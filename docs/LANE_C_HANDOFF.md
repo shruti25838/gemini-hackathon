@@ -5,9 +5,18 @@ the other two lanes need in order to build against it, and everything C needs
 back from them.
 
 Current state: lane C is complete and runs alone. Lanes A and B are
-represented by labelled stubs. Catalog reads are live against the development
-store; **cart writes are disabled at the client level** and no hosted checkout
-URL is produced yet.
+represented by labelled stubs.
+
+**The money path is verified live on the development store.** A real cart was
+created from an approved review, reconciled line by line, passed the
+deterministic checks and the Decision 1 audit, released its hosted checkout
+link, and was paid with the Shopify test gateway: card 1 was approved and the
+order appeared in Shopify Orders; card 2 was declined as expected. The order
+total was $329.00, which is exactly the 32900 integer minor units the
+approval carried, so the money arithmetic held all the way from the catalog
+read to the Shopify order.
+
+Cart writes are **off again by default**. Catalog reads stay live.
 
 Nothing in `contracts/` or `interfaces.py` changes without the owner's
 approval and a pull request of its own.
@@ -323,7 +332,7 @@ other owners.
 
 | Gap | Detail |
 | --- | --- |
-| Cart writes | Built and tested, off by default. Needs `LIVE_CART_WRITES=1` **and** the store on `ALLOWED_CART_STORE_DOMAINS`. See the safety note below |
+| Cart writes | Verified live, then switched off. Needs `LIVE_CART_WRITES=1` **and** the store on `ALLOWED_CART_STORE_DOMAINS`. See section 10 |
 | Inventory scope | The Storefront token lacks `unauthenticated_read_product_inventory`, so `quantityAvailable` is not requested. `availableForSale` still gates every line |
 | Order lookup | `ENABLE_ORDER_LOOKUP=0` and `SHOPIFY_ORDER_LOOKUP_TOKEN` unset. Until both are set, payment stays `payment_unconfirmed` and the refusal says why |
 | `/api/input/respond` | Returns 501. It needs A's resumable workflow |
@@ -375,6 +384,33 @@ Payment is never inferred from the handoff. `order_confirmed` needs
 `ENABLE_ORDER_LOOKUP=1` and a `SHOPIFY_ORDER_LOOKUP_TOKEN` that differs from
 the Storefront token. Without both, the state stays `payment_unconfirmed`.
 
+This was confirmed in the live run and is worth being precise about: the
+order really was placed and really is visible in Shopify Orders, and the app
+still reports `payment_unconfirmed`. That is correct, not a bug. The app
+does not claim a payment it has not independently verified, and order lookup
+is off.
+
+### Verified live
+
+| Step | Result |
+| --- | --- |
+| Cart created on the dev store | one cart, one `cartCreate`, read back and reconciled |
+| Deterministic checks | all passed |
+| Decision 1 audit | `ready` |
+| Hosted checkout link released | yes, bound to that approval and cart |
+| Test card 1 | approved; order visible in Shopify Orders; total $329.00 = 32900 minor units, matching the approval |
+| Test card 2 | declined, as expected |
+| App payment state afterwards | `payment_unconfirmed`, because order lookup is off |
+
+### The dev-store password page
+
+A Shopify development store puts a storefront password page in front of
+everything, including the hosted checkout. Opening the checkout link in a
+fresh browser shows that page rather than the checkout. Either sign in as the
+store owner in the same browser, or enter the store password. This is a
+property of development stores, not of the checkout link, and it will not
+appear on a live store.
+
 **The checkout link is withheld from `GET /api/state`.** It is a bearer link
 to a hosted checkout, and `/api/state` is a broad read, so the field comes
 back as `null` there even once a cart exists. The contract is unchanged, since
@@ -382,3 +418,78 @@ back as `null` there even once a cart exists. The contract is unchanged, since
 exists, link withheld". The link is stored server side and released only by
 `POST /api/checkout/continue`, after an audit bound to that exact approval and
 cart. It is never logged and never appears in an event.
+
+
+---
+
+## 11. Demo day checklist, lane C
+
+Everything here is lane C only. Three minutes, and the gates stay shut until
+the moment they are needed.
+
+### Before the demo
+
+| Check | Expected | Command |
+| --- | --- | --- |
+| Offline suite is green | 444 passed | `.venv/Scripts/python -m pytest tests -q` |
+| Access to the real services | 21 pass, 1 known SDK gap | `.venv/Scripts/python scripts/check_access.py` |
+| Catalog reads are live | `commerce: live` | `curl -s localhost:8000/api/health` |
+| Cart writes are OFF | `LIVE_CART_WRITES is off` | `.venv/Scripts/python scripts/live_cart_smoke.py` |
+| Shop MCP is reachable | 22 tools, 4 allowlisted | `.venv/Scripts/python scripts/check_shop_mcp.py "desk" --limit 3` |
+
+Default posture: `LIVE_CART_WRITES=0`, `ENABLE_ORDER_LOOKUP=0`,
+`MOCK_COMMERCE=0`. Catalog reads real, nothing writable.
+
+### To run the live money path
+
+One flag, and only this one:
+
+```
+LIVE_CART_WRITES=1          # in .env
+```
+
+`ALLOWED_CART_STORE_DOMAINS` already defaults to the dev store, so leave it
+alone. Then:
+
+```
+.venv/Scripts/python scripts/live_cart_smoke.py --yes-write-to-my-dev-store
+```
+
+Without `--yes-write-to-my-dev-store` it rehearses and writes nothing. Use
+`--query "monitor"` to pick a different product.
+
+**Set `LIVE_CART_WRITES` back to `0` the moment you are done.** Check it took
+effect, because a `.env` edit that does not save is easy to miss:
+
+```
+.venv/Scripts/python scripts/live_cart_smoke.py | grep LIVE_CART_WRITES
+```
+
+It must print `off`.
+
+### At the hosted checkout
+
+| Thing | Value |
+| --- | --- |
+| Storefront password page | Expected on a dev store. Sign in as the store owner in the same browser, or enter the store password |
+| Approved payment | Shopify test gateway **card 1** |
+| Declined payment | Shopify test gateway **card 2** |
+| What the app shows afterwards | `payment_unconfirmed`, by design |
+
+The app never sees the card. Payment details go to Shopify's hosted page.
+
+### If a judge asks "did it really charge?"
+
+It really placed an order on the development store in test mode, and the
+order is in Shopify Orders. The app deliberately does not say "paid":
+`order_confirmed` requires `ENABLE_ORDER_LOOKUP=1` and a separate read-only
+credential, neither of which is set. Showing `payment_unconfirmed` next to a
+real order is the honest answer, and it is the behaviour the tests pin.
+
+### Do not do these
+
+- Do not pipe the smoke script's output to a file. The checkout link is
+  printed to the terminal on purpose and belongs nowhere else.
+- Do not enable cart writes against any store other than the dev store. The
+  allowlist refuses it, but do not rely on that alone.
+- Do not claim a payment the app has not confirmed.

@@ -4,13 +4,21 @@ Turn a photo of your room into an editable 3D room, shop verified Shopify
 products into it, check whether they actually fit, and hand off to a hosted
 test checkout.
 
-**Status: Phase 1, lane C core.** State and revisions, the fit engine, the
-catalog layer, cart approval and the checkout audit are built and tested.
-383 tests pass: 366 offline and 17 against live services.
+**Status: lane C complete, money path verified live.** State and revisions,
+the fit engine, the catalog layer, cart approval, the live cart write and the
+checkout audit are built and tested. 461 tests pass: 444 offline and 17
+against live services.
 
-Catalog reads work against the real development store. **Cart writes are
-disabled**, so no live cart is ever created; the write path exists and is
-tested with a fake transport, and enabling it is a constructor flag.
+The whole money path has run end to end on the development store: a real cart
+created from an approved review, reconciled line by line, passed by the
+deterministic checks and the Decision 1 audit, handed off to Shopify's hosted
+checkout, and paid with the test gateway. Card 1 was approved and the order
+appeared in Shopify Orders; card 2 was declined. The order total of $329.00
+matched the 32900 integer minor units the approval carried exactly.
+
+Catalog reads are live. **Cart writes are off by default** and need two gates
+opened deliberately. Payment is never claimed from the handoff: the app still
+reports `payment_unconfirmed` after a real order, because order lookup is off.
 
 ## Running lane C alone
 
@@ -218,8 +226,9 @@ needs a network or a database. A test reads the source and enforces that.
 
 | Gap | Detail |
 | --- | --- |
-| Cart writes | Built and tested, **off by default**. Needs `LIVE_CART_WRITES=1` and the store on `ALLOWED_CART_STORE_DOMAINS`. Run `scripts/live_cart_smoke.py` to create one real cart |
-| Order lookup | `ENABLE_ORDER_LOOKUP=0` and no `SHOPIFY_ORDER_LOOKUP_TOKEN`, so payment stays `payment_unconfirmed` |
+| Cart writes | Verified live, then switched off. Needs `LIVE_CART_WRITES=1` and the store on `ALLOWED_CART_STORE_DOMAINS`. Run `scripts/live_cart_smoke.py` |
+| Order lookup | `ENABLE_ORDER_LOOKUP=0` and no `SHOPIFY_ORDER_LOOKUP_TOKEN`, so payment stays `payment_unconfirmed` even after a real order. That is deliberate |
+| Dev-store password | A development store shows a storefront password page in front of the hosted checkout. Sign in as the store owner in the same browser, or enter the store password |
 | Inventory scope | The Storefront token lacks `unauthenticated_read_product_inventory`, so `quantityAvailable` is not requested. `availableForSale` still gates every line; the quantity check is skipped |
 | Order lookup | `ENABLE_ORDER_LOOKUP=0`. Phase 4 needs a read-only order credential, separate from the Storefront token, which is not yet configured |
 | Lane A | `ai/` holds only the verified model identifiers. `analyze_room`, the planner, the agents and ADK Live land in Phase 2; `MOCK_AI=1` serves A's fixtures |
@@ -229,6 +238,58 @@ needs a network or a database. A test reads the source and enforces that.
 | Shop MCP dimensions | No structured dimension field exists. Sizes are parsed from listing text by plain code, labelled `inferred`, and cap fit at tentative |
 | PRD divergence | PRD page 10 routes Shop MCP results into the Storefront cart. This build keeps discovery and purchase separate. See [docs/SHOP_MCP_NOTES.md](docs/SHOP_MCP_NOTES.md) |
 | npm version | npm 9.6.4 with Node 24 triggers an engine warning. Harmless, but `npm install -g npm@latest` clears it |
+
+## Demo day checklist, lane C
+
+Default posture: catalog reads live, nothing writable.
+
+```
+MOCK_COMMERCE=0        # live catalog
+LIVE_CART_WRITES=0     # no writes            <- the one that matters
+ENABLE_ORDER_LOOKUP=0  # payment never claimed
+```
+
+Before the demo:
+
+```bash
+.venv/Scripts/python -m pytest tests -q          # 444 offline, no network
+.venv/Scripts/python scripts/check_access.py     # prints no secrets
+.venv/Scripts/python scripts/live_cart_smoke.py  # must say LIVE_CART_WRITES off
+```
+
+To run the live money path, open one flag in `.env`:
+
+```
+LIVE_CART_WRITES=1
+```
+
+then:
+
+```bash
+.venv/Scripts/python scripts/live_cart_smoke.py --yes-write-to-my-dev-store
+```
+
+Without the flag it rehearses and writes nothing. At the hosted checkout, a
+development store shows its storefront password page first: sign in as the
+store owner in the same browser, or enter the store password. Then pay with
+the Shopify test gateway, **card 1 to approve** and **card 2 to decline**.
+
+Afterwards the app reports `payment_unconfirmed` even though the order is
+real and visible in Shopify Orders. That is correct: `order_confirmed`
+requires `ENABLE_ORDER_LOOKUP=1` and a separate read-only credential.
+
+**Set `LIVE_CART_WRITES` back to `0` when you are done, and check it took:**
+
+```bash
+.venv/Scripts/python scripts/live_cart_smoke.py | grep LIVE_CART_WRITES
+# must print: off
+```
+
+Do not pipe the smoke script to a file. The checkout link is printed to the
+terminal deliberately and belongs nowhere else.
+
+See [docs/LANE_C_HANDOFF.md](docs/LANE_C_HANDOFF.md) section 11 for the full
+version.
 
 ### Verified access, as of 21 November 2026
 
@@ -241,6 +302,8 @@ needs a network or a database. A test reads the source and enforces that.
 | Decisions API | Live at `v1beta/decisions`; `noul`, `choice` and `score` confirmed |
 | Managed Agents | Reachable on this account |
 | Shop MCP | Live, 22 tools, 4 allowlisted |
+| Live cart write | One cart created, read back and reconciled against the approval |
+| Hosted test checkout | Card 1 approved, order in Shopify Orders; card 2 declined |
 
 ## Event-written code and third-party licenses
 
