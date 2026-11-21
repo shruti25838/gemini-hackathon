@@ -321,7 +321,8 @@ def propose_and_test(room: dict, fixed: list[dict], items: list[dict], brief: di
             "style_assessment": prop.style_assessment if prop else None, "used_agents": used_agents}
 
 
-def review_move(room: dict, placements: list[dict], key: str, x: float, z: float, rot: int, brief: dict, emit) -> dict:
+def review_move(room: dict, placements: list[dict], key: str, x: float, z: float, rot: int, brief: dict, emit,
+                use_agents: bool = False) -> dict:
     """Shopper asked to move one item. Check the requested pose; on conflict, find a checked alternative."""
     requested = [dict(p, x=x, z=z, rot=rot) if p["key"] == key else p for p in placements]
     rep = solver.check(room, requested)
@@ -332,5 +333,15 @@ def review_move(room: dict, placements: list[dict], key: str, x: float, z: float
         return {"accepted": True, "placements": requested, "report": rep, "alternative": None}
     others = [p for p in placements if p["key"] != key]
     item = next(p for p in placements if p["key"] == key)
-    alt = propose_and_test(room, [dict(p, locked=True) for p in others], [item], brief, emit)
+    fixed = [dict(p, locked=True) for p in others]
+    if use_agents:
+        alt = propose_and_test(room, fixed, [item], brief, emit)
+    else:  # interactive drag: answer in < 1 s with the server solver; sandbox review can run after commit
+        near = dict(item, x=x, z=z, rot=rot)
+        res = solver.search(room, fixed, [near], brief.get("preferred_wall"))
+        res["report"]["checked_by"] = ["server"]
+        alt = {"placements": res["placements"], "report": res["report"], "findings": [], "repairs": 0,
+               "style_assessment": None, "used_agents": False}
+        emit("move.alternative", "ok" if res["report"]["status"] in ("fits", "tight") else "warn",
+             f"Checked alternative ready: {res['report']['status']}", report=res["report"])
     return {"accepted": False, "placements": requested, "report": rep, "conflicts": involved, "alternative": alt}
