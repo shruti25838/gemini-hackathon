@@ -194,11 +194,26 @@ function renderDoor() {
     post("/door/manual", { opening_id: b.dataset.o, hinge_side: b.dataset.h, swing: "in" }).then(refresh).catch((e) => flash(e.message)));
 }
 
+const notBuying = new Set();
+let prodKey = null;
 function renderProducts() {
-  $("products").innerHTML = st.selected.map((o) => `<div class="prod">${o.image_url ? `<img src="${o.image_url}" alt="">` : `<div class="noimg"></div>`}
+  const key = JSON.stringify(st.selected.map((o) => o.variant_id));
+  if (key === prodKey) return;
+  prodKey = key;
+  $("products").innerHTML = st.selected.map((o) => `<div class="prod"><input type="checkbox" class="buy" data-v="${o.variant_id}" ${notBuying.has(o.variant_id) ? "" : "checked"} title="Buy this item">${o.image_url ? `<img src="${o.image_url}" alt="">` : `<div class="noimg"></div>`}
     <div class="t">${o.title}<br><span class="hint">${o.variant_title} · ${o.category}${o.dims_m ? "" : " · dims unknown"}</span>
     ${o.source === "fixture" ? '<div class="tag">FIXTURE CATALOG · NOT LIVE</div>' : ""}</div><div class="p">${money(o.price_minor)}</div></div>`).join("") || '<p class="hint">No products yet.</p>';
-  $("subtotal").textContent = st.selected.length ? `items subtotal ${money(st.subtotal_minor)} / budget ${money(st.brief.budget_minor)}` : "";
+  $("products").querySelectorAll("input.buy").forEach((cb) => cb.onchange = () => {
+    cb.checked ? notBuying.delete(cb.dataset.v) : notBuying.add(cb.dataset.v);
+    updateSubtotal(); $("review").innerHTML = "";  // selection changed: review again
+  });
+  updateSubtotal();
+}
+function updateSubtotal() {
+  const buying = st.selected.filter((o) => !notBuying.has(o.variant_id));
+  const sum = buying.reduce((a, o) => a + o.price_minor, 0);
+  $("subtotal").textContent = st.selected.length
+    ? `buying ${buying.length} of ${st.selected.length} · ${money(sum)} / budget ${money(st.brief.budget_minor)}` : "";
 }
 
 function renderAlt() {
@@ -401,7 +416,7 @@ function showReview(rv) {
     refresh();
   };
 }
-$("reviewBtn").onclick = () => post("/review").then(showReview).catch((e) => flash(e.message));
+$("reviewBtn").onclick = () => post("/review", { exclude: [...notBuying] }).then(showReview).catch((e) => flash(e.message));
 
 // ---------- boot ----------
 (async () => {

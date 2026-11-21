@@ -24,10 +24,15 @@ def _fp(obj) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True).encode()).hexdigest()[:16]
 
 
-def build_review(s: Session, extra_variant_ids: list[str] | None = None) -> dict:
+def build_review(s: Session, extra_variant_ids: list[str] | None = None, exclude: list[str] | None = None) -> dict:
+    """Review only what the shopper wants to buy. Excluded items stay in the design but never reach the cart."""
     if not s.scene:
         raise CheckoutError("Nothing to review yet")
     vids = [p.variant_id for p in s.scene.placements if p.variant_id] + (extra_variant_ids or [])
+    skip = set(exclude or [])
+    vids = [v for v in vids if v not in skip]
+    if not vids:
+        raise CheckoutError("Nothing selected to buy. Tick at least one product.")
     # refresh from the catalog before review (prices / stock may have moved)
     offers, _ = shop.fetch_catalog()
     fresh = {o.variant_id: o for o in offers}
@@ -47,7 +52,7 @@ def build_review(s: Session, extra_variant_ids: list[str] | None = None) -> dict
         lines.append({"variant_id": vid, "title": o.title, "variant_title": o.variant_title, "quantity": 1,
                       "price_minor": o.price_minor, "currency": o.currency, "source": o.source})
     subtotal = sum(l["price_minor"] * l["quantity"] for l in lines)
-    review = {"scene_rev": s.scene.rev, "lines": lines, "subtotal_minor": subtotal, "currency": s.brief.currency,
+    review = {"scene_rev": s.scene.rev, "lines": lines, "excluded": sorted(skip), "subtotal_minor": subtotal, "currency": s.brief.currency,
               "budget_minor": s.brief.budget_minor, "within_budget": subtotal <= s.brief.budget_minor,
               "fit_status": s.fit.status if s.fit else "unknown", "problems": problems,
               "note": "Items subtotal only. Shipping and tax are added on Shopify's checkout page."}

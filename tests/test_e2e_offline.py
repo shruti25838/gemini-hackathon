@@ -182,3 +182,25 @@ def test_door_clip_on_room_without_door_says_so(client):
     s.room.openings = [o for o in s.room.openings if o.type != "door"]
     r = c.post(f"/api/session/{sid}/door", files={"file": ("d.mp4", b"\x00" * 10, "video/mp4")}).json()
     assert not r["accepted"] and "no door" in r["problem"]
+
+
+def test_review_buys_only_ticked_items(client):
+    c = client
+    sid = c.post("/api/session").json()["id"]
+    c.post(f"/api/session/{sid}/photo", files={"file": ("r.jpg", b"\xff\xd8fake", "image/jpeg")})
+    c.post(f"/api/session/{sid}/measure", json={"field": "width_m", "value_m": 3.2})
+    c.post(f"/api/session/{sid}/door/manual", json={"opening_id": "door1", "hinge_side": "left", "swing": "in"})
+    c.post(f"/api/session/{sid}/command", data={"text": "build it"})
+    t0 = time.time()
+    while time.time() - t0 < 10:
+        st = c.get(f"/api/session/{sid}/state").json()
+        if st["scene"] and st["scene"]["placements"] and st["fit"]:
+            break
+        time.sleep(0.1)
+    chair = next(o["variant_id"] for o in st["selected"] if o["category"] == "chair")
+    rv = c.post(f"/api/session/{sid}/review", json={"exclude": [chair]}).json()
+    assert chair not in {l["variant_id"] for l in rv["lines"]} and rv["excluded"] == [chair]
+    cart = c.post(f"/api/session/{sid}/approve").json()
+    assert chair not in {l["variant_id"] for l in cart["lines"]}
+    # chair is still in the design
+    assert any(p["variant_id"] == chair for p in c.get(f"/api/session/{sid}/state").json()["scene"]["placements"])

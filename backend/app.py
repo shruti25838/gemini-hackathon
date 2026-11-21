@@ -387,17 +387,21 @@ def undo(sid: str):
 
 
 # ---------- commerce ----------
-def _review(s):
+def _review(s, exclude: Optional[list[str]] = None):
     try:
-        s.last_review = checkout.build_review(s, s.extra_variant_ids)
+        s.last_review = checkout.build_review(s, s.extra_variant_ids, exclude)
     except (checkout.CheckoutError, shop.ShopError) as e:
         raise HTTPException(409, str(e))
     return s.last_review
 
 
+class ReviewBody(BaseModel):
+    exclude: list[str] = []  # variant ids the shopper does not want to buy
+
+
 @app.post("/api/session/{sid}/review")
-def review(sid: str):
-    return _review(S(sid))
+def review(sid: str, body: Optional[ReviewBody] = None):
+    return _review(S(sid), (body.exclude if body else []))
 
 
 @app.post("/api/session/{sid}/approve")
