@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "RevisionRefs": {
+      "additionalProperties": false,
+      "description": "Which revisions this event refers to, so a late event is never applied\nto a newer state.",
+      "properties": {
+        "room_revision": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Room Revision"
+        },
+        "scene_revision": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scene Revision"
+        }
+      },
+      "title": "RevisionRefs",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "revision_refs": {
+      "$ref": "#/$defs/RevisionRefs"
+    },
+    "safe_to_display": {
+      "default": true,
+      "description": "Lanes show message to users only when the producer marks it safe.",
+      "title": "Safe To Display",
+      "type": "boolean"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "ai",
+        "room",
+        "commerce",
+        "app"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "source_label": {
+      "default": "live",
+      "enum": [
+        "live",
+        "cached",
+        "preset",
+        "generated",
+        "inferred",
+        "mock"
+      ],
+      "title": "Source Label",
+      "type": "string"
+    },
+    "step_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step Id"
+    },
+    "ts": {
+      "format": "date-time",
+      "title": "Ts",
+      "type": "string"
+    },
+    "type": {
+      "minLength": 1,
+      "title": "Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "session_id",
+    "source",
+    "type",
+    "message"
+  ],
+  "title": "ActivityEvent",
+  "type": "object"
+}

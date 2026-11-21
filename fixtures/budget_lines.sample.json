@@ -1,0 +1,18 @@
+[
+  {
+    "variant_id": "gid://shopify/ProductVariant/49000000000001",
+    "quantity": 1,
+    "unit_price": {
+      "amount_minor": 42900,
+      "currency": "USD"
+    }
+  },
+  {
+    "variant_id": "gid://shopify/ProductVariant/49000000000004",
+    "quantity": 1,
+    "unit_price": {
+      "amount_minor": 31900,
+      "currency": "USD"
+    }
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "plan_id": "plan_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "goal": "dual_monitor_gaming_corner",
+  "constraints": {
+    "merchandise_budget": {
+      "amount_minor": 120000,
+      "currency": "USD"
+    },
+    "locked_objects": [
+      "obj_existing_monitor"
+    ],
+    "keep_door_clear": true,
+    "min_walkway_width_m": 0.75
+  },
+  "steps": [
+    {
+      "id": "room",
+      "op": "inspect_room_motion",
+      "after": [],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    },
+    {
+      "id": "shop",
+      "op": "discover_shopify_variants",
+      "after": [],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    },
+    {
+      "id": "scale",
+      "op": "confirm_measurement_if_needed",
+      "after": [
+        "room"
+      ],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    },
+    {
+      "id": "plan",
+      "op": "search_layouts",
+      "after": [
+        "shop",
+        "scale"
+      ],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    },
+    {
+      "id": "test",
+      "op": "test_layout_motion",
+      "after": [
+        "plan"
+      ],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    },
+    {
+      "id": "preview",
+      "op": "prepare_scene_preview",
+      "after": [
+        "test"
+      ],
+      "inputs": {},
+      "state": "pending",
+      "artifact_refs": []
+    }
+  ],
+  "room_revision": 3,
+  "scene_revision": 7,
+  "state": "validated",
+  "artifact_refs": [],
+  "created_at": "2026-11-21T12:04:00Z"
+}

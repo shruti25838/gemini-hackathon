@@ -1,0 +1,194 @@
+{
+  "$defs": {
+    "Money": {
+      "additionalProperties": false,
+      "description": "Integer minor units plus an ISO 4217 code. 120000 + USD means $1,200.00.",
+      "properties": {
+        "amount_minor": {
+          "description": "Integer minor units. Never a float.",
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "ISO 4217, uppercase.",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount_minor",
+        "currency"
+      ],
+      "title": "Money",
+      "type": "object"
+    },
+    "PlanConstraints": {
+      "additionalProperties": false,
+      "description": "The hard numbers the plan must respect.",
+      "properties": {
+        "keep_door_clear": {
+          "default": false,
+          "title": "Keep Door Clear",
+          "type": "boolean"
+        },
+        "locked_objects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Locked Objects",
+          "type": "array"
+        },
+        "merchandise_budget": {
+          "$ref": "#/$defs/Money"
+        },
+        "min_walkway_width_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Walkway Width M"
+        }
+      },
+      "required": [
+        "merchandise_budget"
+      ],
+      "title": "PlanConstraints",
+      "type": "object"
+    },
+    "WorkflowStep": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "description": "IDs of steps that must finish first.",
+          "items": {
+            "type": "string"
+          },
+          "title": "After",
+          "type": "array"
+        },
+        "artifact_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Artifact Refs",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": true,
+          "title": "Inputs",
+          "type": "object"
+        },
+        "op": {
+          "description": "Must be in REGISTERED_OPERATIONS.",
+          "title": "Op",
+          "type": "string"
+        },
+        "state": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "running",
+            "waiting_input",
+            "done",
+            "failed",
+            "skipped"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "op"
+      ],
+      "title": "WorkflowStep",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Artifact Refs",
+      "type": "array"
+    },
+    "constraints": {
+      "$ref": "#/$defs/PlanConstraints"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "goal": {
+      "title": "Goal",
+      "type": "string"
+    },
+    "plan_id": {
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "room_revision": {
+      "description": "Base revision the plan was built against.",
+      "minimum": 0,
+      "title": "Room Revision",
+      "type": "integer"
+    },
+    "scene_revision": {
+      "description": "Base revision the plan was built against.",
+      "minimum": 0,
+      "title": "Scene Revision",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "state": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "validated",
+        "running",
+        "paused",
+        "completed",
+        "failed"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/WorkflowStep"
+      },
+      "minItems": 1,
+      "title": "Steps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "plan_id",
+    "session_id",
+    "goal",
+    "constraints",
+    "steps",
+    "room_revision",
+    "scene_revision"
+  ],
+  "title": "WorkflowPlan",
+  "type": "object"
+}

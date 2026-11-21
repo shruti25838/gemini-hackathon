@@ -1,0 +1,458 @@
+{
+  "$defs": {
+    "AlternativeTested": {
+      "additionalProperties": false,
+      "description": "Another pose the agent tried, with the fit result it got.",
+      "properties": {
+        "fit_report_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fit Report Ref"
+        },
+        "fit_result": {
+          "enum": [
+            "fits",
+            "tight",
+            "does_not_fit",
+            "unknown"
+          ],
+          "title": "Fit Result",
+          "type": "string"
+        },
+        "pose": {
+          "$ref": "#/$defs/Pose"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pose",
+        "fit_result",
+        "rationale"
+      ],
+      "title": "AlternativeTested",
+      "type": "object"
+    },
+    "FitCheck": {
+      "additionalProperties": false,
+      "description": "One geometry check and what it found.",
+      "properties": {
+        "blocking_ids": {
+          "description": "Item, opening or zone IDs involved in a tight or failing check.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Blocking Ids",
+          "type": "array"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "measured_clearance_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Only set when the check actually measured a distance.",
+          "title": "Measured Clearance M"
+        },
+        "name": {
+          "enum": [
+            "room_bounds",
+            "free_zone_containment",
+            "object_overlap",
+            "locked_object_overlap",
+            "door_swing",
+            "walking_route"
+          ],
+          "title": "Name",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "pass",
+            "tight",
+            "fail",
+            "unknown"
+          ],
+          "title": "Result",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "result",
+        "detail"
+      ],
+      "title": "FitCheck",
+      "type": "object"
+    },
+    "FitReport": {
+      "additionalProperties": false,
+      "properties": {
+        "assumptions": {
+          "description": "Stated plainly, for example 'clearance margin 0.05 m'.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "checks_run": {
+          "items": {
+            "$ref": "#/$defs/FitCheck"
+          },
+          "title": "Checks Run",
+          "type": "array"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "References to frames, clips or offers used.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "minimum_clearance_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Only when something was actually measured.",
+          "title": "Minimum Clearance M"
+        },
+        "rejected_placement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RejectedPlacement"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "report_id": {
+          "title": "Report Id",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "fits",
+            "tight",
+            "does_not_fit",
+            "unknown"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "room_revision": {
+          "minimum": 0,
+          "title": "Room Revision",
+          "type": "integer"
+        },
+        "scene_revision": {
+          "minimum": 0,
+          "title": "Scene Revision",
+          "type": "integer"
+        },
+        "solver_version": {
+          "description": "fit/ package version that produced this.",
+          "title": "Solver Version",
+          "type": "string"
+        },
+        "tentative": {
+          "default": false,
+          "description": "True when the result rests on estimated room scale or on product dimensions inferred from listing text.",
+          "title": "Tentative",
+          "type": "boolean"
+        },
+        "unknown_reasons": {
+          "description": "Required when result is unknown: what was missing.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Unknown Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "report_id",
+        "room_revision",
+        "scene_revision",
+        "solver_version",
+        "result"
+      ],
+      "title": "FitReport",
+      "type": "object"
+    },
+    "Pose": {
+      "additionalProperties": false,
+      "description": "Where an object sits on the floor and how it is turned.",
+      "properties": {
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "x_m": {
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m"
+      ],
+      "title": "Pose",
+      "type": "object"
+    },
+    "Rect2D": {
+      "additionalProperties": false,
+      "description": "An axis-aligned footprint plus a rotation about its own centre.",
+      "properties": {
+        "depth_m": {
+          "minimum": 0.0,
+          "title": "Depth M",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "width_m": {
+          "minimum": 0.0,
+          "title": "Width M",
+          "type": "number"
+        },
+        "x_m": {
+          "description": "Centre x, room-local metres.",
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "description": "Centre y, room-local metres.",
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "width_m",
+        "depth_m"
+      ],
+      "title": "Rect2D",
+      "type": "object"
+    },
+    "RejectedPlacement": {
+      "additionalProperties": false,
+      "description": "The placement that did not work and why, kept for the replay and the\nbounded repair.",
+      "properties": {
+        "cause": {
+          "title": "Cause",
+          "type": "string"
+        },
+        "failing_check": {
+          "enum": [
+            "room_bounds",
+            "free_zone_containment",
+            "object_overlap",
+            "locked_object_overlap",
+            "door_swing",
+            "walking_route"
+          ],
+          "title": "Failing Check",
+          "type": "string"
+        },
+        "footprint": {
+          "$ref": "#/$defs/Rect2D"
+        },
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "pose": {
+          "$ref": "#/$defs/Pose"
+        }
+      },
+      "required": [
+        "object_id",
+        "pose",
+        "footprint",
+        "cause",
+        "failing_check"
+      ],
+      "title": "RejectedPlacement",
+      "type": "object"
+    },
+    "StyleAssessment": {
+      "additionalProperties": false,
+      "description": "Argon's read on how the move looks against the shopper's stated taste.",
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "matches_preferences": {
+          "title": "Matches Preferences",
+          "type": "boolean"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "summary",
+        "matches_preferences"
+      ],
+      "title": "StyleAssessment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_pose": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Pose"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Set only once the shopper accepts one."
+    },
+    "affected_openings": {
+      "description": "Opening IDs whose motion the move would touch.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Openings",
+      "type": "array"
+    },
+    "affected_paths": {
+      "description": "Walking route IDs the move would touch.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Paths",
+      "type": "array"
+    },
+    "alternatives_tested": {
+      "items": {
+        "$ref": "#/$defs/AlternativeTested"
+      },
+      "title": "Alternatives Tested",
+      "type": "array"
+    },
+    "base_scene_revision": {
+      "minimum": 0,
+      "title": "Base Scene Revision",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "fit_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FitReport"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The report the server reruns and verifies."
+    },
+    "requested_pose": {
+      "$ref": "#/$defs/Pose"
+    },
+    "review_id": {
+      "title": "Review Id",
+      "type": "string"
+    },
+    "selected_object_id": {
+      "title": "Selected Object Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "style_assessment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StyleAssessment"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "review_id",
+    "session_id",
+    "base_scene_revision",
+    "selected_object_id",
+    "requested_pose"
+  ],
+  "title": "PlacementReview",
+  "type": "object"
+}

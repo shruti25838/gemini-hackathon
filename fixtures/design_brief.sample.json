@@ -1,0 +1,64 @@
+{
+  "brief_id": "brief_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "brief_revision": 2,
+  "room_use": "dual_monitor_gaming_corner",
+  "locked_object_ids": [
+    "obj_existing_monitor"
+  ],
+  "merchandise_budget": {
+    "amount_minor": 120000,
+    "currency": "USD"
+  },
+  "budget_applies_to": "merchandise_subtotal",
+  "required_items": [
+    {
+      "item_id": "req_desk",
+      "label": "Desk",
+      "quantity": 1,
+      "category": "desks",
+      "notes": null
+    },
+    {
+      "item_id": "req_monitor",
+      "label": "Second monitor",
+      "quantity": 1,
+      "category": "monitors",
+      "notes": "Must match the 27 inch monitor the shopper already owns."
+    }
+  ],
+  "preferences": {
+    "finish": [
+      "walnut"
+    ],
+    "lighting": [
+      "warm"
+    ],
+    "style": [
+      "minimal"
+    ],
+    "colors": [
+      "olive"
+    ],
+    "free_text": "Keep the room usable as a guest room."
+  },
+  "hard_constraints": [
+    {
+      "constraint_id": "hc_door_clear",
+      "kind": "keep_door_clear",
+      "value": null,
+      "unit": null,
+      "description": "The door must open fully without hitting furniture.",
+      "evidence_status": "confirmed"
+    },
+    {
+      "constraint_id": "hc_walkway",
+      "kind": "min_walkway_width",
+      "value": 0.75,
+      "unit": "m",
+      "description": "A 0.75 m route from the door to the desk must stay clear.",
+      "evidence_status": "confirmed"
+    }
+  ],
+  "created_at": "2026-11-21T12:03:00Z"
+}

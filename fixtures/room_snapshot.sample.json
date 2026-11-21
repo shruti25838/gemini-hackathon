@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "snap_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "media": [
+    {
+      "media_id": "media_room_good",
+      "kind": "photo",
+      "uri": "session://sess_01HQ8ETHYNEON0001/media/room_good.jpg",
+      "width_px": 1536,
+      "height_px": 2048,
+      "captured_at": "2026-11-21T12:00:00Z",
+      "metadata_stripped": true,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "source_device": "iPhone 15, browser capture",
+  "captured_at": "2026-11-21T12:00:00Z",
+  "received_at": "2026-11-21T12:00:02Z",
+  "observed_objects": [
+    {
+      "object_id": "obj_existing_monitor",
+      "label": "27 inch monitor",
+      "confidence": 0.91,
+      "bbox": {
+        "x_m": 1.6,
+        "y_m": 0.45,
+        "width_m": 0.62,
+        "depth_m": 0.22,
+        "rotation_deg": 0.0
+      },
+      "keep": true
+    },
+    {
+      "object_id": "obj_existing_chair",
+      "label": "desk chair",
+      "confidence": 0.84,
+      "bbox": null,
+      "keep": true
+    }
+  ],
+  "measured_anchors": [
+    {
+      "anchor_id": "anchor_desk_wall",
+      "description": "Width of the desk wall, confirmed by the shopper",
+      "length_m": 3.2,
+      "evidence_status": "confirmed",
+      "confirmed_by_user": true
+    }
+  ],
+  "units": "m",
+  "evidence_status": "sampled_from_photo",
+  "source": "live",
+  "consent_given": true
+}

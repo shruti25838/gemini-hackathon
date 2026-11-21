@@ -1,0 +1,30 @@
+{
+  "run_id": "rec_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "failed_step_id": "scale",
+  "error_class": "invalid_room_geometry",
+  "triggering_revision": 3,
+  "interaction_id": "interaction_argon_0001",
+  "allowed_actions": [
+    "request_measurement",
+    "request_rescan",
+    "pause"
+  ],
+  "chosen_action": "request_measurement",
+  "attempt_count": 1,
+  "max_attempts": 3,
+  "last_verified_state": {
+    "room_revision": 2,
+    "scene_revision": 6
+  },
+  "outcome": "awaiting_input",
+  "pending_input": {
+    "interaction_id": "interaction_argon_0001",
+    "prompt": "How wide is the wall behind the desk, in metres?",
+    "expects": "measurement",
+    "frame_ref": "media_room_good",
+    "options": []
+  },
+  "agent_available": true,
+  "created_at": "2026-11-21T12:04:30Z"
+}

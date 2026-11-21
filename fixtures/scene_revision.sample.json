@@ -1,0 +1,92 @@
+{
+  "scene_revision": 7,
+  "parent_revision": 6,
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "room_revision": 3,
+  "placements": [
+    {
+      "object_id": "obj_existing_monitor",
+      "label": "Shopper's own 27 inch monitor",
+      "pose": {
+        "x_m": 1.6,
+        "y_m": 0.4,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 1.6,
+        "y_m": 0.4,
+        "width_m": 0.62,
+        "depth_m": 0.22,
+        "rotation_deg": 0.0
+      },
+      "height_m": 0.46,
+      "locked": true,
+      "variant": null,
+      "asset_id": "asset_monitor_generic",
+      "asset_is_representative": true,
+      "fit_result": "fits",
+      "fit_report_ref": null
+    },
+    {
+      "object_id": "obj_walnut_desk",
+      "label": "Walnut writing desk",
+      "pose": {
+        "x_m": 1.6,
+        "y_m": 0.45,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 1.6,
+        "y_m": 0.45,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "rotation_deg": 0.0
+      },
+      "height_m": 0.74,
+      "locked": false,
+      "variant": {
+        "product_id": "gid://shopify/Product/9000000000001",
+        "variant_id": "gid://shopify/ProductVariant/49000000000001",
+        "store_domain": "ethyneon-dev.myshopify.com",
+        "offer_ref": "offer_dev_desk_walnut"
+      },
+      "asset_id": "asset_desk_rect",
+      "asset_is_representative": true,
+      "fit_result": "fits",
+      "fit_report_ref": "fit_0007"
+    }
+  ],
+  "material_state": {
+    "wall_colors": {
+      "wall_n": {
+        "hex": "#6b7a4f",
+        "evidence_status": "confirmed",
+        "source": "generated"
+      }
+    },
+    "floor_color": {
+      "hex": "#9c7b53",
+      "evidence_status": "sampled_from_photo",
+      "source": "inferred"
+    },
+    "overrides": {}
+  },
+  "light_state": {
+    "preset": "evening",
+    "intensity": 0.8,
+    "color_temp_k": 3200
+  },
+  "selected_variants": [
+    {
+      "product_id": "gid://shopify/Product/9000000000001",
+      "variant_id": "gid://shopify/ProductVariant/49000000000001",
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "offer_ref": "offer_dev_desk_walnut"
+    }
+  ],
+  "fit_status": "fits",
+  "action_id": "3f1b2c84-0d7e-4a19-9c31-7d2f5a6b8e40",
+  "undo_of": null,
+  "source": "generated",
+  "created_at": "2026-11-21T12:06:00Z"
+}

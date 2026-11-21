@@ -1,0 +1,705 @@
+[
+  {
+    "offer_id": "offer_dev_desk_walnut",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000001",
+    "variant_id": "gid://shopify/ProductVariant/49000000000001",
+    "title": "Ethyneon Demo Walnut Writing Desk, 120 cm",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Walnut"
+      },
+      {
+        "name": "Width",
+        "value": "120 cm"
+      }
+    ],
+    "price": {
+      "amount_minor": 42900,
+      "currency": "USD"
+    },
+    "compare_at_price": {
+      "amount_minor": 49900,
+      "currency": "USD"
+    },
+    "availability": {
+      "available": true,
+      "quantity": 12,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/demo-walnut-writing-desk",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/demo-walnut-desk.jpg",
+    "dimensions": {
+      "width_m": 1.2,
+      "depth_m": 0.6,
+      "height_m": 0.74,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_desk_oak",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000002",
+    "variant_id": "gid://shopify/ProductVariant/49000000000002",
+    "title": "Ethyneon Demo Oak Desk, 140 cm",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 38900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 8,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/desk-oak",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/desk_oak.jpg",
+    "dimensions": {
+      "width_m": 1.4,
+      "depth_m": 0.7,
+      "height_m": 0.74,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_desk_compact",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000003",
+    "variant_id": "gid://shopify/ProductVariant/49000000000003",
+    "title": "Ethyneon Demo Compact Desk, 100 cm",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 24900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 20,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/desk-compact",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/desk_compact.jpg",
+    "dimensions": {
+      "width_m": 1.0,
+      "depth_m": 0.5,
+      "height_m": 0.73,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_monitor_27",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000004",
+    "variant_id": "gid://shopify/ProductVariant/49000000000004",
+    "title": "Ethyneon Demo 27 inch Monitor",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 31900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 5,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/monitor-27",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/monitor_27.jpg",
+    "dimensions": {
+      "width_m": 0.62,
+      "depth_m": 0.22,
+      "height_m": 0.46,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_monitor_arm",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000005",
+    "variant_id": "gid://shopify/ProductVariant/49000000000005",
+    "title": "Ethyneon Demo Dual Monitor Arm",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 11900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 31,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/monitor-arm",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/monitor_arm.jpg",
+    "dimensions": {
+      "width_m": 0.3,
+      "depth_m": 0.25,
+      "height_m": 0.52,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_chair_mesh",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000006",
+    "variant_id": "gid://shopify/ProductVariant/49000000000006",
+    "title": "Ethyneon Demo Mesh Task Chair",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 27900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 9,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/chair-mesh",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/chair_mesh.jpg",
+    "dimensions": {
+      "width_m": 0.66,
+      "depth_m": 0.66,
+      "height_m": 1.18,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_lamp_desk",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000007",
+    "variant_id": "gid://shopify/ProductVariant/49000000000007",
+    "title": "Ethyneon Demo Warm Desk Lamp",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 6900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 44,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/lamp-desk",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/lamp_desk.jpg",
+    "dimensions": {
+      "width_m": 0.18,
+      "depth_m": 0.18,
+      "height_m": 0.44,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_rug_olive",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000008",
+    "variant_id": "gid://shopify/ProductVariant/49000000000008",
+    "title": "Ethyneon Demo Olive Rug, 160 x 230",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 15900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 6,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/rug-olive",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/rug_olive.jpg",
+    "dimensions": {
+      "width_m": 2.3,
+      "depth_m": 1.6,
+      "height_m": 0.01,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_shelf_wall",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000009",
+    "variant_id": "gid://shopify/ProductVariant/49000000000009",
+    "title": "Ethyneon Demo Wall Shelf, 80 cm",
+    "selected_options": [
+      {
+        "name": "Finish",
+        "value": "Default"
+      }
+    ],
+    "price": {
+      "amount_minor": 8900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 17,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/shelf-wall",
+    "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/shelf_wall.jpg",
+    "dimensions": {
+      "width_m": 0.8,
+      "depth_m": 0.24,
+      "height_m": 0.2,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_sidetable_nodims",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000010",
+    "variant_id": "gid://shopify/ProductVariant/49000000000010",
+    "title": "Ethyneon Demo Side Table, dimensions not documented",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 9900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": 3,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/demo-side-table",
+    "image_url": null,
+    "dimensions": null,
+    "dimension_source": "unknown",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_dev_desk_walnut_oos",
+    "store": {
+      "store_domain": "ethyneon-dev.myshopify.com",
+      "store_name": "Ethyneon Dev Store",
+      "store_id": "gid://shopify/Shop/90000000001",
+      "api_surface": "storefront_api"
+    },
+    "product_id": "gid://shopify/Product/9000000000011",
+    "variant_id": "gid://shopify/ProductVariant/49000000000011",
+    "title": "Ethyneon Demo Walnut Desk, 160 cm, out of stock",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 52900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": false,
+      "quantity": 0,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://ethyneon-dev.myshopify.com/products/demo-walnut-desk-160",
+    "image_url": null,
+    "dimensions": {
+      "width_m": 1.6,
+      "depth_m": 0.7,
+      "height_m": 0.74,
+      "evidence_status": "confirmed",
+      "raw_text": null
+    },
+    "dimension_source": "metafield",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 300000,
+      "source_label": "live"
+    },
+    "shoppable": true
+  },
+  {
+    "offer_id": "offer_mcp_garvee_folding_desk",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753337",
+    "variant_id": "gid://shopify/ProductVariant/54307265806649",
+    "title": "Garvee Folding Computer Desk for Small Spaces, Natural Wood",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 7299,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/garvee-folding-desk",
+    "image_url": null,
+    "dimensions": {
+      "width_m": 0.8,
+      "depth_m": 0.4,
+      "height_m": 0.72,
+      "evidence_status": "estimated",
+      "raw_text": "Size: 31.5\" x 15.7\" x 28.3\" (80 x 40 x 72 cm)"
+    },
+    "dimension_source": "listing_text_inferred",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  },
+  {
+    "offer_id": "offer_mcp_mcp_desk_corner",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753338",
+    "variant_id": "gid://shopify/ProductVariant/54307265806650",
+    "title": "Corner Computer Desk with Shelf",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 9999,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/mcp-desk-corner",
+    "image_url": null,
+    "dimensions": {
+      "width_m": 1.2,
+      "depth_m": 0.75,
+      "height_m": 0.75,
+      "evidence_status": "estimated",
+      "raw_text": "Overall: 120 x 75 x 75 cm"
+    },
+    "dimension_source": "listing_text_inferred",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  },
+  {
+    "offer_id": "offer_mcp_mcp_desk_nodims",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753339",
+    "variant_id": "gid://shopify/ProductVariant/54307265806651",
+    "title": "Minimalist Writing Table, no size given",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 12500,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/mcp-desk-nodims",
+    "image_url": null,
+    "dimensions": null,
+    "dimension_source": "unknown",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  },
+  {
+    "offer_id": "offer_mcp_mcp_lamp_partial",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753340",
+    "variant_id": "gid://shopify/ProductVariant/54307265806652",
+    "title": "Brass Desk Lamp, height only",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 4500,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/mcp-lamp-partial",
+    "image_url": null,
+    "dimensions": {
+      "width_m": null,
+      "depth_m": null,
+      "height_m": 0.42,
+      "evidence_status": "estimated",
+      "raw_text": "Height: 42 cm"
+    },
+    "dimension_source": "listing_text_inferred",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  },
+  {
+    "offer_id": "offer_mcp_mcp_chair_oos",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753341",
+    "variant_id": "gid://shopify/ProductVariant/54307265806653",
+    "title": "Ergonomic Mesh Chair, sold out",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 18900,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": false,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/mcp-chair-oos",
+    "image_url": null,
+    "dimensions": {
+      "width_m": 0.64,
+      "depth_m": 0.64,
+      "height_m": 1.15,
+      "evidence_status": "estimated",
+      "raw_text": "64 x 64 x 115 cm"
+    },
+    "dimension_source": "listing_text_inferred",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  },
+  {
+    "offer_id": "offer_mcp_mcp_shelf",
+    "store": {
+      "store_domain": "mygarvee.myshopify.com",
+      "store_name": "GARVEE",
+      "store_id": "gid://shopify/Shop/72466989369",
+      "api_surface": "shop_mcp"
+    },
+    "product_id": "gid://shopify/Product/10300986753342",
+    "variant_id": "gid://shopify/ProductVariant/54307265806654",
+    "title": "Floating Wall Shelf, walnut",
+    "selected_options": [],
+    "price": {
+      "amount_minor": 3200,
+      "currency": "USD"
+    },
+    "compare_at_price": null,
+    "availability": {
+      "available": true,
+      "quantity": null,
+      "checked_at": "2026-11-21T12:00:00Z"
+    },
+    "listing_url": "https://www.garvee.com/products/mcp-shelf",
+    "image_url": null,
+    "dimensions": {
+      "width_m": 0.9,
+      "depth_m": 0.2,
+      "height_m": 0.04,
+      "evidence_status": "estimated",
+      "raw_text": "90 x 20 x 4 cm"
+    },
+    "dimension_source": "listing_text_inferred",
+    "freshness": {
+      "fetched_at": "2026-11-21T12:00:00Z",
+      "ttl_ms": 3600000,
+      "source_label": "live"
+    },
+    "shoppable": false
+  }
+]

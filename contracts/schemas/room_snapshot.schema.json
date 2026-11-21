@@ -1,0 +1,323 @@
+{
+  "$defs": {
+    "MeasuredAnchor": {
+      "additionalProperties": false,
+      "description": "A real length the user confirmed, used to set the scale of the model.",
+      "properties": {
+        "anchor_id": {
+          "title": "Anchor Id",
+          "type": "string"
+        },
+        "confirmed_by_user": {
+          "default": false,
+          "title": "Confirmed By User",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_status": {
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "length_m": {
+          "minimum": 0.0,
+          "title": "Length M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "anchor_id",
+        "description",
+        "length_m",
+        "evidence_status"
+      ],
+      "title": "MeasuredAnchor",
+      "type": "object"
+    },
+    "MediaRef": {
+      "additionalProperties": false,
+      "description": "A reference to captured media. EXIF and GPS are stripped in the browser\nbefore upload; metadata_stripped records that it happened.",
+      "properties": {
+        "captured_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Captured At"
+        },
+        "height_px": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Px"
+        },
+        "kind": {
+          "enum": [
+            "photo",
+            "video_clip",
+            "frame"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_id": {
+          "title": "Media Id",
+          "type": "string"
+        },
+        "metadata_stripped": {
+          "default": false,
+          "title": "Metadata Stripped",
+          "type": "boolean"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "uri": {
+          "description": "Session-scoped reference, not a public URL.",
+          "title": "Uri",
+          "type": "string"
+        },
+        "width_px": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Px"
+        }
+      },
+      "required": [
+        "media_id",
+        "kind",
+        "uri"
+      ],
+      "title": "MediaRef",
+      "type": "object"
+    },
+    "ObservedObject": {
+      "additionalProperties": false,
+      "description": "Something the model or the user spotted in the photo.",
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rect2D"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "keep": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Whether the shopper wants to keep it. None means not asked.",
+          "title": "Keep"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "label"
+      ],
+      "title": "ObservedObject",
+      "type": "object"
+    },
+    "Rect2D": {
+      "additionalProperties": false,
+      "description": "An axis-aligned footprint plus a rotation about its own centre.",
+      "properties": {
+        "depth_m": {
+          "minimum": 0.0,
+          "title": "Depth M",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "width_m": {
+          "minimum": 0.0,
+          "title": "Width M",
+          "type": "number"
+        },
+        "x_m": {
+          "description": "Centre x, room-local metres.",
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "description": "Centre y, room-local metres.",
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "width_m",
+        "depth_m"
+      ],
+      "title": "Rect2D",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "captured_at": {
+      "format": "date-time",
+      "title": "Captured At",
+      "type": "string"
+    },
+    "consent_given": {
+      "default": false,
+      "description": "Consent screen shown and accepted before analysis.",
+      "title": "Consent Given",
+      "type": "boolean"
+    },
+    "evidence_status": {
+      "default": "estimated",
+      "enum": [
+        "estimated",
+        "confirmed",
+        "unknown",
+        "sampled_from_photo"
+      ],
+      "title": "Evidence Status",
+      "type": "string"
+    },
+    "measured_anchors": {
+      "items": {
+        "$ref": "#/$defs/MeasuredAnchor"
+      },
+      "title": "Measured Anchors",
+      "type": "array"
+    },
+    "media": {
+      "items": {
+        "$ref": "#/$defs/MediaRef"
+      },
+      "minItems": 1,
+      "title": "Media",
+      "type": "array"
+    },
+    "observed_objects": {
+      "items": {
+        "$ref": "#/$defs/ObservedObject"
+      },
+      "title": "Observed Objects",
+      "type": "array"
+    },
+    "received_at": {
+      "format": "date-time",
+      "title": "Received At",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "source": {
+      "default": "live",
+      "enum": [
+        "live",
+        "cached",
+        "preset",
+        "generated",
+        "inferred",
+        "mock"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "source_device": {
+      "title": "Source Device",
+      "type": "string"
+    },
+    "units": {
+      "const": "m",
+      "default": "m",
+      "title": "Units",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "session_id",
+    "media",
+    "source_device",
+    "captured_at"
+  ],
+  "title": "RoomSnapshot",
+  "type": "object"
+}

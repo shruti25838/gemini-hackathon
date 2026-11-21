@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "HardConstraint": {
+      "additionalProperties": false,
+      "description": "A requirement that must hold. Relaxing one needs the shopper to say so.",
+      "properties": {
+        "constraint_id": {
+          "title": "Constraint Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_status": {
+          "default": "confirmed",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "kind": {
+          "description": "For example keep_door_clear or min_walkway_width.",
+          "title": "Kind",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "constraint_id",
+        "kind",
+        "description"
+      ],
+      "title": "HardConstraint",
+      "type": "object"
+    },
+    "Money": {
+      "additionalProperties": false,
+      "description": "Integer minor units plus an ISO 4217 code. 120000 + USD means $1,200.00.",
+      "properties": {
+        "amount_minor": {
+          "description": "Integer minor units. Never a float.",
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "ISO 4217, uppercase.",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount_minor",
+        "currency"
+      ],
+      "title": "Money",
+      "type": "object"
+    },
+    "Preferences": {
+      "additionalProperties": false,
+      "description": "Soft wishes. These rank feasible options; they never override a\nmeasured constraint.",
+      "properties": {
+        "colors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Colors",
+          "type": "array"
+        },
+        "finish": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Finish",
+          "type": "array"
+        },
+        "free_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Free Text"
+        },
+        "lighting": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Lighting",
+          "type": "array"
+        },
+        "style": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Style",
+          "type": "array"
+        }
+      },
+      "title": "Preferences",
+      "type": "object"
+    },
+    "RequiredItem": {
+      "additionalProperties": false,
+      "description": "Something the shopper said they need, before any product is chosen.",
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "item_id",
+        "label"
+      ],
+      "title": "RequiredItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "brief_id": {
+      "title": "Brief Id",
+      "type": "string"
+    },
+    "brief_revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Brief Revision",
+      "type": "integer"
+    },
+    "budget_applies_to": {
+      "default": "merchandise_subtotal",
+      "description": "Stated plainly, because the shopper must know what the cap covers.",
+      "title": "Budget Applies To",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "hard_constraints": {
+      "items": {
+        "$ref": "#/$defs/HardConstraint"
+      },
+      "title": "Hard Constraints",
+      "type": "array"
+    },
+    "locked_object_ids": {
+      "description": "Items the shopper is keeping.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Locked Object Ids",
+      "type": "array"
+    },
+    "merchandise_budget": {
+      "$ref": "#/$defs/Money",
+      "description": "Maximum merchandise subtotal. Shipping and tax are added at checkout."
+    },
+    "preferences": {
+      "$ref": "#/$defs/Preferences"
+    },
+    "required_items": {
+      "items": {
+        "$ref": "#/$defs/RequiredItem"
+      },
+      "title": "Required Items",
+      "type": "array"
+    },
+    "room_use": {
+      "description": "For example dual_monitor_gaming_corner.",
+      "title": "Room Use",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "brief_id",
+    "session_id",
+    "room_use",
+    "merchandise_budget"
+  ],
+  "title": "DesignBrief",
+  "type": "object"
+}

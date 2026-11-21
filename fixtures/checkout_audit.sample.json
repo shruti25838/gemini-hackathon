@@ -1,0 +1,115 @@
+{
+  "audit_id": "audit_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "workflow_run_id": "plan_0001",
+  "scene_revision": 7,
+  "brief_revision": 2,
+  "approval_fingerprint": "sha256:9f2c1ab8d4e35760c1f0a2b3d4e5f60718293a4b5c6d7e8f9012a3b4c5d6e7f8",
+  "cart_fingerprint": "sha256:1122334455667788990011223344556677889900112233445566778899001122",
+  "deterministic_results": [
+    {
+      "name": "store_matches",
+      "passed": true,
+      "detail": "Cart and approval are on the dev store.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "variant_ids_match",
+      "passed": true,
+      "detail": "Both lines match exactly.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "quantities_match",
+      "passed": true,
+      "detail": "1 and 1.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "currency_matches",
+      "passed": true,
+      "detail": "USD throughout.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "stock_available",
+      "passed": true,
+      "detail": "Both variants in stock on re-read.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "amounts_match",
+      "passed": true,
+      "detail": "Subtotal 74800 USD matches the approved amount.",
+      "expected": "74800",
+      "observed": "74800"
+    },
+    {
+      "name": "within_budget",
+      "passed": true,
+      "detail": "74800 of 120000 USD.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "fit_status_acceptable",
+      "passed": true,
+      "detail": "Scene fit status is fits.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "approval_valid",
+      "passed": true,
+      "detail": "Approval has not expired.",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "name": "revisions_current",
+      "passed": true,
+      "detail": "Scene revision 7 is still current.",
+      "expected": null,
+      "observed": null
+    }
+  ],
+  "decision_answers": [
+    {
+      "question": "purchase_scope_matches",
+      "answer_type": "noul",
+      "answer": "yes",
+      "confidence": 0.94,
+      "threshold": 0.8,
+      "passed_threshold": true,
+      "source": "mock"
+    },
+    {
+      "question": "required_constraints_resolved",
+      "answer_type": "noul",
+      "answer": "yes",
+      "confidence": 0.91,
+      "threshold": 0.8,
+      "passed_threshold": true,
+      "source": "mock"
+    },
+    {
+      "question": "next_action",
+      "answer_type": "choice",
+      "answer": "ready",
+      "confidence": 0.92,
+      "threshold": 0.8,
+      "passed_threshold": true,
+      "source": "mock"
+    }
+  ],
+  "next_action": "ready",
+  "outcome": "ready",
+  "expires_at": "2026-11-21T12:17:00Z",
+  "evidence_status": "confirmed",
+  "created_at": "2026-11-21T12:07:20Z"
+}

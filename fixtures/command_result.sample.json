@@ -1,0 +1,21 @@
+{
+  "status": "accepted",
+  "patch": {
+    "actions": [
+      {
+        "type": "set_wall_color",
+        "object_id": null,
+        "payload": {
+          "wall_id": "wall_n",
+          "hex": "#6b7a4f"
+        }
+      }
+    ],
+    "base_revision": 7,
+    "action_id": "5e4d3c2b-1a09-4f8e-7d6c-5b4a39281706",
+    "origin": "user"
+  },
+  "plan_id": null,
+  "input_request": null,
+  "message": "Painting the desk wall olive."
+}

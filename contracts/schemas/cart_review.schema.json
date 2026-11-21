@@ -1,0 +1,430 @@
+{
+  "$defs": {
+    "ApprovalRecord": {
+      "additionalProperties": false,
+      "description": "Binds an approval to the shopper, the exact lines, the amounts and the\nrevisions it was made against. Any drift voids it.",
+      "properties": {
+        "action_id": {
+          "description": "Client-made UUID for this approval.",
+          "title": "Action Id",
+          "type": "string"
+        },
+        "approval_id": {
+          "title": "Approval Id",
+          "type": "string"
+        },
+        "approved_at": {
+          "format": "date-time",
+          "title": "Approved At",
+          "type": "string"
+        },
+        "base_brief_revision": {
+          "minimum": 0,
+          "title": "Base Brief Revision",
+          "type": "integer"
+        },
+        "base_scene_revision": {
+          "minimum": 0,
+          "title": "Base Scene Revision",
+          "type": "integer"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "fingerprint": {
+          "description": "Deterministic hash over store, lines, quantities, amounts and revisions.",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "shopper_id": {
+          "title": "Shopper Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "approval_id",
+        "shopper_id",
+        "expires_at",
+        "fingerprint",
+        "base_scene_revision",
+        "base_brief_revision",
+        "action_id"
+      ],
+      "title": "ApprovalRecord",
+      "type": "object"
+    },
+    "CartLine": {
+      "additionalProperties": false,
+      "description": "One approved line. The variant is exact and comes from a verified,\nshoppable CatalogOffer on the configured store.",
+      "properties": {
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "line_subtotal": {
+          "$ref": "#/$defs/Money"
+        },
+        "offer_fetched_at": {
+          "description": "Freshness of the offer this line was priced from.",
+          "format": "date-time",
+          "title": "Offer Fetched At",
+          "type": "string"
+        },
+        "offer_ref": {
+          "description": "offer_id of the verified CatalogOffer.",
+          "title": "Offer Ref",
+          "type": "string"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "quantity": {
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "unit_price": {
+          "$ref": "#/$defs/Money"
+        },
+        "variant_id": {
+          "title": "Variant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_id",
+        "product_id",
+        "variant_id",
+        "title",
+        "quantity",
+        "unit_price",
+        "line_subtotal",
+        "offer_ref",
+        "offer_fetched_at"
+      ],
+      "title": "CartLine",
+      "type": "object"
+    },
+    "CartRef": {
+      "additionalProperties": false,
+      "description": "The Shopify cart written for one approval. Written once per approval.",
+      "properties": {
+        "cart_id": {
+          "title": "Cart Id",
+          "type": "string"
+        },
+        "checkout_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hosted checkout URL. Released only after reconciliation and a passing audit.",
+          "title": "Checkout Url"
+        },
+        "fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hash over the cart lines and totals as Shopify returned them.",
+          "title": "Fingerprint"
+        },
+        "store_domain": {
+          "title": "Store Domain",
+          "type": "string"
+        },
+        "write_outcome": {
+          "default": "unknown",
+          "enum": [
+            "unknown",
+            "confirmed",
+            "failed"
+          ],
+          "title": "Write Outcome",
+          "type": "string"
+        },
+        "written_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Written At"
+        }
+      },
+      "required": [
+        "cart_id",
+        "store_domain"
+      ],
+      "title": "CartRef",
+      "type": "object"
+    },
+    "KnownCharge": {
+      "additionalProperties": false,
+      "description": "A charge the store already told us about. Unknown charges are not\nguessed; they are named as resolved at checkout.",
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/Money"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "amount"
+      ],
+      "title": "KnownCharge",
+      "type": "object"
+    },
+    "Money": {
+      "additionalProperties": false,
+      "description": "Integer minor units plus an ISO 4217 code. 120000 + USD means $1,200.00.",
+      "properties": {
+        "amount_minor": {
+          "description": "Integer minor units. Never a float.",
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "ISO 4217, uppercase.",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount_minor",
+        "currency"
+      ],
+      "title": "Money",
+      "type": "object"
+    },
+    "StoreRef": {
+      "additionalProperties": false,
+      "description": "Which store an offer came from. Kept on every offer so a cart line can\nnever silently cross stores.",
+      "properties": {
+        "api_surface": {
+          "enum": [
+            "storefront_api",
+            "shop_mcp",
+            "mock"
+          ],
+          "title": "Api Surface",
+          "type": "string"
+        },
+        "store_domain": {
+          "description": "For example my-dev-store.myshopify.com",
+          "title": "Store Domain",
+          "type": "string"
+        },
+        "store_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Full Shopify ID string, exactly as the API returns it.",
+          "title": "Store Id"
+        },
+        "store_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Store Name"
+        }
+      },
+      "required": [
+        "store_domain",
+        "api_surface"
+      ],
+      "title": "StoreRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approval": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApprovalRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "brief_revision": {
+      "minimum": 0,
+      "title": "Brief Revision",
+      "type": "integer"
+    },
+    "budget": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Money"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "cart_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CartRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "known_charges": {
+      "items": {
+        "$ref": "#/$defs/KnownCharge"
+      },
+      "title": "Known Charges",
+      "type": "array"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/CartLine"
+      },
+      "minItems": 1,
+      "title": "Lines",
+      "type": "array"
+    },
+    "merchandise_subtotal": {
+      "$ref": "#/$defs/Money"
+    },
+    "payment_state": {
+      "default": "cart_ready",
+      "enum": [
+        "cart_ready",
+        "checkout_audit_pending",
+        "needs_review",
+        "checkout_opened",
+        "payment_unconfirmed",
+        "order_confirmed"
+      ],
+      "title": "Payment State",
+      "type": "string"
+    },
+    "review_id": {
+      "title": "Review Id",
+      "type": "string"
+    },
+    "scene_revision": {
+      "minimum": 0,
+      "title": "Scene Revision",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "shipping_and_tax_note": {
+      "default": "Shipping and tax are added at checkout and are not included in this subtotal.",
+      "title": "Shipping And Tax Note",
+      "type": "string"
+    },
+    "shopper_id": {
+      "title": "Shopper Id",
+      "type": "string"
+    },
+    "source": {
+      "default": "live",
+      "enum": [
+        "live",
+        "cached",
+        "preset",
+        "generated",
+        "inferred",
+        "mock"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "awaiting_confirmation",
+        "approved",
+        "superseded",
+        "voided"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "store": {
+      "$ref": "#/$defs/StoreRef"
+    },
+    "within_budget": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Within Budget"
+    }
+  },
+  "required": [
+    "review_id",
+    "session_id",
+    "shopper_id",
+    "store",
+    "lines",
+    "merchandise_subtotal",
+    "brief_revision",
+    "scene_revision"
+  ],
+  "title": "CartReview",
+  "type": "object"
+}

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Start everything: the FastAPI backend and the Vite dev server.
+#
+#   scripts/dev            start both
+#   scripts/dev backend    backend only
+#   scripts/dev web        web only
+#
+# Works from Git Bash on Windows and from a POSIX shell. Ctrl-C stops both.
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$REPO_ROOT"
+
+# Prefer the project venv, so a teammate never accidentally runs the system
+# Python with a different pydantic.
+if [ -x ".venv/Scripts/python.exe" ]; then
+  PY=".venv/Scripts/python.exe"      # Windows
+elif [ -x ".venv/bin/python" ]; then
+  PY=".venv/bin/python"              # macOS, Linux
+else
+  echo "No .venv found. Create one first:"
+  echo "  python -m venv .venv"
+  echo "  .venv/Scripts/python -m pip install -r requirements.txt   # Windows"
+  echo "  .venv/bin/python -m pip install -r requirements.txt       # macOS, Linux"
+  exit 1
+fi
+
+if [ ! -f ".env" ]; then
+  echo "No .env found. Copying .env.example to .env (everything stays mocked)."
+  cp .env.example .env
+fi
+
+start_backend() {
+  echo "backend  http://127.0.0.1:8000  (docs at /docs)"
+  "$PY" -m uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
+}
+
+start_web() {
+  if [ ! -d "web/node_modules" ]; then
+    echo "Installing web dependencies..."
+    (cd web && npm install)
+  fi
+  echo "web      http://localhost:5173"
+  (cd web && npm run dev)
+}
+
+case "${1:-all}" in
+  backend)
+    start_backend
+    ;;
+  web)
+    start_web
+    ;;
+  all)
+    trap 'kill 0' EXIT INT TERM
+    start_backend &
+    start_web &
+    wait
+    ;;
+  *)
+    echo "usage: scripts/dev [backend|web|all]"
+    exit 2
+    ;;
+esac
