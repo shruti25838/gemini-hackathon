@@ -451,20 +451,35 @@ function renderAudit(audit) {
       label.textContent = "Total before shipping and tax";
       total.textContent = priceLabel(audit.subtotal);
       totals.append(label, total);
-      // Shopify checkout cannot run in an iframe, so each store's cart opens in its own window.
-      const opens = audit.stores.filter((store) => safeUrl(store.cart_url)).map((store) => {
-        const open = document.createElement("button");
-        open.type = "button";
-        open.className = "primary store-open";
-        open.textContent = `Open Shopify checkout · ${store.merchant}`;
-        open.addEventListener("click", () => {
+      // Shopify checkout cannot run in an iframe, so the cart opens in its own window.
+      // Pressing this is the approval: it is the only request that sends confirm,
+      // and the purchase server mints no link until it arrives. The review above
+      // asked for none, so audit.stores is empty until this call comes back.
+      const open = document.createElement("button");
+      open.type = "button";
+      open.className = "primary store-open";
+      open.textContent = "Open Shopify checkout";
+      open.addEventListener("click", async () => {
+        open.disabled = true;
+        try {
+          const confirmed = await post("/studio/scene/checkout", {base_etag: etag, confirm: true});
+          const store = (confirmed.stores ?? []).find((candidate) => safeUrl(candidate.cart_url));
+          if (!store) {
+            checkoutLine("blocked", confirmed.message || "No checkout link was issued.");
+            return;
+          }
           const left = Math.max(0, window.screenX + window.outerWidth - 560);
           const popup = window.open(store.cart_url, `shopify-${store.merchant}`, `popup,width=540,height=820,left=${left},top=${window.screenY + 40}`);
           if (!popup) location.assign(store.cart_url);
           checkoutLine("ok", `Shopify checkout opened for ${store.merchant} · enter card details there ·`);
-        });
-        return open;
+        } catch (error) {
+          checkoutLine("blocked", error.message);
+          if (error.status === 409) etag = null;
+        } finally {
+          open.disabled = false;
+        }
       });
+      const opens = [open];
       const note = document.createElement("p");
       note.className = "store-note";
       note.textContent = "Card details go into Shopify's secure checkout window, never this app. For the demo, stop before pressing Pay: no order is placed until you do.";

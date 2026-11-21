@@ -248,6 +248,47 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(len(set(ids)), 2)
 
 
+class ButtonTests(unittest.TestCase):
+    """Which button sends the approval, read off the page source.
+
+    `scene.js` has two steps. "Continue to checkout" only re-renders what the
+    review already returned, so its request must stay a plain review. "Open
+    Shopify checkout" is the approval, and it is the one request that carries
+    confirm.
+    """
+
+    def setUp(self):
+        self.source = (STUDIO / "backend" / "static" / "scene.js").read_text(encoding="utf-8")
+        self.posts = [
+            text.strip() for text in self.source.splitlines()
+            if '/studio/scene/checkout' in text and "post(" in text
+        ]
+
+    def test_exactly_two_requests_go_to_the_checkout_route(self):
+        self.assertEqual(len(self.posts), 2, self.posts)
+
+    def test_the_first_button_sends_no_confirm(self):
+        review = [text for text in self.posts if "confirm" not in text]
+        self.assertEqual(len(review), 1, self.posts)
+        self.assertIn("base_etag: etag", review[0])
+
+    def test_the_second_button_sends_confirm_true(self):
+        approve = [text for text in self.posts if "confirm" in text]
+        self.assertEqual(len(approve), 1, self.posts)
+        self.assertIn("confirm: true", approve[0])
+
+    def test_the_confirming_request_is_inside_the_open_checkout_handler(self):
+        """If confirm moved into the first handler, the approval would be
+        recorded before the shopper ever saw the total."""
+        head, _, tail = self.source.partition('open.textContent = "Open Shopify checkout"')
+        self.assertTrue(tail, "the Open Shopify checkout button is gone")
+        self.assertNotIn("confirm: true", head)
+        self.assertIn("confirm: true", tail)
+
+    def test_the_page_never_builds_a_cart_url_of_its_own(self):
+        self.assertNotIn("/cart/", self.source)
+
+
 # ==========================================================================
 # No link before our audit returns ready
 # ==========================================================================
