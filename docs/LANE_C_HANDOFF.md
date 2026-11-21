@@ -130,7 +130,10 @@ the `FitReport` until Person C approves them.
 
 - Only `commit_revision` writes state. Agents and models return proposals.
 - A product reaches a scene or cart only with a verified `CatalogOffer` for
-  that exact variant.
+  that exact variant. Verified means all three: the configured store, that
+  exact variant ID, and available for sale. A Shop MCP discovery variant and
+  an out-of-stock variant are both refused at `POST /api/scene/patch` with
+  `unverified_variant`.
 - A Shop MCP discovery offer can never be shoppable. The `CatalogOffer` model
   itself refuses it, and `CartReview` refuses to be built on that surface.
 - Money is integer minor units plus an ISO 4217 code. A mixed-currency cart
@@ -169,6 +172,10 @@ needs from B:
   `generated`, `inferred`, `mock`. `web/src/components/SourceBadge.tsx` is the
   single place that styling is decided, and a mock must never look live.
 - Regenerate types after any contract change: `python scripts/gen_schemas.py`.
+- A stand-in is identified by `variant` being `null` with
+  `asset_is_representative` `true`: it must show a not-for-sale label and no
+  add-to-cart button, and a discovery (Shop MCP) product can never be placed
+  in the scene at all and belongs only in a "similar elsewhere" link-out row.
 
 B also owns `backend/routes/agora.py`. C registers it and does not edit it.
 

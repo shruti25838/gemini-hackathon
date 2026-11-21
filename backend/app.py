@@ -371,9 +371,16 @@ async def patch_scene(
             retryable=False,
         )
 
+    # "Verified" means exactly what the shoppable rule says: this store, this
+    # exact variant, available for sale. The default surface is "any", which
+    # includes Shop MCP discovery results from other merchants, and those must
+    # never become a scene placement that reads as purchasable.
     known_variants = {
         offer.variant_id
-        for offer in svc.catalog.search_catalog(SearchRequirements(), limit=200)
+        for offer in svc.catalog.search_catalog(
+            SearchRequirements(surface="storefront_api", require_available=True),
+            limit=200,
+        )
     }
     known_assets = {
         "asset_desk_rect",

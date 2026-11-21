@@ -380,3 +380,134 @@ def test_every_cart_line_traces_back_to_a_verified_offer(
         assert offer.availability.available is True
         assert offer.variant_id == line.variant_id
         assert line.offer_ref == offer.offer_id
+
+
+# ==========================================================================
+# Verified means shoppable: this store, this variant, available
+# ==========================================================================
+
+
+@pytest.fixture
+def route_client(services: Services, monkeypatch):
+    """A client on an isolated backend, with a room already confirmed."""
+    import backend.services as services_module
+    from fastapi.testclient import TestClient
+
+    from backend.app import app
+
+    monkeypatch.setattr(services_module, "_services", services)
+    client = TestClient(app)
+    session_id = client.post("/api/session", json={}).json()["session_id"]
+    client.post(
+        "/api/room/confirm",
+        json={
+            "session_id": session_id,
+            "room_spec": make_room_payload(),
+            "base_revision": 0,
+            "action_id": str(uuid.uuid4()),
+        },
+    )
+    return client, session_id
+
+
+def post_patch(client, session_id: str, patch, base: int = 0):
+    return client.post(
+        "/api/scene/patch",
+        json={
+            "session_id": session_id,
+            "base_revision": base,
+            "action_id": str(uuid.uuid4()),
+            "patch": patch,
+        },
+    )
+
+
+def test_a_discovery_variant_cannot_enter_the_scene(route_client) -> None:
+    """Another merchant's product must never become a scene placement.
+
+    It cannot be bought either way, but a placement carrying a
+    VariantSelection reads as purchasable, and that is the confusion the
+    rule exists to prevent.
+    """
+    client, session_id = route_client
+
+    response = post_patch(
+        client,
+        session_id,
+        add_object_patch(
+            object_id="obj_discovery",
+            label="Discovery desk",
+            product_id="gid://shopify/Product/10300986753337",
+            variant_id=SHOP_MCP_DESK,
+            store_domain="mygarvee.myshopify.com",
+            offer_ref="offer_mcp_garvee_folding_desk",
+        ),
+    )
+
+    assert response.status_code == 422
+    codes = {e["code"] for e in response.json()["details"]["errors"]}
+    assert "unverified_variant" in codes
+
+    # And nothing was committed.
+    state = client.get("/api/state", params={"session_id": session_id}).json()
+    assert state["scene"] is None or state["scene"]["placements"] == []
+
+
+def test_an_unavailable_variant_cannot_enter_the_scene(route_client) -> None:
+    """Out of stock is not placeable, for the same reason."""
+    client, session_id = route_client
+
+    response = post_patch(
+        client,
+        session_id,
+        add_object_patch(
+            object_id="obj_oos",
+            label="Sold out desk",
+            product_id="gid://shopify/Product/9000000000011",
+            variant_id=OUT_OF_STOCK,
+            offer_ref="offer_dev_desk_walnut_oos",
+        ),
+    )
+
+    assert response.status_code == 422
+    codes = {e["code"] for e in response.json()["details"]["errors"]}
+    assert "unverified_variant" in codes
+
+
+def test_a_rejected_discovery_variant_uses_the_standard_error_shape(
+    route_client,
+) -> None:
+    from contracts.common import ErrorResponse
+
+    client, session_id = route_client
+    response = post_patch(
+        client,
+        session_id,
+        add_object_patch(
+            object_id="obj_discovery",
+            variant_id=SHOP_MCP_DESK,
+            store_domain="mygarvee.myshopify.com",
+            offer_ref="offer_mcp_garvee_folding_desk",
+        ),
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    ErrorResponse.model_validate(body)
+    assert set(body) == {"code", "message", "retryable", "details"}
+    assert body["code"] == "patch_rejected"
+    assert body["retryable"] is False
+    assert isinstance(body["details"]["errors"], list)
+    error = next(
+        e for e in body["details"]["errors"] if e["code"] == "unverified_variant"
+    )
+    assert error["field_path"].endswith("payload.variant_id")
+    assert "no verified CatalogOffer" in error["message"]
+
+
+def test_a_shoppable_available_variant_still_goes_in(route_client) -> None:
+    """The narrowing must not block the ordinary case."""
+    client, session_id = route_client
+    response = post_patch(client, session_id, add_object_patch())
+    assert response.status_code == 200, response.text
+    assert response.json()["scene"]["placements"][0]["variant"]["variant_id"] == WALNUT_DESK
