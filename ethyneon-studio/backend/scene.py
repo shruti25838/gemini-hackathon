@@ -424,17 +424,34 @@ class SceneStudio:
                 self._memory[variant_id] = record
         return await self.product(variant_id)
 
+    @property
+    def shoppable_store(self) -> str:
+        """The one store whose products can be bought, or "" when none is set."""
+        storefront = getattr(self.shopify, "storefront", None)
+        return storefront.domain if storefront is not None and storefront.configured else ""
+
     def catalog_alternatives(self, variant_id: str, limit: int) -> list[dict[str, Any]]:
-        """Use the demo product's curated alternatives when available."""
+        """Use the demo product's curated alternatives when available.
+
+        The cached file holds 540 products from dozens of merchants, and a
+        suggestion here can be swapped straight into the room. With a store
+        configured, anything from another merchant is dropped: offering a swap
+        the shopper cannot buy wastes the slot and is discovered only at
+        checkout.
+        """
+        store = self.shoppable_store
         try:
             groups = json.loads(CATALOG.with_name("demo_250_alternatives.json").read_text())
         except (FileNotFoundError, ValueError):
             groups = []
+        def sellable(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+            return [item for item in items if not store or item.get("merchant") == store]
+
         for group in groups:
-            alternatives = group["alternatives"]
+            alternatives = sellable(group["alternatives"])
             if group["seed_variant_id"] == variant_id:
                 return alternatives[:limit]
-            if any(item["variant_id"] == variant_id for item in alternatives):
+            if any(item["variant_id"] == variant_id for item in group["alternatives"]):
                 return [item for item in alternatives if item["variant_id"] != variant_id][:limit]
         try:
             catalog = json.loads(CATALOG.read_text())
@@ -443,7 +460,9 @@ class SceneStudio:
         kind = next((entry["object_type"] for entry in catalog if entry["variant_id"] == variant_id), None)
         return [
             {key: entry.get(key) for key in ("variant_id", "title", "merchant", "image_url", "options", "price", "listing_url", "option")}
-            for entry in catalog if entry["object_type"] == kind and entry["variant_id"] != variant_id
+            for entry in catalog
+            if entry["object_type"] == kind and entry["variant_id"] != variant_id
+            and (not store or entry.get("merchant") == store)
         ][:limit] if kind else []
 
     async def similar(self, variant_id: str, query: str, limit: int = 6) -> dict[str, Any]:
