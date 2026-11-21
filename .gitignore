@@ -42,3 +42,7 @@ AGORA_*.txt
 # built distributions
 dist/
 *.whl
+
+*.sqlite*
+fixtures/photos/*.jpeg
+fixtures/photos/*.jpg
