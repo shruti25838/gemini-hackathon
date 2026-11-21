@@ -1,480 +1,615 @@
-"""Ethyneon API. Run: uvicorn backend.app:app --reload --port 8000"""
+"""Ethyneon FastAPI app. Lane C owns this file and every route except two.
+
+Route ownership, from the team integration contract:
+  C owns backend/app.py and every route except these two
+  A owns backend/routes/live_ws.py
+  B owns backend/routes/agora.py
+C registers both. Nobody else edits them.
+
+Every write carries base_revision and a client action_id. A stale base returns
+409 with the latest revision. A repeated action_id returns the first result.
+Every failure returns {code, message, retryable, details}.
+"""
+
 from __future__ import annotations
 
-import logging
-import os
-import threading
+import asyncio
+import json
+import uuid
+from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Any, Optional
 
-from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, Query, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
-load_dotenv()
+from contracts.common import Money
+from contracts.interfaces import BudgetLine, Command, SearchRequirements
+from backend.cart import CartError
+from backend.checkout import CheckoutError
+from backend.config import get_settings
+from backend.errors import (
+    EthyneonError,
+    NotImplementedYet,
+    ethyneon_error_handler,
+    unhandled_error_handler,
+)
+from backend.lane_a import (
+    get_lane_a,
+    lane_a_delegation,
+    lane_a_is_stubbed,
+    lane_a_name,
+)
+from backend.services import Services, get_services
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile  # noqa: E402
-from fastapi.concurrency import run_in_threadpool  # noqa: E402
-from fastapi.responses import FileResponse  # noqa: E402
-from fastapi.staticfiles import StaticFiles  # noqa: E402
-from pydantic import BaseModel  # noqa: E402
-
-from contracts.schemas import DoorMotion, SceneRevision  # noqa: E402
-
-from ai import agents, commands, gates, gemini, vision, workflow
-from ai import room as ai_room
-from fit import solver
-
-from . import checkout, shop, state  # noqa: E402
-
-logging.basicConfig(level=logging.INFO, format="%(message)s")
-app = FastAPI(title="Ethyneon")
-FRONT = Path(__file__).resolve().parent.parent / "frontend"
-MAX_UPLOAD = 40 * 1024 * 1024
-DOOR_AGENTIC = os.getenv("DOOR_VIDEO_PROCESSING", "agentic") == "agentic"
-
-
-def S(sid: str) -> state.Session:
-    try:
-        return state.get(sid)
-    except KeyError:
-        raise HTTPException(404, "unknown session")
+API_VERSION = "0.2.0"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+FIXTURES = REPO_ROOT / "fixtures"
 
 
-def _bg(s: state.Session, fn, *a):
-    def run():
-        try:
-            fn(*a)
-        except Exception as e:  # never leak a stack trace to the user
-            s.emit("workflow", "error", f"{type(e).__name__}: {str(e)[:300]}")
-    threading.Thread(target=run, daemon=True).start()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    settings = get_settings()
+    mocks = settings.active_mocks()
+    print(f"Ethyneon {API_VERSION} on {settings.host}:{settings.port}")
+    print(f"  mocks on: {', '.join(mocks) if mocks else 'none'}")
+    print(f"  commerce: {'live dev store' if settings.commerce_is_live else 'MOCK_COMMERCE'}")
+    print(f"  shop mcp: {'enabled' if settings.shop_mcp else 'disabled'} (discovery only)")
+    print("  cart writes: disabled in Phase 1")
+    yield
 
 
-@app.get("/")
-def index():
-    return FileResponse(FRONT / "index.html")
+app = FastAPI(
+    title="Ethyneon",
+    version=API_VERSION,
+    description="Room photo to editable 3D room to verified Shopify cart to hosted test checkout.",
+    lifespan=lifespan,
+)
+
+app.add_exception_handler(EthyneonError, ethyneon_error_handler)
+app.add_exception_handler(Exception, unhandled_error_handler)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_settings().cors_origin_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-app.mount("/static", StaticFiles(directory=FRONT), name="static")
+def services() -> Services:
+    return get_services()
+
+
+def _redact_checkout_url(cart: Optional[dict[str, Any]]) -> Optional[dict[str, Any]]:
+    """Keep the private checkout link out of the general state endpoint.
+
+    The URL is a bearer link to a hosted checkout. /api/state is a broad
+    read, so the link is withheld here and released only by
+    POST /api/checkout/continue, after a passing audit bound to this exact
+    approval and cart. The field stays present and null, so the contract is
+    unchanged and a client can tell the difference between "no cart" and
+    "cart exists, link withheld".
+    """
+    if not cart:
+        return cart
+    reference = cart.get("cart_reference")
+    if isinstance(reference, dict) and reference.get("checkout_url"):
+        cart = {**cart, "cart_reference": {**reference, "checkout_url": None}}
+    return cart
+
+
+# --------------------------------------------------------------------------
+# Request bodies
+# --------------------------------------------------------------------------
+
+
+class SessionRequest(BaseModel):
+    shopper_id: Optional[str] = None
+
+
+class AnalyzeRequest(BaseModel):
+    session_id: str
+    media_ref: Optional[str] = None
+    consent_given: bool = False
+
+
+class RoomConfirmRequest(BaseModel):
+    session_id: str
+    room_spec: dict[str, Any]
+    base_revision: int
+    action_id: str
+
+
+class CommandRequest(BaseModel):
+    session_id: str
+    text: str
+    selected_object_id: Optional[str] = None
+    base_revision: int = 0
+    action_id: str
+
+
+class ScenePatchRequest(BaseModel):
+    session_id: str
+    patch: dict[str, Any]
+    base_revision: int
+    action_id: str
+
+
+class InputRespondRequest(BaseModel):
+    session_id: str
+    interaction_id: str
+    value: Any = None
+
+
+class SelectionItem(BaseModel):
+    variant_id: str
+    quantity: int = Field(default=1, ge=1)
+
+
+class CartReviewRequest(BaseModel):
+    session_id: str
+    selections: list[SelectionItem] = Field(min_length=1)
+    budget_minor: Optional[int] = None
+    currency: str = "USD"
+
+
+class CartConfirmRequest(BaseModel):
+    session_id: str
+    review_id: str
+    base_revision: int
+    action_id: str
+
+
+class CheckoutContinueRequest(BaseModel):
+    session_id: str
+    review_id: str
+    action_id: str
+    fit_status: str = "unknown"
+
+
+# --------------------------------------------------------------------------
+# Health
+# --------------------------------------------------------------------------
 
 
 @app.get("/api/health")
-def health():
-    return {"gemini": gemini.configured(), "mock_ai": gemini.mock_ai(), "shopify_live": shop.live(),
-            "voice_mode": os.getenv("ETHYNEON_VOICE_MODE", "hydrogen"),
-            "fixture_catalog": shop.fixture_mode()}
-
-
-@app.post("/api/session")
-def create_session():
-    s = state.new_session()
-    s.emit("session", "info", "Session started")
-    return {"id": s.id}
-
-
-@app.get("/api/session/{sid}/state")
-def get_state(sid: str):
-    s = S(sid)
-    sel = []
-    if s.scene:
-        for vid in [p.variant_id for p in s.scene.placements if p.variant_id] + s.extra_variant_ids:
-            if vid in s.offers:
-                sel.append(s.offers[vid].model_dump())
+async def health(svc: Services = Depends(services)) -> dict[str, Any]:
+    # Reads the settings this app instance is actually using, not the ambient
+    # process config, so what it reports is what is really in force.
+    settings = svc.settings
     return {
-        "room": s.room.model_dump() if s.room else None,
-        "brief": s.brief.model_dump(),
-        "scene": s.scene.model_dump() if s.scene else None,
-        "fit": s.fit.model_dump() if s.fit else None,
-        "selected": sel,
-        "subtotal_minor": sum(o["price_minor"] for o in sel),
-        "pending": s.pending_input["request"] if s.pending_input else None,
-        "approval": {k: s.approval[k] for k in ("scene_rev", "subtotal_minor")} if s.approval else None,
-        "cart": {k: v for k, v in (s.cart or {}).items() if k != "checkout_url"} or None,
-        "audit": s.audit,
-        "alternative": s.last_alternative,
-        "plan": s.plan.model_dump() if s.plan else None,
-        "door_arcs": _door_arcs(s),
+        "status": "ok",
+        "version": API_VERSION,
+        "mocks_on": settings.active_mocks(),
+        "commerce": "live" if settings.commerce_is_live else "mock",
+        "shop_mcp": "enabled" if settings.shop_mcp else "disabled",
+        "cart_writes": "disabled",
+        "lane_a": lane_a_name(),
+        "lane_a_is_stub": lane_a_is_stubbed(),
+        "lane_a_functions": lane_a_delegation(),
+        "phase": "1 (lane C core)",
     }
 
 
-def _door_arcs(s: state.Session) -> list[dict]:
-    """Swept-area outlines for the 3D view, computed by the same solver code."""
-    import math
-    if not s.room:
-        return []
-    room, out = s.room.model_dump(), []
-    for o in room["openings"]:
-        if o["type"] != "door" or not o.get("motion") or o["motion"]["swing"] != "in":
+# --------------------------------------------------------------------------
+# Session and room
+# --------------------------------------------------------------------------
+
+
+@app.post("/api/session")
+async def create_session(
+    body: SessionRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    session_id = f"sess_{uuid.uuid4().hex[:16]}"
+    shopper_id = body.shopper_id or f"shopper_{uuid.uuid4().hex[:12]}"
+    session = svc.db.create_session(session_id, shopper_id)
+    svc.events.emit_simple(session_id, "app", "session_created", "Session started.")
+    return {
+        "session_id": session_id,
+        "shopper_id": shopper_id,
+        "room_revision": session["room_revision"],
+        "scene_revision": session["scene_revision"],
+        "brief_revision": session["brief_revision"],
+    }
+
+
+@app.post("/api/room/analyze")
+async def analyze_room(
+    body: AnalyzeRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    """Calls A's analyze_room. While MOCK_AI is on, serves A's fixture.
+
+    The draft is never committed here. It goes back to the client, which
+    corrects it and posts it to /api/room/confirm.
+    """
+    if not body.consent_given:
+        raise EthyneonError(
+            code="consent_required",
+            message="Consent must be given before a photo is analysed.",
+            retryable=False,
+        )
+
+    lane_a = get_lane_a()
+    analysis = lane_a.analyze_room(b"", body.session_id)
+
+    # The draft is validated before it goes back, but it is never committed
+    # here. Only POST /api/room/confirm writes.
+    validation = None
+    if analysis.room_spec_draft is not None:
+        validation = lane_a.validate_room_spec(analysis.room_spec_draft).model_dump(
+            mode="json"
+        )
+
+    label = "mock" if lane_a_is_stubbed() else "live"
+    svc.events.emit_simple(
+        body.session_id,
+        "ai",
+        "waiting_for_measurement",
+        "Draft room ready. Confirm one real measurement to set the scale.",
+        source_label=label,
+    )
+    return {
+        "analysis": analysis.model_dump(mode="json"),
+        "validation": validation,
+        "source_label": label,
+        "lane_a_is_stub": lane_a_is_stubbed(),
+    }
+
+
+@app.post("/api/room/confirm")
+async def confirm_room(
+    body: RoomConfirmRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    result = svc.revisions.commit_revision(
+        "room",
+        body.room_spec,
+        body.base_revision,
+        body.action_id,
+        session_id=body.session_id,
+    )
+    if result.conflict is not None:
+        raise EthyneonError(
+            code=result.conflict.code,
+            message=result.conflict.message,
+            retryable=True,
+            status_code=409,
+            details={"latest_revision": result.conflict.latest_revision},
+        )
+    if not result.committed:
+        raise EthyneonError(
+            code="room_invalid",
+            message="The room was rejected. The previous room is still in use.",
+            retryable=False,
+            status_code=422,
+            details={
+                "errors": [e.model_dump() for e in (result.validation.errors if result.validation else [])]
+            },
+        )
+    return result.model_dump(mode="json")
+
+
+@app.get("/api/state")
+async def get_state(
+    session_id: str,
+    since_revision: Optional[int] = Query(default=None),
+    svc: Services = Depends(services),
+) -> dict[str, Any]:
+    """Everything a reconnecting client needs."""
+    session = svc.db.get_session(session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session",
+            message=f"No session {session_id}.",
+            retryable=False,
+            status_code=404,
+        )
+
+    room = svc.revisions.current_room(session_id)
+    scene = svc.revisions.current_scene(session_id)
+    cart = _redact_checkout_url(svc.db.latest_cart_review(session_id))
+
+    return {
+        "session_id": session_id,
+        "room_revision": session["room_revision"],
+        "scene_revision": session["scene_revision"],
+        "room_spec": room.model_dump(mode="json") if room else None,
+        "scene": scene.model_dump(mode="json") if scene else None,
+        "cart_review": cart,
+        "events": svc.db.events_since(session_id, since_revision),
+        "mocks_on": get_settings().active_mocks(),
+    }
+
+
+# --------------------------------------------------------------------------
+# Commands and scene edits
+# --------------------------------------------------------------------------
+
+
+@app.post("/api/command")
+async def post_command(
+    body: CommandRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    session = svc.db.get_session(body.session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session", message="No such session.", retryable=False, status_code=404
+        )
+
+    command = Command(
+        command_id=body.action_id,
+        session_id=body.session_id,
+        text=body.text,
+        transcript_source="typed",
+        selected_object_id=body.selected_object_id,
+        room_revision=session["room_revision"],
+        scene_revision=session["scene_revision"],
+    )
+    result = get_lane_a().handle_command(
+        body.session_id,
+        command,
+        {
+            "room_revision": session["room_revision"],
+            "scene_revision": session["scene_revision"],
+        },
+    )
+    # A proposal only. C's commit_revision remains the single writer, so the
+    # client posts any accepted patch to /api/scene/patch.
+    return {
+        "result": result.model_dump(mode="json"),
+        "source_label": "mock" if lane_a_is_stubbed() else "live",
+        "lane_a_is_stub": lane_a_is_stubbed(),
+    }
+
+
+@app.post("/api/scene/patch")
+async def patch_scene(
+    body: ScenePatchRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    """A manual drag or drop. check_fit runs before anything is committed."""
+    room = svc.revisions.current_room(body.session_id)
+    if room is None:
+        raise EthyneonError(
+            code="no_room_yet",
+            message="Confirm the room before placing anything in it.",
+            retryable=False,
+        )
+
+    # "Verified" means exactly what the shoppable rule says: this store, this
+    # exact variant, available for sale. The default surface is "any", which
+    # includes Shop MCP discovery results from other merchants, and those must
+    # never become a scene placement that reads as purchasable.
+    known_variants = {
+        offer.variant_id
+        for offer in svc.catalog.search_catalog(
+            SearchRequirements(surface="storefront_api", require_available=True),
+            limit=200,
+        )
+    }
+    known_assets = {
+        "asset_desk_rect",
+        "asset_monitor_generic",
+        "asset_chair_generic",
+        "asset_lamp_generic",
+        "asset_shelf_generic",
+        "asset_rug_generic",
+        "asset_box_generic",
+    }
+
+    result = svc.revisions.commit_revision(
+        "scene",
+        body.patch,
+        body.base_revision,
+        body.action_id,
+        session_id=body.session_id,
+        known_variant_ids=known_variants,
+        known_asset_ids=known_assets,
+    )
+
+    if result.conflict is not None:
+        raise EthyneonError(
+            code=result.conflict.code,
+            message=result.conflict.message,
+            retryable=True,
+            status_code=409,
+            details={"latest_revision": result.conflict.latest_revision},
+        )
+    if not result.committed:
+        raise EthyneonError(
+            code="patch_rejected",
+            message="The scene patch was rejected.",
+            retryable=False,
+            status_code=422,
+            details={
+                "errors": [
+                    e.model_dump()
+                    for e in (result.validation.errors if result.validation else [])
+                ]
+            },
+        )
+    return result.model_dump(mode="json")
+
+
+@app.post("/api/input/respond")
+async def respond_to_input(
+    body: InputRespondRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    """Answers a paused workflow. A resumes the same run in Phase 2."""
+    raise NotImplementedYet("POST /api/input/respond", "Phase 2")
+
+
+# --------------------------------------------------------------------------
+# Catalog
+# --------------------------------------------------------------------------
+
+
+@app.get("/api/catalog/search")
+async def search_catalog_route(
+    query: Optional[str] = None,
+    limit: int = Query(default=10, ge=1, le=50),
+    surface: str = Query(default="any", pattern="^(any|storefront_api|shop_mcp)$"),
+    require_dimensions: bool = False,
+    svc: Services = Depends(services),
+) -> dict[str, Any]:
+    requirements = SearchRequirements(
+        query=query,
+        require_dimensions=require_dimensions,
+        surface=surface,  # type: ignore[arg-type]
+    )
+    offers = svc.catalog.search_catalog(requirements, limit=limit)
+    return {
+        "offers": [o.model_dump(mode="json") for o in offers],
+        "shoppable_count": sum(1 for o in offers if o.shoppable),
+        "discovery_count": sum(1 for o in offers if not o.shoppable),
+        "discovery_note": (
+            "Discovery results come from other merchants and can never be added "
+            "to the cart."
+        ),
+        "degraded": svc.catalog.last_discovery_error,
+    }
+
+
+# --------------------------------------------------------------------------
+# Cart and checkout
+# --------------------------------------------------------------------------
+
+
+@app.post("/api/cart/review")
+async def review_cart(
+    body: CartReviewRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    session = svc.db.get_session(body.session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session", message="No such session.", retryable=False, status_code=404
+        )
+
+    selections = [
+        BudgetLine(
+            variant_id=item.variant_id,
+            quantity=item.quantity,
+            # Price is read live; this is only a placeholder the server ignores.
+            unit_price=Money(amount_minor=0, currency=body.currency),
+        )
+        for item in body.selections
+    ]
+    review = svc.carts.build_cart_review(
+        body.session_id,
+        session["shopper_id"],
+        selections,
+        scene_revision=session["scene_revision"],
+        brief_revision=session["brief_revision"],
+        budget=(
+            Money(amount_minor=body.budget_minor, currency=body.currency)
+            if body.budget_minor is not None
+            else None
+        ),
+    )
+    return review.model_dump(mode="json")
+
+
+@app.post("/api/cart/confirm")
+async def confirm_cart(
+    body: CartConfirmRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    session = svc.db.get_session(body.session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session", message="No such session.", retryable=False, status_code=404
+        )
+    review = svc.carts.confirm_cart(
+        body.review_id,
+        body.base_revision,
+        body.action_id,
+        current_scene_revision=session["scene_revision"],
+    )
+    return review.model_dump(mode="json")
+
+
+@app.post("/api/checkout/continue")
+async def continue_checkout(
+    body: CheckoutContinueRequest, svc: Services = Depends(services)
+) -> dict[str, Any]:
+    session = svc.db.get_session(body.session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session", message="No such session.", retryable=False, status_code=404
+        )
+
+    audit, checkout_url = svc.checkout.continue_checkout(
+        body.review_id,
+        body.action_id,
+        current_scene_revision=session["scene_revision"],
+        fit_status=body.fit_status,
+    )
+    return {
+        "audit": audit.model_dump(mode="json"),
+        "checkout_url": checkout_url,
+        "payment_state": "checkout_opened" if checkout_url else "needs_review",
+        "note": (
+            "Opening the hosted checkout is not payment. The order is confirmed "
+            "only by a read-only order lookup or a verified Shopify order event."
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
+# WebSockets
+# --------------------------------------------------------------------------
+
+
+@app.websocket("/ws/events")
+async def events_socket(websocket: WebSocket, session_id: str = "") -> None:
+    """Streams ActivityEvent messages and scene-revision notices from C to B.
+
+    Events are written to SQLite before they are pushed here, so a client that
+    misses a push still finds them through GET /api/state?since_revision.
+    """
+    await websocket.accept()
+    svc = get_services()
+    queue = await svc.bus.subscribe(session_id)
+    try:
+        await websocket.send_json(
+            {
+                "type": "connected",
+                "session_id": session_id,
+                "message": "Connected. Reconnect with GET /api/state?since_revision after a drop.",
+            }
+        )
+        while True:
+            try:
+                message = await asyncio.wait_for(queue.get(), timeout=20.0)
+            except asyncio.TimeoutError:
+                await websocket.send_json({"type": "heartbeat"})
+                continue
+            await websocket.send_json(message)
+    except WebSocketDisconnect:
+        pass
+    finally:
+        await svc.bus.unsubscribe(session_id, queue)
+
+
+def register_lane_routes(application: FastAPI) -> None:
+    """C registers A's and B's route files.
+
+    A missing module is fine; a module that exists but fails to import is
+    reported rather than swallowed, because a silent pass would hide a broken
+    lane behind a server that looks healthy.
+    """
+    import importlib.util
+
+    for module_name, owner in (("live_ws", "A"), ("agora", "B")):
+        qualified = f"backend.routes.{module_name}"
+        if importlib.util.find_spec(qualified) is None:
+            print(f"  lane {owner} routes: {module_name}.py not present yet, skipping")
             continue
-        (hx, hz), n, a, r = solver.door_geometry(room, o)
-        amax = math.radians(o["motion"].get("max_angle_deg", 90))
-        pts = [[hx, hz]] + [[hx + r * (a[0] * math.cos(t) + n[0] * math.sin(t)), hz + r * (a[1] * math.cos(t) + n[1] * math.sin(t))]
-                            for t in [amax * i / 24 for i in range(25)]]
-        out.append({"id": o["id"], "points": pts, "source": o["motion"]["source"]})
-    return out
+        try:
+            module = importlib.import_module(qualified)
+            application.include_router(module.router)
+        except Exception as exc:  # noqa: BLE001 - reported, not hidden
+            print(f"  lane {owner} routes: {qualified} failed to load: {exc!r}")
 
 
-@app.get("/api/session/{sid}/events")
-def events(sid: str, since: int = 0):
-    s = S(sid)
-    return [e.model_dump() for e in s.events if e.seq > since]
-
-
-# ---------- room ----------
-async def _read(f: UploadFile) -> bytes:
-    data = await f.read()
-    if len(data) > MAX_UPLOAD:
-        raise HTTPException(413, "file too large")
-    return data
-
-
-PRESET_ROOM = {
-    "room_revision": 1, "width_m": {"value_m": 3.2, "source": "default", "confidence": 1.0},
-    "depth_m": {"value_m": 3.0, "source": "default", "confidence": 1.0},
-    "height_m": {"value_m": 2.5, "source": "default", "confidence": 1.0},
-    "walls": [{"id": w, "color_hex": "#d9d4cc"} for w in ("wall_n", "wall_e", "wall_s", "wall_w")],
-    "openings": [{"id": "door1", "wall": "wall_n", "type": "door", "offset_m": 2.2, "width_m": 0.8, "confidence": 1.0},
-                 {"id": "window1", "wall": "wall_w", "type": "window", "offset_m": 0.9, "width_m": 1.2, "height_m": 1.2,
-                  "sill_m": 0.9, "confidence": 1.0}],
-    "existing_items": [], "status": "preset", "notes": ["PRESET ROOM: not from your photo. Edit the dimensions to match your room."],
-}
-
-
-@app.post("/api/session/{sid}/preset")
-def use_preset(sid: str):
-    """Labeled fallback when the photo path fails. Never presented as the shopper's room."""
-    from contracts.schemas import RoomSpec
-    s = S(sid)
-    spec = RoomSpec(**PRESET_ROOM)
-    s.set_room(spec)
-    if not s.scene:
-        s.commit_scene(SceneRevision(rev=0, room_revision=spec.room_revision))
-    s.emit("roomspec", "warn", "Using the labeled PRESET room (not from a photo). Enter your real wall length.")
-    return {"room": spec.model_dump()}
-
-
-@app.post("/api/session/{sid}/photo")
-async def upload_photo(sid: str, file: UploadFile = File(...)):
-    s = S(sid)
-    img, mime = await _read(file), file.content_type or "image/jpeg"
-    s.emit("roomspec", "started", "Decision 1 photo gate, then Gemini 4 Neon reads the room")
-    a = await run_in_threadpool(ai_room.analyze_room, img, sid, mime)
-    s.gate_log.append(a.gate.model_dump())
-    s.emit("gate.room_photo", "ok" if a.gate.passed else "warn", a.gate.message or "Photo accepted",
-           answers=a.gate.answers, latency_ms=a.gate.latency_ms)
-    if not a.accepted:
-        s.emit("roomspec", "warn" if a.room_spec is None and not a.gate.passed else "error", a.message)
-        if a.gate.passed or a.gate.degraded:
-            raise HTTPException(422, a.message)
-        return {"accepted": False, "gate": a.gate.model_dump()}
-    v = ai_room.validate_room_spec(a.room_spec)  # C validates before commit
-    if not v.ok:
-        s.emit("roomspec", "error", "Room draft failed validation: " + "; ".join(v.errors))
-        raise HTTPException(422, "The room draft was invalid. Try another photo or use the preset room.")
-    spec = v.room_spec
-    s.set_room(spec)
-    if not s.scene:
-        s.commit_scene(SceneRevision(rev=0, room_revision=spec.room_revision,
-                                     wall_colors={w.id: w.color_hex for w in spec.walls}))
-    s.emit("roomspec", "ok", f"Room {spec.width_m.value_m:.2f} x {spec.depth_m.value_m:.2f} m, "
-           f"{len(spec.openings)} openings, {len(spec.existing_items)} items", latency_ms=a.latency_ms,
-           notes=spec.notes)
-    return {"accepted": True, "gate": a.gate.model_dump(), "room": spec.model_dump()}
-
-
-@app.post("/api/session/{sid}/door")
-async def upload_door(sid: str, file: UploadFile = File(...), opening_id: Optional[str] = Form(None)):
-    """Fast path: Decision 1 answers in ~2 s; Neon verifies in the background and can only lower trust."""
-    s = S(sid)
-    if not s.room:
-        raise HTTPException(400, "Add a room photo first")
-    doors = [o for o in s.room.openings if o.type == "door"]
-    if not doors:
-        msg = ("Your room model has no door, so there is nothing to attach the clip to. "
-               "Upload a room photo that shows the door, then add the clip.")
-        s.emit("door_motion", "needs_input", msg)
-        return {"accepted": False, "problem": msg}
-    door_id = opening_id or doors[0].id
-    data = await _read(file)
-    mime = file.content_type or "video/mp4"
-    part = await run_in_threadpool(gemini.video_part, data, mime, False)  # frame sampling: fast
-    f = await run_in_threadpool(ai_room.fast_door, part)
-    s.emit("gate.door_clip", "ok" if f.gate.passed else "warn", f.gate.message or "Clip shows the door moving",
-           answers=f.gate.answers, latency_ms=f.gate.latency_ms)
-    if not f.accepted:
-        s.emit("door_motion", "warn", f.message)
-        return {"accepted": False, "problem": f.message}
-    if f.hinge_side and f.swing:
-        _set_door(s, door_id, f.hinge_side, f.swing, "inferred", 0.7, "fast check")
-    s.door_hint = {"opening_id": door_id, "hinge_side": f.hinge_side, "swing": f.swing}
-    s.emit("door_motion", "ok" if f.hinge_side else "needs_input", f.message, latency_ms=f.gate.latency_ms)
-    _bg(s, _verify_door_bg, s, part, door_id, f.hinge_side, f.swing)
-    return {"accepted": True, "fast": f.model_dump(), "message": f.message}
-
-
-def _set_door(s, door_id: str, hinge: str, swing: str, source: str, conf: float, why: str, evidence_ts=None):
-    spec = s.room.model_copy(deep=True)
-    o = next((o for o in spec.openings if o.id == door_id), None)
-    if not o:
-        return
-    o.motion = DoorMotion(hinge_side=hinge, swing=swing, source=source, confidence=conf, evidence_ts=evidence_ts)
-    spec.room_revision += 1
-    s.set_room(spec)
-    _recheck(s, f"door set ({why})")
-
-
-def _verify_door_bg(s, part, door_id, fast_hinge, fast_swing):
-    d = ai_room.verify_door(part, workflow.room_summary(s))
-    cur = next((o for o in s.room.openings if o.id == door_id), None)
-    if cur is not None and cur.motion is not None and cur.motion.source == "confirmed":
-        return  # the shopper already decided; never override a tap
-    if not d or d["hinge_side"] == "unknown" or d["swing"] == "unknown":
-        if not (fast_hinge and fast_swing):
-            s.emit("door_motion", "needs_input", "Neon couldn't confirm the door either. Tap hinge L / R and opens in / out.")
-        return
-    if fast_hinge and d["hinge_side"] != fast_hinge:
-        if cur is not None and cur.motion is not None:  # readings disagree: remove the guess, ask
-            spec = s.room.model_copy(deep=True)
-            next(o for o in spec.openings if o.id == door_id).motion = None
-            spec.room_revision += 1
-            s.set_room(spec)
-            _recheck(s, "door readings disagree")
-        s.emit("door_motion", "needs_input", f"The fast check said hinge {fast_hinge}, Neon says {d['hinge_side']}. "
-               "Tap which side the hinge is on.", draft=d)
-        return
-    hinge = fast_hinge or d["hinge_side"]
-    swing = fast_swing or d["swing"]
-    _set_door(s, door_id, hinge, swing, "inferred", 0.85 if fast_hinge else d["confidence"],
-              "Neon verified" if fast_hinge else "Neon reading", d.get("evidence_ts"))
-    s.emit("door_motion", "ok", f"Neon {'agrees' if fast_hinge else 'reads'}: hinge {hinge}, opens {swing} "
-           f"(clearest at {d.get('evidence_ts')}).", draft=d)
-
-
-class DoorManual(BaseModel):
-    opening_id: str
-    hinge_side: Optional[Literal["left", "right"]] = None
-    swing: Optional[Literal["in", "out"]] = None
-
-
-@app.post("/api/session/{sid}/door/manual")
-def door_manual(sid: str, body: DoorManual):
-    s = S(sid)
-    spec = s.room.model_copy(deep=True)
-    o = next((o for o in spec.openings if o.id == body.opening_id), None)
-    if not o:
-        raise HTTPException(404, "no such opening")
-    hint = getattr(s, "door_hint", None) or {}
-    cur = o.motion
-    hinge = body.hinge_side or (cur.hinge_side if cur else None) or hint.get("hinge_side")
-    swing = body.swing or (cur.swing if cur else None) or hint.get("swing")
-    if not hinge:
-        s.door_hint = {**hint, "opening_id": o.id, "swing": swing}
-        s.emit("door_motion", "needs_input", "Now tap hinge L or R.")
-        return {"room": spec.model_dump()}
-    note = ""
-    if not swing:
-        swing, note = "in", " (assumed opens in; tap 'opens out' if not)"
-    o.motion = DoorMotion(hinge_side=hinge, swing=swing, source="confirmed", confidence=1.0)
-    spec.room_revision += 1
-    s.set_room(spec)
-    s.emit("door_motion", "ok", f"Door set by you: hinge {hinge}, opens {swing}{note}")
-    _recheck(s, "door corrected by shopper")
-    return {"room": spec.model_dump()}
-
-
-class Measure(BaseModel):
-    field: Literal["width_m", "depth_m", "height_m"] = "width_m"
-    value_m: float
-
-
-@app.post("/api/session/{sid}/measure")
-def measure(sid: str, body: Measure):
-    s = S(sid)
-    if not s.room:
-        raise HTTPException(400, "no room yet")
-    try:
-        spec = vision.anchor_measurement(s.room, body.field, body.value_m)
-    except vision.RoomSpecError as e:
-        raise HTTPException(422, str(e))
-    s.set_room(spec)
-    s.emit("measurement", "ok", f"{body.field} confirmed at {body.value_m} m; estimated lengths rescaled")
-    _recheck(s, "measurement anchored")
-    if s.pending_input and s.pending_input["request"]["kind"] == "measurement":
-        _bg(s, workflow.resume, s)
-    return {"room": spec.model_dump()}
-
-
-def _recheck(s: state.Session, why: str):
-    if s.scene and s.scene.placements and s.room:
-        rep = solver.check(s.room.model_dump(), [p.model_dump() for p in s.scene.placements], s.scene.rev)
-        from contracts.schemas import FitReport
-        s.fit = FitReport(**rep)
-        s.emit("server.check", "ok" if rep["status"] in ("fits", "tight") else "warn",
-               f"Re-checked after {why}: {rep['status']}", report=rep)
-
-
-# ---------- commands ----------
-@app.post("/api/session/{sid}/command")
-async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[UploadFile] = File(None),
-                  selected_key: Optional[str] = Form(None), frame: Optional[UploadFile] = File(None)):
-    """B -> C route. A's handle_command interprets; this server applies the result."""
-    s = S(sid)
-    if not text and not audio:
-        raise HTTPException(400, "say or type something")
-    audio_bytes = await _read(audio) if audio else None
-    frame_t = ((await _read(frame)), frame.content_type or "image/jpeg") if frame else None
-    try:
-        res = await run_in_threadpool(lambda: commands.handle_command(
-            s, text=text, audio=audio_bytes, audio_mime=(audio.content_type if audio else "audio/webm"),
-            selected_key=selected_key or None, frame=frame_t))
-    except gemini.GeminiError:
-        s.emit("intake", "error", "Taking longer than usual. Please try again or type it.")
-        raise HTTPException(503, "model unavailable")
-    if res.brief is not None and res.brief_changed:
-        s.brief = res.brief
-        s.emit("brief", "ok", f"Updated {', '.join(res.brief_changed)}", brief=s.brief.model_dump())
-        if s.approval:
-            s.approval = None
-            s.emit("approval", "warn", "Brief changed; previous cart approval voided")
-    out = {"status": res.status, "action": res.action, "message": res.message, "intent": res.intent,
-           "transcript": res.transcript, "say": res.message if res.status == "needs_input" else res.spoken_reply}
-    if res.status == "needs_input":
-        s.emit("command", "needs_input", res.message, candidates=res.payload.get("candidates", []))
-        return {**out, "status": "clarify", **res.payload}
-    if res.action == "measurement":
-        return measure(sid, Measure(**res.payload))
-    if res.action == "cart_review":
-        return {**out, "status": "review", "review": _review(s)}
-    if res.action == "move":
-        return move(sid, MoveBody(**res.payload))
-    if res.action == "run_plan":
-        _bg(s, workflow.execute, s, res.plan)
-        return {**out, "status": "running", "plan": res.plan.model_dump(), "planner": res.plan.source}
-    if res.action == "plan_and_run":
-        brief = s.brief
-        _bg(s, lambda: workflow.execute(s, commands.plan_workflow(s, res.payload["request"], res.payload["route"], brief)))
-        return {**out, "status": "running", "planner": "neon (planning in background)"}
-    return out
-
-
-class MoveBody(BaseModel):
-    key: str
-    x: float
-    z: float
-    rot: Literal[0, 90, 180, 270] = 0
-
-
-@app.post("/api/session/{sid}/move")
-def move(sid: str, body: MoveBody):
-    s = S(sid)
-    if not (s.scene and s.room):
-        raise HTTPException(400, "nothing to move")
-    if not any(p.key == body.key for p in s.scene.placements):
-        raise HTTPException(404, "unknown item")
-    if next(p for p in s.scene.placements if p.key == body.key).locked:
-        raise HTTPException(409, "That item is locked (you're keeping it)")
-    base = s.scene.rev
-    placements = [p.model_dump() for p in s.scene.placements]
-
-    def run():
-        res = agents.review_move(s.room.model_dump(), placements, body.key, body.x, body.z, body.rot,
-                                 s.brief.model_dump(), s.emit)
-        if res["accepted"]:
-            _commit(s, res["placements"], base, "move accepted")
-        else:
-            s.last_alternative = {"base_rev": base, "title": "That spot conflicts", "requested": res["placements"], "conflicts": res["conflicts"],
-                                  "alternative": res["alternative"]["placements"], "report": res["alternative"]["report"],
-                                  "style": res["alternative"].get("style_assessment"),
-                                  "findings": res["alternative"].get("findings", [])}
-            s.emit("move", "needs_input", f"That spot conflicts: {_names(s, res['conflicts'][0]['detail'])}. "
-                   f"A checked alternative nearby is ready ({res['alternative']['report']['status'].replace('_', ' ')}).")
-    _bg(s, run)
-    return {"status": "running"}
-
-
-def _names(s, text: str) -> str:
-    """Shopper-facing text: product titles instead of Shopify IDs, plain words instead of ids."""
-    for vid, o in s.offers.items():
-        text = text.replace(vid, f"the {o.title}")
-    for i in (s.room.existing_items if s.room else []):
-        text = text.replace(i.id, f"your {i.label}")
-    return text.replace("door door1", "the door").replace("door:door1", "the door")
-
-
-@app.post("/api/session/{sid}/alternative/{decision}")
-def alternative(sid: str, decision: Literal["accept", "reject"]):
-    s = S(sid)
-    alt = s.last_alternative
-    if not alt:
-        raise HTTPException(404, "no alternative pending")
-    s.last_alternative = None
-    if decision == "accept":
-        _commit(s, alt["alternative"], alt["base_rev"], "alternative accepted")
-    else:
-        s.emit("move", "info", "Kept the previous layout")
-    return get_state(sid)
-
-
-def _commit(s: state.Session, placements: list[dict], base: int, why: str):
-    from contracts.schemas import FitReport, Placement
-    sc = s.scene.model_copy(deep=True)
-    sc.placements = [Placement(**{k: v for k, v in p.items() if k in Placement.model_fields and v is not None})
-                     for p in placements if p.get("w") is not None]
-    try:
-        c = s.commit_scene(sc, base_rev=base)
-    except state.StaleRevision as e:
-        s.emit("scene", "warn", f"Discarded a late result: {e}")
-        return
-    rep = solver.check(s.room.model_dump(), [p.model_dump() for p in c.placements], c.rev)
-    s.fit = FitReport(**rep)
-    s.emit("scene", "ok", f"Revision {c.rev} committed ({why}); fit: {rep['status']}", rev=c.rev, fit=rep)
-
-
-@app.post("/api/session/{sid}/undo")
-def undo(sid: str):
-    s = S(sid)
-    if len(s.scenes) < 2:
-        raise HTTPException(400, "nothing to undo")
-    prev = s.scenes[-2].model_copy(deep=True)
-    _commit(s, [p.model_dump() for p in prev.placements], s.scene.rev, f"undo to rev {s.scenes[-2].rev}")
-    s.scene.wall_colors, s.scene.lighting = prev.wall_colors, prev.lighting
-    return get_state(sid)
-
-
-# ---------- commerce ----------
-def _review(s, exclude: Optional[list[str]] = None):
-    try:
-        s.last_review = checkout.build_review(s, s.extra_variant_ids, exclude)
-    except (checkout.CheckoutError, shop.ShopError) as e:
-        raise HTTPException(409, str(e))
-    return s.last_review
-
-
-class ReviewBody(BaseModel):
-    exclude: list[str] = []  # variant ids the shopper does not want to buy
-
-
-@app.post("/api/session/{sid}/review")
-def review(sid: str, body: Optional[ReviewBody] = None):
-    return _review(S(sid), (body.exclude if body else []))
-
-
-@app.post("/api/session/{sid}/approve")
-def approve(sid: str):
-    """Only the 'Confirm and add to cart' button calls this."""
-    s = S(sid)
-    if not s.last_review:
-        raise HTTPException(400, "review first")
-    try:
-        tok = checkout.approve(s, s.last_review)
-        return checkout.create_cart(s, tok["approval_token"])
-    except (checkout.CheckoutError, shop.ShopError) as e:
-        s.emit("cart", "error", str(e))
-        raise HTTPException(409, str(e))
-
-
-@app.post("/api/session/{sid}/checkout")
-def do_checkout(sid: str):
-    s = S(sid)
-    try:
-        return checkout.audit_and_release(s)
-    except checkout.CheckoutError as e:
-        raise HTTPException(409, str(e))
+register_lane_routes(app)

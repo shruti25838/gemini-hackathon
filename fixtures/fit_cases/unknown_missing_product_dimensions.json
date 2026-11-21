@@ -1,0 +1,120 @@
+{
+  "name": "unknown_missing_product_dimensions",
+  "description": "A real, buyable variant with no documented size.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [],
+      "existing_items": [],
+      "free_zones": [],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [],
+    "placement": {
+      "object_id": "obj_mystery",
+      "pose": {
+        "x_m": 2.0,
+        "y_m": 2.0,
+        "rotation_deg": 0.0
+      },
+      "offer_ref": "offer_no_dims"
+    },
+    "offers": [
+      {
+        "offer_id": "offer_no_dims",
+        "store": {
+          "store_domain": "ethyneon.myshopify.com",
+          "api_surface": "storefront_api"
+        },
+        "product_id": "gid://shopify/Product/1",
+        "variant_id": "gid://shopify/ProductVariant/1",
+        "title": "Mystery Desk (no size listed)",
+        "price": {
+          "amount_minor": 19900,
+          "currency": "USD"
+        },
+        "availability": {
+          "available": true
+        },
+        "listing_url": "https://ethyneon.myshopify.com/products/mystery-desk",
+        "dimensions": null,
+        "dimension_source": "unknown",
+        "shoppable": true
+      }
+    ]
+  },
+  "expected": {
+    "result": "unknown",
+    "failing_check": null,
+    "unknown_reason_contains": [
+      "no documented footprint"
+    ],
+    "cause_contains": "Cannot tell",
+    "minimum_clearance_present": false
+  }
+}

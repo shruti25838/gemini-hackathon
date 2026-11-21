@@ -1,92 +1,161 @@
 {
- "room_revision": 2,
- "width_m": {
-  "value_m": 3.2,
-  "source": "confirmed",
-  "confidence": 1.0
- },
- "depth_m": {
-  "value_m": 3.093,
-  "source": "estimated",
-  "confidence": 0.5
- },
- "height_m": {
-  "value_m": 2.667,
-  "source": "estimated",
-  "confidence": 0.6
- },
- "scale_reference": "width_m confirmed by shopper at 3.2 m",
- "walls": [
-  {
-   "id": "wall_n",
-   "color_hex": "#d8d2c8",
-   "color_source": "sampled_from_photo"
+  "room_revision": 3,
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "dimensions_m": {
+    "width_m": {
+      "value_m": 3.2,
+      "evidence_status": "confirmed",
+      "source": "live",
+      "confidence": 1.0
+    },
+    "depth_m": {
+      "value_m": 4.0,
+      "evidence_status": "estimated",
+      "source": "inferred",
+      "confidence": 0.62
+    },
+    "height_m": {
+      "value_m": 2.5,
+      "evidence_status": "estimated",
+      "source": "inferred",
+      "confidence": 0.55
+    }
   },
-  {
-   "id": "wall_e",
-   "color_hex": "#d8d2c8",
-   "color_source": "sampled_from_photo"
+  "scale_reference": {
+    "anchor_id": "anchor_desk_wall",
+    "description": "Desk wall width, confirmed by the shopper",
+    "length_m": 3.2,
+    "confirmed": true,
+    "evidence_status": "confirmed",
+    "measures": "width"
   },
-  {
-   "id": "wall_s",
-   "color_hex": "#d9d4cc",
-   "color_source": "default"
+  "walls": [
+    {
+      "wall_id": "wall_n",
+      "length_m": 3.2,
+      "color": {
+        "hex": "#e8e4dc",
+        "evidence_status": "sampled_from_photo",
+        "source": "inferred"
+      },
+      "label": "Desk wall"
+    },
+    {
+      "wall_id": "wall_e",
+      "length_m": 4.0,
+      "color": {
+        "hex": "#e8e4dc",
+        "evidence_status": "sampled_from_photo",
+        "source": "inferred"
+      },
+      "label": null
+    },
+    {
+      "wall_id": "wall_s",
+      "length_m": 3.2,
+      "color": {
+        "hex": "#e8e4dc",
+        "evidence_status": "sampled_from_photo",
+        "source": "inferred"
+      },
+      "label": "Door wall"
+    },
+    {
+      "wall_id": "wall_w",
+      "length_m": 4.0,
+      "color": {
+        "hex": "#e8e4dc",
+        "evidence_status": "sampled_from_photo",
+        "source": "inferred"
+      },
+      "label": null
+    }
+  ],
+  "floor": {
+    "floor_id": "floor",
+    "color": {
+      "hex": "#9c7b53",
+      "evidence_status": "sampled_from_photo",
+      "source": "inferred"
+    },
+    "material": "oak laminate"
   },
-  {
-   "id": "wall_w",
-   "color_hex": "#d8d2c8",
-   "color_source": "sampled_from_photo"
-  }
- ],
- "openings": [
-  {
-   "id": "door1",
-   "wall": "wall_n",
-   "type": "door",
-   "offset_m": 2.24,
-   "width_m": 0.853,
-   "height_m": 2.133,
-   "sill_m": 0.0,
-   "motion": {
-    "hinge_side": "left",
-    "swing": "in",
-    "max_angle_deg": 90,
-    "source": "inferred",
-    "confidence": 0.8,
-    "evidence_ts": "00:02"
-   },
-   "confidence": 0.8
-  },
-  {
-   "id": "window2",
-   "wall": "wall_w",
-   "type": "window",
-   "offset_m": 0.96,
-   "width_m": 1.173,
-   "height_m": 1.28,
-   "sill_m": 0.96,
-   "motion": null,
-   "confidence": 0.7
-  }
- ],
- "existing_items": [
-  {
-   "id": "item1",
-   "label": "monitor",
-   "x": 0.533,
-   "z": 2.667,
-   "w": 0.587,
-   "d": 0.267,
-   "h": 0.48,
-   "keep": true,
-   "confidence": 0.7
-  }
- ],
- "free_zones": [],
- "floor_color_hex": "#8a7560",
- "status": "validated",
- "notes": [
-  "MOCK_AI: saved output, not from your photo",
-  "Scale anchored on width_m=3.2 m (factor 1.07)"
- ]
+  "openings": [
+    {
+      "opening_id": "door_main",
+      "wall_id": "wall_s",
+      "type": "door",
+      "offset_m": 0.3,
+      "width_m": 0.82,
+      "height_m": 2.03,
+      "sill_m": null,
+      "hinge": {
+        "hinge_side": "left",
+        "swing_direction": "inward",
+        "swing_angle_max_deg": 90.0,
+        "evidence_status": "confirmed",
+        "motion_evidence_ref": "clip_door_open_001"
+      },
+      "evidence_status": "confirmed"
+    },
+    {
+      "opening_id": "window_north",
+      "wall_id": "wall_n",
+      "type": "window",
+      "offset_m": 1.9,
+      "width_m": 1.1,
+      "height_m": 1.2,
+      "sill_m": 0.9,
+      "hinge": null,
+      "evidence_status": "estimated"
+    }
+  ],
+  "existing_items": [
+    {
+      "item_id": "obj_existing_monitor",
+      "label": "27 inch monitor",
+      "footprint": {
+        "x_m": 1.6,
+        "y_m": 0.4,
+        "width_m": 0.62,
+        "depth_m": 0.22,
+        "rotation_deg": 0.0
+      },
+      "height_m": 0.46,
+      "locked": true,
+      "keep": true,
+      "evidence_status": "confirmed"
+    }
+  ],
+  "free_zones": [
+    {
+      "zone_id": "route_door_to_desk",
+      "label": "Walking route from the door to the desk",
+      "area": {
+        "points": [
+          {
+            "x_m": 0.3,
+            "y_m": 3.95
+          },
+          {
+            "x_m": 1.12,
+            "y_m": 3.95
+          },
+          {
+            "x_m": 1.12,
+            "y_m": 0.8
+          },
+          {
+            "x_m": 0.3,
+            "y_m": 0.8
+          }
+        ]
+      },
+      "purpose": "walking_route"
+    }
+  ],
+  "evidence_status": "estimated",
+  "source": "generated",
+  "snapshot_ref": "snap_0001",
+  "created_at": "2026-11-21T12:02:00Z"
 }

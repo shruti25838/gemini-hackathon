@@ -1,0 +1,122 @@
+{
+  "name": "chair_pullback_clear",
+  "description": "A chair with 0.6 m of pull-back room, well clear of the door.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [
+        {
+          "opening_id": "door_main",
+          "wall_id": "wall_s",
+          "type": "door",
+          "offset_m": 0.2,
+          "width_m": 0.9,
+          "height_m": 2.03,
+          "hinge": {
+            "hinge_side": "left",
+            "swing_direction": "inward",
+            "swing_angle_max_deg": 90.0,
+            "evidence_status": "confirmed",
+            "motion_evidence_ref": "clip_door_001"
+          },
+          "evidence_status": "confirmed"
+        }
+      ],
+      "existing_items": [],
+      "free_zones": [],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [],
+    "placement": {
+      "object_id": "obj_chair",
+      "pose": {
+        "x_m": 2.5,
+        "y_m": 1.0,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 2.5,
+        "y_m": 1.0,
+        "width_m": 0.6,
+        "depth_m": 0.6,
+        "rotation_deg": 0.0
+      },
+      "category": "chair",
+      "pullback_m": 0.6
+    }
+  },
+  "expected": {
+    "result": "fits",
+    "extra_checks": [
+      {
+        "name": "chair_pullback",
+        "result": "pass"
+      }
+    ]
+  }
+}

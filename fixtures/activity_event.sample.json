@@ -1,0 +1,19 @@
+{
+  "event_id": "evt_0042",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "ts": "2026-11-21T12:06:12Z",
+  "source": "commerce",
+  "type": "variant_verified",
+  "step_id": "shop",
+  "message": "Walnut desk variant verified on the development store.",
+  "revision_refs": {
+    "room_revision": 3,
+    "scene_revision": 7
+  },
+  "payload": {
+    "variant_id": "gid://shopify/ProductVariant/49000000000001",
+    "store_domain": "ethyneon-dev.myshopify.com"
+  },
+  "source_label": "live",
+  "safe_to_display": true
+}

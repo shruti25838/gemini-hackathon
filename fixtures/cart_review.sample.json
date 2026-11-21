@@ -1,0 +1,82 @@
+{
+  "review_id": "cart_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "shopper_id": "shopper_01HQ8ETHYNEON0001",
+  "store": {
+    "store_domain": "ethyneon-dev.myshopify.com",
+    "store_name": "Ethyneon Dev Store",
+    "store_id": "gid://shopify/Shop/90000000001",
+    "api_surface": "storefront_api"
+  },
+  "lines": [
+    {
+      "line_id": "line_desk",
+      "product_id": "gid://shopify/Product/9000000000001",
+      "variant_id": "gid://shopify/ProductVariant/49000000000001",
+      "title": "Ethyneon Demo Walnut Writing Desk, 120 cm",
+      "quantity": 1,
+      "unit_price": {
+        "amount_minor": 42900,
+        "currency": "USD"
+      },
+      "line_subtotal": {
+        "amount_minor": 42900,
+        "currency": "USD"
+      },
+      "offer_ref": "offer_dev_desk_walnut",
+      "offer_fetched_at": "2026-11-21T12:00:00Z"
+    },
+    {
+      "line_id": "line_monitor",
+      "product_id": "gid://shopify/Product/9000000000004",
+      "variant_id": "gid://shopify/ProductVariant/49000000000004",
+      "title": "Ethyneon Demo 27 inch Monitor",
+      "quantity": 1,
+      "unit_price": {
+        "amount_minor": 31900,
+        "currency": "USD"
+      },
+      "line_subtotal": {
+        "amount_minor": 31900,
+        "currency": "USD"
+      },
+      "offer_ref": "offer_dev_monitor_27",
+      "offer_fetched_at": "2026-11-21T12:00:00Z"
+    }
+  ],
+  "merchandise_subtotal": {
+    "amount_minor": 74800,
+    "currency": "USD"
+  },
+  "known_charges": [],
+  "shipping_and_tax_note": "Shipping and tax are added at checkout and are not included in this subtotal.",
+  "budget": {
+    "amount_minor": 120000,
+    "currency": "USD"
+  },
+  "within_budget": true,
+  "brief_revision": 2,
+  "scene_revision": 7,
+  "approval": {
+    "approval_id": "appr_0001",
+    "shopper_id": "shopper_01HQ8ETHYNEON0001",
+    "approved_at": "2026-11-21T12:07:00Z",
+    "expires_at": "2026-11-21T12:22:00Z",
+    "fingerprint": "sha256:9f2c1ab8d4e35760c1f0a2b3d4e5f60718293a4b5c6d7e8f9012a3b4c5d6e7f8",
+    "base_scene_revision": 7,
+    "base_brief_revision": 2,
+    "action_id": "8c7d6e5f-4a3b-2c1d-0e9f-8a7b6c5d4e3f"
+  },
+  "cart_reference": {
+    "cart_id": "gid://shopify/Cart/c1-abc123def456",
+    "store_domain": "ethyneon-dev.myshopify.com",
+    "checkout_url": null,
+    "fingerprint": "sha256:1122334455667788990011223344556677889900112233445566778899001122",
+    "written_at": "2026-11-21T12:07:05Z",
+    "write_outcome": "confirmed"
+  },
+  "status": "approved",
+  "payment_state": "cart_ready",
+  "source": "live",
+  "created_at": "2026-11-21T12:06:50Z"
+}

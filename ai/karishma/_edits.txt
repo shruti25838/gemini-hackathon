@@ -1,0 +1,15 @@
+ai/karishma/agents.py:24|from fit import solver|from ._vendor import solver|fit.solver -> vendored solver
+ai/karishma/commands.py:11|from contracts.schemas import DesignBrief, WorkflowPlan|from ._vendor.kschemas import DesignBrief, WorkflowPlan|contracts.schemas -> vendored kschemas
+ai/karishma/commands.py:12|from fit import solver|from ._vendor import solver|fit.solver -> vendored solver
+ai/karishma/intake.py:13|from contracts.schemas import DesignBrief|from ._vendor.kschemas import DesignBrief|contracts.schemas -> vendored kschemas
+ai/karishma/recovery.py:15|from contracts.schemas import RecoveryAction, RecoveryRun|from ._vendor.kschemas import RecoveryAction, RecoveryRun|contracts.schemas -> vendored kschemas
+ai/karishma/room.py:8|from contracts.schemas import RoomSpec|from ._vendor.kschemas import RoomSpec|contracts.schemas -> vendored kschemas
+ai/karishma/vision.py:15|from contracts.schemas import (Dimension, DoorMotion, ExistingItem, Opening, RoomSpec, Wall)|from ._vendor.kschemas import (Dimension, DoorMotion, ExistingItem, Opening, RoomSpec, Wall)|contracts.schemas -> vendored kschemas
+ai/karishma/workflow.py:16|from contracts.schemas import Placement, PlanStep, SceneRevision, WorkflowPlan|from ._vendor.kschemas import Placement, PlanStep, SceneRevision, WorkflowPlan|contracts.schemas -> vendored kschemas
+ai/karishma/workflow.py:18|from backend import shop|from .shim import shop|backend.shop -> adapter shim
+ai/karishma/workflow.py:19|from fit import solver|from ._vendor import solver|fit.solver -> vendored solver
+ai/karishma/workflow.py:23|from backend.state import Session|from .shim import Session|backend.state.Session -> adapter shim
+ai/karishma/workflow.py:372|from contracts.schemas import FitReport|from ._vendor.kschemas import FitReport|contracts.schemas -> vendored kschemas (inline)
+ai/karishma/agents.py:27|SOLVER_SRC = (Path(__file__).resolve().parent.parent / "fit" / "solver.py").read_text()|SOLVER_SRC = (Path(__file__).resolve().parent / "_vendor" / "solver.py").read_text()|solver source path -> vendored copy (not an import)
+ai/karishma/gemini.py:175|_MOCKS = json.loads((Path(__file__).resolve().parent.parent / "fixtures" / "ai_mock_outputs.json").read_text())|_MOCKS = json.loads((Path(__file__).resolve().parent / "_vendor" / "ai_mock_outputs.json").read_text())|mock fixture path -> vendored copy (not an import)
+ai/karishma/gemini.py:156|beta_client().decisions.create(...)|ai.karishma_adapter.decisions_bridge.decide(...)|Decisions call site -> our plain-HTTP v1beta client (no Client.decisions in google-genai 2.33.0)

@@ -1,0 +1,212 @@
+{
+  "$defs": {
+    "PendingInput": {
+      "additionalProperties": false,
+      "description": "What the shopper is being asked for while the run waits.",
+      "properties": {
+        "expects": {
+          "enum": [
+            "measurement",
+            "tap",
+            "choice",
+            "confirmation"
+          ],
+          "title": "Expects",
+          "type": "string"
+        },
+        "frame_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Ref"
+        },
+        "interaction_id": {
+          "title": "Interaction Id",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "interaction_id",
+        "prompt",
+        "expects"
+      ],
+      "title": "PendingInput",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agent_available": {
+      "default": true,
+      "description": "False means the recorded fallback was used.",
+      "title": "Agent Available",
+      "type": "boolean"
+    },
+    "allowed_actions": {
+      "items": {
+        "enum": [
+          "request_rescan",
+          "request_measurement",
+          "switch_input_mode",
+          "retry_idempotent_read",
+          "resume_saved_job",
+          "refresh_shopify",
+          "replan_affected_nodes",
+          "request_new_review",
+          "reconcile_cart_by_read",
+          "pause"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Allowed Actions",
+      "type": "array"
+    },
+    "attempt_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Attempt Count",
+      "type": "integer"
+    },
+    "chosen_action": {
+      "anyOf": [
+        {
+          "enum": [
+            "request_rescan",
+            "request_measurement",
+            "switch_input_mode",
+            "retry_idempotent_read",
+            "resume_saved_job",
+            "refresh_shopify",
+            "replan_affected_nodes",
+            "request_new_review",
+            "reconcile_cart_by_read",
+            "pause"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Chosen Action"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "error_class": {
+      "enum": [
+        "unreadable_photo",
+        "invalid_room_geometry",
+        "agora_interruption",
+        "model_timeout",
+        "managed_agent_outage",
+        "infeasible_layout",
+        "stale_shopify_variant",
+        "duplicate_or_stale_action",
+        "cart_mismatch",
+        "low_confidence_audit",
+        "unclear_cart_write",
+        "payment_status_unknown",
+        "unrecognized"
+      ],
+      "title": "Error Class",
+      "type": "string"
+    },
+    "failed_step_id": {
+      "title": "Failed Step Id",
+      "type": "string"
+    },
+    "interaction_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Managed Agent interaction, when one is active.",
+      "title": "Interaction Id"
+    },
+    "last_verified_state": {
+      "additionalProperties": true,
+      "description": "Enough context to restore after a failure.",
+      "title": "Last Verified State",
+      "type": "object"
+    },
+    "max_attempts": {
+      "default": 3,
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "outcome": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "resolved",
+        "failed",
+        "awaiting_input",
+        "exhausted"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "pending_input": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PendingInput"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "triggering_revision": {
+      "minimum": 0,
+      "title": "Triggering Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "run_id",
+    "session_id",
+    "failed_step_id",
+    "error_class",
+    "triggering_revision",
+    "allowed_actions"
+  ],
+  "title": "RecoveryRun",
+  "type": "object"
+}

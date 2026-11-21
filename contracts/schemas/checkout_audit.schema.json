@@ -1,0 +1,242 @@
+{
+  "$defs": {
+    "DecisionAnswer": {
+      "additionalProperties": false,
+      "description": "One Decision 1 answer with the confidence the code actually reads.",
+      "properties": {
+        "answer": {
+          "title": "Answer",
+          "type": "string"
+        },
+        "answer_type": {
+          "description": "The Decisions API type name. The PRD says 'noul' for yes/no and 'choice' for a rubric; both must be verified against the live docs before Lane A calls the real API.",
+          "title": "Answer Type",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "passed_threshold": {
+          "title": "Passed Threshold",
+          "type": "boolean"
+        },
+        "question": {
+          "description": "For example purchase_scope_matches or required_constraints_resolved.",
+          "title": "Question",
+          "type": "string"
+        },
+        "source": {
+          "default": "mock",
+          "enum": [
+            "live",
+            "mock",
+            "local_stand_in"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "threshold": {
+          "description": "The tuned threshold this answer was judged against.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Threshold",
+          "type": "number"
+        }
+      },
+      "required": [
+        "question",
+        "answer_type",
+        "answer",
+        "confidence",
+        "threshold",
+        "passed_threshold"
+      ],
+      "title": "DecisionAnswer",
+      "type": "object"
+    },
+    "DeterministicCheck": {
+      "additionalProperties": false,
+      "description": "One server-side check, run in plain code with no model involved.",
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "expected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected"
+        },
+        "name": {
+          "enum": [
+            "store_matches",
+            "variant_ids_match",
+            "quantities_match",
+            "currency_matches",
+            "stock_available",
+            "amounts_match",
+            "within_budget",
+            "fit_status_acceptable",
+            "approval_valid",
+            "revisions_current"
+          ],
+          "title": "Name",
+          "type": "string"
+        },
+        "observed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "passed",
+        "detail"
+      ],
+      "title": "DeterministicCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approval_fingerprint": {
+      "title": "Approval Fingerprint",
+      "type": "string"
+    },
+    "audit_id": {
+      "title": "Audit Id",
+      "type": "string"
+    },
+    "brief_revision": {
+      "minimum": 0,
+      "title": "Brief Revision",
+      "type": "integer"
+    },
+    "cart_fingerprint": {
+      "title": "Cart Fingerprint",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision_answers": {
+      "items": {
+        "$ref": "#/$defs/DecisionAnswer"
+      },
+      "title": "Decision Answers",
+      "type": "array"
+    },
+    "deterministic_results": {
+      "items": {
+        "$ref": "#/$defs/DeterministicCheck"
+      },
+      "minItems": 1,
+      "title": "Deterministic Results",
+      "type": "array"
+    },
+    "evidence_status": {
+      "default": "confirmed",
+      "enum": [
+        "estimated",
+        "confirmed",
+        "unknown",
+        "sampled_from_photo"
+      ],
+      "title": "Evidence Status",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "next_action": {
+      "anyOf": [
+        {
+          "enum": [
+            "ready",
+            "refresh_cart",
+            "repair_plan",
+            "ask_shopper",
+            "hold_checkout"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Action"
+    },
+    "outcome": {
+      "enum": [
+        "ready",
+        "needs_review",
+        "blocked",
+        "unavailable",
+        "expired"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "scene_revision": {
+      "minimum": 0,
+      "title": "Scene Revision",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "workflow_run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow Run Id"
+    }
+  },
+  "required": [
+    "audit_id",
+    "session_id",
+    "scene_revision",
+    "brief_revision",
+    "approval_fingerprint",
+    "cart_fingerprint",
+    "deterministic_results",
+    "outcome",
+    "expires_at"
+  ],
+  "title": "CheckoutAudit",
+  "type": "object"
+}

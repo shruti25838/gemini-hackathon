@@ -1,13 +1,44 @@
-.venv/
-__pycache__/
+# secrets
 .env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
 .pytest_cache/
-eval/results/
-eval/data/*.jpg
-eval/data/*.jpeg
-eval/data/*.png
-eval/data/*.heic
-eval/data/*.mp4
-eval/data/*.mov
+.mypy_cache/
+*.egg-info/
+
+# data
+*.sqlite
+*.sqlite3
+*.db
+
+# node / web
 node_modules/
-test_media/
+web/dist/
+web/node_modules/
+.vite/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# defensive: stray credential dumps in the repo root
+*token*.txt
+*secret*.txt
+*credential*.txt
+SHOPIFY_*.txt
+GEMINI_*.txt
+AGORA_*.txt
+
+# built distributions
+dist/
+*.whl

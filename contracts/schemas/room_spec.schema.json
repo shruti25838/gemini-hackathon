@@ -1,0 +1,688 @@
+{
+  "$defs": {
+    "ColorSpec": {
+      "additionalProperties": false,
+      "description": "A surface colour and where it came from. Browser pixel sampling is\nlabelled sampled_from_photo because lighting can affect it.",
+      "properties": {
+        "evidence_status": {
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "hex": {
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "title": "Hex",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "live",
+            "cached",
+            "preset",
+            "generated",
+            "inferred",
+            "mock"
+          ],
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hex",
+        "evidence_status",
+        "source"
+      ],
+      "title": "ColorSpec",
+      "type": "object"
+    },
+    "ExistingItem": {
+      "additionalProperties": false,
+      "description": "Furniture already in the room. Locked items are placement constraints.",
+      "properties": {
+        "evidence_status": {
+          "default": "estimated",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "footprint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rect2D"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "None when the bounds are not known."
+        },
+        "height_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height M"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "keep": {
+          "default": true,
+          "title": "Keep",
+          "type": "boolean"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "locked": {
+          "default": false,
+          "title": "Locked",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "item_id",
+        "label"
+      ],
+      "title": "ExistingItem",
+      "type": "object"
+    },
+    "Floor": {
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorSpec"
+        },
+        "floor_id": {
+          "default": "floor",
+          "title": "Floor Id",
+          "type": "string"
+        },
+        "material": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Material"
+        }
+      },
+      "required": [
+        "color"
+      ],
+      "title": "Floor",
+      "type": "object"
+    },
+    "FreeZone": {
+      "additionalProperties": false,
+      "description": "An area that must stay clear, or a region placements are confined to.\n\nCode clips free zones to the valid room; a zone outside the room is invalid.",
+      "properties": {
+        "area": {
+          "$ref": "#/$defs/Polygon2D"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "purpose": {
+          "default": "keep_clear",
+          "enum": [
+            "keep_clear",
+            "placement_area",
+            "walking_route"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        },
+        "zone_id": {
+          "title": "Zone Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zone_id",
+        "label",
+        "area"
+      ],
+      "title": "FreeZone",
+      "type": "object"
+    },
+    "HingeSpec": {
+      "additionalProperties": false,
+      "description": "Door hinge and motion. Missing hinge or swing direction forces a fit\nresult of unknown; the fit engine never guesses them.",
+      "properties": {
+        "evidence_status": {
+          "default": "unknown",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "hinge_side": {
+          "default": "unknown",
+          "enum": [
+            "left",
+            "right",
+            "unknown"
+          ],
+          "title": "Hinge Side",
+          "type": "string"
+        },
+        "motion_evidence_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reference to the clip or frame showing the motion.",
+          "title": "Motion Evidence Ref"
+        },
+        "swing_angle_max_deg": {
+          "default": 90.0,
+          "maximum": 180.0,
+          "minimum": 0.0,
+          "title": "Swing Angle Max Deg",
+          "type": "number"
+        },
+        "swing_direction": {
+          "default": "unknown",
+          "enum": [
+            "inward",
+            "outward",
+            "sliding",
+            "none",
+            "unknown"
+          ],
+          "title": "Swing Direction",
+          "type": "string"
+        }
+      },
+      "title": "HingeSpec",
+      "type": "object"
+    },
+    "Measurement": {
+      "additionalProperties": false,
+      "description": "One length with its provenance, so estimates never masquerade as facts.",
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "evidence_status": {
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "live",
+            "cached",
+            "preset",
+            "generated",
+            "inferred",
+            "mock"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value_m": {
+          "minimum": 0.0,
+          "title": "Value M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value_m",
+        "evidence_status",
+        "source"
+      ],
+      "title": "Measurement",
+      "type": "object"
+    },
+    "Opening": {
+      "additionalProperties": false,
+      "description": "A door, window or archway on one wall.\n\noffset_m is measured from the start of its wall. An opening must lie\nentirely inside its wall: offset_m + width_m <= that wall's length_m.\nvalidate_room_spec enforces that against the wall, which this model\ncannot see on its own.",
+      "properties": {
+        "evidence_status": {
+          "default": "estimated",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "height_m": {
+          "minimum": 0.0,
+          "title": "Height M",
+          "type": "number"
+        },
+        "hinge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HingeSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Doors only. Required before a door swing check can run."
+        },
+        "offset_m": {
+          "minimum": 0.0,
+          "title": "Offset M",
+          "type": "number"
+        },
+        "opening_id": {
+          "title": "Opening Id",
+          "type": "string"
+        },
+        "sill_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Height of the sill above the floor, for windows.",
+          "title": "Sill M"
+        },
+        "type": {
+          "enum": [
+            "door",
+            "window",
+            "archway",
+            "pass_through"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "wall_id": {
+          "enum": [
+            "wall_n",
+            "wall_e",
+            "wall_s",
+            "wall_w"
+          ],
+          "title": "Wall Id",
+          "type": "string"
+        },
+        "width_m": {
+          "minimum": 0.0,
+          "title": "Width M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "opening_id",
+        "wall_id",
+        "type",
+        "offset_m",
+        "width_m",
+        "height_m"
+      ],
+      "title": "Opening",
+      "type": "object"
+    },
+    "Point2D": {
+      "additionalProperties": false,
+      "description": "A point on the floor plane, in room-local metres.",
+      "properties": {
+        "x_m": {
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m"
+      ],
+      "title": "Point2D",
+      "type": "object"
+    },
+    "Polygon2D": {
+      "additionalProperties": false,
+      "description": "A closed polygon on the floor plane. At least three points.",
+      "properties": {
+        "points": {
+          "items": {
+            "$ref": "#/$defs/Point2D"
+          },
+          "minItems": 3,
+          "title": "Points",
+          "type": "array"
+        }
+      },
+      "required": [
+        "points"
+      ],
+      "title": "Polygon2D",
+      "type": "object"
+    },
+    "Rect2D": {
+      "additionalProperties": false,
+      "description": "An axis-aligned footprint plus a rotation about its own centre.",
+      "properties": {
+        "depth_m": {
+          "minimum": 0.0,
+          "title": "Depth M",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "width_m": {
+          "minimum": 0.0,
+          "title": "Width M",
+          "type": "number"
+        },
+        "x_m": {
+          "description": "Centre x, room-local metres.",
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "description": "Centre y, room-local metres.",
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "width_m",
+        "depth_m"
+      ],
+      "title": "Rect2D",
+      "type": "object"
+    },
+    "RoomDimensions": {
+      "additionalProperties": false,
+      "description": "Width, depth and height in metres, each with its own source.",
+      "properties": {
+        "depth_m": {
+          "$ref": "#/$defs/Measurement"
+        },
+        "height_m": {
+          "$ref": "#/$defs/Measurement"
+        },
+        "width_m": {
+          "$ref": "#/$defs/Measurement"
+        }
+      },
+      "required": [
+        "width_m",
+        "depth_m",
+        "height_m"
+      ],
+      "title": "RoomDimensions",
+      "type": "object"
+    },
+    "ScaleReference": {
+      "additionalProperties": false,
+      "description": "The one confirmed real length that anchors the model.\n\nA confirmed width only confirms the dimension it measures; an estimated\ndepth stays estimated after that width is confirmed.",
+      "properties": {
+        "anchor_id": {
+          "title": "Anchor Id",
+          "type": "string"
+        },
+        "confirmed": {
+          "default": false,
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_status": {
+          "default": "estimated",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "length_m": {
+          "minimum": 0.0,
+          "title": "Length M",
+          "type": "number"
+        },
+        "measures": {
+          "default": "other",
+          "enum": [
+            "width",
+            "depth",
+            "height",
+            "other"
+          ],
+          "title": "Measures",
+          "type": "string"
+        }
+      },
+      "required": [
+        "anchor_id",
+        "description",
+        "length_m"
+      ],
+      "title": "ScaleReference",
+      "type": "object"
+    },
+    "Wall": {
+      "additionalProperties": false,
+      "description": "One wall with a stable ID. Walls are never renamed once set.",
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorSpec"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "length_m": {
+          "minimum": 0.0,
+          "title": "Length M",
+          "type": "number"
+        },
+        "wall_id": {
+          "enum": [
+            "wall_n",
+            "wall_e",
+            "wall_s",
+            "wall_w"
+          ],
+          "title": "Wall Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "wall_id",
+        "length_m",
+        "color"
+      ],
+      "title": "Wall",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The validated room. Only C's commit_revision writes one.",
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dimensions_m": {
+      "$ref": "#/$defs/RoomDimensions"
+    },
+    "evidence_status": {
+      "default": "estimated",
+      "enum": [
+        "estimated",
+        "confirmed",
+        "unknown",
+        "sampled_from_photo"
+      ],
+      "title": "Evidence Status",
+      "type": "string"
+    },
+    "existing_items": {
+      "items": {
+        "$ref": "#/$defs/ExistingItem"
+      },
+      "title": "Existing Items",
+      "type": "array"
+    },
+    "floor": {
+      "$ref": "#/$defs/Floor"
+    },
+    "free_zones": {
+      "items": {
+        "$ref": "#/$defs/FreeZone"
+      },
+      "title": "Free Zones",
+      "type": "array"
+    },
+    "openings": {
+      "items": {
+        "$ref": "#/$defs/Opening"
+      },
+      "title": "Openings",
+      "type": "array"
+    },
+    "room_revision": {
+      "minimum": 0,
+      "title": "Room Revision",
+      "type": "integer"
+    },
+    "scale_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScaleReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "snapshot_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "RoomSnapshot this spec was derived from.",
+      "title": "Snapshot Ref"
+    },
+    "source": {
+      "default": "generated",
+      "enum": [
+        "live",
+        "cached",
+        "preset",
+        "generated",
+        "inferred",
+        "mock"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "walls": {
+      "items": {
+        "$ref": "#/$defs/Wall"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "title": "Walls",
+      "type": "array"
+    }
+  },
+  "required": [
+    "room_revision",
+    "session_id",
+    "dimensions_m",
+    "walls",
+    "floor"
+  ],
+  "title": "RoomSpec",
+  "type": "object"
+}

@@ -1,0 +1,107 @@
+{
+  "name": "drawer_extension_unknown_without_the_depth",
+  "description": "A drawer unit with no extension depth supplied.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [],
+      "existing_items": [],
+      "free_zones": [],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [],
+    "placement": {
+      "object_id": "obj_drawers",
+      "pose": {
+        "x_m": 2.0,
+        "y_m": 2.0,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 2.0,
+        "y_m": 2.0,
+        "width_m": 0.4,
+        "depth_m": 0.5,
+        "rotation_deg": 0.0
+      },
+      "category": "drawer_unit"
+    }
+  },
+  "expected": {
+    "result": "unknown",
+    "extra_checks": [
+      {
+        "name": "drawer_extension",
+        "result": "unknown"
+      }
+    ],
+    "unknown_reason_contains": [
+      "drawer_extension_m"
+    ]
+  }
+}

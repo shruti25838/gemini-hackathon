@@ -1,0 +1,347 @@
+{
+  "$defs": {
+    "Availability": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "checked_at": {
+          "format": "date-time",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantity"
+        }
+      },
+      "required": [
+        "available"
+      ],
+      "title": "Availability",
+      "type": "object"
+    },
+    "Freshness": {
+      "additionalProperties": false,
+      "description": "When the offer was read and how long it may be reused.\n\nShop MCP advertises its own ttl on tools/list (currently 3600000 ms); that\nvalue is carried here rather than hardcoded, and a reused offer is shown\nwith a cached label and its last-updated time.",
+      "properties": {
+        "fetched_at": {
+          "format": "date-time",
+          "title": "Fetched At",
+          "type": "string"
+        },
+        "source_label": {
+          "default": "live",
+          "enum": [
+            "live",
+            "cached",
+            "preset",
+            "generated",
+            "inferred",
+            "mock"
+          ],
+          "title": "Source Label",
+          "type": "string"
+        },
+        "ttl_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ttl Ms"
+        }
+      },
+      "title": "Freshness",
+      "type": "object"
+    },
+    "Money": {
+      "additionalProperties": false,
+      "description": "Integer minor units plus an ISO 4217 code. 120000 + USD means $1,200.00.",
+      "properties": {
+        "amount_minor": {
+          "description": "Integer minor units. Never a float.",
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "ISO 4217, uppercase.",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount_minor",
+        "currency"
+      ],
+      "title": "Money",
+      "type": "object"
+    },
+    "ProductDimensions": {
+      "additionalProperties": false,
+      "description": "Product footprint and height in metres. Any axis may be missing.",
+      "properties": {
+        "depth_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Depth M"
+        },
+        "evidence_status": {
+          "default": "unknown",
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "height_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height M"
+        },
+        "raw_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The listing text a value was parsed from, kept for the audit trail.",
+          "title": "Raw Text"
+        },
+        "width_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width M"
+        }
+      },
+      "title": "ProductDimensions",
+      "type": "object"
+    },
+    "SelectedOption": {
+      "additionalProperties": false,
+      "description": "One resolved variant option, for example Color = Walnut.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "title": "SelectedOption",
+      "type": "object"
+    },
+    "StoreRef": {
+      "additionalProperties": false,
+      "description": "Which store an offer came from. Kept on every offer so a cart line can\nnever silently cross stores.",
+      "properties": {
+        "api_surface": {
+          "enum": [
+            "storefront_api",
+            "shop_mcp",
+            "mock"
+          ],
+          "title": "Api Surface",
+          "type": "string"
+        },
+        "store_domain": {
+          "description": "For example my-dev-store.myshopify.com",
+          "title": "Store Domain",
+          "type": "string"
+        },
+        "store_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Full Shopify ID string, exactly as the API returns it.",
+          "title": "Store Id"
+        },
+        "store_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Store Name"
+        }
+      },
+      "required": [
+        "store_domain",
+        "api_surface"
+      ],
+      "title": "StoreRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "availability": {
+      "$ref": "#/$defs/Availability"
+    },
+    "compare_at_price": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Money"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "dimension_source": {
+      "default": "unknown",
+      "enum": [
+        "metafield",
+        "listing_text_inferred",
+        "unknown"
+      ],
+      "title": "Dimension Source",
+      "type": "string"
+    },
+    "dimensions": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProductDimensions"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "freshness": {
+      "$ref": "#/$defs/Freshness"
+    },
+    "image_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Image Url"
+    },
+    "listing_url": {
+      "title": "Listing Url",
+      "type": "string"
+    },
+    "offer_id": {
+      "title": "Offer Id",
+      "type": "string"
+    },
+    "price": {
+      "$ref": "#/$defs/Money"
+    },
+    "product_id": {
+      "description": "Full Shopify product ID string. Separate from variant_id.",
+      "title": "Product Id",
+      "type": "string"
+    },
+    "selected_options": {
+      "items": {
+        "$ref": "#/$defs/SelectedOption"
+      },
+      "title": "Selected Options",
+      "type": "array"
+    },
+    "shoppable": {
+      "default": false,
+      "description": "True only for a storefront_api offer from the configured dev store. A shop_mcp offer is discovery only and can never reach a cart.",
+      "title": "Shoppable",
+      "type": "boolean"
+    },
+    "store": {
+      "$ref": "#/$defs/StoreRef"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "variant_id": {
+      "description": "Full Shopify variant ID string. Separate from product_id.",
+      "title": "Variant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "offer_id",
+    "store",
+    "product_id",
+    "variant_id",
+    "title",
+    "price",
+    "availability",
+    "listing_url"
+  ],
+  "title": "CatalogOffer",
+  "type": "object"
+}

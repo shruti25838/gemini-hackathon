@@ -1,0 +1,122 @@
+{
+  "name": "tentative_inferred_product_dimensions",
+  "description": "Dimensions parsed out of listing text cap the result at tentative.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [],
+      "existing_items": [],
+      "free_zones": [],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [],
+    "placement": {
+      "object_id": "obj_folding",
+      "pose": {
+        "x_m": 2.0,
+        "y_m": 0.5,
+        "rotation_deg": 0.0
+      },
+      "offer_ref": "offer_inferred"
+    },
+    "offers": [
+      {
+        "offer_id": "offer_inferred",
+        "store": {
+          "store_domain": "mygarvee.myshopify.com",
+          "api_surface": "shop_mcp"
+        },
+        "product_id": "gid://shopify/Product/2",
+        "variant_id": "gid://shopify/ProductVariant/2",
+        "title": "Folding desk",
+        "price": {
+          "amount_minor": 7299,
+          "currency": "USD"
+        },
+        "availability": {
+          "available": true
+        },
+        "listing_url": "https://example.com/p",
+        "dimensions": {
+          "width_m": 0.8,
+          "depth_m": 0.4,
+          "height_m": 0.72,
+          "evidence_status": "estimated",
+          "raw_text": "80 x 40 x 72 cm"
+        },
+        "dimension_source": "listing_text_inferred",
+        "shoppable": false
+      }
+    ]
+  },
+  "expected": {
+    "result": "fits",
+    "tentative": true,
+    "assumption_contains": "listing text"
+  }
+}

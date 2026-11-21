@@ -1,0 +1,29 @@
+[project]
+name = "ethyneon"
+version = "0.1.0"
+description = "Turn a room photo into an editable 3D room, shop verified Shopify products into it, check fit, and hand off to a hosted test checkout."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q --strict-markers --strict-config -m \"not network\""
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "ai: lane A adapter and Karishma integration",
+    "contracts: contract and fixture checks, required on every pull request",
+    "fit: pure geometry checks, no network or database",
+    "backend: backend routes, state and revisions",
+    "commerce: Shopify and Shop MCP layers, mocked by default",
+    "network: needs real network access, deselected by default",
+]
+filterwarnings = ["error::DeprecationWarning:contracts.*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

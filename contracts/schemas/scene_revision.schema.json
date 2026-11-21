@@ -1,0 +1,423 @@
+{
+  "$defs": {
+    "ColorSpec": {
+      "additionalProperties": false,
+      "description": "A surface colour and where it came from. Browser pixel sampling is\nlabelled sampled_from_photo because lighting can affect it.",
+      "properties": {
+        "evidence_status": {
+          "enum": [
+            "estimated",
+            "confirmed",
+            "unknown",
+            "sampled_from_photo"
+          ],
+          "title": "Evidence Status",
+          "type": "string"
+        },
+        "hex": {
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "title": "Hex",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "live",
+            "cached",
+            "preset",
+            "generated",
+            "inferred",
+            "mock"
+          ],
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hex",
+        "evidence_status",
+        "source"
+      ],
+      "title": "ColorSpec",
+      "type": "object"
+    },
+    "LightState": {
+      "additionalProperties": false,
+      "properties": {
+        "color_temp_k": {
+          "anyOf": [
+            {
+              "maximum": 12000,
+              "minimum": 1000,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Color Temp K"
+        },
+        "intensity": {
+          "default": 1.0,
+          "maximum": 4.0,
+          "minimum": 0.0,
+          "title": "Intensity",
+          "type": "number"
+        },
+        "preset": {
+          "default": "daylight",
+          "enum": [
+            "daylight",
+            "evening",
+            "rgb",
+            "neutral"
+          ],
+          "title": "Preset",
+          "type": "string"
+        }
+      },
+      "title": "LightState",
+      "type": "object"
+    },
+    "MaterialState": {
+      "additionalProperties": false,
+      "properties": {
+        "floor_color": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ColorSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "overrides": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Overrides",
+          "type": "object"
+        },
+        "wall_colors": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ColorSpec"
+          },
+          "title": "Wall Colors",
+          "type": "object"
+        }
+      },
+      "title": "MaterialState",
+      "type": "object"
+    },
+    "ObjectPlacement": {
+      "additionalProperties": false,
+      "description": "One object standing on the floor of the room.",
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Stand-in 3D asset used to represent the product.",
+          "title": "Asset Id"
+        },
+        "asset_is_representative": {
+          "default": true,
+          "description": "Labelled on screen: the geometry stands in for the real product.",
+          "title": "Asset Is Representative",
+          "type": "boolean"
+        },
+        "fit_report_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fit Report Ref"
+        },
+        "fit_result": {
+          "default": "unknown",
+          "enum": [
+            "fits",
+            "tight",
+            "does_not_fit",
+            "unknown"
+          ],
+          "title": "Fit Result",
+          "type": "string"
+        },
+        "footprint": {
+          "$ref": "#/$defs/Rect2D"
+        },
+        "height_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height M"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "locked": {
+          "default": false,
+          "title": "Locked",
+          "type": "boolean"
+        },
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "pose": {
+          "$ref": "#/$defs/Pose"
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VariantSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "None for the shopper's own furniture. Required for anything shoppable."
+        }
+      },
+      "required": [
+        "object_id",
+        "label",
+        "pose",
+        "footprint"
+      ],
+      "title": "ObjectPlacement",
+      "type": "object"
+    },
+    "Pose": {
+      "additionalProperties": false,
+      "description": "Where an object sits on the floor and how it is turned.",
+      "properties": {
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "x_m": {
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m"
+      ],
+      "title": "Pose",
+      "type": "object"
+    },
+    "Rect2D": {
+      "additionalProperties": false,
+      "description": "An axis-aligned footprint plus a rotation about its own centre.",
+      "properties": {
+        "depth_m": {
+          "minimum": 0.0,
+          "title": "Depth M",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "width_m": {
+          "minimum": 0.0,
+          "title": "Width M",
+          "type": "number"
+        },
+        "x_m": {
+          "description": "Centre x, room-local metres.",
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "description": "Centre y, room-local metres.",
+          "title": "Y M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "width_m",
+        "depth_m"
+      ],
+      "title": "Rect2D",
+      "type": "object"
+    },
+    "VariantSelection": {
+      "additionalProperties": false,
+      "description": "The exact Shopify variant behind a placed object. Product and variant\nIDs stay separate, and offer_ref points at the verified CatalogOffer.",
+      "properties": {
+        "offer_ref": {
+          "description": "offer_id of the verified CatalogOffer.",
+          "title": "Offer Ref",
+          "type": "string"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "store_domain": {
+          "title": "Store Domain",
+          "type": "string"
+        },
+        "variant_id": {
+          "title": "Variant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_id",
+        "variant_id",
+        "store_domain",
+        "offer_ref"
+      ],
+      "title": "VariantSelection",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Action Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "fit_status": {
+      "default": "unknown",
+      "enum": [
+        "fits",
+        "tight",
+        "does_not_fit",
+        "unknown"
+      ],
+      "title": "Fit Status",
+      "type": "string"
+    },
+    "light_state": {
+      "$ref": "#/$defs/LightState"
+    },
+    "material_state": {
+      "$ref": "#/$defs/MaterialState"
+    },
+    "parent_revision": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "None only for the first revision of a session.",
+      "title": "Parent Revision"
+    },
+    "placements": {
+      "items": {
+        "$ref": "#/$defs/ObjectPlacement"
+      },
+      "title": "Placements",
+      "type": "array"
+    },
+    "room_revision": {
+      "minimum": 0,
+      "title": "Room Revision",
+      "type": "integer"
+    },
+    "scene_revision": {
+      "minimum": 0,
+      "title": "Scene Revision",
+      "type": "integer"
+    },
+    "selected_variants": {
+      "items": {
+        "$ref": "#/$defs/VariantSelection"
+      },
+      "title": "Selected Variants",
+      "type": "array"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "source": {
+      "default": "generated",
+      "enum": [
+        "live",
+        "cached",
+        "preset",
+        "generated",
+        "inferred",
+        "mock"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "undo_of": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Set when this revision restores an older one.",
+      "title": "Undo Of"
+    }
+  },
+  "required": [
+    "scene_revision",
+    "session_id",
+    "room_revision"
+  ],
+  "title": "SceneRevision",
+  "type": "object"
+}

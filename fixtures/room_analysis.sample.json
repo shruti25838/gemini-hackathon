@@ -1,137 +1,204 @@
 {
- "accepted": true,
- "gate": {
-  "gate": "room_photo",
-  "passed": true,
-  "action": "build_roomspec",
-  "message": "",
-  "answers": {
-   "is_room": {
-    "type": "noul",
-    "noul": 0.92,
-    "confidence": 0.92
-   },
-   "person_visible": {
-    "type": "noul",
-    "noul": 0.05,
-    "confidence": 0.95
-   },
-   "usable": {
-    "type": "score",
-    "score": 2.0,
-    "confidence": 0.9,
-    "probabilities": {},
-    "legend": {}
-   },
-   "door_visible": {
-    "type": "noul",
-    "noul": 0.92,
-    "confidence": 0.92
-   },
-   "corner_visible": {
-    "type": "noul",
-    "noul": 0.92,
-    "confidence": 0.92
-   },
-   "floor_near_door_visible": {
-    "type": "noul",
-    "noul": 0.92,
-    "confidence": 0.92
-   },
-   "desk_wall_visible": {
-    "type": "noul",
-    "noul": 0.92,
-    "confidence": 0.92
-   }
+  "analysis_id": "analysis_0001",
+  "session_id": "sess_01HQ8ETHYNEON0001",
+  "gates": {
+    "gate_set": "room_photo",
+    "answers": [
+      {
+        "gate": "room_photo",
+        "question": "is_room_photo",
+        "answer": "yes",
+        "confidence": 0.97,
+        "threshold": 0.8,
+        "passed": true,
+        "source": "mock"
+      },
+      {
+        "gate": "room_photo",
+        "question": "person_visible",
+        "answer": "no",
+        "confidence": 0.95,
+        "threshold": 0.8,
+        "passed": true,
+        "source": "mock"
+      },
+      {
+        "gate": "room_photo",
+        "question": "usable_for_layout",
+        "answer": "yes",
+        "confidence": 0.88,
+        "threshold": 0.8,
+        "passed": true,
+        "source": "mock"
+      }
+    ],
+    "all_passed": true,
+    "created_at": "2026-11-21T12:01:00Z"
   },
-  "latency_ms": 0,
-  "degraded": false,
-  "coverage_gaps": []
- },
- "room_spec": {
-  "room_revision": 1,
-  "width_m": {
-   "value_m": 3.0,
-   "source": "estimated",
-   "confidence": 0.6
+  "room_spec_draft": {
+    "room_revision": 3,
+    "session_id": "sess_01HQ8ETHYNEON0001",
+    "dimensions_m": {
+      "width_m": {
+        "value_m": 3.2,
+        "evidence_status": "confirmed",
+        "source": "live",
+        "confidence": 1.0
+      },
+      "depth_m": {
+        "value_m": 4.0,
+        "evidence_status": "estimated",
+        "source": "inferred",
+        "confidence": 0.62
+      },
+      "height_m": {
+        "value_m": 2.5,
+        "evidence_status": "estimated",
+        "source": "inferred",
+        "confidence": 0.55
+      }
+    },
+    "scale_reference": {
+      "anchor_id": "anchor_desk_wall",
+      "description": "Desk wall width, confirmed by the shopper",
+      "length_m": 3.2,
+      "confirmed": true,
+      "evidence_status": "confirmed",
+      "measures": "width"
+    },
+    "walls": [
+      {
+        "wall_id": "wall_n",
+        "length_m": 3.2,
+        "color": {
+          "hex": "#e8e4dc",
+          "evidence_status": "sampled_from_photo",
+          "source": "inferred"
+        },
+        "label": "Desk wall"
+      },
+      {
+        "wall_id": "wall_e",
+        "length_m": 4.0,
+        "color": {
+          "hex": "#e8e4dc",
+          "evidence_status": "sampled_from_photo",
+          "source": "inferred"
+        },
+        "label": null
+      },
+      {
+        "wall_id": "wall_s",
+        "length_m": 3.2,
+        "color": {
+          "hex": "#e8e4dc",
+          "evidence_status": "sampled_from_photo",
+          "source": "inferred"
+        },
+        "label": "Door wall"
+      },
+      {
+        "wall_id": "wall_w",
+        "length_m": 4.0,
+        "color": {
+          "hex": "#e8e4dc",
+          "evidence_status": "sampled_from_photo",
+          "source": "inferred"
+        },
+        "label": null
+      }
+    ],
+    "floor": {
+      "floor_id": "floor",
+      "color": {
+        "hex": "#9c7b53",
+        "evidence_status": "sampled_from_photo",
+        "source": "inferred"
+      },
+      "material": "oak laminate"
+    },
+    "openings": [
+      {
+        "opening_id": "door_main",
+        "wall_id": "wall_s",
+        "type": "door",
+        "offset_m": 0.3,
+        "width_m": 0.82,
+        "height_m": 2.03,
+        "sill_m": null,
+        "hinge": {
+          "hinge_side": "left",
+          "swing_direction": "inward",
+          "swing_angle_max_deg": 90.0,
+          "evidence_status": "confirmed",
+          "motion_evidence_ref": "clip_door_open_001"
+        },
+        "evidence_status": "confirmed"
+      },
+      {
+        "opening_id": "window_north",
+        "wall_id": "wall_n",
+        "type": "window",
+        "offset_m": 1.9,
+        "width_m": 1.1,
+        "height_m": 1.2,
+        "sill_m": 0.9,
+        "hinge": null,
+        "evidence_status": "estimated"
+      }
+    ],
+    "existing_items": [
+      {
+        "item_id": "obj_existing_monitor",
+        "label": "27 inch monitor",
+        "footprint": {
+          "x_m": 1.6,
+          "y_m": 0.4,
+          "width_m": 0.62,
+          "depth_m": 0.22,
+          "rotation_deg": 0.0
+        },
+        "height_m": 0.46,
+        "locked": true,
+        "keep": true,
+        "evidence_status": "confirmed"
+      }
+    ],
+    "free_zones": [
+      {
+        "zone_id": "route_door_to_desk",
+        "label": "Walking route from the door to the desk",
+        "area": {
+          "points": [
+            {
+              "x_m": 0.3,
+              "y_m": 3.95
+            },
+            {
+              "x_m": 1.12,
+              "y_m": 3.95
+            },
+            {
+              "x_m": 1.12,
+              "y_m": 0.8
+            },
+            {
+              "x_m": 0.3,
+              "y_m": 0.8
+            }
+          ]
+        },
+        "purpose": "walking_route"
+      }
+    ],
+    "evidence_status": "estimated",
+    "source": "generated",
+    "snapshot_ref": "snap_0001",
+    "created_at": "2026-11-21T12:02:00Z"
   },
-  "depth_m": {
-   "value_m": 2.9,
-   "source": "estimated",
-   "confidence": 0.5
-  },
-  "height_m": {
-   "value_m": 2.5,
-   "source": "estimated",
-   "confidence": 0.6
-  },
-  "scale_reference": null,
-  "walls": [
-   {
-    "id": "wall_n",
-    "color_hex": "#d8d2c8",
-    "color_source": "sampled_from_photo"
-   },
-   {
-    "id": "wall_e",
-    "color_hex": "#d8d2c8",
-    "color_source": "sampled_from_photo"
-   },
-   {
-    "id": "wall_s",
-    "color_hex": "#d9d4cc",
-    "color_source": "default"
-   },
-   {
-    "id": "wall_w",
-    "color_hex": "#d8d2c8",
-    "color_source": "sampled_from_photo"
-   }
+  "confidence": 0.88,
+  "evidence_refs": [
+    "media_room_good"
   ],
-  "openings": [
-   {
-    "id": "door1",
-    "wall": "wall_n",
-    "type": "door",
-    "offset_m": 2.1,
-    "width_m": 0.8,
-    "height_m": 2.0,
-    "sill_m": 0.0,
-    "motion": null,
-    "confidence": 0.8
-   },
-   {
-    "id": "window2",
-    "wall": "wall_w",
-    "type": "window",
-    "offset_m": 0.9,
-    "width_m": 1.1,
-    "height_m": 1.2,
-    "sill_m": 0.9,
-    "motion": null,
-    "confidence": 0.7
-   }
-  ],
-  "existing_items": [
-   {
-    "id": "item1",
-    "label": "monitor",
-    "x": 0.5,
-    "z": 2.5,
-    "w": 0.55,
-    "d": 0.25,
-    "h": 0.45,
-    "keep": true,
-    "confidence": 0.7
-   }
-  ],
-  "free_zones": [],
-  "floor_color_hex": "#8a7560",
-  "status": "validated",
-  "notes": [
-   "MOCK_AI: saved output, not from your photo"
-  ]
- },
- "message": "",
- "latency_ms": 0
+  "source": "mock"
 }

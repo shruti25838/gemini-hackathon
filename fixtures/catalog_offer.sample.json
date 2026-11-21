@@ -1,0 +1,51 @@
+{
+  "offer_id": "offer_dev_desk_walnut",
+  "store": {
+    "store_domain": "ethyneon-dev.myshopify.com",
+    "store_name": "Ethyneon Dev Store",
+    "store_id": "gid://shopify/Shop/90000000001",
+    "api_surface": "storefront_api"
+  },
+  "product_id": "gid://shopify/Product/9000000000001",
+  "variant_id": "gid://shopify/ProductVariant/49000000000001",
+  "title": "Ethyneon Demo Walnut Writing Desk, 120 cm",
+  "selected_options": [
+    {
+      "name": "Finish",
+      "value": "Walnut"
+    },
+    {
+      "name": "Width",
+      "value": "120 cm"
+    }
+  ],
+  "price": {
+    "amount_minor": 42900,
+    "currency": "USD"
+  },
+  "compare_at_price": {
+    "amount_minor": 49900,
+    "currency": "USD"
+  },
+  "availability": {
+    "available": true,
+    "quantity": 12,
+    "checked_at": "2026-11-21T12:00:00Z"
+  },
+  "listing_url": "https://ethyneon-dev.myshopify.com/products/demo-walnut-writing-desk",
+  "image_url": "https://ethyneon-dev.myshopify.com/cdn/shop/files/demo-walnut-desk.jpg",
+  "dimensions": {
+    "width_m": 1.2,
+    "depth_m": 0.6,
+    "height_m": 0.74,
+    "evidence_status": "confirmed",
+    "raw_text": null
+  },
+  "dimension_source": "metafield",
+  "freshness": {
+    "fetched_at": "2026-11-21T12:00:00Z",
+    "ttl_ms": 300000,
+    "source_label": "live"
+  },
+  "shoppable": true
+}
