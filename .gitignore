@@ -43,4 +43,8 @@ AGORA_*.txt
 dist/
 *.whl
 
+# data and local media, from both sides of the merge
+*.sqlite*
+fixtures/photos/*.jpeg
+fixtures/photos/*.jpg
 ethyneon-studio/samples/
