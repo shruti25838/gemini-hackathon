@@ -39,6 +39,32 @@ Fourteen lines across eight files. Twelve are imports; two are paths.
 No logic of hers was changed. `ai/karishma/_edits.txt` holds the machine-made
 record.
 
+### Which commit of hers is vendored
+
+`origin/karishma/full-build` at **e92b987**, "A: smooth furniture dragging and
+better voice", which `main` later merged as **040ff65**.
+
+That matters for a merge. When `main` moved from 9fb2d7e to 040ff65 it
+changed four files, two of which we vendor. Both were already at the newer
+version here, because the copy was taken from her branch tip rather than
+from `main`. Verified by diffing our copies against `origin/main`:
+
+| File | Against `origin/main` |
+| --- | --- |
+| `ai/karishma/agents.py` | identical except edits 1 and 2 above |
+| `ai/karishma/_vendor/solver.py` | byte-identical |
+
+So the ported content for that merge was **nothing**: `review_move`'s
+`use_agents` flag and the solver's nearest-wall search were already present.
+Re-check this whenever `main` moves again:
+
+```bash
+git show origin/main:ai/agents.py  | tr -d '' | diff - <(tr -d '' < ai/karishma/agents.py)
+git show origin/main:fit/solver.py | tr -d '' | diff - <(tr -d '' < ai/karishma/_vendor/solver.py)
+```
+
+The first should show only edits 1 and 2; the second should show nothing.
+
 ### The Decisions call site
 
 Her `gemini.decide` called
