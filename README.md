@@ -184,7 +184,14 @@ fit/            lane C: pure geometry, no web, database or network imports
 tests/          contracts, ai, web, backend, fit
 scripts/        dev, gen_schemas, make_fixtures, check_shop_mcp, e2e_mock
 docs/           PRD v3.0, team integration contract, Shop MCP notes
+ethyneon-studio/  lane B: Mitran's Studio, its own venv (3.12) and suite
 ```
+
+`ethyneon-studio/` is a separate service with its own `.env`, dependencies and
+`python -m unittest` suite. It renders rooms and products but decides nothing
+about money: every purchase question goes to this server over
+`ETHYNEON_API_BASE`, and with that unset Studio has no purchase path at all.
+Its README has the two-port setup.
 
 `fit/` sits outside `backend/` on purpose: the same code runs on the server
 and inside the Argon and Carbon sandboxes, so it may not import anything that
@@ -325,4 +332,19 @@ Written during the Gemini 4 NYC Hackathon, November 2026.
 | 3D product assets | to be recorded in Phase 3 | Stand-in geometry, labelled representative on screen |
 | Room photos | supplied at the event | Consent shown before analysis; EXIF and GPS stripped in the browser |
 
-To be completed as lanes A and B land.
+### Third-party assets and licenses, lane B (`ethyneon-studio/`)
+
+Nothing below is vendored: the browser libraries load from a CDN at a pinned version, and the sample
+photos and generated meshes live in `ethyneon-studio/samples/` and `.cache/`, which git ignores.
+
+| Asset | License | Note |
+| --- | --- | --- |
+| three.js 0.180.0, from jsDelivr | MIT | `three.module.js` and `examples/jsm` loaders |
+| Agora RTC SDK NG 4.23.4, from jsDelivr | Agora SDK license, free tier | Voice only |
+| Poly Haven interior HDRIs, source for the 28 sample room sets | CC0 | Cut into camera views by `scripts/make_room_samples.py` |
+| `samples/shopify-walnut-side-table.glb` | not stated, confirm with Mitran | Generated from a public Shopify listing's photos; treat as merchant-owned until confirmed |
+| Shopify product data, photos and copy | merchant-owned | Labelled discovery only. Never mirrored into the development store, never purchasable. |
+| Generated 3D models for merchant products | derived from merchant-owned photos | Approximate stand-in geometry, labelled on screen |
+| Inter, Helvetica Neue, SF Mono, Menlo | system fonts | Named in CSS stacks, not bundled |
+
+To be completed as lane A lands.

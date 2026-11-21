@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ethyneon Product Studio</title>
+    <link rel="stylesheet" href="/studio-assets/studio.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="/studio-assets/studio.js"></script>
+    <script type="module" src="/studio-assets/app-nav.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div><h1>Ethyneon</h1><span>Product Studio</span></div>
+      </div>
+      <span class="catalog-source"><i aria-hidden="true"></i> Shopify catalog</span>
+    </header>
+
+    <main>
+      <div class="workspace">
+        <section class="panel product" aria-labelledby="product-title">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">3D preview</p>
+              <h2 id="product-title">Select a product</h2>
+            </div>
+            <div class="view-actions">
+              <button type="button" id="spin" disabled aria-pressed="false">Auto-rotate</button>
+              <button type="button" id="reset" disabled>Reset view</button>
+            </div>
+          </div>
+          <div class="viewport" role="region" aria-label="Interactive 3D preview">
+            <div id="viewer"></div>
+            <p class="viewport-empty" id="viewer-message">Choose a Shopify result to see it in 3D.</p>
+            <p class="viewport-hint" id="controls-hint" hidden>Drag to orbit · Scroll to zoom</p>
+          </div>
+          <div class="product-details" id="product-details" hidden>
+            <div class="product-summary">
+              <dl id="facts"></dl>
+              <div class="product-links">
+                <a id="listing" target="_blank" rel="noopener noreferrer" hidden>Shopify listing <span aria-hidden="true">↗</span></a>
+                <p id="finish" class="finish" hidden><span id="swatch"></span><span id="finish-label"></span></p>
+              </div>
+            </div>
+            <section id="attachment" class="attachment" aria-label="Attached headrest" hidden></section>
+            <div id="gallery" class="gallery" aria-label="Shopify product photos" hidden></div>
+          </div>
+        </section>
+        <aside class="panel catalog" aria-labelledby="results-title">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Shopify</p>
+              <h2 id="results-title">Product results</h2>
+            </div>
+            <span class="result-count" id="result-count" hidden></span>
+          </div>
+          <div id="results" class="results"></div>
+          <div id="catalog-empty" class="catalog-empty">
+            <p>Search for a product to fill the grid.</p>
+            <button type="button" data-command="Gaming chair">Find gaming chairs <span aria-hidden="true">↗</span></button>
+          </div>
+        </aside>
+      </div>
+      <section class="composer panel" aria-label="Text commands">
+        <p class="status" id="status" role="status" aria-live="polite">Enter a product or a design command.</p>
+        <form id="composer-form">
+          <label for="command" class="sr-only">Product or design command</label>
+          <input id="command" required maxlength="400" placeholder="Type a command, such as Gaming chair" autocomplete="off" spellcheck="false">
+          <button id="send" type="submit">Run <span aria-hidden="true">↵</span></button>
+        </form>
+        <div class="examples" aria-label="Example commands">
+          <button type="button" data-command="Choose top right" id="choose-example" disabled>Choose top right</button>
+          <button type="button" data-command="Rotate it" data-needs-product disabled>Rotate it</button>
+          <button type="button" data-command="Make it green" data-needs-product disabled>Make it green</button>
+          <button type="button" data-command="Add a headrest" data-needs-product disabled>Add a headrest</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

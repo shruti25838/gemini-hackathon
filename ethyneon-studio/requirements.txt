@@ -1,0 +1,10 @@
+agora-agents==3.0.0a4
+fastapi>=0.115,<1
+httpx>=0.28,<0.29
+numpy>=1.26,<3
+pillow>=11,<13
+pydantic>=2.10,<3
+python-dotenv>=1,<2
+trimesh>=4.0,<5
+uvicorn>=0.34,<1
+websockets>=13,<16
