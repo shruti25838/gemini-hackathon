@@ -162,3 +162,11 @@ def test_drag_into_door_swing_gets_checked_alternative(client):
     assert st["scene"]["rev"] == rev  # nothing committed until the shopper accepts
     st = c.post(f"/api/session/{sid}/alternative/accept").json()
     assert st["scene"]["rev"] == rev + 1 and st["fit"]["status"] in ("fits", "tight")
+
+
+def test_preset_room_is_labeled(client):
+    c = client
+    sid = c.post("/api/session").json()["id"]
+    r = c.post(f"/api/session/{sid}/preset").json()["room"]
+    assert any("PRESET" in n for n in r["notes"])
+    assert r["width_m"]["source"] == "default"  # not "confirmed": still needs a real measurement

@@ -117,6 +117,31 @@ async def _read(f: UploadFile) -> bytes:
     return data
 
 
+PRESET_ROOM = {
+    "revision": 1, "width_m": {"value_m": 3.2, "source": "default", "confidence": 1.0},
+    "depth_m": {"value_m": 3.0, "source": "default", "confidence": 1.0},
+    "height_m": {"value_m": 2.5, "source": "default", "confidence": 1.0},
+    "walls": [{"id": w, "color_hex": "#d9d4cc"} for w in ("back", "right", "front", "left")],
+    "openings": [{"id": "door1", "wall": "back", "type": "door", "offset_m": 2.2, "width_m": 0.8, "confidence": 1.0},
+                 {"id": "window1", "wall": "left", "type": "window", "offset_m": 0.9, "width_m": 1.2, "height_m": 1.2,
+                  "sill_m": 0.9, "confidence": 1.0}],
+    "existing_items": [], "notes": ["PRESET ROOM: not from your photo. Edit the dimensions to match your room."],
+}
+
+
+@app.post("/api/session/{sid}/preset")
+def use_preset(sid: str):
+    """Labeled fallback when the photo path fails. Never presented as the shopper's room."""
+    from contracts.schemas import RoomSpec
+    s = S(sid)
+    spec = RoomSpec(**PRESET_ROOM)
+    s.set_room(spec)
+    if not s.scene:
+        s.commit_scene(SceneRevision(rev=0, room_revision=spec.revision))
+    s.emit("roomspec", "warn", "Using the labeled PRESET room (not from a photo). Enter your real wall length.")
+    return {"room": spec.model_dump()}
+
+
 @app.post("/api/session/{sid}/photo")
 async def upload_photo(sid: str, file: UploadFile = File(...)):
     s = S(sid)
@@ -350,7 +375,8 @@ def move(sid: str, body: MoveBody):
         else:
             s.last_alternative = {"base_rev": base, "title": "That spot conflicts", "requested": res["placements"], "conflicts": res["conflicts"],
                                   "alternative": res["alternative"]["placements"], "report": res["alternative"]["report"],
-                                  "style": res["alternative"].get("style_assessment")}
+                                  "style": res["alternative"].get("style_assessment"),
+                                  "findings": res["alternative"].get("findings", [])}
             s.emit("move", "needs_input", f"That spot conflicts: {res['conflicts'][0]['detail']}. "
                    f"A checked alternative is ready ({res['alternative']['report']['status']}).")
     _bg(s, run)

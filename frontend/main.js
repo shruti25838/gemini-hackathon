@@ -156,7 +156,8 @@ function renderAlt() {
   const a = st.alternative, el = $("altCard");
   el.hidden = !a; if (!a) return;
   el.innerHTML = `<h3>${a.title || "Placement review"}</h3><p>${a.conflicts.map((c) => c.detail).join("<br>")}</p>
-    <p>Checked alternative: <b>${a.report.status}</b>${a.style ? ` — ${a.style}` : ""}</p>
+    <p>Checked alternative: <b>${a.report.status}</b> (checked by ${a.report.checked_by.join(" + ")})${a.style ? `<br><i>Argon:</i> ${a.style}` : ""}</p>
+    ${(a.findings || []).length ? `<p class="hint"><i>Carbon / probe findings:</i><br>${a.findings.map((f) => `${f.kind} · ${f.item_key}: ${f.detail} — ${f.reproduced_by_server ? "reproduced by server" : "NOT reproduced by server"}${f.advisory ? " (advisory)" : ""}`).join("<br>")}</p>` : ""}
     <button id="altYes">Use the alternative</button> <button class="secondary" id="altNo">Keep previous</button>`;
   $("altYes").onclick = () => post("/alternative/accept").then(refresh);
   $("altNo").onclick = () => post("/alternative/reject").then(refresh);
@@ -190,6 +191,8 @@ async function reencode(file, max = 1600) {
   c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
   return new Promise((res) => c.toBlob(res, "image/jpeg", 0.88)); // canvas output carries no EXIF/GPS
 }
+
+$("presetBtn").onclick = () => post("/preset").then(refresh).catch((e) => flash(e.message));
 
 $("photo").onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return;

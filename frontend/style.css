@@ -38,3 +38,4 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 #activity .needs_input::before { content:"? "; color:var(--ne);} #activity .started::before{content:"… ";color:var(--muted);} #activity .info::before{content:"· ";}
 #activity .meta { color:var(--muted); }
 table { width:100%; border-collapse:collapse; font-size:12px; } td { padding:3px 0; } td.r { text-align:right; }
+

@@ -404,7 +404,7 @@ def agent_review(s: Session, rev: int):
         elif res["report"]["status"] in ("fits", "tight"):
             s.last_alternative = {"base_rev": rev, "title": "Argon suggests a different layout", "requested": current,
                                   "conflicts": [], "alternative": res["placements"], "report": res["report"],
-                                  "style": res.get("style_assessment")}
+                                  "style": res.get("style_assessment"), "findings": res.get("findings", [])}
             s.emit("agent_review", "needs_input", "Argon proposed a different layout that passes every check. Use it?",
                    checked_by=res["report"]["checked_by"])
         else:
