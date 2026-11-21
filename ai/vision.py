@@ -7,6 +7,7 @@ user measurement -> scale anchoring of every still-estimated length
 from __future__ import annotations
 
 import math
+import os
 from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
@@ -133,7 +134,9 @@ def draft_to_spec(d: RoomDraft, revision: int = 1) -> RoomSpec:
     return validate_room(spec)
 
 
-def photo_to_roomspec(image: bytes, mime: str, thinking: str = "medium") -> tuple[RoomSpec, dict]:
+def photo_to_roomspec(image: bytes, mime: str, thinking: str | None = None) -> tuple[RoomSpec, dict]:
+    # live test: low = 17-18 s vs medium = 41 s with the same door/window/item positions (+-0.1 m)
+    thinking = thinking or os.getenv("ROOMSPEC_THINKING", "low")
     draft, meta = gemini.generate_structured(
         NEON, [gemini.image_part(image, mime), gemini.text_part("Build the room model for this photo.")],
         RoomDraft, system=ROOM_SYSTEM, thinking=thinking)
