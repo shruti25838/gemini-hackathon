@@ -155,7 +155,7 @@ function renderProducts() {
 function renderAlt() {
   const a = st.alternative, el = $("altCard");
   el.hidden = !a; if (!a) return;
-  el.innerHTML = `<h3>Placement review</h3><p>${a.conflicts.map((c) => c.detail).join("<br>")}</p>
+  el.innerHTML = `<h3>${a.title || "Placement review"}</h3><p>${a.conflicts.map((c) => c.detail).join("<br>")}</p>
     <p>Checked alternative: <b>${a.report.status}</b>${a.style ? ` — ${a.style}` : ""}</p>
     <button id="altYes">Use the alternative</button> <button class="secondary" id="altNo">Keep previous</button>`;
   $("altYes").onclick = () => post("/alternative/accept").then(refresh);

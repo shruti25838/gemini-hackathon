@@ -348,7 +348,7 @@ def move(sid: str, body: MoveBody):
         if res["accepted"]:
             _commit(s, res["placements"], base, "move accepted")
         else:
-            s.last_alternative = {"base_rev": base, "requested": res["placements"], "conflicts": res["conflicts"],
+            s.last_alternative = {"base_rev": base, "title": "That spot conflicts", "requested": res["placements"], "conflicts": res["conflicts"],
                                   "alternative": res["alternative"]["placements"], "report": res["alternative"]["report"],
                                   "style": res["alternative"].get("style_assessment")}
             s.emit("move", "needs_input", f"That spot conflicts: {res['conflicts'][0]['detail']}. "

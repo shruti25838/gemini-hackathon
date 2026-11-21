@@ -19,6 +19,12 @@ from . import agents, gates, gemini, shop, solver
 from .models import NEON
 from .state import Session
 
+import os
+
+# "background" (default): server solver commits instantly, Argon/Carbon review runs after.
+# "inline": wait for the full sandbox loop before committing. "off": server solver only.
+AGENT_REVIEW = os.getenv("ETHYNEON_AGENT_REVIEW", "background")
+
 
 class NeedsInput(Exception):
     def __init__(self, request: dict):
@@ -229,7 +235,9 @@ def op_discover_shopify_variants(s: Session, args: dict, ctx: dict):
     # one per category, best style match then cheapest; then downgrade until within budget
     choice = {}
     for c in cats:
-        cands = sorted([o for o in pool if o.category == c], key=lambda o: (-_style_score(o, s.brief.style), o.price_minor))
+        # when fit matters, prefer products whose dimensions are documented (unknown dims => unknown fit)
+        cands = sorted([o for o in pool if o.category == c],
+                       key=lambda o: (o.dims_m is None and c != "lighting", -_style_score(o, s.brief.style), o.price_minor))
         if cands:
             choice[c] = cands
     pick = {c: 0 for c in choice}
@@ -284,14 +292,28 @@ def op_plan_and_test_layout(s: Session, args: dict, ctx: dict):
         selected = [s.offers[p.variant_id] for p in sc.placements if p.variant_id in s.offers]
     fixed, items = _placements_for(s, selected)
     room = s.room.model_dump()
-    res = agents.propose_and_test(room, fixed, items, s.brief.model_dump(), s.emit)
+    if AGENT_REVIEW == "inline":
+        res = agents.propose_and_test(room, fixed, items, s.brief.model_dump(), s.emit)
+    else:
+        # Fast path: server solver now; Argon/Carbon sandbox review runs after commit (see agent_review).
+        res = solver.search(room, fixed, items, s.brief.preferred_wall)
+        res["report"]["checked_by"] = ["server"]
+        s.emit("plan_and_test_layout", "ok", f"Server solver placed {len(items)} items: {res['report']['status']}"
+               + ("; sandbox review starts after commit" if AGENT_REVIEW == "background" else ""),
+               report=res["report"], rejected=len(res["rejected"]))
+        ctx["agent_review"] = AGENT_REVIEW == "background"
     sc = _working_scene(s, ctx)
     sc.placements = [Placement(**{k: v for k, v in p.items() if k in Placement.model_fields and v is not None})
                      for p in res["placements"] if p.get("w") is not None]
     ctx["fit"] = res["report"]
     ctx["layout"] = res
-    # lighting products go in the cart but not on the floor plan
-    s.extra_variant_ids = [o.variant_id for o in selected if o.category == "lighting"]
+    # lighting has no floor footprint; products without documented dims can't be placed but stay visible
+    no_dims = [o for o in selected if o.category != "lighting" and o.dims_m is None]
+    for o in no_dims:
+        s.emit("plan_and_test_layout", "warn", f"{o.title} has no documented dimensions: shown in the list, "
+               "not placed in 3D, fit unknown")
+        ctx.setdefault("fit_unknowns", []).append(f"{o.variant_id}: dimensions not documented")
+    s.extra_variant_ids = [o.variant_id for o in selected if o.category == "lighting"] + [o.variant_id for o in no_dims]
 
 
 def op_apply_style_edit(s: Session, args: dict, ctx: dict):
@@ -337,6 +359,10 @@ def op_commit_scene_preview(s: Session, args: dict, ctx: dict):
     rep = solver.check(s.room.model_dump(), [p.model_dump() for p in sc.placements])
     if ctx.get("fit"):
         rep["checked_by"] = ctx["fit"].get("checked_by", rep["checked_by"])
+    if ctx.get("fit_unknowns"):
+        rep["unknowns"] += ctx["fit_unknowns"]
+        if rep["status"] != "no_fit":
+            rep["status"] = "unknown"
     committed = s.commit_scene(sc, base_rev=ctx["base_scene_rev"])
     from contracts.schemas import FitReport
     rep["scene_rev"] = committed.rev
@@ -344,6 +370,47 @@ def op_commit_scene_preview(s: Session, args: dict, ctx: dict):
     ctx["committed_rev"] = committed.rev
     s.emit("commit_scene_preview", "ok", f"Scene revision {committed.rev} committed; fit: {rep['status']}",
            rev=committed.rev, fit=rep)
+    if ctx.get("agent_review"):
+        import threading
+        threading.Thread(target=agent_review, args=(s, committed.rev), daemon=True).start()
+
+
+def _same_layout(a: list[dict], b: list[dict], tol: float = 0.05) -> bool:
+    ka = {p["key"]: p for p in a if not p.get("locked")}
+    kb = {p["key"]: p for p in b if not p.get("locked")}
+    return ka.keys() == kb.keys() and all(
+        abs(ka[k]["x"] - kb[k]["x"]) <= tol and abs(ka[k]["z"] - kb[k]["z"]) <= tol and ka[k].get("rot", 0) == kb[k].get("rot", 0)
+        for k in ka)
+
+
+def agent_review(s: Session, rev: int):
+    """Background: Argon proposes, Carbon tests, server verifies. Never commits on its own."""
+    try:
+        sc = next(x for x in s.scenes if x.rev == rev)
+        current = [p.model_dump() for p in sc.placements]
+        fixed = [p for p in current if p.get("locked")]
+        items = [p for p in current if not p.get("locked")]
+        if not items:
+            return
+        res = agents.propose_and_test(s.room.model_dump(), fixed, items, s.brief.model_dump(), s.emit)
+        if not s.scene or s.scene.rev != rev:
+            s.emit("agent_review", "info", f"Sandbox review for rev {rev} arrived after newer edits; discarded")
+            return
+        sandboxes = [c for c in res["report"]["checked_by"] if c.endswith("sandbox")]
+        if _same_layout(current, res["placements"]):
+            if sandboxes and s.fit and s.fit.scene_rev == rev:
+                s.fit.checked_by = list(dict.fromkeys(s.fit.checked_by + sandboxes))
+            s.emit("agent_review", "ok", f"Sandbox review agrees with rev {rev}" + (f" ({', '.join(sandboxes)})" if sandboxes else " (agents unavailable; server only)"))
+        elif res["report"]["status"] in ("fits", "tight"):
+            s.last_alternative = {"base_rev": rev, "title": "Argon suggests a different layout", "requested": current,
+                                  "conflicts": [], "alternative": res["placements"], "report": res["report"],
+                                  "style": res.get("style_assessment")}
+            s.emit("agent_review", "needs_input", "Argon proposed a different layout that passes every check. Use it?",
+                   checked_by=res["report"]["checked_by"])
+        else:
+            s.emit("agent_review", "warn", f"Sandbox proposal did not pass server checks ({res['report']['status']}); kept current layout")
+    except Exception as e:
+        s.emit("agent_review", "warn", f"Sandbox review failed: {type(e).__name__}: {str(e)[:200]}")
 
 
 OPS: dict[str, Callable] = {

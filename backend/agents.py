@@ -27,6 +27,8 @@ SOLVER_SRC = (Path(__file__).parent / "solver.py").read_text()
 AGENT_TIMEOUT_S = float(os.getenv("AGENT_TIMEOUT_S", "120"))
 AGENT_MAX_TOKENS = int(os.getenv("AGENT_MAX_TOKENS", "120000"))
 MAX_REPAIRS = int(os.getenv("AGENT_MAX_REPAIRS", "1"))
+CARBON_TIMEOUT_S = float(os.getenv("CARBON_TIMEOUT_S", "240"))
+CARBON_MAX_TOKENS = int(os.getenv("CARBON_MAX_TOKENS", "60000"))
 
 
 class AgentUnavailable(RuntimeError):
@@ -76,10 +78,10 @@ Your FINAL message must be ONLY this JSON object (not the solver's output):
  "style_assessment":"two sentences", "alternatives_considered":0, "unresolved":[]}"""
 
 TESTER_SYSTEM = """You are an independent tester. /workspace contains solver.py and input.json with a
-PROPOSED layout. Try to break it:
-- `python solver.py check input.json` and `python solver.py probe input.json` (door at 15-180 degrees)
-- re-check with every product footprint enlarged by 3 cm (manufacturing tolerance)
-- check that a 0.6 m path from the door to the desk front is not blocked
+PROPOSED layout. Be quick and concrete:
+1. `python solver.py check input.json`
+2. `python solver.py probe input.json` (door swing at 15-180 degrees)
+3. One tolerance test: copy input.json with every unlocked product's w and d increased by 0.03, run check on it.
 Report each real problem with the exact command that reproduces it. If nothing fails, verdict=pass.
 You cannot change the layout.
 Your FINAL message must be ONLY this JSON object:
@@ -88,7 +90,9 @@ Your FINAL message must be ONLY this JSON object:
 
 
 def _run_agent(model: str, system: str, task: str, payload: dict, out: type[BaseModel],
-               on_event=None, previous_id: Optional[str] = None) -> tuple[BaseModel, dict]:
+               on_event=None, previous_id: Optional[str] = None, timeout_s: Optional[float] = None,
+               max_tokens: Optional[int] = None) -> tuple[BaseModel, dict]:
+    timeout_s = timeout_s or AGENT_TIMEOUT_S
     env = {"sources": [
         {"type": "inline", "content": SOLVER_SRC, "target": "/workspace/solver.py"},
         {"type": "inline", "content": json.dumps(payload, indent=1), "target": "/workspace/input.json"},
@@ -96,7 +100,7 @@ def _run_agent(model: str, system: str, task: str, payload: dict, out: type[Base
     kwargs = dict(
         agent=ANTIGRAVITY_AGENT,
         environment=env,
-        agent_config={"type": "antigravity", "model": model, "max_total_tokens": AGENT_MAX_TOKENS},
+        agent_config={"type": "antigravity", "model": model, "max_total_tokens": max_tokens or AGENT_MAX_TOKENS},
         system_instruction=system,
         input=task,
         response_format={"type": "text", "mime_type": "application/json", "schema": gemini.inline_schema(out)},
@@ -108,8 +112,8 @@ def _run_agent(model: str, system: str, task: str, payload: dict, out: type[Base
     try:
         it = gemini.beta_client().interactions.create(**kwargs)
         while it.status in ("in_progress", "queued"):
-            if time.time() - t0 > AGENT_TIMEOUT_S:
-                raise AgentUnavailable(f"{model} agent timed out after {AGENT_TIMEOUT_S:.0f}s (interaction {it.id})")
+            if time.time() - t0 > timeout_s:
+                raise AgentUnavailable(f"{model} agent timed out after {timeout_s:.0f}s")
             time.sleep(2)
             it = gemini.beta_client().interactions.get(id=it.id)
             if on_event:
@@ -196,20 +200,42 @@ def _apply_poses(placements: list[dict], poses: list[ProposedPose]) -> tuple[lis
     return list(by_key.values()), rejected
 
 
+def _max_door_angle(room: dict) -> float:
+    angs = [(o.get("motion") or {}).get("max_angle_deg", 90) for o in room.get("openings", []) if o["type"] == "door"]
+    return max(angs) if angs else 90
+
+
+def server_probe_findings(room: dict, placements: list[dict]) -> list[dict]:
+    """Server-side probe. Angles beyond the door's observed opening are advisory, not failures."""
+    amax = _max_door_angle(room)
+    seen, out = set(), []
+    for a in solver.probe(room, placements)["angles"]:
+        for c in a["collisions"]:
+            beyond = a["angle_deg"] > amax
+            if (c["a"], beyond) in seen:
+                continue
+            seen.add((c["a"], beyond))
+            out.append({"kind": "door_swing", "item_key": c["a"], "other": c["b"], "angle_deg": a["angle_deg"],
+                        "detail": c["detail"] + (f" (only if opened past the observed {amax:.0f} deg)" if beyond else ""),
+                        "command": "python solver.py probe input.json", "reproduced_by_server": True, "advisory": beyond})
+    return out
+
+
 def verify_findings(room: dict, placements: list[dict], findings: list[Finding]) -> list[dict]:
     """Server reproduces each tester finding with its own solver run."""
     base = solver.check(room, placements)
-    probe = solver.probe(room, placements)
+    amax = _max_door_angle(room)
     out = []
     for f in findings:
         reproduced = False
+        beyond = f.kind == "door_swing" and f.angle_deg is not None and f.angle_deg > amax
         if f.kind in ("door_swing", "overlap", "out_of_bounds"):
             reproduced = any(c["a"] in (f.item_key, f.other) or c["b"] in (f.item_key, f.other)
                              for c in base["collisions"])
             if not reproduced and f.kind == "door_swing":
-                reproduced = any(c["a"] == f.item_key for a in probe["angles"] for c in a["collisions"])
+                reproduced = any(p["item_key"] == f.item_key for p in server_probe_findings(room, placements))
         out.append({**f.model_dump(), "reproduced_by_server": reproduced,
-                    "advisory": f.kind in ("tolerance", "access", "clearance")})
+                    "advisory": beyond or f.kind in ("tolerance", "access", "clearance")})
     return out
 
 
@@ -217,11 +243,13 @@ def propose_and_test(room: dict, fixed: list[dict], items: list[dict], brief: di
     """Full proposal loop. `emit(step, status, detail, **data)` feeds the activity panel."""
     payload = {"room": room, "placements": fixed + items, "brief": brief}
     used_agents = True
+    completed: list[str] = []
     try:
         emit("argon.propose", "started", "Argon is searching layouts in a sandbox")
         prop, pmeta = _run_agent(ARGON, PROPOSER_SYSTEM, "Propose the layout for the products in input.json.",
                                  payload, Proposal)
         placements, rej = _apply_poses(fixed + items, prop.placements)
+        completed.append("argon-sandbox")
         emit("argon.propose", "ok", prop.style_assessment, interaction_id=pmeta["interaction_id"],
              environment_id=pmeta["environment_id"], commands=prop.commands_run, ignored=rej,
              latency_ms=pmeta["latency_ms"])
@@ -242,19 +270,19 @@ def propose_and_test(room: dict, fixed: list[dict], items: list[dict], brief: di
             try:
                 emit("carbon.test", "started", "Carbon is testing the layout in a separate sandbox")
                 test, tmeta = _run_agent(CARBON, TESTER_SYSTEM, "Test this proposed layout.",
-                                         {"room": room, "placements": placements, "brief": brief}, TestReport)
+                                         {"room": room, "placements": placements, "brief": brief}, TestReport,
+                                         timeout_s=CARBON_TIMEOUT_S, max_tokens=CARBON_MAX_TOKENS)
                 test_findings = verify_findings(room, placements, test.findings)
+                if "carbon-sandbox" not in completed:
+                    completed.append("carbon-sandbox")
                 n_rep = sum(f["reproduced_by_server"] for f in test_findings)
                 emit("carbon.test", "ok" if test.verdict == "pass" else "warn",
                      f"Carbon verdict: {test.verdict}; {len(test_findings)} findings, {n_rep} reproduced by server",
                      findings=test_findings, interaction_id=tmeta["interaction_id"],
                      environment_id=tmeta["environment_id"], latency_ms=tmeta["latency_ms"])
             except AgentUnavailable as e:
-                emit("carbon.test", "warn", f"{e}. Falling back to server probe.")
-                pr = solver.probe(room, placements)
-                test_findings = [{"kind": "door_swing", "item_key": c["a"], "other": c["b"], "detail": c["detail"],
-                                  "angle_deg": a["angle_deg"], "reproduced_by_server": True, "advisory": False}
-                                 for a in pr["angles"] for c in a["collisions"]]
+                emit("carbon.test", "warn", f"{e}. Falling back to the server probe.")
+                test_findings = server_probe_findings(room, placements)
         hard = [f for f in test_findings if f["reproduced_by_server"] and not f["advisory"]]
         if report["status"] in ("fits", "tight") and not hard:
             break
@@ -285,7 +313,7 @@ def propose_and_test(room: dict, fixed: list[dict], items: list[dict], brief: di
         emit("server.check", "ok" if report["status"] in ("fits", "tight") else "warn",
              f"Server re-check after repair: {report['status']}", report=report)
 
-    report["checked_by"] = ["server"] + (["argon-sandbox", "carbon-sandbox"] if used_agents else ["local-fallback"])
+    report["checked_by"] = ["server"] + (completed or ["local-fallback"])
     return {"placements": placements, "report": report, "findings": test_findings, "repairs": repairs,
             "style_assessment": prop.style_assessment if prop else None, "used_agents": used_agents}
 

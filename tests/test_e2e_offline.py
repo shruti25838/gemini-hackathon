@@ -88,7 +88,17 @@ def test_full_flow(client):
             break
         time.sleep(0.1)
     assert st["fit"]["status"] in ("fits", "tight"), st["fit"]
-    assert "local-fallback" in st["fit"]["checked_by"]
+    assert st["fit"]["checked_by"][0] == "server"
+    # background sandbox review runs after commit; with agents unavailable it must say so, not claim a sandbox
+    t0 = time.time()
+    while time.time() - t0 < 10:
+        evs = c.get(f"/api/session/{sid}/events").json()
+        rev_ev = [e for e in evs if e["step"] == "agent_review"]
+        if rev_ev:
+            break
+        time.sleep(0.1)
+    assert rev_ev and "agents unavailable" in rev_ev[-1]["detail"]
+    assert not any(x.endswith("sandbox") for x in c.get(f"/api/session/{sid}/state").json()["fit"]["checked_by"])
     assert st["subtotal_minor"] <= 120000
     keys = {p["key"] for p in st["scene"]["placements"]}
     assert "item1" in keys  # existing monitor kept and locked
