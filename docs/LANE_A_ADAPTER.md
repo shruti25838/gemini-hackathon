@@ -34,9 +34,29 @@ Fourteen lines across eight files. Twelve are imports; two are paths.
 | `workflow.py` | 19 | `from fit import solver` to `from ._vendor import solver` |
 | `workflow.py` | 23 | `from backend.state import Session` to `from .shim import Session` |
 | `workflow.py` | 372 | inline `from contracts.schemas import FitReport` to `from ._vendor.kschemas import` |
+| `gemini.py` | 156 | **Decisions call site** to our plain-HTTP client, see below |
 
 No logic of hers was changed. `ai/karishma/_edits.txt` holds the machine-made
 record.
+
+### The Decisions call site
+
+Her `gemini.decide` called
+`genai.Client(http_options={"api_version": "v1beta"}).decisions.create(...)`.
+**That attribute does not exist in `google-genai` 2.33.0**, the newest on
+PyPI; the builder guide's `>=3.2.0` was never published. So every Decisions
+gate raised `AttributeError`, her `_degraded` caught it, and the photo gate
+silently stopped running while the pipeline carried on.
+
+The call site now goes through `ai/karishma_adapter/decisions_bridge.py`,
+which uses the same `backend/decisions.py` client we already use for the
+checkout audit, and returns her exact `(answers, meta)` tuple. Her gate
+logic is untouched: she still reads `a["is_room"]["noul"]`,
+`a["usable"]["score"]` and `a[k]["confidence"]`. Her input parts are passed
+through as she builds them.
+
+If the bridge cannot run, it raises, so her `_degraded` path still fires. A
+gate that cannot run must degrade loudly, never pass by default.
 
 ## What was vendored, and one deviation
 
@@ -90,6 +110,35 @@ wall, hinge left and right, inward and outward.
 This mattered because a mirrored swing is not an error; it is a confident,
 plausible, wrong "fits".
 
+## Gate outcomes: error, rejected, passed
+
+These are three different things and the adapter keeps them apart.
+
+| Her `GateResult` | Our `gate_set` | Draft returned |
+| --- | --- | --- |
+| `degraded=True` | `room_photo_error` | **no** |
+| `passed=False` | `room_photo` | **no**, plus the re-shoot hint |
+| `passed=True` | `room_photo` | yes, with any coverage gaps as `rescan:` answers |
+
+Two decisions worth stating.
+
+**An errored gate is not a rejected photo.** The original symptom was an
+`AttributeError` surfacing as `passed=False`, which reads on screen as "your
+photo was no good". The shopper would retake a perfectly good picture while
+the real fault was a missing SDK attribute.
+
+**A failed or errored gate yields no draft.** Her `analyze_room` continues
+past a degraded gate and builds a room from the photo anyway. That is
+reasonable in her app and wrong here: once an ungated draft reaches the
+scene it is indistinguishable from an analysed one, and nothing on the
+record says the photo was never checked for quality or for a person in
+frame. When that happens the adapter drops the draft and records
+`ungated_draft_discarded`.
+
+Per-answer `passed` means "confident enough to rely on this answer", not the
+overall verdict, which lives in `all_passed`. A rejected photo can still
+have a high-confidence `door_visible`.
+
 ## What is real and what is delegated
 
 `GET /api/health` reports this per function, under `lane_a_functions`.
@@ -116,6 +165,8 @@ plausible, wrong "fits".
 | Walking routes | Her `FreeZone` has no `purpose`, so every zone becomes `keep_clear` and a route cannot survive the crossing. This is the loss most likely to change a fit result |
 | `scale_reference` | Hers is a bare string; ours needs an anchor and a length. Dropped unless the width is confirmed |
 | Her `fixtures/room_spec.sample.json` etc. | Not copied; ours are generated from our models |
+| Preset room | Not implemented. A failed gate returns no draft at all rather than a labelled preset |
+| `room_poor.jpeg` sits on her threshold | Her `room_usable_min_score` is 1.0 and this photo scores either side of it between runs, so the same photo is sometimes accepted with coverage gaps and sometimes rejected. Her thresholds were not touched |
 
 `ai/karishma_adapter/contracts_bridge.py` has a `LOSSY` dict naming every
 field that does not survive a round trip, and a test asserts it stays

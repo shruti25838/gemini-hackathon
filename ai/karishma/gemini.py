@@ -152,13 +152,14 @@ def decide(parts: list[dict] | str, questions: dict[str, dict]) -> tuple[dict, d
 
     if mock_ai():
         return _mock_decide(questions), {"model": DECISION, "latency_ms": 0, "source": "mock"}
-    t0 = time.time()
-    r = beta_client().decisions.create(model=DECISION, input=parts, questions=questions)
-    answers = {k: (v.model_dump() if hasattr(v, "model_dump") else dict(v)) for k, v in (r.answers or {}).items()}
-    meta = {"model": DECISION, "latency_ms": int((time.time() - t0) * 1000)}
-    if getattr(r, "prompt_feedback", None):
-        meta["prompt_feedback"] = r.prompt_feedback.model_dump()
-    return answers, meta
+    # Call site routed through our plain-HTTP client. google-genai 2.33.0 has
+    # no Client.decisions, and the guide's >=3.2.0 was never published, so the
+    # original line below raised AttributeError on every gate:
+    #     r = beta_client().decisions.create(model=DECISION, input=parts, questions=questions)
+    # Her logic is unchanged: the same (answers, meta) tuple comes back.
+    from ai.karishma_adapter.decisions_bridge import decide as _decide_via_ours
+
+    return _decide_via_ours(parts, questions, model=DECISION)
 
 
 def mock_ai() -> bool:

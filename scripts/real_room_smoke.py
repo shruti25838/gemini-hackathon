@@ -80,19 +80,40 @@ def main() -> int:
         print(f"  FAILED: {type(exc).__name__}: {exc}")
         return 1
 
-    print(f"  source       {analysis.source}")
+    from ai.karishma_adapter.provider import GATE_SET_ERROR
+
+    errored = analysis.gates.gate_set == GATE_SET_ERROR
+    if errored:
+        status = "ERROR  (the gate could not run; this is NOT a verdict on the photo)"
+    elif analysis.gates.all_passed:
+        status = "PASSED"
+    else:
+        status = "REJECTED  (the gate ran and turned the photo down)"
+
+    print(f"  gate status  {status}")
     print(f"  gate set     {analysis.gates.gate_set}")
-    print(f"  gates passed {analysis.gates.all_passed}")
+    print(f"  source       {analysis.source}")
+    print()
+    print("  raw gate answers:")
     for answer in analysis.gates.answers:
         print(
-            f"    {answer.question:28} {answer.answer:10} "
+            f"    {answer.question:26} {answer.answer[:40]:42} "
             f"confidence {answer.confidence:.2f}  passed={answer.passed}"
         )
+    for ref in analysis.evidence_refs:
+        print(f"  note         {ref}")
 
     draft = analysis.room_spec_draft
     if draft is None:
         print()
-        print("  No RoomSpec draft: the photo gate rejected the image.")
+        if errored:
+            print("  No RoomSpec draft, because the gate never ran.")
+            print("  Fix the gate, do not retake the photo.")
+        else:
+            print("  No RoomSpec draft: the gate turned this photo down.")
+            hints = [a.answer for a in analysis.gates.answers if "rescan" in a.question]
+            for hint in hints:
+                print(f"    hint: {hint}")
         return 1
 
     rule("3. Our validator")
@@ -104,6 +125,12 @@ def main() -> int:
         print(f"    warning {warning.field_path}: {warning.code}")
 
     rule("4. Room")
+    # Where this room came from matters more than its numbers.
+    print(f"  provenance   analysed from the photo (gate passed)")
+    print(f"  draft status validated draft, not a preset")
+    print(f"  source label {analysis.source}")
+    print(f"  evidence     {analysis.evidence_refs or 'none recorded'}")
+    print()
     dims = draft.dimensions_m
     for name, measurement in (
         ("width_m", dims.width_m),
