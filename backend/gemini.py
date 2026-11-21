@@ -114,7 +114,6 @@ def generate_structured(
         model=model,
         input=parts,
         response_format={"type": "text", "mime_type": "application/json", "schema": inline_schema(out)},
-        response_mime_type="application/json",
     )
     if system:
         kwargs["system_instruction"] = system

@@ -70,7 +70,10 @@ authoritative fit checker) and input.json (room, fixed items, products to place,
 2. You may try other positions by editing a copy of input.json and running `python solver.py check`.
 3. Prefer positions that serve the brief (style, preferred wall, keeping the door clear) but NEVER
    return a layout that `solver.py check` reports as no_fit.
-Only use product keys present in input.json. Do not invent products. Return JSON only."""
+Only use product keys present in input.json. Do not invent products.
+Your FINAL message must be ONLY this JSON object (not the solver's output):
+{"placements":[{"key":"...","x":0.0,"z":0.0,"rot":0}], "commands_run":["..."],
+ "style_assessment":"two sentences", "alternatives_considered":0, "unresolved":[]}"""
 
 TESTER_SYSTEM = """You are an independent tester. /workspace contains solver.py and input.json with a
 PROPOSED layout. Try to break it:
@@ -78,7 +81,10 @@ PROPOSED layout. Try to break it:
 - re-check with every product footprint enlarged by 3 cm (manufacturing tolerance)
 - check that a 0.6 m path from the door to the desk front is not blocked
 Report each real problem with the exact command that reproduces it. If nothing fails, verdict=pass.
-You cannot change the layout. Return JSON only."""
+You cannot change the layout.
+Your FINAL message must be ONLY this JSON object:
+{"verdict":"pass|fail", "findings":[{"kind":"door_swing|overlap|out_of_bounds|clearance|tolerance|access",
+ "item_key":"...","other":"...","detail":"...","angle_deg":null,"command":"..."}], "commands_run":["..."]}"""
 
 
 def _run_agent(model: str, system: str, task: str, payload: dict, out: type[BaseModel],
@@ -94,7 +100,6 @@ def _run_agent(model: str, system: str, task: str, payload: dict, out: type[Base
         system_instruction=system,
         input=task,
         response_format={"type": "text", "mime_type": "application/json", "schema": gemini.inline_schema(out)},
-        response_mime_type="application/json",
         background=True,
     )
     if previous_id:
@@ -111,15 +116,69 @@ def _run_agent(model: str, system: str, task: str, payload: dict, out: type[Base
                 on_event("poll", it)
         if it.status != "completed":
             raise AgentUnavailable(f"{model} agent ended with status {it.status}: {getattr(it, 'errors', None)}")
-        parsed = out.model_validate_json(it.output_text or "")
+        executed = _executed_commands(it)
+        parsed = _coerce(out, _extract_json(it.output_text or ""), executed)
     except AgentUnavailable:
         raise
     except Exception as e:
         raise AgentUnavailable(f"{model} agent failed: {type(e).__name__}: {str(e)[:200]}") from e
     meta = {"model": model, "interaction_id": it.id, "environment_id": it.environment_id,
             "latency_ms": int((time.time() - t0) * 1000),
-            "usage": it.usage.model_dump() if getattr(it, "usage", None) else None}
+            "usage": it.usage.model_dump() if getattr(it, "usage", None) else None,
+            "executed_in_sandbox": executed}
     return parsed, meta
+
+
+def _extract_json(text: str) -> dict:
+    """Agents don't enforce response_format: take the last JSON object in the final message."""
+    t = text.strip()
+    if "```" in t:
+        blocks = [b.split("\n", 1)[-1] if b.lstrip().startswith(("json", "\n")) or "{" not in b[:5] else b
+                  for b in t.split("```")[1::2]]
+        t = blocks[-1] if blocks else t
+    start = t.find("{")
+    if start < 0:
+        raise ValueError("no JSON object in agent output")
+    obj, _ = json.JSONDecoder().raw_decode(t[start:])
+    return obj
+
+
+def _executed_commands(it) -> list[str]:
+    """Commands the sandbox actually executed (from interaction steps), not self-reported ones."""
+    out = []
+    for st in it.steps or []:
+        if st.type in ("code_execution_call", "function_call"):
+            args = getattr(st, "arguments", None)
+            if hasattr(args, "model_dump"):
+                args = args.model_dump()
+            if isinstance(args, dict):
+                args = args.get("code") or args.get("command") or args.get("cmd") or json.dumps(args)[:200]
+            out.append(str(args)[:200] if args else st.type)
+    return out
+
+
+def _coerce(out: type[BaseModel], obj: dict, executed: list[str]) -> BaseModel:
+    """Accept the requested schema, or the solver's own output shape, and fill evidence from real steps."""
+    try:
+        m = out.model_validate(obj)
+    except Exception:
+        if out is Proposal and isinstance(obj.get("placements"), list):
+            m = Proposal(placements=[ProposedPose(key=p["key"], x=p["x"], z=p["z"], rot=p.get("rot", 0))
+                                     for p in obj["placements"] if {"key", "x", "z"} <= set(p)],
+                         commands_run=[], style_assessment="", alternatives_considered=len(obj.get("rejected", [])),
+                         unresolved=[])
+        elif out is TestReport and ("status" in obj or "collisions" in obj or "angles" in obj):
+            cols = obj.get("collisions", []) + [c for a in obj.get("angles", []) for c in a.get("collisions", [])]
+            m = TestReport(verdict="fail" if cols or obj.get("status") == "no_fit" else "pass",
+                           findings=[Finding(kind=c.get("kind", "overlap") if c.get("kind") in Finding.model_fields["kind"].annotation.__args__ else "overlap",
+                                             item_key=c["a"], other=c["b"], detail=c.get("detail", ""),
+                                             command="python solver.py check input.json") for c in cols],
+                           commands_run=[])
+        else:
+            raise
+    if hasattr(m, "commands_run") and executed:
+        m.commands_run = executed
+    return m
 
 
 # ---------- orchestration ----------
