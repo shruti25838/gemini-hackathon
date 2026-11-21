@@ -144,7 +144,7 @@ def test_env_example_contains_no_values() -> None:
         # Only the mock flags and feature switches carry a value, and those
         # are not secrets.
         if value.strip():
-            assert key.startswith(("MOCK_", "SHOP_MCP", "ENABLE_")), (
+            assert key.startswith(("MOCK_", "SHOP_MCP", "ENABLE_", "LIVE_")), (
                 f"{key} has a value in .env.example; it must be empty"
             )
             assert value.strip() in {"0", "1"}, f"{key} should be a 0/1 flag"

@@ -414,13 +414,15 @@ class CartService:
 
     # -- the Shopify write ------------------------------------------------
 
-    def write_cart_once(self, review: CartReview) -> CartReview:
-        """Create the Shopify cart for an approval, exactly once.
+    def write_cart_once(self, review: CartReview):
+        """Create and verify the Shopify cart for an approval, exactly once.
 
-        Not reached in Phase 1: cart writes are disabled on the Storefront
-        client, so this raises rather than mutating anything. The logic is
-        here, and tested with a fake transport, so enabling it later is a
-        configuration change and not new code.
+        Returns (review, reconciliation). The reconciliation says what the
+        read-back found and is safe to print: it carries no URL and no
+        credential.
+
+        Guarded twice. LIVE_CART_WRITES must be on and the store must be on
+        the allowlist, checked here rather than only at startup.
         """
         if review.approval is None:
             raise CartError(
@@ -428,13 +430,6 @@ class CartService:
                 message="A cart is written only for an approved review.",
                 retryable=False,
             )
-
-        if review.cart_reference and review.cart_reference.write_outcome == "confirmed":
-            return review
-
-        if review.cart_reference and review.cart_reference.write_outcome == "unknown":
-            # The previous attempt's outcome is unclear. Read, never rewrite.
-            return self.reconcile_unclear_write(review)
 
         storefront = self.catalog.storefront
         if storefront is None:
@@ -444,37 +439,41 @@ class CartService:
                 retryable=False,
             )
 
-        lines = [
-            {"merchandiseId": line.variant_id, "quantity": line.quantity}
-            for line in review.lines
-        ]
-        review.cart_reference = CartRef(
-            cart_id="pending",
-            store_domain=review.store.store_domain,
-            write_outcome="unknown",
-            written_at=datetime.now(timezone.utc),
+        from backend.cart_write import LiveCartWriter, check_cart_writes_allowed
+
+        # Raises with the standard envelope when either gate is closed.
+        check_cart_writes_allowed(self.catalog.settings)
+
+        def persist_intent(pending: CartReview) -> None:
+            # Written before the mutation leaves, so a crash mid-write is
+            # recoverable by reading back rather than writing again.
+            self.db.upsert_cart_review(pending.model_dump(mode="json"))
+
+        writer = LiveCartWriter(
+            storefront, self.catalog.settings, on_intent=persist_intent
         )
+        review, reconciliation = writer.write_and_verify(review)
         self.db.upsert_cart_review(review.model_dump(mode="json"))
 
-        cart = storefront.create_cart(lines)
-
-        review.cart_reference = CartRef(
-            cart_id=cart["id"],
-            store_domain=review.store.store_domain,
-            checkout_url=None,  # released only after a passing audit
-            fingerprint=cart_fingerprint_from_shopify(cart),
-            written_at=datetime.now(timezone.utc),
-            write_outcome="confirmed",
-        )
-        self.db.upsert_cart_review(review.model_dump(mode="json"))
-        self.events.emit_simple(
-            review.session_id,
-            "commerce",
-            "cart_written",
-            "Shopify cart created for this approval.",
-            scene_revision=review.scene_revision,
-        )
-        return review
+        if reconciliation.matches:
+            self.events.emit_simple(
+                review.session_id,
+                "commerce",
+                "cart_written",
+                f"Shopify cart created and verified against the approval, "
+                f"{len(review.lines)} line(s).",
+                scene_revision=review.scene_revision,
+            )
+        else:
+            self.events.emit_simple(
+                review.session_id,
+                "commerce",
+                "cart_needs_review",
+                "The written cart does not match the approval.",
+                payload={"problems": reconciliation.problems},
+                scene_revision=review.scene_revision,
+            )
+        return review, reconciliation
 
     def reconcile_unclear_write(self, review: CartReview) -> CartReview:
         """Read the cart back rather than writing again."""

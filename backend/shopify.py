@@ -142,6 +142,22 @@ mutation EthyneonCartCreate($lines: [CartLineInput!]!) {
 }
 """
 
+CART_LINES_ADD = """
+mutation EthyneonCartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+  cartLinesAdd(cartId: $cartId, lines: $lines) {
+    cart {
+      id
+      checkoutUrl
+      cost { subtotalAmount { amount currencyCode } }
+      lines(first: 50) {
+        edges { node { id quantity merchandise { ... on ProductVariant { id } } } }
+      }
+    }
+    userErrors { field message }
+  }
+}
+"""
+
 CART_QUERY = """
 query EthyneonCart($id: ID!) {
   cart(id: $id) {
@@ -393,6 +409,33 @@ class ShopifyStorefront:
             # retry rather than writing again.
             raise ShopifyError(
                 "cartCreate returned no cart and no error; read the cart back before retrying",
+                retryable=False,
+                code="unclear_outcome",
+            )
+        return cart
+
+    def add_cart_lines(self, cart_id: str, lines: list[dict[str, Any]]) -> dict[str, Any]:
+        """Add lines to an existing cart.
+
+        Used only to complete a cart whose read-back showed missing lines.
+        Never used to create a second cart: that is what would double-charge.
+        """
+        if not self.allow_cart_writes:
+            raise ShopifyError(
+                "live cart writes are disabled. Set allow_cart_writes to enable them.",
+                retryable=False,
+                code="cart_writes_disabled",
+            )
+        data = self.execute(CART_LINES_ADD, {"cartId": cart_id, "lines": lines})
+        result = data.get("cartLinesAdd") or {}
+        if result.get("userErrors"):
+            messages = "; ".join(e.get("message", "") for e in result["userErrors"])
+            raise ShopifyError(f"cartLinesAdd failed: {messages}", retryable=False)
+        cart = result.get("cart")
+        if not cart:
+            raise ShopifyError(
+                "cartLinesAdd returned no cart and no error; read the cart back "
+                "before retrying",
                 retryable=False,
                 code="unclear_outcome",
             )

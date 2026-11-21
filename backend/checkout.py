@@ -42,6 +42,19 @@ from backend.events import EventWriter
 ACCEPTABLE_FIT = ("fits", "tight")
 
 
+def _current_cart_fingerprint(
+    review: CartReview, live_cart: Optional[dict[str, Any]]
+) -> str:
+    """Fingerprint the cart as it is right now, not as it was when written."""
+    if live_cart is not None:
+        from backend.cart import cart_fingerprint_from_shopify
+
+        return cart_fingerprint_from_shopify(live_cart)
+    if review.cart_reference and review.cart_reference.fingerprint:
+        return review.cart_reference.fingerprint
+    return "no_live_cart"
+
+
 class CheckoutError(EthyneonError):
     pass
 
@@ -195,15 +208,43 @@ class CheckoutService:
         )
 
         expected_total = sum(line.line_subtotal.amount_minor for line in review.lines)
-        add(
-            "amounts_match",
+        amounts_ok = (
             not price_moved
-            and review.merchandise_subtotal.amount_minor == expected_total,
+            and review.merchandise_subtotal.amount_minor == expected_total
+        )
+        observed_total = review.merchandise_subtotal.amount_minor
+        amount_detail = (
             "Subtotal equals the sum of the approved lines at current prices."
             if not price_moved
-            else f"Prices moved on: {price_moved}",
+            else f"Prices moved on: {price_moved}"
+        )
+
+        # When a live cart was read, its own subtotal must agree too. This is
+        # what catches a cart whose amount drifted after approval.
+        if live_cart is not None:
+            from backend.cart_write import subtotal_from_cart
+
+            live_subtotal = subtotal_from_cart(live_cart)
+            if live_subtotal is None:
+                amounts_ok = False
+                amount_detail = "The live cart subtotal could not be read."
+            else:
+                observed_total = live_subtotal.amount_minor
+                if (
+                    live_subtotal.amount_minor != review.merchandise_subtotal.amount_minor
+                    or live_subtotal.currency != review.merchandise_subtotal.currency
+                ):
+                    amounts_ok = False
+                    amount_detail = (
+                        "The live cart subtotal does not match the approved amount."
+                    )
+
+        add(
+            "amounts_match",
+            amounts_ok,
+            amount_detail,
             expected_total,
-            review.merchandise_subtotal.amount_minor,
+            observed_total,
         )
 
         within = True
@@ -287,6 +328,11 @@ class CheckoutService:
                 retryable=False,
             )
 
+        # Always compare against the cart as it is right now. A cart edited
+        # in another tab after approval is exactly what this catches.
+        if live_cart is None:
+            live_cart = self._read_live_cart(review)
+
         checks = self.reconcile(
             review,
             live_cart,
@@ -353,11 +399,7 @@ class CheckoutService:
             scene_revision=review.scene_revision,
             brief_revision=review.brief_revision,
             approval_fingerprint=review.approval.fingerprint,
-            cart_fingerprint=(
-                review.cart_reference.fingerprint or "no_live_cart"
-                if review.cart_reference
-                else "no_live_cart"
-            ),
+            cart_fingerprint=_current_cart_fingerprint(review, live_cart),
             deterministic_results=checks,
             decision_answers=decision_answers,
             next_action=next_action,  # type: ignore[arg-type]
@@ -368,10 +410,10 @@ class CheckoutService:
 
         checkout_url: Optional[str] = None
         if outcome == "ready":
-            checkout_url = (
-                review.cart_reference.checkout_url if review.cart_reference else None
+            checkout_url = self._release_url(review, audit, live_cart)
+            review.payment_state = (
+                "checkout_opened" if checkout_url else "checkout_audit_pending"
             )
-            review.payment_state = "checkout_opened"
             self.events.emit_simple(
                 review.session_id,
                 "commerce",
@@ -411,6 +453,52 @@ class CheckoutService:
         )
         return audit, checkout_url
 
+    def _read_live_cart(self, review: CartReview) -> Optional[dict[str, Any]]:
+        """Read the cart from Shopify, if there is one and we can reach it."""
+        reference = review.cart_reference
+        if reference is None or reference.cart_id in (None, "", "pending"):
+            return None
+        storefront = self.carts.catalog.storefront
+        if storefront is None:
+            return None
+        try:
+            return storefront.get_cart(reference.cart_id)
+        except Exception:  # noqa: BLE001 - an unreadable cart is not a pass
+            return None
+
+    def _release_url(
+        self,
+        review: CartReview,
+        audit: CheckoutAudit,
+        live_cart: Optional[dict[str, Any]],
+    ) -> Optional[str]:
+        """Hand back the hosted checkout URL, bound to this approval and cart.
+
+        Released only when the audit is for this exact approval fingerprint
+        and the cart fingerprint still matches what was audited. Any drift
+        means a new audit, not a release.
+        """
+        reference = review.cart_reference
+        if reference is None or not reference.checkout_url:
+            return None
+
+        from backend.cart import approval_fingerprint, cart_fingerprint_from_shopify
+
+        if review.approval is None:
+            return None
+        if audit.approval_fingerprint != approval_fingerprint(review):
+            return None
+        if audit.expires_at <= datetime.now(timezone.utc):
+            return None
+
+        if live_cart is not None:
+            current = cart_fingerprint_from_shopify(live_cart)
+            if current != audit.cart_fingerprint:
+                # The cart moved between the audit and the release.
+                return None
+
+        return reference.checkout_url
+
     # -- payment state ----------------------------------------------------
 
     def mark_payment_unconfirmed(self, review_id: str) -> CartReview:
@@ -428,20 +516,33 @@ class CheckoutService:
         return review
 
     def confirm_order(
-        self, review_id: str, *, order_id: Optional[str], lookup_enabled: bool
+        self,
+        review_id: str,
+        *,
+        order_id: Optional[str],
+        lookup_enabled: bool,
+        blocked_reason: Optional[str] = None,
     ) -> CartReview:
         """order_confirmed comes only from a read-only order lookup or a
-        verified Shopify order event, never from the handoff."""
+        verified Shopify order event, never from the handoff.
+
+        Without the flag and a separate credential the state stays
+        payment_unconfirmed, and the refusal says plainly why.
+        """
         review = CartReview.model_validate(self.db.get_cart_review(review_id))
 
         if not lookup_enabled:
+            reason = blocked_reason or "ENABLE_ORDER_LOOKUP is off"
+            review.payment_state = "payment_unconfirmed"
+            self.db.upsert_cart_review(review.model_dump(mode="json"))
             raise CheckoutError(
                 code="order_lookup_disabled",
                 message=(
-                    "ENABLE_ORDER_LOOKUP is off, so an order cannot be confirmed. "
-                    "The state stays payment_unconfirmed."
+                    f"An order cannot be confirmed: {reason}. The state stays "
+                    f"payment_unconfirmed."
                 ),
                 retryable=False,
+                details={"reason": reason, "payment_state": "payment_unconfirmed"},
             )
         if not order_id:
             review.payment_state = "payment_unconfirmed"

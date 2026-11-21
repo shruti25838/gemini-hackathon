@@ -77,9 +77,23 @@ class Settings(BaseSettings):
     shopify_storefront_token: Optional[str] = Field(default=None, alias="SHOPIFY_STOREFRONT_TOKEN")
     shopify_api_version: str = Field(default="2025-10", alias="SHOPIFY_API_VERSION")
 
+    # Live cart writes. Off by default, and gated twice: the flag must be on
+    # AND the configured store must be on the allowlist below. Both conditions
+    # are checked at the moment of the write, not only at startup.
+    live_cart_writes: bool = Field(default=False, alias="LIVE_CART_WRITES")
+    allowed_cart_store_domains: str = Field(
+        default="ethyneon.myshopify.com", alias="ALLOWED_CART_STORE_DOMAINS"
+    )
+
     # Order lookup, off by default. Phase 4 adds the read-only credential,
     # which must be separate from the Storefront token.
     enable_order_lookup: bool = Field(default=False, alias="ENABLE_ORDER_LOOKUP")
+    # A separate, read-only credential. Never the Storefront token: an order
+    # lookup reads buyer data and must not share a credential with catalog
+    # reads. Without it the state stays payment_unconfirmed.
+    shopify_order_lookup_token: Optional[str] = Field(
+        default=None, alias="SHOPIFY_ORDER_LOOKUP_TOKEN"
+    )
 
     # Shop MCP, discovery only
     shop_mcp: bool = Field(default=True, alias="SHOP_MCP")
@@ -114,6 +128,59 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def order_lookup_ready(self) -> bool:
+        """Both the flag and a distinct credential, or no confirmation."""
+        token = (self.shopify_order_lookup_token or "").strip()
+        return bool(
+            self.enable_order_lookup
+            and token
+            and token != (self.shopify_storefront_token or "").strip()
+        )
+
+    def order_lookup_blocked_reason(self) -> Optional[str]:
+        if not self.enable_order_lookup:
+            return "ENABLE_ORDER_LOOKUP is off"
+        token = (self.shopify_order_lookup_token or "").strip()
+        if not token:
+            return "SHOPIFY_ORDER_LOOKUP_TOKEN is not set"
+        if token == (self.shopify_storefront_token or "").strip():
+            return (
+                "the order lookup credential must be separate from the "
+                "Storefront token"
+            )
+        return None
+
+    @property
+    def cart_store_allowlist(self) -> list[str]:
+        return [
+            d.strip().lower()
+            for d in self.allowed_cart_store_domains.split(",")
+            if d.strip()
+        ]
+
+    @property
+    def cart_writes_allowed(self) -> bool:
+        """Both gates, evaluated together. Either one off means no write."""
+        return bool(
+            self.live_cart_writes
+            and self.shopify_store_domain
+            and self.shopify_store_domain.strip().lower() in self.cart_store_allowlist
+        )
+
+    def cart_write_refusal_reason(self) -> Optional[str]:
+        """Why a write would be refused, or None when it is allowed."""
+        if not self.live_cart_writes:
+            return "LIVE_CART_WRITES is off"
+        if not self.shopify_store_domain:
+            return "no SHOPIFY_STORE_DOMAIN is configured"
+        if self.shopify_store_domain.strip().lower() not in self.cart_store_allowlist:
+            return (
+                f"store {self.shopify_store_domain} is not on the cart-write "
+                f"allowlist {self.cart_store_allowlist}"
+            )
+        return None
 
     @property
     def commerce_is_live(self) -> bool:

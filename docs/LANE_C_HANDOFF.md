@@ -279,7 +279,11 @@ Names only. Values live in `.env`, which is git-ignored and never committed.
 **Shopify Storefront:** `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_TOKEN`,
 `SHOPIFY_API_VERSION`, `SHOPIFY_DIMENSION_METAFIELD_NAMESPACE`,
 `SHOPIFY_DIMENSION_METAFIELD_WIDTH`, `SHOPIFY_DIMENSION_METAFIELD_DEPTH`,
-`SHOPIFY_DIMENSION_METAFIELD_HEIGHT`, `ENABLE_ORDER_LOOKUP`
+`SHOPIFY_DIMENSION_METAFIELD_HEIGHT`
+
+**Live cart writes:** `LIVE_CART_WRITES`, `ALLOWED_CART_STORE_DOMAINS`
+
+**Order confirmation:** `ENABLE_ORDER_LOOKUP`, `SHOPIFY_ORDER_LOOKUP_TOKEN`
 
 **Shop MCP:** `SHOP_MCP`, `SHOP_MCP_ENDPOINT`, `SHOP_MCP_PROTOCOL_VERSION`,
 `SHOP_MCP_TIMEOUT_SECONDS`, `SHOP_MCP_CACHE_TTL_MS_OVERRIDE`
@@ -319,9 +323,60 @@ other owners.
 
 | Gap | Detail |
 | --- | --- |
-| Cart writes | Disabled at the client level. No hosted checkout URL is produced. `ShopifyStorefront(allow_cart_writes=True)` enables the path, which is written and tested with a fake transport |
+| Cart writes | Built and tested, off by default. Needs `LIVE_CART_WRITES=1` **and** the store on `ALLOWED_CART_STORE_DOMAINS`. See the safety note below |
 | Inventory scope | The Storefront token lacks `unauthenticated_read_product_inventory`, so `quantityAvailable` is not requested. `availableForSale` still gates every line |
-| Order lookup | `ENABLE_ORDER_LOOKUP=0`. Phase 4 needs a read-only order credential, separate from the Storefront token |
+| Order lookup | `ENABLE_ORDER_LOOKUP=0` and `SHOPIFY_ORDER_LOOKUP_TOKEN` unset. Until both are set, payment stays `payment_unconfirmed` and the refusal says why |
 | `/api/input/respond` | Returns 501. It needs A's resumable workflow |
 | Decisions SDK | `google-genai` 2.33.0 has no `.decisions` client and the guide's `>=3.2.0` is not published, so it is called over plain v1beta HTTP |
 | Room photos | `fixtures/photos/` is empty. B supplies the two real images |
+
+
+---
+
+## 10. Live cart writes
+
+The only code in this project that mutates a real store is
+`backend/cart_write.py`, reached through `CartService.write_cart_once`.
+
+Two gates, both checked at the moment of the write rather than only at
+startup:
+
+```
+LIVE_CART_WRITES=1
+SHOPIFY_STORE_DOMAIN is listed in ALLOWED_CART_STORE_DOMAINS
+```
+
+Either one off raises `live_cart_writes_refused` (HTTP 403) in the standard
+error envelope. Both default to off, so a fresh clone cannot write anywhere.
+
+The sequence:
+
+1. The pending cart reference is persisted with `write_outcome: unknown`
+   **before** the mutation leaves. If the process dies mid-write, the next
+   attempt finds `unknown` and reads back instead of creating a second cart.
+2. `cartCreate` with the exact approved variant IDs and quantities.
+3. The cart is read back from Shopify. The mutation response is never
+   trusted on its own.
+4. If the read-back is short of approved lines, `cartLinesAdd` adds exactly
+   the shortfall. A cart that already matches is never topped up.
+5. Reconciliation against the approval: variant IDs, quantities, currency,
+   and the subtotal in integer minor units. A mismatch sets `failed` and
+   `needs_review`, and no link is released.
+
+The hosted checkout URL is stored server side on `CartRef.checkout_url` and
+released only by `continue_checkout`, and only when all of these hold: the
+audit is for this exact approval fingerprint, the cart fingerprint still
+matches what was audited, and the audit has not expired. A cart edited after
+the audit releases nothing and forces a new audit.
+
+Payment is never inferred from the handoff. `order_confirmed` needs
+`ENABLE_ORDER_LOOKUP=1` and a `SHOPIFY_ORDER_LOOKUP_TOKEN` that differs from
+the Storefront token. Without both, the state stays `payment_unconfirmed`.
+
+**One thing to decide before the demo.** `GET /api/state` returns the whole
+`CartReview`, which includes `cart_reference.checkout_url` once a cart has
+been written. That is a private link. It is not logged anywhere, and it never
+appears in an event, but any client holding the `session_id` can read it from
+that endpoint. Redacting it there would be a one-line change and would not
+alter the contract, since the field is optional. It was left alone because
+changing response content needs the owner's approval.

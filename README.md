@@ -218,7 +218,8 @@ needs a network or a database. A test reads the source and enforces that.
 
 | Gap | Detail |
 | --- | --- |
-| Cart writes | Disabled. No live Shopify cart is created, so no hosted checkout URL is produced yet. The path is written and tested with a fake transport |
+| Cart writes | Built and tested, **off by default**. Needs `LIVE_CART_WRITES=1` and the store on `ALLOWED_CART_STORE_DOMAINS`. Run `scripts/live_cart_smoke.py` to create one real cart |
+| Order lookup | `ENABLE_ORDER_LOOKUP=0` and no `SHOPIFY_ORDER_LOOKUP_TOKEN`, so payment stays `payment_unconfirmed` |
 | Inventory scope | The Storefront token lacks `unauthenticated_read_product_inventory`, so `quantityAvailable` is not requested. `availableForSale` still gates every line; the quantity check is skipped |
 | Order lookup | `ENABLE_ORDER_LOOKUP=0`. Phase 4 needs a read-only order credential, separate from the Storefront token, which is not yet configured |
 | Lane A | `ai/` holds only the verified model identifiers. `analyze_room`, the planner, the agents and ADK Live land in Phase 2; `MOCK_AI=1` serves A's fixtures |
