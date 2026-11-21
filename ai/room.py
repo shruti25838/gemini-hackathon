@@ -99,10 +99,15 @@ def analyze_door(video_part: dict, room_hint: str = "") -> DoorAnalysis:
     out.needs_confirm = True
     why = []
     if not hinge_ok:
-        why.append(f"hinge: video model says {d.hinge_side}, independent check says {dec_hinge or 'unclear'} "
-                   f"({dec_conf:.2f})")
+        if dec_hinge == d.hinge_side and d.hinge_side in ("left", "right"):
+            why.append(f"both readings lean hinge-{d.hinge_side}, but not confidently "
+                       f"(video model {d.confidence:.2f}, independent check {dec_conf:.2f})")
+        else:
+            why.append(f"the video model says hinge-{d.hinge_side}, the independent check says "
+                       f"{dec_hinge if dec_hinge in ('left', 'right') else 'it cannot tell'}")
     if not swing_ok:
-        why.append(f"swing: video model says {d.swing}, independent check says {dec_swing or 'unclear'}")
+        why.append(f"swing: the video model says {d.swing}, the independent check "
+                   + (f"says {dec_swing}" if dec_swing else "cannot tell"))
     out.swing = d.swing if swing_ok else None
-    out.message = "I'm not sure about the door (" + "; ".join(why) + "). Tap which side the hinge is on."
+    out.message = "I'm not sure about the door: " + "; ".join(why) + ". Tap which side the hinge is on."
     return out

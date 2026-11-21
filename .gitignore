@@ -10,3 +10,4 @@ eval/data/*.heic
 eval/data/*.mp4
 eval/data/*.mov
 node_modules/
+test_media/
