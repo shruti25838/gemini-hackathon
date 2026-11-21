@@ -25,7 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from contracts.common import Money
-from contracts.interfaces import BudgetLine, SearchRequirements
+from contracts.interfaces import BudgetLine, Command, SearchRequirements
 from backend.cart import CartError
 from backend.checkout import CheckoutError
 from backend.config import get_settings
@@ -35,6 +35,7 @@ from backend.errors import (
     ethyneon_error_handler,
     unhandled_error_handler,
 )
+from backend.lane_a import get_lane_a, lane_a_is_stubbed, lane_a_name
 from backend.services import Services, get_services
 
 API_VERSION = "0.2.0"
@@ -152,8 +153,10 @@ class CheckoutContinueRequest(BaseModel):
 
 
 @app.get("/api/health")
-async def health() -> dict[str, Any]:
-    settings = get_settings()
+async def health(svc: Services = Depends(services)) -> dict[str, Any]:
+    # Reads the settings this app instance is actually using, not the ambient
+    # process config, so what it reports is what is really in force.
+    settings = svc.settings
     return {
         "status": "ok",
         "version": API_VERSION,
@@ -161,6 +164,8 @@ async def health() -> dict[str, Any]:
         "commerce": "live" if settings.commerce_is_live else "mock",
         "shop_mcp": "enabled" if settings.shop_mcp else "disabled",
         "cart_writes": "disabled",
+        "lane_a": lane_a_name(),
+        "lane_a_is_stub": lane_a_is_stubbed(),
         "phase": "1 (lane C core)",
     }
 
@@ -203,32 +208,31 @@ async def analyze_room(
             retryable=False,
         )
 
-    settings = get_settings()
-    if not settings.mock_ai:
-        raise NotImplementedYet("POST /api/room/analyze with MOCK_AI=0", "Phase 2")
+    lane_a = get_lane_a()
+    analysis = lane_a.analyze_room(b"", body.session_id)
 
-    analysis = json.loads((FIXTURES / "room_analysis.sample.json").read_text(encoding="utf-8"))
-    analysis["session_id"] = body.session_id
-    if analysis.get("room_spec_draft"):
-        analysis["room_spec_draft"]["session_id"] = body.session_id
-
-    from contracts.room_spec import RoomSpec
-    from backend.validation import validate_room_spec
-
+    # The draft is validated before it goes back, but it is never committed
+    # here. Only POST /api/room/confirm writes.
     validation = None
-    if analysis.get("room_spec_draft"):
-        validation = validate_room_spec(
-            RoomSpec.model_validate(analysis["room_spec_draft"])
-        ).model_dump(mode="json")
+    if analysis.room_spec_draft is not None:
+        validation = lane_a.validate_room_spec(analysis.room_spec_draft).model_dump(
+            mode="json"
+        )
 
+    label = "mock" if lane_a_is_stubbed() else "live"
     svc.events.emit_simple(
         body.session_id,
         "ai",
         "waiting_for_measurement",
         "Draft room ready. Confirm one real measurement to set the scale.",
-        source_label="mock",
+        source_label=label,
     )
-    return {"analysis": analysis, "validation": validation, "source_label": "mock"}
+    return {
+        "analysis": analysis.model_dump(mode="json"),
+        "validation": validation,
+        "source_label": label,
+        "lane_a_is_stub": lane_a_is_stubbed(),
+    }
 
 
 @app.post("/api/room/confirm")
@@ -304,15 +308,36 @@ async def get_state(
 async def post_command(
     body: CommandRequest, svc: Services = Depends(services)
 ) -> dict[str, Any]:
-    settings = get_settings()
-    if not settings.mock_ai:
-        raise NotImplementedYet("POST /api/command with MOCK_AI=0", "Phase 2")
+    session = svc.db.get_session(body.session_id)
+    if session is None:
+        raise EthyneonError(
+            code="unknown_session", message="No such session.", retryable=False, status_code=404
+        )
 
-    result = json.loads((FIXTURES / "command_result.sample.json").read_text(encoding="utf-8"))
-    if result.get("patch"):
-        result["patch"]["base_revision"] = body.base_revision
-        result["patch"]["action_id"] = body.action_id
-    return {"result": result, "source_label": "mock"}
+    command = Command(
+        command_id=body.action_id,
+        session_id=body.session_id,
+        text=body.text,
+        transcript_source="typed",
+        selected_object_id=body.selected_object_id,
+        room_revision=session["room_revision"],
+        scene_revision=session["scene_revision"],
+    )
+    result = get_lane_a().handle_command(
+        body.session_id,
+        command,
+        {
+            "room_revision": session["room_revision"],
+            "scene_revision": session["scene_revision"],
+        },
+    )
+    # A proposal only. C's commit_revision remains the single writer, so the
+    # client posts any accepted patch to /api/scene/patch.
+    return {
+        "result": result.model_dump(mode="json"),
+        "source_label": "mock" if lane_a_is_stubbed() else "live",
+        "lane_a_is_stub": lane_a_is_stubbed(),
+    }
 
 
 @app.post("/api/scene/patch")

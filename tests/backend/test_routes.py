@@ -79,7 +79,16 @@ def test_health_reports_the_real_state(client: TestClient) -> None:
     body = client.get("/api/health").json()
     assert body["status"] == "ok"
     assert body["cart_writes"] == "disabled"
+    # This client is wired to the fully mocked test settings.
+    assert body["commerce"] == "mock"
     assert "MOCK_COMMERCE" in body["mocks_on"]
+
+
+def test_health_says_plainly_that_lane_a_is_a_stub(client: TestClient) -> None:
+    """Person C runs alone, and the UI must not present a stub as lane A."""
+    body = client.get("/api/health").json()
+    assert body["lane_a_is_stub"] is True
+    assert body["lane_a"] == "stub"
 
 
 def test_health_never_leaks_a_secret(client: TestClient) -> None:

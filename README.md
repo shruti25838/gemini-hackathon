@@ -12,6 +12,62 @@ Catalog reads work against the real development store. **Cart writes are
 disabled**, so no live cart is ever created; the write path exists and is
 tested with a fake transport, and enabling it is a constructor flag.
 
+## Running lane C alone
+
+Lane C is self-contained. It boots, serves every route and passes its whole
+test suite with no teammate code and no API keys at all. Lanes A and B are
+represented by labelled stubs, and `GET /api/health` reports
+`lane_a_is_stub: true` so a stub can never be mistaken for the real thing.
+
+```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.txt    # Windows
+cp .env.example .env            # every mock on, no credentials needed
+scripts/dev backend             # http://127.0.0.1:8000/docs
+```
+
+With no `.env` at all, every mock defaults to on and nothing reaches a
+network. Add credentials only for what you want to make real:
+
+| To make this real | Set | Effect |
+| --- | --- | --- |
+| Catalog reads | `MOCK_COMMERCE=0`, `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_TOKEN` | Live products from the dev store |
+| The checkout gate | `GOOGLE_API_KEY` | Real Decisions API; otherwise a labelled local stand-in answers |
+| Discovery | `SHOP_MCP=1` | Live Shop MCP. Needs no credentials, and can never reach the cart |
+
+Cart writes stay disabled regardless, so no live cart is created.
+
+```bash
+# The whole offline suite. No network, no keys, deterministic.
+.venv/Scripts/python -m pytest tests -q
+
+# Live checks. Skip rather than fail when a credential is missing.
+.venv/Scripts/python -m pytest tests -m network -q
+
+# Prove access to Shopify, Gemini, Managed Agents and Decisions.
+# Prints no secret values.
+.venv/Scripts/python scripts/check_access.py
+.venv/Scripts/python scripts/check_access.py --only shopify
+
+# One real Shop MCP search, printed raw.
+.venv/Scripts/python scripts/check_shop_mcp.py "standing desk" --limit 3
+
+# The gate that must pass before any pull request merges.
+bash scripts/e2e_mock.sh
+```
+
+When a teammate's lane A lands, swapping it in is one call at startup:
+
+```python
+from backend.lane_a import set_lane_a
+from ai.agents import RealLaneA
+
+set_lane_a(RealLaneA())     # raises if any of the seven functions is missing
+```
+
+See [docs/LANE_C_HANDOFF.md](docs/LANE_C_HANDOFF.md) for every route, every
+function, and how to swap each stub individually.
+
 ## Setup
 
 Needs Python 3.10 or newer and Node 20 or newer.
@@ -66,12 +122,15 @@ After changing any contract model, regenerate or the checks fail:
 
 Set in `.env`. All four default to `1`, so a fresh clone runs fully offline.
 
-| Flag | When on | Owner |
-| --- | --- | --- |
-| `MOCK_AI` | Lane A returns saved fixtures instead of calling Gemini or the agents | A |
-| `MOCK_COMMERCE` | The Shopify cart path reads a local fixture catalog of 17 offers | C |
-| `MOCK_ROOM_INPUT` | The frontend loads a saved photo, RoomSpec and door clip | B |
-| `MOCK_AGORA` | Two browser tabs share state over the events socket, no video | B |
+| Flag | Current | When on | Owner |
+| --- | --- | --- | --- |
+| `MOCK_AI` | `1` | Lane A returns saved fixtures instead of calling Gemini or the agents | A |
+| `MOCK_COMMERCE` | **`0`** | Catalog reads use a local fixture catalog of 17 offers instead of the dev store | C |
+| `MOCK_ROOM_INPUT` | `1` | The frontend loads a saved photo, RoomSpec and door clip | B |
+| `MOCK_AGORA` | `1` | Two browser tabs share state over the events socket, no video | B |
+
+Catalog reads are currently **live** against the development store. Cart
+writes are disabled at the client level regardless of any flag.
 
 Rules that are not negotiable:
 
