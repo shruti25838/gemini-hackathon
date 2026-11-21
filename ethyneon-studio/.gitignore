@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+*Access Credentials.eml
+Geminitoken
+.venv/
+__pycache__/
+.pytest_cache/
+.cache/

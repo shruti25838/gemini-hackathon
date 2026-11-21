@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ethyneon Room Studio</title>
+    <link rel="stylesheet" href="/studio-assets/studio.css">
+    <link rel="stylesheet" href="/studio-assets/room.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="/studio-assets/room.js"></script>
+    <script type="module" src="/studio-assets/app-nav.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div><h1>Ethyneon</h1><span>Room Studio</span></div>
+      </div>
+      <ol class="steps" aria-label="Progress">
+        <li data-step="photos" aria-current="step">Photos</li>
+        <li data-step="coverage">Coverage check</li>
+        <li data-step="room">3D room</li>
+        <li data-step="furnish" class="later">Furnish</li>
+        <li data-step="checkout" class="later">Checkout</li>
+      </ol>
+    </header>
+
+    <main class="room-main">
+      <aside class="room-side">
+        <section class="panel side-panel" aria-labelledby="photos-title">
+          <div class="panel-header compact">
+            <div><p class="eyebrow">Step 1</p><h2 id="photos-title">Room photos</h2></div>
+            <span class="result-count" id="photo-count">0 / 5</span>
+          </div>
+          <div class="side-body">
+            <label class="dropzone" id="dropzone">
+              <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple>
+              <strong>Add 2 to 5 photos of the room</strong>
+              <span>Photograph every wall, turning on the spot. Photo 1 faces the main wall. Building starts once all four walls are covered.</span>
+            </label>
+            <ul class="thumbs" id="thumbs"></ul>
+            <fieldset class="required">
+              <legend>My room has <span>(the check asks for these)</span></legend>
+              <label><input type="checkbox" value="door"> Door</label>
+              <label><input type="checkbox" value="window"> Window</label>
+              <label><input type="checkbox" value="cupboard"> Wardrobe / cupboard</label>
+              <label><input type="checkbox" value="pillar"> Pillar</label>
+            </fieldset>
+            <details class="measure">
+              <summary>Add a measurement you know <span>(optional)</span></summary>
+              <div class="measure-row">
+                <select id="measure-axis" aria-label="Measured dimension">
+                  <option value="width">Width (along the photo-1 wall)</option>
+                  <option value="depth">Depth</option>
+                  <option value="height">Ceiling height</option>
+                </select>
+                <input id="measure-value" type="number" min="1.5" max="15" step="0.01" placeholder="m" aria-label="Measured length in metres">
+              </div>
+            </details>
+            <button type="button" class="primary" id="build" hidden>Build 3D room</button>
+            <p class="model-line" id="model-line" role="status" hidden></p>
+            <a class="primary next-step" id="plan-furniture" href="/studio/room/chat" hidden>Plan furniture with chat →</a>
+          </div>
+        </section>
+
+        <section class="panel side-panel" id="gate-panel" aria-labelledby="gate-title" hidden>
+          <div class="panel-header compact">
+            <div><p class="eyebrow">Step 2 · Decision 1</p><h2 id="gate-title">Coverage check</h2></div>
+            <span class="pill" id="gate-status"></span>
+          </div>
+          <div class="side-body">
+            <p class="gate-message" id="gate-message"></p>
+            <div class="meter"><span>Layout coverage</span><b id="coverage-label"></b><i><em id="coverage-bar"></em><s id="coverage-pass"></s></i></div>
+            <div class="meter"><span>Image quality</span><b id="quality-label"></b><i><em id="quality-bar"></em><s id="quality-pass"></s></i></div>
+            <ul class="features" id="gate-features" aria-label="Room features"></ul>
+            <ol class="guidance" id="gate-guidance" aria-label="Next photos to take"></ol>
+            <ul class="notes" id="gate-notes"></ul>
+          </div>
+        </section>
+
+        <section class="panel side-panel" id="room-panel" aria-labelledby="room-title" hidden>
+          <div class="panel-header compact">
+            <div><p class="eyebrow">Step 3 · RoomSpec</p><h2 id="room-title">Your room</h2></div>
+            <span class="result-count" id="revision"></span>
+          </div>
+          <div class="side-body">
+            <label class="field">
+              <span>Room category</span>
+              <select id="category"></select>
+              <small id="category-source"></small>
+            </label>
+            <form id="preference-form" class="scene-form">
+              <label class="field">Design preferences<textarea id="preference" maxlength="1000" rows="2" placeholder="A warm gaming room with blue accents and space for wall art"></textarea></label>
+              <button type="submit">Update preferences</button>
+              <p id="preference-summary" class="scene-meta" hidden></p>
+            </form>
+            <fieldset class="dims">
+              <legend>Size · enter a real measurement to anchor scale</legend>
+              <div class="dim-row" data-axis="width"><span>Width</span><input type="number" step="0.01" min="1.5" max="15"><em></em><button type="button">Confirm</button></div>
+              <div class="dim-row" data-axis="depth"><span>Depth</span><input type="number" step="0.01" min="1.5" max="15"><em></em><button type="button">Confirm</button></div>
+              <div class="dim-row" data-axis="height"><span>Height</span><input type="number" step="0.01" min="2" max="5"><em></em><button type="button">Confirm</button></div>
+            </fieldset>
+            <div class="surfaces" id="surfaces"></div>
+            <h3>Openings</h3>
+            <ul class="list" id="openings"></ul>
+            <h3>Objects and fixtures</h3>
+            <ul class="list" id="items"></ul>
+            <form id="placement-form" class="scene-form">
+              <label class="field">Object to move<select id="move-object"></select></label>
+              <div class="pose-fields">
+                <label class="field">X (m)<input id="move-x" type="number" step="any" required></label>
+                <label class="field">Y (m)<input id="move-y" type="number" step="any" required></label>
+                <label class="field">Z (m)<input id="move-z" type="number" step="any" required></label>
+                <label class="field">Yaw (°)<input id="move-yaw" type="number" step="any" min="-360" max="360" required></label>
+              </div>
+              <button type="submit" id="save-pose">Apply position</button>
+            </form>
+            <details>
+              <summary>Place a Shopify product</summary>
+              <form id="product-form" class="scene-form">
+                <label class="field">Shopify variant ID<input id="product-variant" required placeholder="gid://shopify/ProductVariant/50876631908516"></label>
+                <div class="pose-fields">
+                  <label class="field">X (m)<input id="product-x" type="number" step="any" required></label>
+                  <label class="field">Y (m)<input id="product-y" type="number" step="any" value="0" required></label>
+                  <label class="field">Z (m)<input id="product-z" type="number" step="any" required></label>
+                  <label class="field">Yaw (°)<input id="product-yaw" type="number" step="any" value="0" min="-360" max="360" required></label>
+                </div>
+                <button type="submit">Place product</button>
+              </form>
+            </details>
+            <h3>Daylight and painting spots</h3>
+            <p id="lighting-summary" class="scene-meta"></p>
+            <ul class="list" id="painting-spots"></ul>
+            <button type="button" id="export-scene">Download scene JSON</button>
+            <h3 id="missing-title">Still estimated</h3>
+            <ul class="notes" id="missing"></ul>
+          </div>
+        </section>
+      </aside>
+
+      <section class="panel stage" aria-labelledby="stage-title">
+        <div class="panel-header">
+          <div><p class="eyebrow">3D room · metres</p><h2 id="stage-title">Upload photos to build your room</h2></div>
+          <div class="view-actions" role="group" aria-label="Room controls">
+            <button type="button" data-view="overview" disabled>Overview</button>
+            <button type="button" data-view="plan" disabled>Plan</button>
+            <button type="button" data-view="eye" disabled>Eye level</button>
+            <button type="button" id="toggle-labels" aria-pressed="true" disabled>Labels</button>
+            <button type="button" id="toggle-items" aria-pressed="false" disabled>Detected items</button>
+            <a id="open-plan-chat" href="/studio/room/chat">Room JSON chat</a>
+          </div>
+        </div>
+        <div class="viewport room-viewport" role="region" aria-label="Interactive 3D room">
+          <div id="room-viewer"></div>
+          <div class="empty-stage" id="empty-stage">
+            <p>Your photos become an editable 3D room here.</p>
+            <p class="hint">Walls, floor, doors and windows come from Gemini 4 Neon. Decision 1 checks the photos cover enough of the room first.</p>
+          </div>
+          <div class="busy" id="busy" hidden><span class="spinner" aria-hidden="true"></span><span id="busy-text">Working…</span></div>
+          <p class="viewport-hint" id="room-hint" hidden>Drag to orbit · Right-drag to pan · Scroll to zoom</p>
+        </div>
+        <p class="status room-status" id="status" role="status" aria-live="polite">Add room photos to start.</p>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ethyneon Design View</title>
+    <link rel="stylesheet" href="/studio-assets/studio.css">
+    <link rel="stylesheet" href="/studio-assets/room.css">
+    <link rel="stylesheet" href="/studio-assets/scene.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="/studio-assets/scene.js"></script>
+    <script type="module" src="/studio-assets/app-nav.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div><h1>Ethyneon</h1><span>Design view</span></div>
+      </div>
+      <span class="catalog-source" id="source"><i aria-hidden="true"></i> Waiting for geometricconfig.json</span>
+    </header>
+
+    <main class="scene-main">
+      <section class="panel stage" aria-labelledby="stage-title">
+        <div class="panel-header">
+          <div><p class="eyebrow" id="stage-eyebrow">Room · metres</p><h2 id="stage-title">Loading the room…</h2></div>
+          <div class="view-actions" role="group" aria-label="Camera">
+            <button type="button" data-view="overview">Overview</button>
+            <button type="button" data-view="plan">Plan</button>
+            <button type="button" data-view="eye">Eye level</button>
+            <button type="button" id="toggle-labels" aria-pressed="true">Labels</button>
+          </div>
+        </div>
+        <div class="viewport room-viewport" role="region" aria-label="Interactive 3D room with products">
+          <div id="room-viewer"></div>
+          <p class="viewport-hint">Click a product or its price tag · Drag to orbit · Scroll to zoom</p>
+          <aside class="product-pop" id="product-pop" aria-labelledby="product-title" hidden>
+            <div class="pop-head">
+              <div>
+                <p class="eyebrow" id="product-eyebrow">Selected product</p>
+                <h2 id="product-title"></h2>
+                <p class="product-state" id="product-state"></p>
+              </div>
+              <button type="button" class="pop-close" id="close-product" aria-label="Close product panel">×</button>
+            </div>
+            <div class="pop-viewport">
+              <div id="product-viewer"></div>
+              <p class="viewport-empty" id="product-message"></p>
+            </div>
+            <div class="product-facts" id="product-facts" hidden>
+              <p class="product-price" id="product-price"></p>
+              <dl id="facts"></dl>
+              <a id="listing" target="_blank" rel="noopener noreferrer" hidden>Shopify ↗</a>
+            </div>
+            <div class="edit-tools" id="edit-tools" role="group" aria-label="Edit this product" hidden>
+              <button type="button" id="edit-move" aria-pressed="false">Move</button>
+              <button type="button" id="edit-left" aria-label="Rotate 15 degrees left">⟲ 15°</button>
+              <button type="button" id="edit-right" aria-label="Rotate 15 degrees right">⟳ 15°</button>
+              <button type="button" id="edit-swap" aria-pressed="false">Swap…</button>
+              <button type="button" id="edit-remove">Remove</button>
+            </div>
+            <button type="button" class="use-product" id="use-product" hidden>Use this in the room</button>
+            <button type="button" class="use-product" id="add-product" hidden>Add to room</button>
+            <p class="edit-message" id="edit-message" role="status" aria-live="polite"></p>
+            <div class="pop-alternatives">
+              <div class="pop-alt-head">
+                <h3 id="similar-title">Alternatives on Shopify</h3>
+                <button type="button" class="ghost-button" id="back-to-placed" hidden>Back</button>
+              </div>
+              <p class="similar-status" id="similar-status"></p>
+              <div class="similar" id="similar"></div>
+            </div>
+          </aside>
+        </div>
+        <form class="link-import" id="link-form">
+          <label for="link-input">Paste a Shopify product link</label>
+          <div><input id="link-input" type="url" required placeholder="https://store.com/products/…" autocomplete="off">
+          <button type="submit" class="primary" id="link-go">Make 3D</button></div>
+          <p class="edit-message" id="link-message" role="status"></p>
+        </form>
+        <div class="cart">
+          <ul class="cart-list" id="cart-list" aria-label="Products in the room"></ul>
+          <p class="cart-total"><span>Subtotal</span><b id="subtotal">—</b></p>
+          <button type="button" class="primary checkout-button" id="checkout">Review &amp; checkout</button>
+          <p class="model-line" id="checkout-line" role="status" hidden></p>
+          <section class="audit" id="audit" aria-labelledby="audit-title" hidden>
+            <div class="audit-head">
+              <h3 id="audit-title">Checkout review</h3>
+              <span class="pill" id="audit-status"></span>
+            </div>
+            <p class="audit-message" id="audit-message"></p>
+            <ul class="audit-checks" id="audit-checks"></ul>
+            <dl class="audit-decision" id="audit-decision"></dl>
+            <ul class="audit-lines" id="audit-lines"></ul>
+            <div class="audit-stores" id="audit-stores"></div>
+            <p class="audit-note" id="audit-note"></p>
+          </section>
+        </div>
+      </section>
+    </main>
+    <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+  </body>
+</html>
