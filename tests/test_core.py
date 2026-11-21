@@ -204,3 +204,54 @@ def test_workflow_failure_retries_once_then_pauses(monkeypatch):
     assert calls["n"] == 2  # one automatic retry, never more
     assert out["status"] == "error" and len(s.recovery_runs) == 2
     assert s.scene.rev == 1  # last verified scene untouched
+
+
+# ---------- target selection ----------
+def _scene_with(s, *items):
+    from contracts.schemas import Placement
+    sc = SceneRevision(rev=0, room_revision=1, placements=[
+        Placement(key=k, variant_id=k, category=c, x=x, z=0.4, w=1.0, d=0.5) for k, c, x in items])
+    s.commit_scene(sc)
+
+
+def test_target_gate_ids_are_valid_and_low_confidence_asks(monkeypatch):
+    import re
+    seen = {}
+    def fake(parts, q):
+        seen.update(q["target"]["criteria"])
+        return {"target": {"choice": "c1", "confidence": 0.55, "probabilities": {}}}, {"latency_ms": 2}
+    monkeypatch.setattr(gates.gemini, "decide", fake)
+    g = gates.target_selection("move that one", [{"key": "gid://shopify/ProductVariant/1", "label": "desk"},
+                                                 {"key": "gid://shopify/ProductVariant/2", "label": "storage"}])
+    assert all(re.fullmatch(r"[A-Za-z0-9_-]{1,64}", k) for k in seen) and "other" in seen
+    assert not g.passed and g.action == "ask_user_tap"
+
+
+def test_vague_reference_resolved_by_gate(monkeypatch):
+    from ai import commands
+    monkeypatch.setattr(gates.gemini, "decide",
+                        lambda parts, q: ({"target": {"choice": "c1", "confidence": 0.93, "probabilities": {}}}, {"latency_ms": 2}))
+    s = session_with_room()
+    _scene_with(s, ("v_desk", "desk", 0.8), ("v_store", "storage", 2.0))
+    p, g = commands.resolve_target(s, "move that under the window", "", selected_key=None, frame=None)
+    assert p.key == "v_store" and g.passed
+
+
+def test_unambiguous_category_needs_no_model_call(monkeypatch):
+    from ai import commands
+    def boom(*a, **k):
+        raise AssertionError("should not call Decision 1")
+    monkeypatch.setattr(gates.gemini, "decide", boom)
+    s = session_with_room()
+    _scene_with(s, ("v_desk", "desk", 0.8), ("v_store", "storage", 2.0))
+    p, g = commands.resolve_target(s, "move the desk to the left wall", "desk", selected_key=None, frame=None)
+    assert p.key == "v_desk" and g is None
+
+
+def test_selection_answers_vague_reference_without_model(monkeypatch):
+    from ai import commands
+    monkeypatch.setattr(gates.gemini, "decide", lambda *a, **k: (_ for _ in ()).throw(AssertionError("no call")))
+    s = session_with_room()
+    _scene_with(s, ("v_desk", "desk", 0.8), ("v_store", "storage", 2.0))
+    p, g = commands.resolve_target(s, "move it to the back wall", "", selected_key="v_store", frame=None)
+    assert p.key == "v_store" and g is None

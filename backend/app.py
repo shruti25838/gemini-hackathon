@@ -259,15 +259,18 @@ def _recheck(s: state.Session, why: str):
 
 # ---------- commands ----------
 @app.post("/api/session/{sid}/command")
-async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[UploadFile] = File(None)):
+async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[UploadFile] = File(None),
+                  selected_key: Optional[str] = Form(None), frame: Optional[UploadFile] = File(None)):
     """B -> C route. A's handle_command interprets; this server applies the result."""
     s = S(sid)
     if not text and not audio:
         raise HTTPException(400, "say or type something")
     audio_bytes = await _read(audio) if audio else None
+    frame_t = ((await _read(frame)), frame.content_type or "image/jpeg") if frame else None
     try:
         res = commands.handle_command(s, text=text, audio=audio_bytes,
-                                      audio_mime=(audio.content_type if audio else "audio/webm"))
+                                      audio_mime=(audio.content_type if audio else "audio/webm"),
+                                      selected_key=selected_key or None, frame=frame_t)
     except gemini.GeminiError:
         s.emit("intake", "error", "Taking longer than usual. Please try again or type it.")
         raise HTTPException(503, "model unavailable")
@@ -279,6 +282,7 @@ async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[Up
             s.emit("approval", "warn", "Brief changed; previous cart approval voided")
     out = {"status": res.status, "action": res.action, "message": res.message, "intent": res.intent}
     if res.status == "needs_input":
+        s.emit("command", "needs_input", res.message, candidates=res.payload.get("candidates", []))
         return {**out, "status": "clarify", **res.payload}
     if res.action == "measurement":
         return measure(sid, Measure(**res.payload))

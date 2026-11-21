@@ -20,6 +20,7 @@ TH = {
     "room_usable_min_score": 1.0,  # score in [0, 2]
     "coverage": 0.60,
     "route_conf": 0.70,
+    "target_conf": 0.75,
     "audit_yes": 0.85,
     "audit_conf": 0.80,
 }
@@ -122,6 +123,35 @@ def route(utterance: str, context: str = "") -> GateResult:
     return GateResult(gate="route", passed=ok, action=r["choice"] if ok else "clarify", answers=a,
                       latency_ms=meta["latency_ms"],
                       message="" if ok else "Did you want to change the style, move furniture, find products or check out?")
+
+
+# ---------- 3b. target selection ----------
+def target_selection(utterance: str, candidates: list[dict], selected_key: str | None = None,
+                     frame: tuple[bytes, str] | None = None) -> GateResult:
+    """Resolve "that monitor" / "it" to one scene item. candidates: [{"key", "label"}].
+    Uses the words, the on-screen selection and (optionally) a camera frame. Low confidence -> ask for a tap."""
+    if not candidates:
+        return GateResult(gate="target", passed=False, action="none", message="There is nothing in the design to act on yet.")
+    ids = {f"c{i}": c for i, c in enumerate(candidates)}
+    criteria = {cid: c["label"] + (" (currently selected on screen)" if c["key"] == selected_key else "")
+                for cid, c in ids.items()}
+    criteria["other"] = "None of these items, or the request does not refer to a specific item."
+    parts = []
+    if frame:
+        parts.append(gemini.image_part(*frame))
+    parts.append(gemini.text_part(f"Shopper said: {utterance}\nOn-screen selection: {selected_key or 'none'}"
+                                  + ("\nThe camera frame above shows what they are pointing at." if frame else "")))
+    q = {"target": {"type": "choice", "instructions": "Which item in the design does the shopper mean?", "criteria": criteria}}
+    try:
+        a, meta = gemini.decide(parts, q)
+    except Exception as e:
+        return _degraded("target", "ask_user_tap", "tap the item you mean.", e)
+    t = a["target"]
+    ok = t["choice"] != "other" and t["confidence"] >= TH["target_conf"]
+    key = ids[t["choice"]]["key"] if t["choice"] in ids else None
+    return GateResult(gate="target", passed=ok, action=key if ok else "ask_user_tap", answers=a,
+                      latency_ms=meta["latency_ms"],
+                      message="" if ok else "Which one do you mean? Tap it in the room.")
 
 
 # ---------- 4. catalog text injection ----------

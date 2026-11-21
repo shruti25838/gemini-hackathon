@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from contracts.schemas import DesignBrief, WorkflowPlan
 from fit import solver
 
-from . import gemini, intake, workflow
+from . import gates, gemini, intake, workflow
 
 
 class CommandResult(BaseModel):
@@ -49,8 +49,41 @@ def resolve_destination(room, p, dest: str):
     return solver._against_wall(room.model_dump(), wall, along, p.w, p.d)
 
 
+VAGUE = ("that", "this", "it", "the one", "there", "these", "those")
+
+
+def _label(s, p) -> str:
+    o = s.offers.get(p.variant_id) if p.variant_id else None
+    name = f"{o.title} ({o.variant_title})" if o else p.category
+    return f"{p.category}: {name} at x={p.x:.1f} m, z={p.z:.1f} m" + (" [shopper's own, locked]" if p.locked else "")
+
+
+def resolve_target(s, said: str, category_hint: str, selected_key: Optional[str],
+                   frame: Optional[tuple[bytes, str]], allow_locked: bool = False):
+    """Return (placement, gate_result|None). Unambiguous category match needs no model call;
+    vague words, several matches or a camera frame go to the Decision 1 target gate."""
+    pool = [p for p in s.scene.placements if allow_locked or not p.locked]
+    hint = (category_hint or "").lower()
+    by_cat = [p for p in pool if hint and (p.category in hint or hint in p.category)]
+    vague = not hint or any(w in f" {said.lower()} " for w in (f" {v} " for v in VAGUE))
+    if len(by_cat) == 1 and not vague and not frame:
+        return by_cat[0], None
+    if selected_key and not frame and not by_cat and vague:
+        sel = next((p for p in pool if p.key == selected_key), None)
+        if sel:
+            return sel, None
+    cands = by_cat if len(by_cat) > 1 else pool
+    g = gates.target_selection(said, [{"key": p.key, "label": _label(s, p)} for p in cands], selected_key, frame)
+    s.emit("gate.target", "ok" if g.passed else "needs_input",
+           f"Target: {g.action}" if g.passed else g.message, answers=g.answers, latency_ms=g.latency_ms,
+           candidates=[p.key for p in cands])
+    hit = next((p for p in cands if p.key == g.action), None) if g.passed else None
+    return hit, g
+
+
 def handle_command(s, text: Optional[str] = None, audio: Optional[bytes] = None,
-                   audio_mime: str = "audio/webm") -> CommandResult:
+                   audio_mime: str = "audio/webm", selected_key: Optional[str] = None,
+                   frame: Optional[tuple[bytes, str]] = None) -> CommandResult:
     ctx = workflow.room_summary(s)
     parsed = intake.parse(text=text, audio=audio, audio_mime=audio_mime, context=ctx)  # may raise GeminiError
     cmd = intake.Command(**parsed["command"])
@@ -77,14 +110,11 @@ def handle_command(s, text: Optional[str] = None, audio: Optional[bytes] = None,
     if cmd.intent == "move_furniture":
         if not (s.scene and s.scene.placements and s.room):
             return CommandResult(status="needs_input", message="There is nothing to move yet.", **base)
-        target = (cmd.move_target or "").lower()
-        cands = [p for p in s.scene.placements if not p.locked and (p.category in target or target in p.category)]
-        if len(cands) != 1:
-            msg = ("Which item should I move? Tap it in the room." if cands or not target
-                   else f"I can't find '{target}' in the design.")
-            s.emit("move", "needs_input", msg, candidates=[p.key for p in cands])
-            return CommandResult(status="needs_input", message=msg, payload={"candidates": [p.key for p in cands]}, **base)
-        p = cands[0]
+        p, g = resolve_target(s, cmd.transcript, cmd.move_target or "", selected_key, frame)
+        if p is None:
+            msg = (g.message if g else "") or "Which item should I move? Tap it in the room."
+            return CommandResult(status="needs_input", message=msg,
+                                 payload={"candidates": [x.key for x in s.scene.placements if not x.locked]}, **base)
         pose = resolve_destination(s.room, p, (cmd.move_destination or "").lower())
         if not pose:
             return CommandResult(status="needs_input", **base,
@@ -100,6 +130,13 @@ def handle_command(s, text: Optional[str] = None, audio: Optional[bytes] = None,
         plan = workflow.validate_plan(s, WorkflowPlan(goal="style_edit", source="fast_path", steps=[
             workflow.PlanStep(id="style", op="apply_style_edit", args=args)]))
         return CommandResult(status="pending", action="run_plan", plan=plan, **base)
+    if (cmd.intent == "product_search" and cmd.finish and s.scene and s.scene.placements
+            and (not cmd.swap_category or any(f" {v} " in f" {cmd.transcript.lower()} " for v in VAGUE))):
+        p, g = resolve_target(s, cmd.transcript, cmd.swap_category or "", selected_key, frame)
+        if p is None:
+            return CommandResult(status="needs_input", message=(g.message if g else "Which item? Tap it in the room."),
+                                 payload={"candidates": [x.key for x in s.scene.placements if not x.locked]}, **base)
+        cmd.swap_category = p.category if p.category in ("desk", "chair", "monitor", "lighting", "storage") else cmd.swap_category
     if cmd.intent == "product_search" and cmd.swap_category and cmd.finish and s.scene and s.scene.placements:
         plan = workflow.validate_plan(s, WorkflowPlan(goal="swap_finish", source="fast_path", steps=[
             workflow.PlanStep(id="swap", op="swap_finish", args={"category": cmd.swap_category, "finish": cmd.finish})]))

@@ -12,7 +12,7 @@ const post = (path, json) => api(path, { method: "POST", headers: { "Content-Typ
 const money = (m) => `$${(m / 100).toFixed(2)}`;
 
 let SID = sessionStorage.getItem("ethyneon_sid");
-let lastSeq = 0, st = null, sceneKey = "";
+let lastSeq = 0, st = null, sceneKey = "", selectedKey = null, highlight = [], frameBlob = null;
 
 // ---------- three.js ----------
 const vp = $("viewport");
@@ -85,6 +85,7 @@ function buildRoom() {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, p.h || 0.75, d), mat);
     m.position.set(p.x, (p.h || 0.75) / 2, p.z);
     m.userData = { key: p.key, locked: p.locked, w, d };
+    if (p.key === selectedKey || highlight.includes(p.key)) { m.material.emissive = new THREE.Color(p.key === selectedKey ? 0x7c6cf0 : 0xff5ea8); m.material.emissiveIntensity = 0.6; }
     roomGroup.add(m); itemMeshes.set(p.key, m);
   }
   const [lc, ai, si] = LIGHT[sc.lighting || "daylight"];
@@ -100,6 +101,7 @@ function ndc(e) { const b = renderer.domElement.getBoundingClientRect(); mouse.s
 renderer.domElement.addEventListener("pointerdown", (e) => {
   ndc(e);
   const hit = ray.intersectObjects([...itemMeshes.values()])[0];
+  if (hit) { selectedKey = hit.object.userData.key; highlight = []; sceneKey = ""; render(); $("selInfo").textContent = `Selected: ${selectedKey}`; }
   if (hit && !hit.object.userData.locked) { drag = hit.object; controls.enabled = false; }
 });
 renderer.domElement.addEventListener("pointermove", (e) => {
@@ -213,13 +215,22 @@ $("doorClip").onchange = async (e) => {
 };
 
 async function sendCommand(fd) {
+  if (selectedKey) fd.append("selected_key", selectedKey);
+  if (frameBlob) { fd.append("frame", frameBlob, "frame.jpg"); frameBlob = null; $("frameInfo").textContent = ""; }
   try {
     const r = await api("/command", { method: "POST", body: fd });
-    if (r.status === "clarify") { $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`; }
+    if (r.status === "clarify") {
+      $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`;
+      highlight = r.candidates || []; sceneKey = ""; render();
+    }
     if (r.status === "review") showReview(r.review);
   } catch (err) { flash(err.message); }
   refresh();
 }
+$("frameIn").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try { frameBlob = await reencode(f, 1024); $("frameInfo").textContent = "Camera frame attached to your next request"; } catch { flash("Couldn't read that image."); }
+};
 $("cmdForm").onsubmit = (e) => { e.preventDefault(); const t = $("cmdText").value.trim(); if (!t) return; const fd = new FormData(); fd.append("text", t); $("cmdText").value = ""; sendCommand(fd); };
 
 let rec = null, chunks = [];
