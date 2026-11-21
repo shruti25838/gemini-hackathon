@@ -1,0 +1,107 @@
+{
+ "room_photo": {
+  "gate": "room_photo",
+  "passed": true,
+  "action": "build_roomspec",
+  "message": "",
+  "answers": {
+   "is_room": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "person_visible": {
+    "type": "noul",
+    "noul": 0.05,
+    "confidence": 0.95
+   },
+   "usable": {
+    "type": "score",
+    "score": 2.0,
+    "confidence": 0.9,
+    "probabilities": {},
+    "legend": {}
+   },
+   "door_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "corner_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "floor_near_door_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "desk_wall_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   }
+  },
+  "latency_ms": 0,
+  "degraded": false,
+  "coverage_gaps": []
+ },
+ "route": {
+  "gate": "route",
+  "passed": true,
+  "action": "product_search",
+  "message": "",
+  "answers": {
+   "route": {
+    "type": "choice",
+    "choice": "product_search",
+    "confidence": 0.9,
+    "probabilities": {
+     "cart_review": 0.02,
+     "measurement_correction": 0.02,
+     "move_furniture": 0.02,
+     "product_search": 0.9,
+     "style_edit": 0.02,
+     "other": 0.02
+    }
+   }
+  },
+  "latency_ms": 0,
+  "degraded": false,
+  "coverage_gaps": []
+ },
+ "checkout_audit": {
+  "gate": "checkout_audit",
+  "passed": true,
+  "action": "ready",
+  "message": "",
+  "answers": {
+   "purchase_scope_matches": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "required_constraints_resolved": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "next_action": {
+    "type": "choice",
+    "choice": "ready",
+    "confidence": 0.9,
+    "probabilities": {
+     "ask_shopper": 0.025,
+     "hold_checkout": 0.025,
+     "ready": 0.9,
+     "refresh_cart": 0.025,
+     "repair_plan": 0.025
+    }
+   }
+  },
+  "latency_ms": 0,
+  "degraded": false,
+  "coverage_gaps": []
+ }
+}

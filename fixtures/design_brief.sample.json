@@ -1,0 +1,18 @@
+{
+ "goal": "gaming_corner",
+ "budget_minor": 120000,
+ "currency": "USD",
+ "categories": [
+  "desk",
+  "chair",
+  "monitor",
+  "lighting"
+ ],
+ "style": [
+  "purple",
+  "blue"
+ ],
+ "locked_item_ids": [],
+ "keep_door_clear": true,
+ "preferred_wall": null
+}

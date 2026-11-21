@@ -1,0 +1,8 @@
+google-genai>=3.6.1
+fastapi>=0.115
+uvicorn[standard]
+pydantic>=2.8
+httpx
+python-multipart
+python-dotenv
+pytest

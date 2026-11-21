@@ -1,0 +1,119 @@
+{
+ "base_scene_rev": 2,
+ "selected_key": "gid://shopify/ProductVariant/21",
+ "requested_pose": {
+  "x": 2.6665,
+  "z": 0.4,
+  "rot": 0
+ },
+ "requested_fit": {
+  "scene_rev": 0,
+  "room_revision": 2,
+  "status": "does_not_fit",
+  "collisions": [
+   {
+    "a": "gid://shopify/ProductVariant/21",
+    "b": "wall:wall_e",
+    "kind": "out_of_bounds",
+    "detail": "gid://shopify/ProductVariant/21 extends past the wall_e wall"
+   },
+   {
+    "a": "gid://shopify/ProductVariant/21",
+    "b": "door:door1",
+    "kind": "door_swing",
+    "detail": "gid://shopify/ProductVariant/21 is inside the swing of door door1"
+   }
+  ],
+  "min_gap_m": 0.117,
+  "unknowns": [],
+  "solver_version": "solver-1.2",
+  "checked_by": [
+   "server"
+  ]
+ },
+ "conflicts": [
+  {
+   "a": "gid://shopify/ProductVariant/21",
+   "b": "wall:wall_e",
+   "kind": "out_of_bounds",
+   "detail": "gid://shopify/ProductVariant/21 extends past the wall_e wall"
+  },
+  {
+   "a": "gid://shopify/ProductVariant/21",
+   "b": "door:door1",
+   "kind": "door_swing",
+   "detail": "gid://shopify/ProductVariant/21 is inside the swing of door door1"
+  }
+ ],
+ "style_assessment": null,
+ "alternatives_tested": 1,
+ "alternative_placements": [
+  {
+   "key": "item1",
+   "variant_id": null,
+   "category": "monitor",
+   "x": 0.533,
+   "z": 2.667,
+   "w": 0.587,
+   "d": 0.267,
+   "h": 0.48,
+   "rot": 0,
+   "locked": true
+  },
+  {
+   "key": "gid://shopify/ProductVariant/51",
+   "variant_id": "gid://shopify/ProductVariant/51",
+   "category": "chair",
+   "x": 1.7,
+   "z": 0.3,
+   "w": 0.6,
+   "d": 0.6,
+   "h": 1.1,
+   "rot": 0,
+   "locked": true
+  },
+  {
+   "key": "gid://shopify/ProductVariant/61",
+   "variant_id": "gid://shopify/ProductVariant/61",
+   "category": "monitor",
+   "x": 0.11,
+   "z": 1.2,
+   "w": 0.62,
+   "d": 0.22,
+   "h": 0.5,
+   "rot": 90,
+   "locked": true
+  },
+  {
+   "key": "gid://shopify/ProductVariant/21",
+   "variant_id": "gid://shopify/ProductVariant/21",
+   "category": "desk",
+   "x": 0.6,
+   "z": 0.3,
+   "w": 1.1,
+   "d": 0.6,
+   "h": 0.74,
+   "rot": 0,
+   "locked": false
+  }
+ ],
+ "alternative_fit": {
+  "scene_rev": 0,
+  "room_revision": 2,
+  "status": "fits",
+  "collisions": [],
+  "min_gap_m": 0.24,
+  "unknowns": [],
+  "solver_version": "solver-1.2",
+  "checked_by": [
+   "server",
+   "local-fallback"
+  ]
+ },
+ "tester_findings": [],
+ "accepted_pose": null,
+ "checked_by": [
+  "server",
+  "local-fallback"
+ ]
+}

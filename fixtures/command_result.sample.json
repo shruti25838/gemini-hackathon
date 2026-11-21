@@ -1,0 +1,53 @@
+{
+ "status": "pending",
+ "action": "plan_and_run",
+ "message": "",
+ "plan": null,
+ "brief": {
+  "goal": "gaming_corner",
+  "budget_minor": 120000,
+  "currency": "USD",
+  "categories": [
+   "desk",
+   "chair",
+   "monitor",
+   "lighting"
+  ],
+  "style": [
+   "purple",
+   "blue"
+  ],
+  "locked_item_ids": [],
+  "keep_door_clear": true,
+  "preferred_wall": null
+ },
+ "brief_changed": [
+  "budget",
+  "style",
+  "categories",
+  "keep_door_clear"
+ ],
+ "payload": {
+  "request": "MOCK_AI: build a purple and blue dual-monitor setup under $1,200\nParsed: {\"transcript\":\"MOCK_AI: build a purple and blue dual-monitor setup under $1,200\",\"intent\":\"product_search\",\"brief_patch\":{\"budget_usd\":1200.0,\"style\":[\"purple\",\"blue\"],\"categories\":[\"desk\",\"chair\",\"monitor\",\"lighting\"],\"keep_door_clear\":true,\"preferred_wall\":null,\"keep_existing_labels\":null},\"wall_id\":null,\"color_hex\":null,\"lighting\":null,\"swap_category\":null,\"finish\":null,\"move_target\":null,\"move_destination\":null,\"measurement_field\":null,\"measurement_m\":null,\"ambiguities\":[],\"spoken_reply\":\"MOCK_AI: okay, planning a purple and blue setup.\"}",
+  "route": "product_search"
+ },
+ "transcript": "MOCK_AI: build a purple and blue dual-monitor setup under $1,200",
+ "intent": "product_search",
+ "route_answers": {
+  "route": {
+   "type": "choice",
+   "choice": "product_search",
+   "confidence": 0.9,
+   "probabilities": {
+    "cart_review": 0.02,
+    "measurement_correction": 0.02,
+    "move_furniture": 0.02,
+    "product_search": 0.9,
+    "style_edit": 0.02,
+    "other": 0.02
+   }
+  }
+ },
+ "latency_ms": 0,
+ "spoken_reply": "MOCK_AI: okay, planning a purple and blue setup."
+}

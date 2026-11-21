@@ -1,0 +1,15 @@
+{
+  "_how_to": "Copy to cases.json. Photos/clips from people OUTSIDE the team; tape-measure the truth. Mark ~1/3 held_out and never tune prompts on them. desk_probe_along = desk centre positions (m from wall start) to test; include some inside the door swing.",
+  "cases": [
+    {
+      "id": "friend-apt-1",
+      "photo": "eval/data/friend-apt-1.jpg",
+      "door_clip": "eval/data/friend-apt-1-door.mp4",
+      "truth": {"width_m": 3.2, "depth_m": 2.9, "height_m": 2.5,
+                "door": {"wall": "wall_n", "offset_m": 2.3, "width_m": 0.8, "hinge_side": "left", "swing": "in"}},
+      "labels": {"is_room": true, "person_visible": false},
+      "held_out": true,
+      "desk_probe_along": [0.8, 1.5, 2.3, 2.7]
+    }
+  ]
+}

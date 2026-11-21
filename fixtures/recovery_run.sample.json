@@ -1,0 +1,21 @@
+{
+ "run_id": "825cff55",
+ "failed_step": "discover_shopify_variants",
+ "error_class": "ShopError",
+ "triggering_revision": 2,
+ "interaction_id": null,
+ "allowed_actions": [
+  "refresh_shopify",
+  "retry_read_once",
+  "pause"
+ ],
+ "attempt_count": 0,
+ "last_verified_state": {
+  "scene_rev": 2
+ },
+ "chosen_action": "pause",
+ "chosen_by": "mock",
+ "rationale": "MOCK_AI: saved recovery choice",
+ "outcome": null,
+ "pending_input": null
+}
