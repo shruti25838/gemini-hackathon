@@ -155,6 +155,8 @@ class DoorDraft(BaseModel):
 
 
 DOOR_SYSTEM = """You analyse a short clip of a door opening, filmed from inside the room.
+Watch the WHOLE clip: decide from the first frame whether the door starts closed or open, so you do not
+mistake opening for closing. The hinge edge is the vertical edge that stays fixed while the door moves.
 Report: which room wall it is on (same frame as the room model: wall_n is the far wall the main
 photo faced, wall_e on its right, wall_w on its left, wall_s behind the camera), the hinge side as seen from inside the room facing that wall, whether the door swings
 into the room or out of it, the maximum opening angle you observe, and the timestamp where this is

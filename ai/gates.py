@@ -104,6 +104,15 @@ DOOR_CLIP_Q = {
     "door_opens": {"type": "noul", "instructions": "Does this clip show a door being opened or closed?"},
     "hinge_visible": {"type": "noul", "instructions": "Is the door's hinge side clearly visible while it moves?"},
     "floor_visible": {"type": "noul", "instructions": "Is the floor area the door sweeps over visible?"},
+    # independent cross-check of Neon's door reading, asked in plain frame terms
+    "hinge_edge": {"type": "choice",
+                   "instructions": "In the video frame, on which vertical edge of the door are its hinges "
+                                   "(the edge that stays fixed while the door swings)?",
+                   "criteria": {"left": "Hinges on the left edge of the door in the frame.",
+                                "right": "Hinges on the right edge of the door in the frame.",
+                                "other": "Hinges not visible, or it is unclear."}},
+    "opens_toward_camera": {"type": "noul",
+                            "instructions": "As the door OPENS, does it swing toward the camera, into the room the camera is in?"},
 }
 
 

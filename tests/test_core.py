@@ -300,3 +300,40 @@ def test_no_door_does_not_also_ask_for_floor_near_door(monkeypatch):
                         lambda parts, q: (_photo_answers(door_visible=0.1, floor_near_door_visible=0.1), {"latency_ms": 3}))
     g = gates.room_photo(b"x", "image/jpeg")
     assert [x["affects"] for x in g.coverage_gaps] == ["door clearance"]
+
+
+# ---------- door cross-check ----------
+def _door_gate_answers(hinge="right", hconf=0.9, toward=0.9):
+    return {"door_opens": {"noul": 0.9, "confidence": 0.9}, "hinge_visible": {"noul": 0.8, "confidence": 0.8},
+            "floor_visible": {"noul": 0.8, "confidence": 0.8},
+            "hinge_edge": {"choice": hinge, "confidence": hconf, "probabilities": {}},
+            "opens_toward_camera": {"noul": toward, "confidence": max(toward, 1 - toward)}}
+
+
+def _neon_door(hinge="right", swing="in", conf=0.85):
+    return vision.DoorDraft(door_wall="wall_n", hinge_side=hinge, swing=swing, max_angle_deg=90, evidence_ts="00:03",
+                            confidence=conf, reasoning="test")
+
+
+def test_door_attached_only_when_both_agree(monkeypatch):
+    from ai import room as ai_room
+    monkeypatch.setattr(gates.gemini, "decide", lambda parts, q: (_door_gate_answers("right"), {"latency_ms": 5}))
+    monkeypatch.setattr(vision, "clip_to_door_motion", lambda part, hint="": (_neon_door("right"), {"latency_ms": 9}))
+    d = ai_room.analyze_door({"type": "video"})
+    assert d.agree and d.hinge_side == "right" and d.swing == "in" and not d.needs_confirm
+
+
+def test_door_disagreement_asks_instead_of_guessing(monkeypatch):
+    # live failure we found: Neon said hinge left at 0.85 on a right-hinged door
+    from ai import room as ai_room
+    monkeypatch.setattr(gates.gemini, "decide", lambda parts, q: (_door_gate_answers("right"), {"latency_ms": 5}))
+    monkeypatch.setattr(vision, "clip_to_door_motion", lambda part, hint="": (_neon_door("left"), {"latency_ms": 9}))
+    d = ai_room.analyze_door({"type": "video"})
+    assert d.needs_confirm and d.hinge_side is None and "Tap which side" in d.message
+
+
+def test_door_unclear_independent_check_asks(monkeypatch):
+    from ai import room as ai_room
+    monkeypatch.setattr(gates.gemini, "decide", lambda parts, q: (_door_gate_answers("other", 0.8), {"latency_ms": 5}))
+    monkeypatch.setattr(vision, "clip_to_door_motion", lambda part, hint="": (_neon_door("right"), {"latency_ms": 9}))
+    assert ai_room.analyze_door({"type": "video"}).needs_confirm

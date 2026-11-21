@@ -28,6 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 app = FastAPI(title="Ethyneon")
 FRONT = Path(__file__).resolve().parent.parent / "frontend"
 MAX_UPLOAD = 40 * 1024 * 1024
+DOOR_AGENTIC = os.getenv("DOOR_VIDEO_PROCESSING", "agentic") == "agentic"
 
 
 def S(sid: str) -> state.Session:
@@ -184,28 +185,29 @@ async def upload_door(sid: str, file: UploadFile = File(...), opening_id: Option
     if not s.room:
         raise HTTPException(400, "Add a room photo first")
     data = await _read(file)
-    part = gemini.video_part(data, file.content_type or "video/mp4", agentic=True)
-    g = gates.door_clip(part)
+    part = gemini.video_part(data, file.content_type or "video/mp4", agentic=DOOR_AGENTIC)
+    s.emit("door_motion", "started", "Decision 1 checks the clip; Neon scrubs it for hinge and swing")
+    d = ai_room.analyze_door(part, workflow.room_summary(s))
+    g = d.gate
     s.emit("gate.door_clip", "ok" if g.passed else "warn", g.message or "Clip shows the door moving",
            answers=g.answers, latency_ms=g.latency_ms)
-    if not g.passed and not g.degraded:
-        return {"accepted": False, "gate": g.model_dump()}
-    s.emit("door_motion", "started", "Neon is scrubbing the clip for hinge and swing")
-    try:
-        door, meta = vision.clip_to_door_motion(part, workflow.room_summary(s))
-    except gemini.GeminiError as e:
-        s.emit("door_motion", "error", str(e)[:200])
-        raise HTTPException(422, "Could not analyse the clip. Tap the hinge side instead.")
-    spec = s.room.model_copy(deep=True)
-    spec, problem = vision.apply_door(spec, door, opening_id)
+    if not d.accepted:
+        s.emit("door_motion", "needs_input" if d.needs_confirm else "warn", d.message)
+        return {"accepted": False, "gate": g.model_dump(), "problem": d.message}
+    if d.needs_confirm:  # the two readings disagree: record nothing, ask for one tap
+        s.emit("door_motion", "needs_input", d.message, draft=d.draft, latency_ms=d.latency_ms)
+        return {"accepted": False, "needs_confirm": True, "problem": d.message, "draft": d.draft}
+    draft = vision.DoorDraft(**d.draft)
+    spec, problem = vision.apply_door(s.room.model_copy(deep=True), draft, opening_id)
     if problem:
-        s.emit("door_motion", "needs_input", problem, draft=door.model_dump())
-        return {"accepted": False, "problem": problem, "draft": door.model_dump()}
+        s.emit("door_motion", "needs_input", problem, draft=d.draft)
+        return {"accepted": False, "problem": problem, "draft": d.draft}
     s.set_room(spec)
     _recheck(s, "door motion added")
-    s.emit("door_motion", "ok", f"Hinge {door.hinge_side}, swings {door.swing}, up to {door.max_angle_deg:.0f} deg "
-           f"(clearest at {door.evidence_ts})", draft=door.model_dump(), latency_ms=meta["latency_ms"])
-    return {"accepted": True, "door": door.model_dump(), "room": spec.model_dump()}
+    s.emit("door_motion", "ok", f"Hinge {draft.hinge_side}, swings {draft.swing}, up to {draft.max_angle_deg:.0f} deg "
+           f"(clearest at {draft.evidence_ts}); video model and independent check agree", draft=d.draft,
+           latency_ms=d.latency_ms)
+    return {"accepted": True, "door": d.draft, "room": spec.model_dump()}
 
 
 class DoorManual(BaseModel):
