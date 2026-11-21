@@ -16,7 +16,7 @@ from . import gates, gemini, intake, workflow
 
 class CommandResult(BaseModel):
     status: Literal["accepted", "pending", "needs_input"]
-    action: Literal["run_plan", "measurement", "move", "cart_review", "none"] = "none"
+    action: Literal["run_plan", "plan_and_run", "measurement", "move", "cart_review", "none"] = "none"
     message: str = ""
     plan: Optional[WorkflowPlan] = None
     brief: Optional[DesignBrief] = None  # proposed brief (C stores it)
@@ -26,6 +26,7 @@ class CommandResult(BaseModel):
     intent: str = ""
     route_answers: dict = {}
     latency_ms: Optional[int] = None
+    spoken_reply: str = ""
 
 
 WALL_WORDS = {"wall_n": ("wall_n", "back", "far", "north"), "wall_e": ("wall_e", "right", "east"),
@@ -89,8 +90,11 @@ def handle_command(s, text: Optional[str] = None, audio: Optional[bytes] = None,
     cmd = intake.Command(**parsed["command"])
     s.emit("intake", "ok", f"“{cmd.transcript}” -> {cmd.intent}", command=parsed["command"],
            route=parsed["route"]["answers"], agree=parsed["agree"], latency_ms=parsed["latency_ms"])
+    reply = cmd.spoken_reply.strip()
+    if any(w in reply.lower() for w in ("purchased", "bought", "paid", "added to your cart", "added it to the cart")):
+        reply = ""  # never let a spoken reply claim a money step happened
     base = dict(transcript=cmd.transcript, intent=cmd.intent, route_answers=parsed["route"]["answers"],
-                latency_ms=parsed["latency_ms"])
+                latency_ms=parsed["latency_ms"], spoken_reply=reply)
     if parsed["clarify"]:
         s.emit("intake", "needs_input", parsed["clarify"])
         return CommandResult(status="needs_input", message=parsed["clarify"], **base)
@@ -142,8 +146,9 @@ def handle_command(s, text: Optional[str] = None, audio: Optional[bytes] = None,
             workflow.PlanStep(id="swap", op="swap_finish", args={"category": cmd.swap_category, "finish": cmd.finish})]))
         return CommandResult(status="pending", action="run_plan", plan=plan, **base)
 
-    plan = plan_workflow(s, f"{cmd.transcript}\nParsed: {cmd.model_dump_json()}", cmd.intent, brief)
-    return CommandResult(status="pending", action="run_plan", plan=plan, **base)
+    # Neon planning takes seconds: return now (so voice can answer) and let the server plan + run in background
+    return CommandResult(status="pending", action="plan_and_run", **base,
+                         payload={"request": f"{cmd.transcript}\nParsed: {cmd.model_dump_json()}", "route": cmd.intent})
 
 
 def plan_workflow(s, request: str, route: str, brief: Optional[DesignBrief] = None) -> WorkflowPlan:

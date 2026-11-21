@@ -39,3 +39,5 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 #activity .meta { color:var(--muted); }
 table { width:100%; border-collapse:collapse; font-size:12px; } td { padding:3px 0; } td.r { text-align:right; }
 
+#transcript { max-height:140px; overflow:auto; margin-top:6px; font-size:12px; }
+#transcript .tx { padding:2px 0; } #transcript .you { color:var(--text); } #transcript .ethyneon { color:var(--ar); }

@@ -51,12 +51,14 @@
       <form id="cmdForm">
         <input id="cmdText" placeholder="Build a purple and blue dual-monitor setup under $1,200 and keep the door clear" />
         <button type="submit">Send</button>
-        <button type="button" id="micBtn" title="Hold to talk">🎤 Hold</button>
+        <button type="button" id="micBtn" title="Hands-free voice: just talk; talk over it to interrupt">🎙 Talk</button>
       </form>
       <div class="hint"><span id="selInfo">Tap an item to select it.</span>
         <label class="btn secondary" style="padding:2px 8px">📷 Point at it<input id="frameIn" type="file" accept="image/*" capture="environment" hidden></label>
         <span id="frameInfo"></span></div>
       <div id="clarify" class="clarify" hidden></div>
+      <div class="hint" id="voiceState"></div>
+      <div id="transcript"></div>
     </div>
     <div class="card">
       <h3>Products <span id="subtotal" class="hint"></span></h3>

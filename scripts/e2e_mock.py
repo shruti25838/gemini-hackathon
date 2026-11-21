@@ -20,7 +20,9 @@ results.append(ok(r.get("accepted") and r["room"]["walls"][0]["id"].startswith("
 c.post(f"/api/session/{sid}/measure", json={"field": "width_m", "value_m": 3.2})
 c.post(f"/api/session/{sid}/door/manual", json={"opening_id": "door1", "hinge_side": "left", "swing": "in"})
 r = c.post(f"/api/session/{sid}/command", data={"text": "build it"}).json()
-results.append(ok(r.get("status") == "running" and r.get("planner") == "mock", "command -> plan labeled mock"))
+time.sleep(0.5)
+plan_ev = [e for e in c.get(f"/api/session/{sid}/events").json() if e["step"] == "planner"]
+results.append(ok(r.get("status") == "running" and plan_ev and "MOCK_AI" in plan_ev[-1]["detail"], "command -> plan labeled mock"))
 t0 = time.time()
 while time.time() - t0 < 15:
     st = c.get(f"/api/session/{sid}/state").json()

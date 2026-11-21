@@ -12,7 +12,7 @@ const post = (path, json) => api(path, { method: "POST", headers: { "Content-Typ
 const money = (m) => `$${(m / 100).toFixed(2)}`;
 
 let SID = sessionStorage.getItem("ethyneon_sid");
-let lastSeq = 0, st = null, sceneKey = "", selectedKey = null, highlight = [], frameBlob = null;
+let lastSeq = 0, st = null, sceneKey = "", selectedKey = null, highlight = [], frameBlob = null, booted = false;
 
 // ---------- three.js ----------
 const vp = $("viewport");
@@ -171,6 +171,7 @@ function renderEvents(evs) {
     const li = document.createElement("li"); li.className = e.status;
     const meta = [e.data?.latency_ms && `${e.data.latency_ms} ms`, e.data?.interaction_id && `interaction ${String(e.data.interaction_id).slice(0, 10)}`, e.data?.environment_id && `sandbox ${String(e.data.environment_id).slice(0, 10)}`].filter(Boolean).join(" · ");
     li.innerHTML = `<span class="step">${e.step}</span> ${e.detail}${meta ? ` <span class="meta">(${meta})</span>` : ""}`;
+    if (booted && voice.on) { const line = SPOKEN(e); if (line) say(line); }
     ol.prepend(li);
     lastSeq = e.seq;
   }
@@ -214,14 +215,17 @@ $("doorClip").onchange = async (e) => {
   refresh();
 };
 
-async function sendCommand(fd) {
+async function sendCommand(fd, spoken = false) {
   if (selectedKey) fd.append("selected_key", selectedKey);
   if (frameBlob) { fd.append("frame", frameBlob, "frame.jpg"); frameBlob = null; $("frameInfo").textContent = ""; }
   try {
     const r = await api("/command", { method: "POST", body: fd });
+    if (spoken) transcript("you", r.transcript);
+    if (spoken && r.say && r.status !== "clarify") say(r.say);
     if (r.status === "clarify") {
       $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`;
       highlight = r.candidates || []; sceneKey = ""; render();
+      if (spoken) say(r.message);
     }
     if (r.status === "review") showReview(r.review);
   } catch (err) { flash(err.message); }
@@ -233,17 +237,89 @@ $("frameIn").onchange = async (e) => {
 };
 $("cmdForm").onsubmit = (e) => { e.preventDefault(); const t = $("cmdText").value.trim(); if (!t) return; const fd = new FormData(); fd.append("text", t); $("cmdText").value = ""; sendCommand(fd); };
 
-let rec = null, chunks = [];
-$("micBtn").onpointerdown = async () => {
+// ---------- hands-free voice: VAD -> Hydrogen -> spoken reply, with barge-in ----------
+const voice = { on: false, state: "off", stream: null, ctx: null, analyser: null, rec: null, chunks: [], floor: 0.01,
+                above: 0, belowSince: 0, startedAt: 0, raf: 0 };
+function setVoice(state) {
+  voice.state = state;
+  const labels = { off: "🎙 Talk", listening: "● Listening", hearing: "● Hearing you", thinking: "… Thinking", speaking: "🔊 Speaking" };
+  $("micBtn").textContent = labels[state]; $("micBtn").classList.toggle("rec", state !== "off");
+  $("voiceState").textContent = state === "off" ? "" : `voice: ${state}`;
+}
+function transcript(who, text) {
+  if (!text) return;
+  const d = document.createElement("div"); d.className = `tx ${who}`; d.textContent = `${who === "you" ? "You" : "Ethyneon"}: ${text}`;
+  $("transcript").prepend(d);
+}
+function say(text) {
+  if (!voice.on || !text || !("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text); u.rate = 1.05;
+  u.onstart = () => setVoice("speaking");
+  u.onend = () => { if (voice.on && voice.state === "speaking") setVoice("listening"); };
+  speechSynthesis.speak(u); transcript("ethyneon", text);
+}
+function rms() {
+  const buf = new Float32Array(voice.analyser.fftSize); voice.analyser.getFloatTimeDomainData(buf);
+  let s = 0; for (const x of buf) s += x * x; return Math.sqrt(s / buf.length);
+}
+function startSegment() {
+  voice.chunks = []; voice.startedAt = performance.now();
+  voice.rec = new MediaRecorder(voice.stream);
+  voice.rec.ondataavailable = (e) => e.data.size && voice.chunks.push(e.data);
+  voice.rec.onstop = () => {
+    const dur = performance.now() - voice.startedAt;
+    if (dur < 450 || !voice.on) { if (voice.on) setVoice("listening"); return; }  // too short: cough, click, echo
+    setVoice("thinking");
+    const fd = new FormData(); fd.append("audio", new Blob(voice.chunks, { type: voice.rec.mimeType }), "voice.webm");
+    sendCommand(fd, true).finally(() => { if (voice.on && voice.state === "thinking") setVoice("listening"); });
+  };
+  voice.rec.start(100);
+}
+function loop() {
+  if (!voice.on) return;
+  const level = rms(), now = performance.now();
+  // speaking raises the bar so our own voice through the speakers doesn't trigger barge-in
+  const thr = Math.max(0.012, voice.floor * 3) * (voice.state === "speaking" ? 2.2 : 1);
+  if (level > thr) {
+    voice.above++; voice.belowSince = 0;
+    if (voice.above === 3 && voice.state !== "hearing") {
+      if (speechSynthesis.speaking) speechSynthesis.cancel();  // barge-in: the shopper interrupts
+      setVoice("hearing"); startSegment();
+    }
+  } else {
+    voice.above = 0;
+    if (voice.state === "hearing") {
+      voice.belowSince ||= now;
+      if (now - voice.belowSince > 800 || now - voice.startedAt > 15000) { voice.belowSince = 0; voice.rec.stop(); }
+    } else if (voice.state === "listening") voice.floor = voice.floor * 0.98 + level * 0.02;  // track room noise
+  }
+  voice.raf = requestAnimationFrame(loop);
+}
+async function voiceOn() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    rec = new MediaRecorder(stream); chunks = [];
-    rec.ondataavailable = (e) => chunks.push(e.data);
-    rec.onstop = () => { stream.getTracks().forEach((t) => t.stop()); const fd = new FormData(); fd.append("audio", new Blob(chunks, { type: rec.mimeType }), "voice.webm"); sendCommand(fd); };
-    rec.start(); $("micBtn").classList.add("rec"); $("micBtn").textContent = "● Recording";
-  } catch { flash("Microphone unavailable. Type instead."); }
+    voice.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  } catch { flash("Microphone unavailable or not allowed. Type instead."); return; }
+  voice.ctx = new AudioContext(); voice.analyser = voice.ctx.createAnalyser(); voice.analyser.fftSize = 1024;
+  voice.ctx.createMediaStreamSource(voice.stream).connect(voice.analyser);
+  voice.on = true; setVoice("listening"); loop();
+  say("I'm listening. Tell me your budget and the look you want.");
+}
+function voiceOff() {
+  voice.on = false; cancelAnimationFrame(voice.raf); speechSynthesis.cancel();
+  if (voice.rec?.state === "recording") voice.rec.stop();
+  voice.stream?.getTracks().forEach((t) => t.stop()); voice.ctx?.close(); setVoice("off");
+}
+$("micBtn").onclick = () => (voice.on ? voiceOff() : voiceOn());
+
+// speak the workflow's important moments while voice is on
+const SPOKEN = (e) => {
+  if (e.status === "needs_input") return e.detail;
+  if (e.step === "commit_scene_preview" && e.status === "ok") return `Done. The layout ${e.data?.fit?.status === "fits" ? "fits" : "is " + (e.data?.fit?.status || "ready").replace(/_/g, " ")}.`;
+  if (e.step === "scene" && e.status === "ok") return "Moved. " + (e.detail.includes("fits") ? "It fits." : "");
+  if (e.step === "agent_review" && e.status === "ok") return "The sandbox agents checked it too.";
+  if (e.step === "workflow" && e.status === "error") return "Something went wrong. Your last layout is unchanged.";
+  return null;
 };
-addEventListener("pointerup", () => { if (rec?.state === "recording") { rec.stop(); $("micBtn").classList.remove("rec"); $("micBtn").textContent = "🎤 Hold"; } });
 
 $("undoBtn").onclick = () => post("/undo").then(refresh).catch((e) => flash(e.message));
 
@@ -278,9 +354,10 @@ $("reviewBtn").onclick = () => post("/review").then(showReview).catch((e) => fla
 // ---------- boot ----------
 (async () => {
   const h = await (await fetch("/api/health")).json();
-  $("status").innerHTML = `<span class="${h.mock_ai ? "fixture" : h.gemini ? "live" : "off"}">${h.mock_ai ? "AI: MOCK (saved outputs)" : h.gemini ? "Gemini live" : "Gemini: no key"}</span>
+  $("status").innerHTML = `<span class="fixture" title="Gemini Live is not enabled on this API key">Voice: Hydrogen + browser speech</span>
+    <span class="${h.mock_ai ? "fixture" : h.gemini ? "live" : "off"}">${h.mock_ai ? "AI: MOCK (saved outputs)" : h.gemini ? "Gemini live" : "Gemini: no key"}</span>
     <span class="${h.shopify_live ? "live" : h.fixture_catalog ? "fixture" : "off"}">${h.shopify_live ? "Shopify live" : h.fixture_catalog ? "Fixture catalog · not live" : "Shopify not configured"}</span>`;
   if (!SID) { SID = (await (await fetch("/api/session", { method: "POST" })).json()).id; sessionStorage.setItem("ethyneon_sid", SID); }
-  await refresh();
+  await refresh(); booted = true;
   setInterval(refresh, 1000);
 })();

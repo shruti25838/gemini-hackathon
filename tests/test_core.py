@@ -255,3 +255,15 @@ def test_selection_answers_vague_reference_without_model(monkeypatch):
     _scene_with(s, ("v_desk", "desk", 0.8), ("v_store", "storage", 2.0))
     p, g = commands.resolve_target(s, "move it to the back wall", "", selected_key="v_store", frame=None)
     assert p.key == "v_store" and g is None
+
+
+def test_spoken_reply_never_claims_money_step(monkeypatch):
+    from ai import commands, intake
+    def fake_parse(**kw):
+        return {"command": intake.Command(transcript="add it to the cart", intent="cart_review", brief_patch=intake.BriefPatch(),
+                                          ambiguities=[], spoken_reply="Done, I've added it to your cart and paid.").model_dump(),
+                "route": {"answers": {}}, "agree": True, "clarify": None, "latency_ms": 1}
+    monkeypatch.setattr(intake, "parse", fake_parse)
+    s = session_with_room()
+    r = commands.handle_command(s, text="add it to the cart")
+    assert r.action == "cart_review" and r.spoken_reply == ""

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import threading
 from pathlib import Path
 from typing import Literal, Optional
@@ -56,6 +57,7 @@ app.mount("/static", StaticFiles(directory=FRONT), name="static")
 @app.get("/api/health")
 def health():
     return {"gemini": gemini.configured(), "mock_ai": gemini.mock_ai(), "shopify_live": shop.live(),
+            "voice_mode": os.getenv("ETHYNEON_VOICE_MODE", "hydrogen"),
             "fixture_catalog": shop.fixture_mode()}
 
 
@@ -280,7 +282,8 @@ async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[Up
         if s.approval:
             s.approval = None
             s.emit("approval", "warn", "Brief changed; previous cart approval voided")
-    out = {"status": res.status, "action": res.action, "message": res.message, "intent": res.intent}
+    out = {"status": res.status, "action": res.action, "message": res.message, "intent": res.intent,
+           "transcript": res.transcript, "say": res.message if res.status == "needs_input" else res.spoken_reply}
     if res.status == "needs_input":
         s.emit("command", "needs_input", res.message, candidates=res.payload.get("candidates", []))
         return {**out, "status": "clarify", **res.payload}
@@ -293,6 +296,10 @@ async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[Up
     if res.action == "run_plan":
         _bg(s, workflow.execute, s, res.plan)
         return {**out, "status": "running", "plan": res.plan.model_dump(), "planner": res.plan.source}
+    if res.action == "plan_and_run":
+        brief = s.brief
+        _bg(s, lambda: workflow.execute(s, commands.plan_workflow(s, res.payload["request"], res.payload["route"], brief)))
+        return {**out, "status": "running", "planner": "neon (planning in background)"}
     return out
 
 

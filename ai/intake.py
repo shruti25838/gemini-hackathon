@@ -41,6 +41,8 @@ class Command(BaseModel):
     measurement_field: Optional[Literal["width_m", "depth_m", "height_m"]] = None
     measurement_m: Optional[float] = None
     ambiguities: list[str] = Field(description="anything you had to guess; empty if none")
+    spoken_reply: str = Field("", description="ONE short sentence to say back out loud, acknowledging what you will do. "
+                              "Never claim it is already done, bought or paid.")
 
 
 SYSTEM = """You turn a shopper's spoken or typed request about designing their room into one typed command.
@@ -49,6 +51,8 @@ units to metres and named colors to hex. Never invent a budget, product or measu
 'Make that wall olive' -> style_edit, color_hex. 'Show me the walnut desk' -> product_search with swap_category=desk,
 finish=walnut. 'The desk wall is 3.2 metres' -> measurement_correction, width_m=3.2 (the desk wall is wall_n, the far wall in the photo).
 Walls: wall_n = far/back wall in the photo, wall_e = right, wall_w = left, wall_s = behind the camera/front.
+spoken_reply examples: "Sure, painting that wall olive." / "Okay, looking for a walnut desk that fits." /
+"Opening the review so you can check the cart." Never say anything was purchased or added to a cart.
 If the request mixes intents, pick the one that changes products/money and list the rest in ambiguities."""
 
 
