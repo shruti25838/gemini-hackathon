@@ -111,3 +111,45 @@ def analyze_door(video_part: dict, room_hint: str = "") -> DoorAnalysis:
     out.swing = d.swing if swing_ok else None
     out.message = "I'm not sure about the door: " + "; ".join(why) + ". Tap which side the hinge is on."
     return out
+
+
+# ---------- fast door path (live: Decision 1 = 1.6-1.9 s vs Neon agentic video = 150+ s) ----------
+class FastDoor(BaseModel):
+    accepted: bool
+    gate: gates.GateResult
+    hinge_side: Optional[str] = None   # from Decision 1 when confident
+    swing: Optional[str] = None        # from Decision 1 when clear, else filled later by Neon or the shopper
+    message: str = ""
+
+
+FAST_HINGE_CONF = 0.70
+
+
+def fast_door(video_part: dict) -> FastDoor:
+    """Decision 1 only: coverage + hinge edge + swing, in ~2 s."""
+    g = gates.door_clip(video_part)
+    if not g.passed and not g.degraded:
+        return FastDoor(accepted=False, gate=g, message=g.message)
+    a = g.answers or {}
+    he = a.get("hinge_edge") or {}
+    hinge = he.get("choice") if he.get("choice") in ("left", "right") and he.get("confidence", 0) >= FAST_HINGE_CONF else None
+    toward = (a.get("opens_toward_camera") or {}).get("noul")
+    swing = None if toward is None else ("in" if toward >= 0.65 else "out" if toward <= 0.35 else None)
+    if hinge and swing:
+        msg = f"Hinge {hinge}, opens {swing} (fast check). Neon is double-checking in the background."
+    elif hinge:
+        msg = f"Hinge {hinge} (fast check). Checking the swing direction in the background, or tap opens in / out."
+    else:
+        msg = "Couldn't see the hinge clearly. Tap hinge L or R; Neon is also checking in the background."
+    return FastDoor(accepted=True, gate=g, hinge_side=hinge, swing=swing, message=msg)
+
+
+def verify_door(video_part: dict, room_hint: str = "") -> Optional[dict]:
+    """Background Neon reading (frame sampling, low thinking). Returns DoorDraft dict or None."""
+    try:
+        d, _ = gemini.generate_structured(
+            vision.NEON, [video_part, gemini.text_part(f"Room context: {room_hint}\nAnalyse the door.")],
+            vision.DoorDraft, system=vision.DOOR_SYSTEM, thinking="low", retries=0)
+        return d.model_dump()
+    except Exception:
+        return None

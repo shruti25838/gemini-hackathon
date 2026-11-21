@@ -35,6 +35,7 @@ class Session:
     last_review: Optional[dict] = None
     last_alternative: Optional[dict] = None
     recovery_runs: list = field(default_factory=list)
+    door_hint: Optional[dict] = None
     lock: threading.RLock = field(default_factory=threading.RLock)
 
     # ----- scene -----

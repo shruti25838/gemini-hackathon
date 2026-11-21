@@ -182,44 +182,76 @@ async def upload_photo(sid: str, file: UploadFile = File(...)):
 
 @app.post("/api/session/{sid}/door")
 async def upload_door(sid: str, file: UploadFile = File(...), opening_id: Optional[str] = Form(None)):
+    """Fast path: Decision 1 answers in ~2 s; Neon verifies in the background and can only lower trust."""
     s = S(sid)
     if not s.room:
         raise HTTPException(400, "Add a room photo first")
-    if not any(o.type == "door" for o in s.room.openings):
+    doors = [o for o in s.room.openings if o.type == "door"]
+    if not doors:
         msg = ("Your room model has no door, so there is nothing to attach the clip to. "
                "Upload a room photo that shows the door, then add the clip.")
         s.emit("door_motion", "needs_input", msg)
         return {"accepted": False, "problem": msg}
+    door_id = opening_id or doors[0].id
     data = await _read(file)
-    part = await run_in_threadpool(gemini.video_part, data, file.content_type or "video/mp4", DOOR_AGENTIC)
-    s.emit("door_motion", "started", "Decision 1 checks the clip; Neon scrubs it for hinge and swing")
-    d = await run_in_threadpool(ai_room.analyze_door, part, workflow.room_summary(s))
-    g = d.gate
-    s.emit("gate.door_clip", "ok" if g.passed else "warn", g.message or "Clip shows the door moving",
-           answers=g.answers, latency_ms=g.latency_ms)
-    if not d.accepted:
-        s.emit("door_motion", "needs_input" if d.needs_confirm else "warn", d.message)
-        return {"accepted": False, "gate": g.model_dump(), "problem": d.message}
-    if d.needs_confirm:  # the two readings disagree: record nothing, ask for one tap
-        s.emit("door_motion", "needs_input", d.message, draft=d.draft, latency_ms=d.latency_ms)
-        return {"accepted": False, "needs_confirm": True, "problem": d.message, "draft": d.draft}
-    draft = vision.DoorDraft(**d.draft)
-    spec, problem = vision.apply_door(s.room.model_copy(deep=True), draft, opening_id)
-    if problem:
-        s.emit("door_motion", "needs_input", problem, draft=d.draft)
-        return {"accepted": False, "problem": problem, "draft": d.draft}
+    mime = file.content_type or "video/mp4"
+    part = await run_in_threadpool(gemini.video_part, data, mime, False)  # frame sampling: fast
+    f = await run_in_threadpool(ai_room.fast_door, part)
+    s.emit("gate.door_clip", "ok" if f.gate.passed else "warn", f.gate.message or "Clip shows the door moving",
+           answers=f.gate.answers, latency_ms=f.gate.latency_ms)
+    if not f.accepted:
+        s.emit("door_motion", "warn", f.message)
+        return {"accepted": False, "problem": f.message}
+    if f.hinge_side and f.swing:
+        _set_door(s, door_id, f.hinge_side, f.swing, "inferred", 0.7, "fast check")
+    s.door_hint = {"opening_id": door_id, "hinge_side": f.hinge_side, "swing": f.swing}
+    s.emit("door_motion", "ok" if f.hinge_side else "needs_input", f.message, latency_ms=f.gate.latency_ms)
+    _bg(s, _verify_door_bg, s, part, door_id, f.hinge_side, f.swing)
+    return {"accepted": True, "fast": f.model_dump(), "message": f.message}
+
+
+def _set_door(s, door_id: str, hinge: str, swing: str, source: str, conf: float, why: str, evidence_ts=None):
+    spec = s.room.model_copy(deep=True)
+    o = next((o for o in spec.openings if o.id == door_id), None)
+    if not o:
+        return
+    o.motion = DoorMotion(hinge_side=hinge, swing=swing, source=source, confidence=conf, evidence_ts=evidence_ts)
+    spec.room_revision += 1
     s.set_room(spec)
-    _recheck(s, "door motion added")
-    s.emit("door_motion", "ok", f"Hinge {draft.hinge_side}, swings {draft.swing}, up to {draft.max_angle_deg:.0f} deg "
-           f"(clearest at {draft.evidence_ts}); video model and independent check agree", draft=d.draft,
-           latency_ms=d.latency_ms)
-    return {"accepted": True, "door": d.draft, "room": spec.model_dump()}
+    _recheck(s, f"door set ({why})")
+
+
+def _verify_door_bg(s, part, door_id, fast_hinge, fast_swing):
+    d = ai_room.verify_door(part, workflow.room_summary(s))
+    cur = next((o for o in s.room.openings if o.id == door_id), None)
+    if cur is not None and cur.motion is not None and cur.motion.source == "confirmed":
+        return  # the shopper already decided; never override a tap
+    if not d or d["hinge_side"] == "unknown" or d["swing"] == "unknown":
+        if not (fast_hinge and fast_swing):
+            s.emit("door_motion", "needs_input", "Neon couldn't confirm the door either. Tap hinge L / R and opens in / out.")
+        return
+    if fast_hinge and d["hinge_side"] != fast_hinge:
+        if cur is not None and cur.motion is not None:  # readings disagree: remove the guess, ask
+            spec = s.room.model_copy(deep=True)
+            next(o for o in spec.openings if o.id == door_id).motion = None
+            spec.room_revision += 1
+            s.set_room(spec)
+            _recheck(s, "door readings disagree")
+        s.emit("door_motion", "needs_input", f"The fast check said hinge {fast_hinge}, Neon says {d['hinge_side']}. "
+               "Tap which side the hinge is on.", draft=d)
+        return
+    hinge = fast_hinge or d["hinge_side"]
+    swing = fast_swing or d["swing"]
+    _set_door(s, door_id, hinge, swing, "inferred", 0.85 if fast_hinge else d["confidence"],
+              "Neon verified" if fast_hinge else "Neon reading", d.get("evidence_ts"))
+    s.emit("door_motion", "ok", f"Neon {'agrees' if fast_hinge else 'reads'}: hinge {hinge}, opens {swing} "
+           f"(clearest at {d.get('evidence_ts')}).", draft=d)
 
 
 class DoorManual(BaseModel):
     opening_id: str
-    hinge_side: Literal["left", "right"]
-    swing: Literal["in", "out"]
+    hinge_side: Optional[Literal["left", "right"]] = None
+    swing: Optional[Literal["in", "out"]] = None
 
 
 @app.post("/api/session/{sid}/door/manual")
@@ -229,9 +261,21 @@ def door_manual(sid: str, body: DoorManual):
     o = next((o for o in spec.openings if o.id == body.opening_id), None)
     if not o:
         raise HTTPException(404, "no such opening")
-    o.motion = DoorMotion(hinge_side=body.hinge_side, swing=body.swing, source="confirmed", confidence=1.0)
+    hint = getattr(s, "door_hint", None) or {}
+    cur = o.motion
+    hinge = body.hinge_side or (cur.hinge_side if cur else None) or hint.get("hinge_side")
+    swing = body.swing or (cur.swing if cur else None) or hint.get("swing")
+    if not hinge:
+        s.door_hint = {**hint, "opening_id": o.id, "swing": swing}
+        s.emit("door_motion", "needs_input", "Now tap hinge L or R.")
+        return {"room": spec.model_dump()}
+    note = ""
+    if not swing:
+        swing, note = "in", " (assumed opens in; tap 'opens out' if not)"
+    o.motion = DoorMotion(hinge_side=hinge, swing=swing, source="confirmed", confidence=1.0)
     spec.room_revision += 1
     s.set_room(spec)
+    s.emit("door_motion", "ok", f"Door set by you: hinge {hinge}, opens {swing}{note}")
     _recheck(s, "door corrected by shopper")
     return {"room": spec.model_dump()}
 

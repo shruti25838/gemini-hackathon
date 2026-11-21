@@ -189,9 +189,10 @@ function renderDoor() {
   if (key === doorKey) return;
   doorKey = key;
   $("doorManual").innerHTML = doors.map((d) => `<div class="hint">${d.id} (${d.wall} wall): ${d.motion ? `hinge ${d.motion.hinge_side}, swings ${d.motion.swing} <span class="src ${d.motion.source}">${d.motion.source}</span>` : "swing unknown"}
-    <br>Correct: <button class="secondary" data-o="${d.id}" data-h="left">hinge L</button><button class="secondary" data-o="${d.id}" data-h="right">hinge R</button></div>`).join("");
+    <br>Set: <button class="secondary" data-o="${d.id}" data-h="left">hinge L</button><button class="secondary" data-o="${d.id}" data-h="right">hinge R</button>
+    <button class="secondary" data-o="${d.id}" data-s="in">opens in</button><button class="secondary" data-o="${d.id}" data-s="out">opens out</button></div>`).join("");
   $("doorManual").querySelectorAll("button").forEach((b) => b.onclick = () =>
-    post("/door/manual", { opening_id: b.dataset.o, hinge_side: b.dataset.h, swing: "in" }).then(refresh).catch((e) => flash(e.message)));
+    post("/door/manual", { opening_id: b.dataset.o, ...(b.dataset.h ? { hinge_side: b.dataset.h } : { swing: b.dataset.s }) }).then(refresh).catch((e) => flash(e.message)));
 }
 
 const notBuying = new Set();
@@ -275,9 +276,9 @@ $("photo").onchange = async (e) => {
 
 $("doorClip").onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return;
-  $("doorInfo").textContent = "Analysing clip…";
+  $("doorInfo").textContent = "Uploading and checking the clip (a few seconds)…";
   const fd = new FormData(); fd.append("file", f, f.name);
-  try { const r = await api("/door", { method: "POST", body: fd }); $("doorInfo").textContent = r.accepted ? `Clearest at ${r.door.evidence_ts}: ${r.door.reasoning}` : (r.problem || r.gate?.message); }
+  try { const r = await api("/door", { method: "POST", body: fd }); $("doorInfo").textContent = r.accepted ? r.message : (r.problem || r.gate?.message); }
   catch (err) { $("doorInfo").textContent = err.message; }
   refresh();
 };
