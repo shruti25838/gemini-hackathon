@@ -781,3 +781,105 @@ def test_the_health_endpoint_never_exposes_a_token(
     monkeypatch.setattr(services_module, "_services", build_services(settings, db))
     body = TestClient(app).get("/api/health").text
     assert SENTINEL_TOKEN not in body
+
+
+def test_api_state_withholds_the_checkout_url(
+    live_settings: Settings, db, monkeypatch
+) -> None:
+    """A bearer link to a hosted checkout does not belong in a broad read.
+
+    It is released only by POST /api/checkout/continue, after a passing
+    audit bound to this approval and cart.
+    """
+    import backend.services as services_module
+    from fastapi.testclient import TestClient
+    from contracts.interfaces import BudgetLine
+    from backend.app import app
+
+    services = build_services(live_settings, db)
+    services.catalog._storefront = FakeStorefront()
+    monkeypatch.setattr(services_module, "_services", services)
+
+    session_id = f"sess_{uuid.uuid4().hex[:8]}"
+    services.db.create_session(session_id, "shopper_state")
+    review = services.carts.build_cart_review(
+        session_id,
+        "shopper_state",
+        [
+            BudgetLine(
+                variant_id=WALNUT_DESK,
+                quantity=1,
+                unit_price=Money(amount_minor=0, currency="USD"),
+            )
+        ],
+        scene_revision=0,
+        brief_revision=0,
+    )
+    approved = services.carts.confirm_cart(
+        review.review_id, 0, str(uuid.uuid4()), current_scene_revision=0
+    )
+    written, _ = services.carts.write_cart_once(approved)
+    real_url = written.cart_reference.checkout_url
+    assert real_url, "the fake store should have produced a URL"
+
+    client = TestClient(app)
+    body = client.get("/api/state", params={"session_id": session_id})
+    assert body.status_code == 200
+    payload = body.json()
+
+    # The cart is reported, but the link is not.
+    assert payload["cart_review"] is not None
+    assert payload["cart_review"]["cart_reference"] is not None
+    assert payload["cart_review"]["cart_reference"]["checkout_url"] is None
+    assert real_url not in body.text
+    assert "/cart/c/" not in body.text
+
+    # And the stored record still has it, so checkout can still release it.
+    stored = services.db.get_cart_review(written.review_id)
+    assert stored["cart_reference"]["checkout_url"] == real_url
+
+
+def test_the_checkout_route_still_releases_the_url(
+    live_settings: Settings, db, monkeypatch
+) -> None:
+    """Redacting /api/state must not break the legitimate handoff."""
+    import backend.services as services_module
+    from fastapi.testclient import TestClient
+    from contracts.interfaces import BudgetLine
+    from backend.app import app
+
+    services = build_services(live_settings, db)
+    services.catalog._storefront = FakeStorefront()
+    monkeypatch.setattr(services_module, "_services", services)
+
+    session_id = f"sess_{uuid.uuid4().hex[:8]}"
+    services.db.create_session(session_id, "shopper_state")
+    review = services.carts.build_cart_review(
+        session_id,
+        "shopper_state",
+        [
+            BudgetLine(
+                variant_id=WALNUT_DESK,
+                quantity=1,
+                unit_price=Money(amount_minor=0, currency="USD"),
+            )
+        ],
+        scene_revision=0,
+        brief_revision=0,
+    )
+    approved = services.carts.confirm_cart(
+        review.review_id, 0, str(uuid.uuid4()), current_scene_revision=0
+    )
+    services.carts.write_cart_once(approved)
+
+    response = TestClient(app).post(
+        "/api/checkout/continue",
+        json={
+            "session_id": session_id,
+            "review_id": review.review_id,
+            "action_id": str(uuid.uuid4()),
+            "fit_status": "fits",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["checkout_url"], "the handoff must still work"

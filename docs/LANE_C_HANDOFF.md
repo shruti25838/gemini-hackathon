@@ -338,8 +338,10 @@ other owners.
 The only code in this project that mutates a real store is
 `backend/cart_write.py`, reached through `CartService.write_cart_once`.
 
-Two gates, both checked at the moment of the write rather than only at
-startup:
+Two gates. One place decides: the Storefront client's own
+`allow_cart_writes` is derived from `settings.cart_writes_allowed`, so the
+client and the policy cannot disagree. They are also re-checked at the moment
+of the write, not only at construction:
 
 ```
 LIVE_CART_WRITES=1
@@ -373,10 +375,10 @@ Payment is never inferred from the handoff. `order_confirmed` needs
 `ENABLE_ORDER_LOOKUP=1` and a `SHOPIFY_ORDER_LOOKUP_TOKEN` that differs from
 the Storefront token. Without both, the state stays `payment_unconfirmed`.
 
-**One thing to decide before the demo.** `GET /api/state` returns the whole
-`CartReview`, which includes `cart_reference.checkout_url` once a cart has
-been written. That is a private link. It is not logged anywhere, and it never
-appears in an event, but any client holding the `session_id` can read it from
-that endpoint. Redacting it there would be a one-line change and would not
-alter the contract, since the field is optional. It was left alone because
-changing response content needs the owner's approval.
+**The checkout link is withheld from `GET /api/state`.** It is a bearer link
+to a hosted checkout, and `/api/state` is a broad read, so the field comes
+back as `null` there even once a cart exists. The contract is unchanged, since
+`checkout_url` is optional, and a client can still tell "no cart" from "cart
+exists, link withheld". The link is stored server side and released only by
+`POST /api/checkout/continue`, after an audit bound to that exact approval and
+cart. It is never logged and never appears in an event.

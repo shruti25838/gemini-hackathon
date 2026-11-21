@@ -78,6 +78,24 @@ def services() -> Services:
     return get_services()
 
 
+def _redact_checkout_url(cart: Optional[dict[str, Any]]) -> Optional[dict[str, Any]]:
+    """Keep the private checkout link out of the general state endpoint.
+
+    The URL is a bearer link to a hosted checkout. /api/state is a broad
+    read, so the link is withheld here and released only by
+    POST /api/checkout/continue, after a passing audit bound to this exact
+    approval and cart. The field stays present and null, so the contract is
+    unchanged and a client can tell the difference between "no cart" and
+    "cart exists, link withheld".
+    """
+    if not cart:
+        return cart
+    reference = cart.get("cart_reference")
+    if isinstance(reference, dict) and reference.get("checkout_url"):
+        cart = {**cart, "cart_reference": {**reference, "checkout_url": None}}
+    return cart
+
+
 # --------------------------------------------------------------------------
 # Request bodies
 # --------------------------------------------------------------------------
@@ -285,7 +303,7 @@ async def get_state(
 
     room = svc.revisions.current_room(session_id)
     scene = svc.revisions.current_scene(session_id)
-    cart = svc.db.latest_cart_review(session_id)
+    cart = _redact_checkout_url(svc.db.latest_cart_review(session_id))
 
     return {
         "session_id": session_id,

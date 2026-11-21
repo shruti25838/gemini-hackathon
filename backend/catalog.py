@@ -70,7 +70,12 @@ class CatalogService:
             self.settings.shopify_store_domain,
             self.settings.shopify_storefront_token,
             self.settings.shopify_api_version,
-            allow_cart_writes=False,  # Phase 1 never writes a live cart.
+            # Derived from the same two gates that govern policy, so the
+            # client and the policy can never disagree. Hardcoding this to
+            # False once meant both gates could open while the client stayed
+            # shut, and the live write died with a misleading message.
+            # It is re-checked again at write time by check_cart_writes_allowed.
+            allow_cart_writes=self.settings.cart_writes_allowed,
         )
         return self._storefront
 
