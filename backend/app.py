@@ -35,7 +35,12 @@ from backend.errors import (
     ethyneon_error_handler,
     unhandled_error_handler,
 )
-from backend.lane_a import get_lane_a, lane_a_is_stubbed, lane_a_name
+from backend.lane_a import (
+    get_lane_a,
+    lane_a_delegation,
+    lane_a_is_stubbed,
+    lane_a_name,
+)
 from backend.services import Services, get_services
 
 API_VERSION = "0.2.0"
@@ -184,6 +189,7 @@ async def health(svc: Services = Depends(services)) -> dict[str, Any]:
         "cart_writes": "disabled",
         "lane_a": lane_a_name(),
         "lane_a_is_stub": lane_a_is_stubbed(),
+        "lane_a_functions": lane_a_delegation(),
         "phase": "1 (lane C core)",
     }
 

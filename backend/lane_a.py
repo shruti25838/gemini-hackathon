@@ -83,3 +83,19 @@ def lane_a_is_stubbed() -> bool:
 
 def lane_a_name() -> str:
     return str(getattr(_provider, "name", type(_provider).__name__))
+
+
+def lane_a_delegation() -> dict[str, str]:
+    """What each of the seven functions actually is right now.
+
+    A provider may be partly real and partly delegated. Saying which is
+    which, in /api/health, is what stops a stub being demoed as an agent.
+    """
+    declared = getattr(_provider, "delegation", None)
+    if isinstance(declared, dict):
+        return {name: str(declared.get(name, "unknown")) for name in LANE_A_FUNCTIONS}
+    stubbed = lane_a_is_stubbed()
+    return {
+        name: "stub" if stubbed else "provider"
+        for name in LANE_A_FUNCTIONS
+    }
