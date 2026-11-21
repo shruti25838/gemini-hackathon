@@ -2,18 +2,21 @@
 
 from __future__ import annotations
 
-import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-load_dotenv(REPO_ROOT / ".env")
+# Deliberately no load_dotenv() here. Calling it at import time copies every
+# line of .env into os.environ, including the blank ones, and a process
+# environment variable outranks any env_file passed later. That made an
+# explicit Settings(_env_file=...) silently ignore its own file. Let
+# pydantic-settings read .env itself, from an absolute path so the result does
+# not depend on the current working directory.
 
 
 class Settings(BaseSettings):
@@ -23,7 +26,29 @@ class Settings(BaseSettings):
     a mock off is a deliberate act.
     """
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=str(REPO_ROOT / ".env"),
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _blank_means_unset(cls, data: object) -> object:
+        """An empty value in .env means "not configured", not "empty string".
+
+        .env.example lists every variable with no value, and both the README
+        and scripts/dev tell you to copy it to .env. Without this, that copy
+        makes ETHYNEON_PORT="" and the whole app refuses to start on a typed
+        field. Dropping blanks lets the declared defaults apply.
+        """
+        if isinstance(data, dict):
+            return {
+                key: value
+                for key, value in data.items()
+                if not (isinstance(value, str) and value.strip() == "")
+            }
+        return data
 
     # Mock flags
     mock_ai: bool = Field(default=True, alias="MOCK_AI")
@@ -107,4 +132,4 @@ def reset_settings_cache() -> None:
     get_settings.cache_clear()
 
 
-__all__ = ["Settings", "get_settings", "reset_settings_cache", "REPO_ROOT", "os"]
+__all__ = ["Settings", "get_settings", "reset_settings_cache", "REPO_ROOT"]
