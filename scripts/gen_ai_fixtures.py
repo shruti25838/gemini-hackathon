@@ -38,14 +38,15 @@ s.commit_scene(SceneRevision(rev=0, room_revision=room.room_revision))
 cmd = ai.handle_command(s, text="build a purple and blue dual-monitor setup under $1,200")
 dump("command_result", cmd)
 dump("design_brief", cmd.brief)
-dump("workflow_plan", cmd.plan)
+plan = cmd.plan or ai.plan_workflow(s, cmd.payload["request"], cmd.payload["route"], cmd.brief)
+dump("workflow_plan", plan)
 dump("gate_answers", {"room_photo": analysis.gate.model_dump(),
                       "route": gates.route("make the wall olive").model_dump(),
                       "checkout_audit": ai.run_checkout_gates({"fixture": True}).model_dump()})
 
 # placement review: desk dragged into the door swing, with the server-checked alternative
 s.brief = cmd.brief
-ai.run_workflow(s, cmd.plan)
+ai.run_workflow(s, plan)
 desk = next(p for p in s.scene.placements if p.category == "desk")
 door = room.openings[0]
 x = door.offset_m + door.width_m / 2

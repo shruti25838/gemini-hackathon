@@ -34,6 +34,7 @@ class GateResult(BaseModel):
     answers: dict = {}
     latency_ms: Optional[int] = None
     degraded: bool = False  # Decision 1 unavailable -> plain question to user
+    coverage_gaps: list[dict] = []  # scan coverage: [{"affects", "rescan"}]
 
 
 def _degraded(gate: str, action: str, msg: str, err: Exception) -> GateResult:
@@ -55,6 +56,17 @@ ROOM_PHOTO_Q = {
         ],
     },
     "door_visible": {"type": "noul", "instructions": "Is a door or doorway visible in the image?"},
+    # scan coverage: what the layout and fit checks need to see (one pass, same call)
+    "corner_visible": {"type": "noul", "instructions": "Is at least one corner where two walls meet the floor visible?"},
+    "floor_near_door_visible": {"type": "noul", "instructions": "Is the floor area directly in front of the door visible (not hidden by furniture or cropped)?"},
+    "desk_wall_visible": {"type": "noul", "instructions": "Is the wall where a desk would go visible along most of its length?"},
+}
+
+# coverage question -> (what it affects, the specific re-shoot instruction)
+COVERAGE_HINTS = {
+    "corner_visible": ("room scale", "Step back into a corner so two walls and the floor meet in the frame."),
+    "floor_near_door_visible": ("door clearance", "Show the floor in front of the door; move anything blocking it out of frame."),
+    "desk_wall_visible": ("desk placement", "Point the camera at the wall where the desk will go and include both ends of it."),
 }
 
 
@@ -73,10 +85,18 @@ def room_photo(image: bytes, mime: str) -> GateResult:
     else:
         res = ("build_roomspec", "")
     msg = res[1]
-    if res[0] == "build_roomspec" and a["door_visible"]["noul"] < TH["coverage"]:
-        msg = "No door is visible; door clearance will stay unknown unless you add a door clip."
+    gaps = []
+    if res[0] == "build_roomspec":
+        if a["door_visible"]["noul"] < TH["coverage"]:
+            gaps.append(("door clearance", "No door is visible; add a door clip or a photo that includes the door."))
+        gaps += [COVERAGE_HINTS[k] for k in COVERAGE_HINTS
+                 if k in a and (a[k]["noul"] < TH["coverage"] or a[k]["confidence"] < TH["coverage"])
+                 and not (k == "floor_near_door_visible" and a["door_visible"]["noul"] < TH["coverage"])]
+        if gaps:  # photo is still usable: build the room, mark what stays uncertain, say exactly what to re-shoot
+            msg = "Room built, but " + "; ".join(f"{what} will be marked uncertain. {how}" for what, how in gaps)
     return GateResult(gate="room_photo", passed=res[0] == "build_roomspec", action=res[0], message=msg,
-                      answers=a, latency_ms=meta["latency_ms"])
+                      answers=a, latency_ms=meta["latency_ms"],
+                      coverage_gaps=[{"affects": w, "rescan": h} for w, h in gaps])
 
 
 # ---------- 2. door clip coverage ----------

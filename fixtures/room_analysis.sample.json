@@ -27,10 +27,26 @@
     "type": "noul",
     "noul": 0.92,
     "confidence": 0.92
+   },
+   "corner_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "floor_near_door_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "desk_wall_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
    }
   },
   "latency_ms": 0,
-  "degraded": false
+  "degraded": false,
+  "coverage_gaps": []
  },
  "room_spec": {
   "room_revision": 1,

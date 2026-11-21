@@ -35,6 +35,8 @@ def analyze_room(image: bytes, session_id: str = "", mime: str = "image/jpeg") -
         return RoomAnalysis(accepted=False, gate=g,
                             message=f"Could not build a room from this photo ({type(e).__name__}). "
                                     "Try another angle, enter dimensions, or use the preset room.")
+    for gap in g.coverage_gaps:
+        spec.notes.append(f"Uncertain {gap['affects']}: {gap['rescan']}")
     return RoomAnalysis(accepted=True, gate=g, room_spec=spec, message=g.message, latency_ms=meta["latency_ms"])
 
 

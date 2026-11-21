@@ -1,65 +1,8 @@
 {
  "status": "pending",
- "action": "run_plan",
+ "action": "plan_and_run",
  "message": "",
- "plan": {
-  "plan_id": "407ff81f",
-  "goal": "dual_monitor_gaming_corner",
-  "steps": [
-   {
-    "id": "room",
-    "op": "inspect_room_motion",
-    "after": [],
-    "args": {},
-    "state": "pending"
-   },
-   {
-    "id": "shop",
-    "op": "discover_shopify_variants",
-    "after": [],
-    "args": {
-     "categories": []
-    },
-    "state": "pending"
-   },
-   {
-    "id": "scale",
-    "op": "confirm_measurement_if_needed",
-    "after": [
-     "room"
-    ],
-    "args": {},
-    "state": "pending"
-   },
-   {
-    "id": "plan",
-    "op": "plan_and_test_layout",
-    "after": [
-     "shop",
-     "scale",
-     "room"
-    ],
-    "args": {},
-    "state": "pending"
-   },
-   {
-    "id": "commit",
-    "op": "commit_scene_preview",
-    "after": [
-     "room",
-     "shop",
-     "scale",
-     "plan"
-    ],
-    "args": {},
-    "state": "pending"
-   }
-  ],
-  "base_room_revision": 2,
-  "base_scene_rev": 1,
-  "source": "mock",
-  "artifacts": {}
- },
+ "plan": null,
  "brief": {
   "goal": "gaming_corner",
   "budget_minor": 120000,
@@ -84,7 +27,10 @@
   "categories",
   "keep_door_clear"
  ],
- "payload": {},
+ "payload": {
+  "request": "MOCK_AI: build a purple and blue dual-monitor setup under $1,200\nParsed: {\"transcript\":\"MOCK_AI: build a purple and blue dual-monitor setup under $1,200\",\"intent\":\"product_search\",\"brief_patch\":{\"budget_usd\":1200.0,\"style\":[\"purple\",\"blue\"],\"categories\":[\"desk\",\"chair\",\"monitor\",\"lighting\"],\"keep_door_clear\":true,\"preferred_wall\":null,\"keep_existing_labels\":null},\"wall_id\":null,\"color_hex\":null,\"lighting\":null,\"swap_category\":null,\"finish\":null,\"move_target\":null,\"move_destination\":null,\"measurement_field\":null,\"measurement_m\":null,\"ambiguities\":[],\"spoken_reply\":\"MOCK_AI: okay, planning a purple and blue setup.\"}",
+  "route": "product_search"
+ },
  "transcript": "MOCK_AI: build a purple and blue dual-monitor setup under $1,200",
  "intent": "product_search",
  "route_answers": {
@@ -102,5 +48,6 @@
    }
   }
  },
- "latency_ms": 0
+ "latency_ms": 0,
+ "spoken_reply": "MOCK_AI: okay, planning a purple and blue setup."
 }

@@ -267,3 +267,36 @@ def test_spoken_reply_never_claims_money_step(monkeypatch):
     s = session_with_room()
     r = commands.handle_command(s, text="add it to the cart")
     assert r.action == "cart_review" and r.spoken_reply == ""
+
+
+# ---------- scan coverage ----------
+def _photo_answers(**over):
+    base = {"is_room": 0.97, "person_visible": 0.02, "door_visible": 0.95, "corner_visible": 0.9,
+            "floor_near_door_visible": 0.9, "desk_wall_visible": 0.9}
+    base.update(over)
+    a = {k: {"noul": v, "confidence": max(v, 1 - v)} for k, v in base.items()}
+    a["usable"] = {"score": 2.0, "confidence": 0.9}
+    return a
+
+
+def test_full_coverage_has_no_gaps(monkeypatch):
+    monkeypatch.setattr(gates.gemini, "decide", lambda parts, q: (_photo_answers(), {"latency_ms": 3}))
+    g = gates.room_photo(b"x", "image/jpeg")
+    assert g.passed and g.coverage_gaps == [] and g.message == ""
+
+
+def test_coverage_gap_gives_specific_rescan_but_still_builds(monkeypatch):
+    monkeypatch.setattr(gates.gemini, "decide",
+                        lambda parts, q: (_photo_answers(floor_near_door_visible=0.2, corner_visible=0.3), {"latency_ms": 3}))
+    g = gates.room_photo(b"x", "image/jpeg")
+    assert g.passed and g.action == "build_roomspec"
+    affects = {x["affects"] for x in g.coverage_gaps}
+    assert affects == {"door clearance", "room scale"}
+    assert "floor in front of the door" in g.message
+
+
+def test_no_door_does_not_also_ask_for_floor_near_door(monkeypatch):
+    monkeypatch.setattr(gates.gemini, "decide",
+                        lambda parts, q: (_photo_answers(door_visible=0.1, floor_near_door_visible=0.1), {"latency_ms": 3}))
+    g = gates.room_photo(b"x", "image/jpeg")
+    assert [x["affects"] for x in g.coverage_gaps] == ["door clearance"]
