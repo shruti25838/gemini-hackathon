@@ -123,28 +123,54 @@ function render() {
   const fb = $("fitBadge"); const fs = st.fit?.status || "—";
   fb.textContent = `fit: ${fs}${st.fit?.checked_by?.length ? " · " + st.fit.checked_by.join(" + ") : ""}`; fb.className = `badge ${fs}`;
   renderDims(); renderDoor(); renderProducts(); renderAlt();
-  const pend = st.pending;
-  $("clarify").hidden = !pend;
-  if (pend) $("clarify").innerHTML = `<b>Needs you:</b> ${pend.prompt}` + (pend.kind === "measurement" ? ` <input id="pendVal" size="5" placeholder="m"> <button id="pendBtn">Confirm</button>` : "");
-  if (pend?.kind === "measurement") $("pendBtn").onclick = () => post("/measure", { field: pend.field, value_m: parseFloat($("pendVal").value) }).catch((e) => flash(e.message));
+  renderPending();
 }
 
+let pendKey = null, clarifyNote = false;
+function renderPending() {
+  const pend = st.pending, key = pend ? JSON.stringify(pend) : null;
+  if (key === pendKey) return;  // unchanged: never wipe what the shopper is typing
+  pendKey = key;
+  if (!pend) { if (!clarifyNote) $("clarify").hidden = true; return; }
+  clarifyNote = false; $("clarify").hidden = false;
+  $("clarify").innerHTML = `<b>Needs you:</b> ${pend.prompt}` + (pend.kind === "measurement"
+    ? ` <input id="pendVal" size="6" placeholder="metres" inputmode="decimal"> <button id="pendBtn">Confirm</button>` : "");
+  if (pend.kind === "measurement") {
+    const submit = () => {
+      const v = parseFloat($("pendVal").value);
+      if (!(v > 0)) { flash("Type the length in metres, e.g. 3.2"); return; }
+      post("/measure", { field: pend.field, value_m: v }).then(refresh).catch((e) => flash(e.message));
+    };
+    $("pendBtn").onclick = submit;
+    $("pendVal").onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } };
+    $("pendVal").focus();
+  }
+}
+
+let dimsKey = null;
 function renderDims() {
   const r = st.room; if (!r) return;
+  const key = JSON.stringify([r.room_revision, r.width_m, r.depth_m, r.height_m, r.notes.length]);
+  if (key === dimsKey || $("roomDims").contains(document.activeElement)) return;
+  dimsKey = key;
   const row = (k, label) => `<label>${label} <span><input data-f="${k}" value="${r[k].value_m.toFixed(2)}"> m <span class="src ${r[k].source}">${r[k].source}</span></span></label>`;
   $("roomDims").innerHTML = `<div class="dims">${row("width_m", "Far wall (wall_n)")}${row("depth_m", "Depth")}${row("height_m", "Height")}</div>
     <p class="hint">Measure one wall and type it in: every estimated length rescales from it.</p>
     ${r.notes.length ? `<p class="hint">Uncertain: ${r.notes.slice(-3).join("; ")}</p>` : ""}`;
   $("roomDims").querySelectorAll("input").forEach((inp) => inp.onchange = () =>
-    post("/measure", { field: inp.dataset.f, value_m: parseFloat(inp.value) }).catch((e) => flash(e.message)));
+    post("/measure", { field: inp.dataset.f, value_m: parseFloat(inp.value) }).then(refresh).catch((e) => flash(e.message)));
 }
 
+let doorKey = null;
 function renderDoor() {
   const doors = (st.room?.openings || []).filter((o) => o.type === "door");
+  const key = JSON.stringify(doors);
+  if (key === doorKey) return;
+  doorKey = key;
   $("doorManual").innerHTML = doors.map((d) => `<div class="hint">${d.id} (${d.wall} wall): ${d.motion ? `hinge ${d.motion.hinge_side}, swings ${d.motion.swing} <span class="src ${d.motion.source}">${d.motion.source}</span>` : "swing unknown"}
     <br>Correct: <button class="secondary" data-o="${d.id}" data-h="left">hinge L</button><button class="secondary" data-o="${d.id}" data-h="right">hinge R</button></div>`).join("");
   $("doorManual").querySelectorAll("button").forEach((b) => b.onclick = () =>
-    post("/door/manual", { opening_id: b.dataset.o, hinge_side: b.dataset.h, swing: "in" }).catch((e) => flash(e.message)));
+    post("/door/manual", { opening_id: b.dataset.o, hinge_side: b.dataset.h, swing: "in" }).then(refresh).catch((e) => flash(e.message)));
 }
 
 function renderProducts() {
@@ -223,7 +249,7 @@ async function sendCommand(fd, spoken = false) {
     if (spoken) transcript("you", r.transcript);
     if (spoken && r.say && r.status !== "clarify") say(r.say);
     if (r.status === "clarify") {
-      $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`;
+      clarifyNote = true; pendKey = "__note"; $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`;
       highlight = r.candidates || []; sceneKey = ""; render();
       if (spoken) say(r.message);
     }
