@@ -21,7 +21,7 @@ Set the values in `.env` before starting the service. Process environment values
 | `GEMINI_API_KEY` | Sign in with the hackathon account and create an API key in its Gemini project. [Google AI Studio API keys](https://aistudio.google.com/api-keys) |
 | `AGORA_APP_ID` and `AGORA_APP_CERTIFICATE` | Values from the same certificate-enabled Agora project. Only the App ID and issued room tokens go to the browser. |
 | `SHOPIFY_SHOPS` | Optional comma-separated `myshopify.com` domains. Set it to the development-store domain to restrict discovery to that store. Public Shop catalog reads work without a shopper account. |
-| `SHOPIFY_STOREFRONT_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` | Optional development-store domain and public Storefront access token for native product 3D media. |
+| `SHOPIFY_STOREFRONT_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` | Development-store domain and public Storefront access token. Set both and **product search reads that store** instead of the public Shop catalog, so every result is something the purchase server can sell. Also used for native product 3D media. |
 
 Open `http://127.0.0.1:8000/docs` for typed requests and the bearer-token field. `GET /healthz` checks that the server is running. `GET /api/providers` reports configuration presence. It does not make provider calls.
 
@@ -101,6 +101,43 @@ Show `follow_up.message` as the primary hint, use `follow_up.direction` for a ca
 ## Sample rooms
 
 `samples/rooms/` holds 28 photo sets of seven plain, empty rooms (no loose furniture), each with 2, 3, 4, or 5 photos of the same room: `kitchen`, `gaming-room`, `living-room`, `working-room`, `bedroom`, `study-room`, and `guest-room`. The folder name is the intended use of the empty room. The photos are ordinary 100° camera views cut from CC0 [Poly Haven](https://polyhaven.com/hdris) interior panoramas by `scripts/make_room_samples.py`. `manifest.json` records the source, headings, and the Decision 1 result for each set: single photos and two-photo sets need more coverage, every five-photo set builds, and three or four photos build when they cover every wall.
+
+## Where products come from
+
+Two surfaces, and only one of them can be bought from.
+
+| Surface | When it is used | Can it be placed or bought |
+| --- | --- | --- |
+| Storefront API, the connected development store | whenever `SHOPIFY_STOREFRONT_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` are both set | yes |
+| Shop MCP, the public Shop catalog across all merchants | only when no Storefront store is configured | no, the purchase server refuses it |
+
+With a store configured, `search_catalog`, `get_product` and `lookup_variant`
+all read that store, and the cached suggestions in the "similar" row drop every
+product from another merchant. The point is that a shopper cannot search a
+product, place it in the room, and only discover at checkout that it is
+view-only. `GET /api/providers` reports `shopify_storefront.search_source` as
+`storefront_api` or `shop_mcp` so you can see which is live before a demo.
+
+Note the honest consequence: the cached suggestions file holds 540 products
+from other merchants and none from the development store, so with a store
+configured the cached half of the "similar" row is empty and every suggestion
+comes live from the store. A thinner row of products that can actually be
+bought beats a full row that cannot.
+
+Shop MCP is still reachable as `app.state.discovery` for a deliberate
+cross-merchant look. Nothing in the placement or checkout path uses it when a
+store is configured, and the purchase server refuses its products regardless.
+
+Two filters behave differently on the two surfaces. A price bound is applied
+on values already converted to minor units, and a bound stated in a currency
+the store does not price in drops the variant rather than comparing the numbers
+as if they were the same money. Searching by image is a Shop discovery feature
+with no Storefront equivalent, so it is refused with `image_search_unsupported`
+rather than quietly falling back to the text query.
+
+Price conversion matches the purchase server exactly: Shopify's decimal strings
+become integer minor units with two decimal places and no float arithmetic. Both
+sides must agree to the cent or cart reconciliation fails.
 
 ## Product catalog
 
@@ -196,7 +233,9 @@ Then in `ethyneon-studio/.env`:
 | --- | --- | --- |
 | `ETHYNEON_API_BASE` | `http://127.0.0.1:8000` | Where to ask. Unset means no purchase path. |
 | `ETHYNEON_API_TOKEN` | the purchase server's bearer token | Sent as a header only, never in a body or a log. |
-| `SHOPIFY_SHOPS` | `ethyneon.myshopify.com` | Limits discovery to the connected store. Empty means public Shop discovery, and those products are view-only. |
+| `SHOPIFY_SHOPS` | `ethyneon.myshopify.com` | Limits Shop MCP discovery to the connected store. Empty means public Shop discovery, and those products are view-only. |
+| `SHOPIFY_STOREFRONT_DOMAIN` | `ethyneon.myshopify.com` | Set with the token below to make product search read this store. Unset falls back to Shop MCP. |
+| `SHOPIFY_STOREFRONT_TOKEN` | the store's public Storefront access token | Sent as a header only. Never appears in a response or an error. |
 
 Both names also appear in `.env.example`, without values. The server prints a warning at startup for
 each one that is missing, so a misconfigured demo is obvious before anyone clicks.

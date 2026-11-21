@@ -12,6 +12,7 @@ import httpx
 
 from backend.config import Settings
 from backend.connections import GeminiConnection, ShopifyConnection
+from backend.storefront import CatalogConnection, StorefrontConnection
 from backend.errors import ConnectionError
 from backend.product_models import ProductModelConnection
 from backend.room import RoomStudio
@@ -72,6 +73,17 @@ def providers(request: Request) -> dict[str, Any]:
         "gemini": {"configured": bool(settings.gemini_api_key)},
         "agora": {"configured": bool(settings.agora_app_id and settings.agora_app_certificate)},
         "shopify_mcp": {"configured": True, "stores": list(settings.shopify_shops)},
+        # Which surface product search reads from. storefront_api means every
+        # result is a product the purchase server can actually sell.
+        "shopify_storefront": {
+            "configured": bool(settings.shopify_storefront_domain and settings.shopify_storefront_token),
+            "store": settings.shopify_storefront_domain or None,
+            "search_source": (
+                "storefront_api"
+                if settings.shopify_storefront_domain and settings.shopify_storefront_token
+                else "shop_mcp"
+            ),
+        },
     }
 
 
@@ -124,7 +136,15 @@ def create_app(
     async def lifespan(app: FastAPI):
         async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0), transport=transport) as http:
             app.state.gemini = GeminiConnection(http, config.gemini_api_key)
-            app.state.shopify = ShopifyConnection(http, config.shopify_shops)
+            # Shop MCP stays reachable as cross-merchant discovery. The router
+            # sends search and variant lookups to the connected development
+            # store instead, when one is configured, so a shopper cannot place
+            # a product that checkout will later refuse.
+            app.state.discovery = ShopifyConnection(http, config.shopify_shops)
+            app.state.storefront = StorefrontConnection(
+                http, config.shopify_storefront_domain, config.shopify_storefront_token
+            )
+            app.state.shopify = CatalogConnection(app.state.storefront, app.state.discovery)
             app.state.product_models = ProductModelConnection(http, app.state.shopify, app.state.gemini, config)
             app.state.studio = ProductStudio(app.state.shopify, app.state.gemini, app.state.product_models)
             app.state.rooms = RoomStudio(app.state.gemini, product_models=app.state.product_models)
@@ -138,6 +158,11 @@ def create_app(
                 logging.getLogger('ethyneon.studio').warning(
                     'SHOPIFY_SHOPS is empty: product discovery may return other merchants. '
                     'Those products are view-only and cannot be bought here.'
+                )
+            if not (config.shopify_storefront_domain and config.shopify_storefront_token):
+                logging.getLogger('ethyneon.studio').warning(
+                    'No Storefront store configured: product search falls back to Shop MCP, '
+                    'which returns other merchants. Those products are view-only.'
                 )
             if not config.ethyneon_api_base:
                 logging.getLogger('ethyneon.studio').warning(
