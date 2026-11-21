@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile  # noqa: E402
+from fastapi.concurrency import run_in_threadpool  # noqa: E402
 from fastapi.responses import FileResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
@@ -155,7 +156,7 @@ async def upload_photo(sid: str, file: UploadFile = File(...)):
     s = S(sid)
     img, mime = await _read(file), file.content_type or "image/jpeg"
     s.emit("roomspec", "started", "Decision 1 photo gate, then Gemini 4 Neon reads the room")
-    a = ai_room.analyze_room(img, sid, mime)
+    a = await run_in_threadpool(ai_room.analyze_room, img, sid, mime)
     s.gate_log.append(a.gate.model_dump())
     s.emit("gate.room_photo", "ok" if a.gate.passed else "warn", a.gate.message or "Photo accepted",
            answers=a.gate.answers, latency_ms=a.gate.latency_ms)
@@ -190,9 +191,9 @@ async def upload_door(sid: str, file: UploadFile = File(...), opening_id: Option
         s.emit("door_motion", "needs_input", msg)
         return {"accepted": False, "problem": msg}
     data = await _read(file)
-    part = gemini.video_part(data, file.content_type or "video/mp4", agentic=DOOR_AGENTIC)
+    part = await run_in_threadpool(gemini.video_part, data, file.content_type or "video/mp4", DOOR_AGENTIC)
     s.emit("door_motion", "started", "Decision 1 checks the clip; Neon scrubs it for hinge and swing")
-    d = ai_room.analyze_door(part, workflow.room_summary(s))
+    d = await run_in_threadpool(ai_room.analyze_door, part, workflow.room_summary(s))
     g = d.gate
     s.emit("gate.door_clip", "ok" if g.passed else "warn", g.message or "Clip shows the door moving",
            answers=g.answers, latency_ms=g.latency_ms)
@@ -277,9 +278,9 @@ async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[Up
     audio_bytes = await _read(audio) if audio else None
     frame_t = ((await _read(frame)), frame.content_type or "image/jpeg") if frame else None
     try:
-        res = commands.handle_command(s, text=text, audio=audio_bytes,
-                                      audio_mime=(audio.content_type if audio else "audio/webm"),
-                                      selected_key=selected_key or None, frame=frame_t)
+        res = await run_in_threadpool(lambda: commands.handle_command(
+            s, text=text, audio=audio_bytes, audio_mime=(audio.content_type if audio else "audio/webm"),
+            selected_key=selected_key or None, frame=frame_t))
     except gemini.GeminiError:
         s.emit("intake", "error", "Taking longer than usual. Please try again or type it.")
         raise HTTPException(503, "model unavailable")

@@ -89,7 +89,10 @@ function buildRoom() {
     m.rotation.x = Math.PI / 2; m.position.y = 0.01; roomGroup.add(m);
   }
   const bad = new Set((st.fit?.collisions || []).flatMap((c) => [c.a, c.b]));
-  for (const p of sc.placements || []) {
+  const placed = new Set((sc.placements || []).map((p) => p.key));
+  const owned = (r.existing_items || []).filter((i) => !placed.has(i.id))
+    .map((i) => ({ key: i.id, category: i.label, x: i.x, z: i.z, w: i.w, d: i.d, h: i.h, rot: 0, locked: true }));
+  for (const p of [...(sc.placements || []), ...owned]) {
     const rot = p.rot === 90 || p.rot === 270;
     const w = rot ? p.d : p.w, d = rot ? p.w : p.d;
     const mat = new THREE.MeshStandardMaterial({ color: bad.has(p.key) ? 0xff6b6b : p.locked ? 0x5f6b7a : (CAT_COLOR[p.category] || 0x9e9e9e), transparent: p.locked, opacity: p.locked ? 0.7 : 1 });
@@ -136,7 +139,7 @@ addEventListener("pointerup", async () => {
 
 // ---------- UI rendering ----------
 function render() {
-  const key = JSON.stringify([st.room?.room_revision, st.scene?.rev, st.fit?.status, st.door_arcs?.length, st.scene?.lighting, st.scene?.wall_colors]);
+  const key = JSON.stringify([st.room?.room_revision, st.room?.existing_items?.length, st.scene?.rev, st.fit?.status, st.door_arcs?.length, st.scene?.lighting, st.scene?.wall_colors]);
   if (key !== sceneKey) { sceneKey = key; buildRoom(); }
   const fb = $("fitBadge"); const fs = st.fit?.status || "—";
   fb.textContent = `fit: ${fs}${st.fit?.checked_by?.length ? " · " + st.fit.checked_by.join(" + ") : ""}`; fb.className = `badge ${fs}`;
@@ -212,6 +215,7 @@ function renderAlt() {
 function renderEvents(evs) {
   const ol = $("activity");
   for (const e of evs) {
+    if (e.seq <= lastSeq) continue;  // already shown
     const li = document.createElement("li"); li.className = e.status;
     const meta = [e.data?.latency_ms && `${e.data.latency_ms} ms`, e.data?.interaction_id && `interaction ${String(e.data.interaction_id).slice(0, 10)}`, e.data?.environment_id && `sandbox ${String(e.data.environment_id).slice(0, 10)}`].filter(Boolean).join(" · ");
     li.innerHTML = `<span class="step">${e.step}</span> ${e.detail}${meta ? ` <span class="meta">(${meta})</span>` : ""}`;
@@ -223,11 +227,15 @@ function renderEvents(evs) {
 
 function flash(msg) { const li = document.createElement("li"); li.className = "error"; li.textContent = msg; $("activity").prepend(li); }
 
+let refreshing = false;
 async function refresh() {
+  if (refreshing) return;
+  refreshing = true;
   try {
     const [s, evs] = await Promise.all([api("/state"), api(`/events?since=${lastSeq}`)]);
     st = s; renderEvents(evs); render();
   } catch (e) { if (String(e.message).includes("unknown session")) { sessionStorage.removeItem("ethyneon_sid"); location.reload(); } }
+  finally { refreshing = false; }
 }
 
 // ---------- inputs ----------
