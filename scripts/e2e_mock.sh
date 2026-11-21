@@ -55,14 +55,21 @@ run "$PY" -m pytest tests/fit -q
 step "4. Backend scaffold, Shop MCP allowlist, untrusted text"
 run "$PY" -m pytest tests/backend -q
 
-step "5. Full journey replay: photo to checkout link"
-echo "PENDING. Implemented in Phase 1 (state and revisions, fit engine, cart,"
-echo "checkout audit). This step will replay fixtures/photos/room_good.jpg"
-echo "through to a hosted test checkout URL with all four mock flags on."
+step "5. Fit engine: fits, tight, does_not_fit and unknown"
+run "$PY" -m pytest tests/fit -q
+
+step "6. Full journey replay: photo to checkout audit"
+run "$PY" -m pytest tests/backend/test_routes.py::test_photo_to_checkout_link_on_mocks -q
+echo "Replays consent, draft, room confirm, placement, cart review, approval"
+echo "and the Decision 1 audit with all four mock flags on."
+echo
+echo "Note: the hosted checkout URL itself is released only against a real"
+echo "development store. On mocks there is no live cart, so the audit passing"
+echo "is what this step proves."
 
 echo
 if [ "$failures" -gt 0 ]; then
   echo "e2e_mock: $failures step(s) failed"
   exit 1
 fi
-echo "e2e_mock: all implemented steps passed; step 5 is pending Phase 1"
+echo "e2e_mock: all steps passed"

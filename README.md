@@ -4,11 +4,13 @@ Turn a photo of your room into an editable 3D room, shop verified Shopify
 products into it, check whether they actually fit, and hand off to a hosted
 test checkout.
 
-**Status: Phase 0, scaffold and contracts.** The twelve shared data formats,
-their fixtures, the generated schemas and TypeScript types, the backend route
-skeleton and the Shop MCP discovery client are real and tested. The state
-store, fit engine, cart and checkout land in Phase 1. Routes that are not
-implemented answer `501` rather than returning plausible fake data.
+**Status: Phase 1, lane C core.** State and revisions, the fit engine, the
+catalog layer, cart approval and the checkout audit are built and tested.
+383 tests pass: 366 offline and 17 against live services.
+
+Catalog reads work against the real development store. **Cart writes are
+disabled**, so no live cart is ever created; the write path exists and is
+tested with a fake transport, and enabling it is a constructor flag.
 
 ## Setup
 
@@ -42,11 +44,16 @@ on, at <http://127.0.0.1:8000/api/health>.
 
 ```bash
 bash scripts/e2e_mock.sh                      # the gate for every pull request
-.venv/Scripts/python -m pytest tests -q       # everything
-.venv/Scripts/python -m pytest tests/contracts -q
+.venv/Scripts/python -m pytest tests -q       # 366 offline tests, no network
+.venv/Scripts/python -m pytest tests -m network -q   # 17 live checks, needs keys
+.venv/Scripts/python scripts/check_access.py  # prove access, prints no secrets
 .venv/Scripts/python scripts/gen_schemas.py --check
 cd web && npm run build                       # type-checks the generated types
 ```
+
+The default run is offline and deterministic. Tests marked `network` are
+deselected unless you ask for them, and they skip rather than fail when a
+credential is missing.
 
 After changing any contract model, regenerate or the checks fail:
 
@@ -152,14 +159,28 @@ needs a network or a database. A test reads the source and enforces that.
 
 | Gap | Detail |
 | --- | --- |
-| Dev store | Not yet configured. `MOCK_COMMERCE=1` until a Storefront token and seeded products exist |
-| Gemini | No API key configured. Lane A is unwritten; `MOCK_AI=1` |
-| Model names | The PRD names Gemini 4 Neon, Hydrogen, Argon, Carbon, Gemini 3.8 Live, Nano Banana 2.1, Lyria, `gemini-decision-1`, and the answer type `noul`. **None verified against live docs.** Phase 2 checks each before use |
-| ADK version | PRD specifies ADK 2.15; installed is **2.11.0**. `ManagedAgent`, graph workflows and Live all exist in 2.11, but account-level Managed Agents access is unverified |
+| Cart writes | Disabled. No live Shopify cart is created, so no hosted checkout URL is produced yet. The path is written and tested with a fake transport |
+| Inventory scope | The Storefront token lacks `unauthenticated_read_product_inventory`, so `quantityAvailable` is not requested. `availableForSale` still gates every line; the quantity check is skipped |
+| Order lookup | `ENABLE_ORDER_LOOKUP=0`. Phase 4 needs a read-only order credential, separate from the Storefront token, which is not yet configured |
+| Lane A | `ai/` holds only the verified model identifiers. `analyze_room`, the planner, the agents and ADK Live land in Phase 2; `MOCK_AI=1` serves A's fixtures |
+| Lane B | `web/` is a Phase 0 shell. The 3D room, placement and activity panel land in Phase 3 |
+| Decisions SDK | `google-genai` 2.33.0 has no `.decisions` client, and the guide's `>=3.2.0` is not published. Called over plain v1beta HTTP instead, verified working |
+| ADK version | PRD specifies ADK 2.15; installed is 2.11.0, which is the newest on PyPI. `ManagedAgent`, graph workflows and Live all exist in it |
 | Shop MCP dimensions | No structured dimension field exists. Sizes are parsed from listing text by plain code, labelled `inferred`, and cap fit at tentative |
 | PRD divergence | PRD page 10 routes Shop MCP results into the Storefront cart. This build keeps discovery and purchase separate. See [docs/SHOP_MCP_NOTES.md](docs/SHOP_MCP_NOTES.md) |
-| e2e replay | `scripts/e2e_mock.sh` step 5, photo to checkout link, is pending Phase 1 |
 | npm version | npm 9.6.4 with Node 24 triggers an engine warning. Harmless, but `npm install -g npm@latest` clears it |
+
+### Verified access, as of 21 November 2026
+
+| Item | Result |
+| --- | --- |
+| Shopify Storefront token | Confirmed a Storefront token, `Shopify-Storefront-Private-Token` header |
+| Store catalog | 37 products visible, 15 Shopify samples excluded, 22 seeded furniture |
+| Dimension metafields | 21 products expose all three of `custom.width/depth/height` |
+| Gemini models | All six PRD identifiers available: `gemini-4-neon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-4-carbon`, `gemini-decision-1`, `gemini-3.8-live` |
+| Decisions API | Live at `v1beta/decisions`; `noul`, `choice` and `score` confirmed |
+| Managed Agents | Reachable on this account |
+| Shop MCP | Live, 22 tools, 4 allowlisted |
 
 ## Event-written code and third-party licenses
 

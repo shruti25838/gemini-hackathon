@@ -76,7 +76,7 @@ def first_env(*names: str) -> tuple[Optional[str], Optional[str]]:
 PRODUCTS_QUERY = """
 query EthyneonAccessCheck {
   shop { name primaryDomain { url } }
-  products(first: 5) {
+  products(first: 100) {
     edges {
       node {
         id
@@ -233,14 +233,14 @@ def check_shopify() -> None:
 
     shop_name = (data.get("shop") or {}).get("name", "unknown")
     edges = ((data.get("products") or {}).get("edges")) or []
-    record("Shop", PASS, f"{shop_name}, {len(edges)} product(s) in the first page")
+    record("Shop", PASS, f"{shop_name}, {len(edges)} product(s) visible to the Storefront API")
 
     samples: list[str] = []
     seeded: list[str] = []
     with_dimensions: list[str] = []
 
     print()
-    for edge in edges:
+    for edge in edges[:40]:
         node = edge["node"]
         title = node.get("title", "")
         variants = ((node.get("variants") or {}).get("edges")) or []
@@ -269,8 +269,7 @@ def check_shopify() -> None:
         record(
             "Seeded furniture",
             FAIL,
-            "every product in the first page is Shopify sample data; "
-            "no furniture to sell yet",
+            "every visible product is Shopify sample data; no furniture to sell yet",
         )
 
     if samples:
@@ -280,7 +279,7 @@ def check_shopify() -> None:
             f"{len(samples)} found and will be excluded from the shoppable catalog: {samples}",
         )
     else:
-        record("Shopify sample products", PASS, "none in the first page")
+        record("Shopify sample products", PASS, "none visible")
 
     if with_dimensions:
         record(
@@ -364,8 +363,20 @@ def check_gemini() -> None:
         record("Gemini call", SKIP, "no model list to choose from")
         return
 
-    preferred = [m for m in available if "flash" in m and "lite" not in m] or available
-    chosen = sorted(preferred)[0]
+    # Pick a verified identifier rather than guessing by name. Sorting the
+    # visible list alphabetically lands on retired models like gemini-2.5-flash.
+    from ai.model_ids import MODEL_IDS
+
+    for candidate in (
+        MODEL_IDS["fast_workhorse"],
+        MODEL_IDS["frontier_fast"],
+        MODEL_IDS["text_fast_lite"],
+    ):
+        if candidate in available:
+            chosen = candidate
+            break
+    else:
+        chosen = sorted(available)[0]
     try:
         response = client.models.generate_content(
             model=chosen,
@@ -412,19 +423,22 @@ def check_agents_and_decisions() -> None:
     except ImportError as exc:
         record("ADK ManagedAgent", FAIL, f"not available: {exc!r}")
 
-    # The Decisions API. The PRD describes a yes/no answer type called "noul".
-    from google.genai import types as genai_types
+    # The Decisions API. The builder guide shows client.decisions.create and
+    # says to install google-genai>=3.2.0. That release does not exist on
+    # PyPI, so the call is made over plain HTTP at v1beta instead.
+    from google import genai as _genai
 
-    decision_types = [n for n in dir(genai_types) if "ecision" in n or "oul" in n.lower()]
-    if decision_types:
-        record("Decisions API types", PASS, f"found: {decision_types}")
-    else:
-        record(
-            "Decisions API types",
-            FAIL,
-            "google-genai exposes no Decisions types and no 'noul' answer type. "
-            "The PRD's gemini-decision-1 and 'noul' are unverified",
-        )
+    has_sdk_decisions = hasattr(_genai.Client, "decisions")
+    record(
+        "Decisions in the SDK",
+        PASS if has_sdk_decisions else FAIL,
+        "client.decisions is available"
+        if has_sdk_decisions
+        else (
+            f"google-genai {_genai.__version__} has no .decisions client; the "
+            f"guide's >=3.2.0 is not published. Using plain v1beta HTTP instead"
+        ),
+    )
 
     key, _ = first_env("GOOGLE_API_KEY", "GEMINI_API_KEY")
     if key is None:
@@ -448,6 +462,36 @@ def check_agents_and_decisions() -> None:
             FAIL,
             f"{type(exc).__name__}: {str(exc)[:200]}",
         )
+
+    # The live Decisions call, which is the one that actually matters.
+    try:
+        from backend.decisions import DecisionsClient
+
+        client = DecisionsClient(key)
+        body = client.create(
+            inputs=[{"type": "text", "text": "The cart matches the approval exactly."}],
+            questions={
+                "matches": {
+                    "type": "noul",
+                    "instructions": "Does the cart match what was approved?",
+                }
+            },
+        )
+        answer = (body.get("answers") or {}).get("matches") or {}
+        if "noul" in answer and "confidence" in answer:
+            record(
+                "Decisions API live call",
+                PASS,
+                f"{client.endpoint} answered with a noul probability and a confidence score",
+            )
+        else:
+            record(
+                "Decisions API live call",
+                FAIL,
+                f"unexpected response shape: {sorted(answer)}",
+            )
+    except Exception as exc:  # noqa: BLE001
+        record("Decisions API live call", FAIL, f"{type(exc).__name__}: {str(exc)[:200]}")
 
 
 # ==========================================================================

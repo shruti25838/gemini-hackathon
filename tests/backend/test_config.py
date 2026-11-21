@@ -18,6 +18,29 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 pytestmark = pytest.mark.backend
 
 
+@pytest.fixture(autouse=True)
+def _isolate_from_the_ambient_environment(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests are about what a .env file produces.
+
+    A process environment variable outranks an env_file, which is correct, but
+    it means a caller that exports MOCK_COMMERCE (scripts/e2e_mock.sh does)
+    would otherwise change the outcome of a test about file handling.
+    """
+    for name in (
+        "MOCK_AI",
+        "MOCK_COMMERCE",
+        "MOCK_ROOM_INPUT",
+        "MOCK_AGORA",
+        "SHOP_MCP",
+        "ETHYNEON_PORT",
+        "APPROVAL_TTL_SECONDS",
+        "SHOPIFY_STORE_DOMAIN",
+        "SHOPIFY_STOREFRONT_TOKEN",
+        "FIT_MIN_WALKWAY_WIDTH_M",
+    ):
+        monkeypatch.delenv(name, raising=False)
+
+
 def test_a_env_copied_from_the_example_still_starts(tmp_path: Path) -> None:
     """The exact thing the README tells a teammate to do."""
     env_file = tmp_path / ".env"

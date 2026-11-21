@@ -8,7 +8,7 @@ requires-python = ">=3.10"
 minversion = "8.0"
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-q --strict-markers --strict-config"
+addopts = "-q --strict-markers --strict-config -m \"not network\""
 asyncio_default_fixture_loop_scope = "function"
 markers = [
     "contracts: contract and fixture checks, required on every pull request",

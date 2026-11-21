@@ -57,16 +57,29 @@ class Settings(BaseSettings):
     mock_agora: bool = Field(default=True, alias="MOCK_AGORA")
 
     # Gemini and ADK
+    google_api_key: Optional[str] = Field(default=None, alias="GOOGLE_API_KEY")
     gemini_api_key: Optional[str] = Field(default=None, alias="GEMINI_API_KEY")
+    gemini_decisions_base_url: str = Field(
+        default="https://generativelanguage.googleapis.com",
+        alias="GEMINI_DECISIONS_BASE_URL",
+    )
+    gemini_decisions_model: str = Field(
+        default="gemini-decision-1", alias="GEMINI_DECISIONS_MODEL"
+    )
+
+    @property
+    def api_key(self) -> Optional[str]:
+        """Either variable works; GOOGLE_API_KEY wins if both are set."""
+        return self.google_api_key or self.gemini_api_key
 
     # Shopify Storefront
     shopify_store_domain: Optional[str] = Field(default=None, alias="SHOPIFY_STORE_DOMAIN")
     shopify_storefront_token: Optional[str] = Field(default=None, alias="SHOPIFY_STOREFRONT_TOKEN")
     shopify_api_version: str = Field(default="2025-10", alias="SHOPIFY_API_VERSION")
 
-    # Order lookup, separate credential, off by default
+    # Order lookup, off by default. Phase 4 adds the read-only credential,
+    # which must be separate from the Storefront token.
     enable_order_lookup: bool = Field(default=False, alias="ENABLE_ORDER_LOOKUP")
-    shopify_admin_api_token: Optional[str] = Field(default=None, alias="SHOPIFY_ADMIN_API_TOKEN")
 
     # Shop MCP, discovery only
     shop_mcp: bool = Field(default=True, alias="SHOP_MCP")
