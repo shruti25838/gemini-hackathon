@@ -197,11 +197,19 @@ def search(room: dict, fixed: list[dict], items: list[dict], preferred_wall: str
     rejected = []
     walls = ([preferred_wall] if preferred_wall else []) + [w for w in WALL_ORDER if w != preferred_wall]
     for item in sorted(items, key=lambda p: -(p.get("w") or 0) * (p.get("d") or 0)):
+        # if the item already has a requested position, try the nearest wall first and stay close to it
+        rx, rz = item.get("x"), item.get("z")
+        has_pose = rx is not None and rz is not None and (rx or rz)
+        if has_pose:
+            dist = {"wall_n": rz, "wall_s": _dim(room, "depth_m") - rz, "wall_w": rx, "wall_e": _dim(room, "width_m") - rx}
+            item_walls = sorted(WALL_ORDER, key=lambda w: dist[w])
+        else:
+            item_walls = walls
         if item.get("w") is None or item.get("d") is None:
             rejected.append({"key": item["key"], "reason": "dimensions unknown"})
             continue
         best = None
-        for wall in walls:
+        for wall in item_walls:
             length = W if wall in ("wall_n", "wall_s") else D
             n = int(length / step)
             for i in range(n + 1):
@@ -210,14 +218,15 @@ def search(room: dict, fixed: list[dict], items: list[dict], preferred_wall: str
                 cand = {**item, "x": round(x, 3), "z": round(z, 3), "rot": rot}
                 rep = check(room, placed + [cand])
                 if rep["status"] in ("fits", "tight"):
-                    score = (0 if wall == walls[0] else 1, 0 if rep["status"] == "fits" else 1,
+                    near = round(((cand["x"] - rx) ** 2 + (cand["z"] - rz) ** 2) ** 0.5, 2) if has_pose else 0
+                    score = (0 if wall == item_walls[0] else 1, near, 0 if rep["status"] == "fits" else 1,
                              -(rep["min_gap_m"] or 0))
                     if best is None or score < best[0]:
                         best = (score, cand)
                 elif len(rejected) < 40:
                     rejected.append({"key": item["key"], "wall": wall, "pos": round(pos, 2),
                                      "reason": rep["collisions"][0]["detail"] if rep["collisions"] else rep["status"]})
-            if best and best[0][0] == 0:
+            if best and best[0][0] == 0 and not has_pose:
                 break
         if best:
             placed.append(best[1])

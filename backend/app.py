@@ -384,10 +384,19 @@ def move(sid: str, body: MoveBody):
                                   "alternative": res["alternative"]["placements"], "report": res["alternative"]["report"],
                                   "style": res["alternative"].get("style_assessment"),
                                   "findings": res["alternative"].get("findings", [])}
-            s.emit("move", "needs_input", f"That spot conflicts: {res['conflicts'][0]['detail']}. "
-                   f"A checked alternative is ready ({res['alternative']['report']['status']}).")
+            s.emit("move", "needs_input", f"That spot conflicts: {_names(s, res['conflicts'][0]['detail'])}. "
+                   f"A checked alternative nearby is ready ({res['alternative']['report']['status'].replace('_', ' ')}).")
     _bg(s, run)
     return {"status": "running"}
+
+
+def _names(s, text: str) -> str:
+    """Shopper-facing text: product titles instead of Shopify IDs, plain words instead of ids."""
+    for vid, o in s.offers.items():
+        text = text.replace(vid, f"the {o.title}")
+    for i in (s.room.existing_items if s.room else []):
+        text = text.replace(i.id, f"your {i.label}")
+    return text.replace("door door1", "the door").replace("door:door1", "the door")
 
 
 @app.post("/api/session/{sid}/alternative/{decision}")

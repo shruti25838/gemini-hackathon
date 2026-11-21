@@ -99,7 +99,6 @@ function buildRoom() {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, p.h || 0.75, d), mat);
     m.position.set(p.x, (p.h || 0.75) / 2, p.z);
     m.userData = { key: p.key, locked: p.locked, w, d };
-    if (p.key === selectedKey || highlight.includes(p.key)) { m.material.emissive = new THREE.Color(p.key === selectedKey ? 0x7c6cf0 : 0xff5ea8); m.material.emissiveIntensity = 0.6; }
     roomGroup.add(m); itemMeshes.set(p.key, m);
     const name = (st.selected.find((o) => o.variant_id === p.variant_id)?.title) || (p.locked ? `${p.category} (yours)` : p.category);
     const lab = label(name, p.locked ? "#9aa3b5" : "#ffffff");
@@ -119,28 +118,66 @@ function buildRoom() {
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 let drag = null;
 function ndc(e) { const b = renderer.domElement.getBoundingClientRect(); mouse.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1); ray.setFromCamera(mouse, camera); }
+function paintSelection() {  // highlight without rebuilding the scene (rebuilding would drop the dragged mesh)
+  for (const [k, m] of itemMeshes) {
+    const on = k === selectedKey || highlight.includes(k);
+    m.material.emissive = new THREE.Color(on ? (k === selectedKey ? 0x7c6cf0 : 0xff5ea8) : 0x000000);
+    m.material.emissiveIntensity = on ? 0.6 : 0;
+  }
+}
+function inPoly(x, z, pts) {
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, zi] = pts[i], [xj, zj] = pts[j];
+    if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function liveConflict(m) {  // instant local preview; the server's solver makes the real decision on drop
+  const { w, d } = m.userData, x0 = m.position.x - w / 2, x1 = m.position.x + w / 2, z0 = m.position.z - d / 2, z1 = m.position.z + d / 2;
+  for (const [k, o] of itemMeshes) {
+    if (o === m) continue;
+    const ow = o.userData.w / 2, od = o.userData.d / 2;
+    if (x0 < o.position.x + ow && x1 > o.position.x - ow && z0 < o.position.z + od && z1 > o.position.z - od) return true;
+  }
+  for (const arc of st.door_arcs || []) {
+    for (let i = 0; i <= 4; i++) for (let j = 0; j <= 4; j++)
+      if (inPoly(x0 + (x1 - x0) * i / 4, z0 + (z1 - z0) * j / 4, arc.points)) return true;
+  }
+  return false;
+}
+let dragStart = null;
 renderer.domElement.addEventListener("pointerdown", (e) => {
   ndc(e);
   const hit = ray.intersectObjects([...itemMeshes.values()])[0];
-  if (hit) { selectedKey = hit.object.userData.key; highlight = []; sceneKey = ""; render(); $("selInfo").textContent = `Selected: ${selectedKey}`; }
-  if (hit && !hit.object.userData.locked) { drag = hit.object; controls.enabled = false; }
+  if (!hit) return;
+  selectedKey = hit.object.userData.key; highlight = []; paintSelection();
+  $("selInfo").textContent = `Selected: ${selectedKey.split("/").pop()}`;
+  if (!hit.object.userData.locked) { drag = hit.object; dragStart = drag.position.clone(); controls.enabled = false; }
 });
 renderer.domElement.addEventListener("pointermove", (e) => {
   if (!drag) return; ndc(e);
-  const p = new THREE.Vector3(); ray.ray.intersectPlane(plane, p);
-  drag.position.x = Math.round(p.x * 20) / 20; drag.position.z = Math.round(p.z * 20) / 20;
+  const p = new THREE.Vector3(); if (!ray.ray.intersectPlane(plane, p)) return;
+  const r = st.room, W = r.width_m.value_m, D = r.depth_m.value_m, hw = drag.userData.w / 2, hd = drag.userData.d / 2;
+  drag.position.x = Math.min(W - hw, Math.max(hw, Math.round(p.x * 20) / 20));  // stay inside the room
+  drag.position.z = Math.min(D - hd, Math.max(hd, Math.round(p.z * 20) / 20));
+  const bad = liveConflict(drag);
+  drag.material.emissive = new THREE.Color(bad ? 0xff3b3b : 0x3ecf8e); drag.material.emissiveIntensity = 0.55;
 });
 addEventListener("pointerup", async () => {
   if (!drag) return;
   const m = drag; drag = null; controls.enabled = true;
+  if (dragStart && m.position.distanceTo(dragStart) < 0.03) { paintSelection(); return; }  // a click, not a move
   const p = st.scene.placements.find((q) => q.key === m.userData.key);
+  $("fitBadge").textContent = "fit: checking…";
   try { await post("/move", { key: p.key, x: m.position.x, z: m.position.z, rot: p.rot }); } catch (err) { flash(err.message); }
+  setTimeout(refresh, 300); setTimeout(refresh, 900);
 });
 
 // ---------- UI rendering ----------
 function render() {
   const key = JSON.stringify([st.room?.room_revision, st.room?.existing_items?.length, st.scene?.rev, st.fit?.status, st.door_arcs?.length, st.scene?.lighting, st.scene?.wall_colors]);
-  if (key !== sceneKey) { sceneKey = key; buildRoom(); }
+  if (key !== sceneKey && !drag) { sceneKey = key; buildRoom(); paintSelection(); }
   const fb = $("fitBadge"); const fs = st.fit?.status || "—";
   fb.textContent = `fit: ${fs}${st.fit?.checked_by?.length ? " · " + st.fit.checked_by.join(" + ") : ""}`; fb.className = `badge ${fs}`;
   renderDims(); renderDoor(); renderProducts(); renderAlt();
@@ -292,7 +329,7 @@ async function sendCommand(fd, spoken = false) {
     if (spoken && r.say && r.status !== "clarify") say(r.say);
     if (r.status === "clarify") {
       clarifyNote = true; pendKey = "__note"; $("clarify").hidden = false; $("clarify").innerHTML = `<b>Quick check:</b> ${r.message}`;
-      highlight = r.candidates || []; sceneKey = ""; render();
+      highlight = r.candidates || []; paintSelection();
       if (spoken) say(r.message);
     }
     if (r.status === "review") showReview(r.review);
@@ -319,9 +356,25 @@ function transcript(who, text) {
   const d = document.createElement("div"); d.className = `tx ${who}`; d.textContent = `${who === "you" ? "You" : "Ethyneon"}: ${text}`;
   $("transcript").prepend(d);
 }
+let bestVoice = null, lastSaid = { text: "", at: 0 }, pendingLine = null;
+function pickVoice() {
+  const vs = speechSynthesis.getVoices().filter((v) => /^en[-_]/i.test(v.lang));
+  const rank = (v) => [/premium/i, /enhanced/i, /natural/i, /neural/i, /^(Ava|Zoe|Allison|Samantha|Karen|Daniel|Serena)/i, /Google US English/i]
+    .findIndex((re) => re.test(v.name));
+  bestVoice = vs.filter((v) => rank(v) >= 0).sort((a, b) => rank(a) - rank(b))[0] || vs.find((v) => v.default) || vs[0] || null;
+}
+if ("speechSynthesis" in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
 function say(text) {
   if (!voice.on || !text || !("speechSynthesis" in window)) return;
-  const u = new SpeechSynthesisUtterance(text); u.rate = 1.05;
+  text = text.replace(/\(.*?\)/g, "").replace(/\s+/g, " ").trim();  // don't read out parentheticals like latencies
+  const now = performance.now();
+  if (text === lastSaid.text && now - lastSaid.at < 10000) return;  // no repeats
+  if (voice.state === "hearing") { pendingLine = text; return; }    // never talk over the shopper
+  lastSaid = { text, at: now };
+  speechSynthesis.cancel();  // only the latest line: no backlog of stale updates
+  const u = new SpeechSynthesisUtterance(text);
+  if (bestVoice) u.voice = bestVoice;
+  u.rate = 1.0; u.pitch = 1.0;
   u.onstart = () => setVoice("speaking");
   u.onend = () => { if (voice.on && voice.state === "speaking") setVoice("listening"); };
   speechSynthesis.speak(u); transcript("ethyneon", text);
@@ -336,8 +389,9 @@ function startSegment() {
   voice.rec.ondataavailable = (e) => e.data.size && voice.chunks.push(e.data);
   voice.rec.onstop = () => {
     const dur = performance.now() - voice.startedAt;
-    if (dur < 450 || !voice.on) { if (voice.on) setVoice("listening"); return; }  // too short: cough, click, echo
+    if (dur < 500 || !voice.on) { if (voice.on) setVoice("listening"); return; }  // too short: cough, click, echo
     setVoice("thinking");
+    if (pendingLine) { const l = pendingLine; pendingLine = null; setTimeout(() => say(l), 50); }
     const fd = new FormData(); fd.append("audio", new Blob(voice.chunks, { type: voice.rec.mimeType }), "voice.webm");
     sendCommand(fd, true).finally(() => { if (voice.on && voice.state === "thinking") setVoice("listening"); });
   };
@@ -350,7 +404,7 @@ function loop() {
   const thr = Math.max(0.012, voice.floor * 3) * (voice.state === "speaking" ? 2.2 : 1);
   if (level > thr) {
     voice.above++; voice.belowSince = 0;
-    if (voice.above === 3 && voice.state !== "hearing") {
+    if (voice.above === 2 && voice.state !== "hearing") {
       if (speechSynthesis.speaking) speechSynthesis.cancel();  // barge-in: the shopper interrupts
       setVoice("hearing"); startSegment();
     }
@@ -358,7 +412,7 @@ function loop() {
     voice.above = 0;
     if (voice.state === "hearing") {
       voice.belowSince ||= now;
-      if (now - voice.belowSince > 800 || now - voice.startedAt > 15000) { voice.belowSince = 0; voice.rec.stop(); }
+      if (now - voice.belowSince > 900 || now - voice.startedAt > 15000) { voice.belowSince = 0; voice.rec.stop(); }
     } else if (voice.state === "listening") voice.floor = voice.floor * 0.98 + level * 0.02;  // track room noise
   }
   voice.raf = requestAnimationFrame(loop);
@@ -384,7 +438,6 @@ const SPOKEN = (e) => {
   if (e.status === "needs_input") return e.detail;
   if (e.step === "commit_scene_preview" && e.status === "ok") return `Done. The layout ${e.data?.fit?.status === "fits" ? "fits" : "is " + (e.data?.fit?.status || "ready").replace(/_/g, " ")}.`;
   if (e.step === "scene" && e.status === "ok") return "Moved. " + (e.detail.includes("fits") ? "It fits." : "");
-  if (e.step === "agent_review" && e.status === "ok") return "The sandbox agents checked it too.";
   if (e.step === "workflow" && e.status === "error") return "Something went wrong. Your last layout is unchanged.";
   return null;
 };
