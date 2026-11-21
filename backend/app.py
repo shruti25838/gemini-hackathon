@@ -184,6 +184,11 @@ async def upload_door(sid: str, file: UploadFile = File(...), opening_id: Option
     s = S(sid)
     if not s.room:
         raise HTTPException(400, "Add a room photo first")
+    if not any(o.type == "door" for o in s.room.openings):
+        msg = ("Your room model has no door, so there is nothing to attach the clip to. "
+               "Upload a room photo that shows the door, then add the clip.")
+        s.emit("door_motion", "needs_input", msg)
+        return {"accepted": False, "problem": msg}
     data = await _read(file)
     part = gemini.video_part(data, file.content_type or "video/mp4", agentic=DOOR_AGENTIC)
     s.emit("door_motion", "started", "Decision 1 checks the clip; Neon scrubs it for hinge and swing")

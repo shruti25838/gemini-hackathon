@@ -43,8 +43,19 @@ addEventListener("resize", resize);
 resize();
 renderer.setAnimationLoop(() => renderer.render(scene, camera));
 
-const LIGHT = { daylight: [0xffffff, 0.6, 1.2], evening: [0xffb36b, 0.35, 0.7], rgb: [0x8a6cff, 0.5, 0.6] };
+const LIGHT = { daylight: [0xffffff, 0.65, 1.2], evening: [0xffd2a1, 0.5, 0.8], rgb: [0xf2f0ff, 0.55, 0.9] };
+const accentLight = new THREE.PointLight(0xffffff, 0, 6);
+scene.add(accentLight);
 const CAT_COLOR = { desk: 0x8d6e63, chair: 0x7c6cf0, monitor: 0x222831, storage: 0xa1887f };
+
+function label(text, color = "#fff") {
+  const c = document.createElement("canvas"), g = c.getContext("2d"), fs = 44;
+  g.font = `600 ${fs}px system-ui`; c.width = Math.min(1024, g.measureText(text).width + 32); c.height = fs + 24;
+  g.font = `600 ${fs}px system-ui`; g.fillStyle = "rgba(15,17,21,0.75)"; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = color; g.textBaseline = "middle"; g.fillText(text, 16, c.height / 2);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false }));
+  sp.scale.set(c.width / c.height * 0.22, 0.22, 1); sp.renderOrder = 10; return sp;
+}
 
 function buildRoom() {
   roomGroup.clear();
@@ -87,11 +98,18 @@ function buildRoom() {
     m.userData = { key: p.key, locked: p.locked, w, d };
     if (p.key === selectedKey || highlight.includes(p.key)) { m.material.emissive = new THREE.Color(p.key === selectedKey ? 0x7c6cf0 : 0xff5ea8); m.material.emissiveIntensity = 0.6; }
     roomGroup.add(m); itemMeshes.set(p.key, m);
+    const name = (st.selected.find((o) => o.variant_id === p.variant_id)?.title) || (p.locked ? `${p.category} (yours)` : p.category);
+    const lab = label(name, p.locked ? "#9aa3b5" : "#ffffff");
+    lab.position.set(p.x, (p.h || 0.75) + 0.25, p.z); roomGroup.add(lab);
   }
   const [lc, ai, si] = LIGHT[sc.lighting || "daylight"];
   ambient.color.set(lc); ambient.intensity = ai; sun.intensity = si;
-  if (sc.accent_hex) ambient.color.set(sc.accent_hex);
-  controls.target.set(W / 2, 0, D / 2);
+  // accent / RGB = a coloured glow near the desk wall, like an LED bar; the room keeps its real colours
+  const glow = sc.accent_hex || (sc.lighting === "rgb" ? "#7c6cf0" : null);
+  accentLight.intensity = glow ? 2.5 : 0;
+  if (glow) { accentLight.color.set(glow); accentLight.position.set(W / 2, 1.1, 0.4); }
+  controls.target.set(W / 2, 0.3, D / 2);
+  if (!buildRoom.framed) { camera.position.set(W * 0.5, Math.max(W, D) * 0.95, D * 1.9); buildRoom.framed = true; }
 }
 
 // drag items on the floor plane; drop -> server move review

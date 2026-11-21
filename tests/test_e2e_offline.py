@@ -171,3 +171,14 @@ def test_preset_room_is_labeled(client):
     r = c.post(f"/api/session/{sid}/preset").json()["room"]
     assert any("PRESET" in n for n in r["notes"])
     assert r["width_m"]["source"] == "default"  # not "confirmed": still needs a real measurement
+
+
+def test_door_clip_on_room_without_door_says_so(client):
+    c = client
+    sid = c.post("/api/session").json()["id"]
+    c.post(f"/api/session/{sid}/preset")
+    from backend import state
+    s = state.get(sid)
+    s.room.openings = [o for o in s.room.openings if o.type != "door"]
+    r = c.post(f"/api/session/{sid}/door", files={"file": ("d.mp4", b"\x00" * 10, "video/mp4")}).json()
+    assert not r["accepted"] and "no door" in r["problem"]
