@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49030220775585",
+ "title": "Ivory Minimalist Abstract Wall Art",
+ "merchant": "foradollarplus-com.myshopify.com",
+ "listing_url": "https://harvestgiftshop.com/products/ivory-minimalist-abstract-wall-art?variant=49030220775585&_gsid=KcnxLDtEAcY7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0584/7456/1697/files/1_9f60b9c0-5e33-490a-8b1f-1c77817a0fcf.jpg?v=1794705289",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0584/7456/1697/files/1_9f60b9c0-5e33-490a-8b1f-1c77817a0fcf.jpg?v=1794705289",
+  "https://cdn.shopify.com/s/files/1/0584/7456/1697/files/4_8a6549f7-ac8a-4190-840d-a801d6c2eb04.jpg?v=1794705288",
+  "https://cdn.shopify.com/s/files/1/0584/7456/1697/files/2_ddd8f806-c89b-4e61-a5ed-c88fe228a763.jpg?v=1794705288",
+  "https://cdn.shopify.com/s/files/1/0584/7456/1697/files/3_33e63439-cb16-4fb9-9664-d988e874eedd.jpg?v=1794705289"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

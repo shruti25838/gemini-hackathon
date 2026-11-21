@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67612616360099",
+ "title": "Cabinfield Red Cedar Rustic Log Sofa",
+ "merchant": "degfurnituredesigns.myshopify.com",
+ "listing_url": "https://degfurnituredesigns.com/products/cabinfield-red-cedar-rustic-log-sofa?variant=67612616360099&_gsid=vsFRkCqw5NMU&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 170000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0610/1263/9907/files/IMG_9242-Photoroom.jpg?v=1791242475",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0610/1263/9907/files/IMG_9242-Photoroom.jpg?v=1791242475",
+  "https://cdn.shopify.com/s/files/1/0610/1263/9907/files/IMG_9243-Photoroom.jpg?v=1791242475",
+  "https://cdn.shopify.com/s/files/1/0610/1263/9907/files/IMG_9244-Photoroom.jpg?v=1791242475",
+  "https://cdn.shopify.com/s/files/1/0610/1263/9907/files/IMG_9245-Photoroom.jpg?v=1791242475"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48616620228914",
+ "title": "Kitchen Island Cart Rolling Storage Trolley with Towel Rack and Drawer",
+ "merchant": "mgdter.myshopify.com",
+ "listing_url": "https://www.glintex.net/products/kitchen-islands-cart9298?variant=48616620228914&_gsid=qdTgahAaLDUp&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 38319,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0715/4309/5602/files/HW55461CF_9.jpg?v=1751294370",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0715/4309/5602/files/HW55461CF_9.jpg?v=1751294370",
+  "https://cdn.shopify.com/s/files/1/0715/4309/5602/files/3_b09f5fd3-0808-478e-8429-609e14abf0ca.jpg?v=1751294370",
+  "https://cdn.shopify.com/s/files/1/0715/4309/5602/files/HW55461CF_3.jpg?v=1751294370",
+  "https://cdn.shopify.com/s/files/1/0715/4309/5602/files/HW55461CF_2.jpg?v=1751294370"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42616793497791",
+ "title": "34\" Ultrawide UWQHD 165Hz 1ms QLED 3440x1440 21:9 Curved Gaming Monitor",
+ "merchant": "trakracer.myshopify.com",
+ "listing_url": "https://trakracer.com/products/34-ultrawide-uwqhd-165hz-1ms-qled-3440x1440-21-9-curved-gaming-monitor?variant=42616793497791&_gsid=rqriXB4meer7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 33915,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0268/8149/1135/files/TR-M34A-1.webp?v=1752105275",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0268/8149/1135/files/TR-M34A-1.webp?v=1752105275",
+  "https://cdn.shopify.com/s/files/1/0268/8149/1135/files/TR-M34A-2.webp?v=1752105275",
+  "https://cdn.shopify.com/s/files/1/0268/8149/1135/files/TR-M34A-3.webp?v=1752105274",
+  "https://cdn.shopify.com/s/files/1/0268/8149/1135/files/TR-M34A-4.webp?v=1752105274"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

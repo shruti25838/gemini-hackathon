@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44331147886850",
+ "title": "3-Tier Industrial Chic TV Stand, Rustic Heavy Duty Storage Shelves Made with Wood and Iron Pipes.",
+ "merchant": "childedempsey.myshopify.com",
+ "listing_url": "https://woodartdeal.com/products/3-tier-industrial-chic-tv-stand-rustic-media-console?variant=44331147886850&_gsid=xTukNeWWPruE&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 35800,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/3-tier-industrial-chic-tv-stand-rustic-media-console-woodartdeal-1.jpg?v=1710129745",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/3-tier-industrial-chic-tv-stand-rustic-media-console-woodartdeal-1.jpg?v=1710129745",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/1_453a5630-a461-434b-85d7-0c42a476c09e.jpg?v=1767924680",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/126c3ccf-ac8e-4969-a596-864320565177.png?v=1767924680",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/1970cf5a-d1e9-4144-aef8-0e6fed5da330.png?v=1767924680"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

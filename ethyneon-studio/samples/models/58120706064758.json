@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/58120706064758",
+ "title": "Chestnut Solid Wood Nordic Coffee Table",
+ "merchant": "d2uych-gv.myshopify.com",
+ "listing_url": "https://www.mercerandgray.com/products/chestnut-solid-wood-nordic-coffee-table?variant=58120706064758&_gsid=3Wo6snFjBr2T&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 35995,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1001/0679/7430/files/Amaya_Lifestyle_03_Coastal-Living-Room_1x1_7436c258-db24-4785-bf9a-09e6ef43e265.jpg?v=1794039439",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1001/0679/7430/files/Amaya_Lifestyle_03_Coastal-Living-Room_1x1_7436c258-db24-4785-bf9a-09e6ef43e265.jpg?v=1794039439",
+  "https://cdn.shopify.com/s/files/1/1001/0679/7430/files/6_566f6265-4680-4725-8a18-1027516c885d.png?v=1781901745",
+  "https://cdn.shopify.com/s/files/1/1001/0679/7430/files/03_right-side-view_a6f140c2-748e-4ffb-9732-6c6eea8c5a55.jpg?v=1785863425",
+  "https://cdn.shopify.com/s/files/1/1001/0679/7430/files/4_70663d91-bf29-464f-b37c-f13ec178ca11.png?v=1781901745"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

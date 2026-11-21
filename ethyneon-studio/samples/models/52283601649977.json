@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52283601649977",
+ "title": "Garvee Queen Size Platform Bed Frame Upholstered Headboard Wooden Slats Beige Easy Assembly Durable Support",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-queen-size-platform-bed-upholstered-beige-phk_36hckkt6?variant=52283601649977&_gsid=qy9h7JTWTXaR&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81vvFFOL4_L_925e0123-4235-4a04-8180-c54815541d57.jpg?v=1776402998",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81vvFFOL4_L_925e0123-4235-4a04-8180-c54815541d57.jpg?v=1776402998",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81hRPMOdF8L_ec583446-7bf2-45b5-b2e8-74b927eadc5d.jpg?v=1776402998",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/71ldAfp2qyL.jpg?v=1776402998",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81Gw1Pr83uL_ac243a67-e2a1-4d50-b6ca-78a1fbdcc2dc.jpg?v=1776402998"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

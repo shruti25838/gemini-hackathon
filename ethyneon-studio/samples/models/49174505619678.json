@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49174505619678",
+ "title": "Gaming Chair Office Chair Desk Chair Massage PU Leather Recliner Racing Chair with Headrest Armrest Footrest Rolling Swivel Task PC Ergonomic Computer Chair for Back Support, Blue",
+ "merchant": "v0bxba-gg.myshopify.com",
+ "listing_url": "https://ktsbargains.com/products/gaming-chair-office-chair-desk-chair-massage-pu-leather-recliner-racing-chair-with-headrest-armrest-footrest-rolling-swivel-task-pc-ergonomic-computer-chair-for-back-support-blue?variant=49174505619678&_gsid=zLoR9DTfY6MX&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9445,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0735/0137/6734/files/622188a72e226b24c67a25883b23b4e6.jpg?v=1791512939",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0735/0137/6734/files/622188a72e226b24c67a25883b23b4e6.jpg?v=1791512939",
+  "https://cdn.shopify.com/s/files/1/0735/0137/6734/files/e5f09345ac6bc9dba16eba695fec8245.jpg?v=1791512939",
+  "https://cdn.shopify.com/s/files/1/0735/0137/6734/files/4882d8e166324b11dbdafc7d925d2d92.jpg?v=1791512939",
+  "https://cdn.shopify.com/s/files/1/0735/0137/6734/files/82487ffa01d1f7b34eb3542fd86ed09a.jpg?v=1791512939"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

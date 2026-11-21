@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/3745616901",
+ "title": "Oslo Walnut Round Side Table",
+ "merchant": "gingko-furniture.myshopify.com",
+ "listing_url": "https://www.gingkofurniture.com/products/oslosidetable?variant=3745616901&_gsid=La5iKbQLjM5d&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0927/6694/products/OsloStoll_6.jpg?v=1546567886",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0927/6694/products/OsloStoll_6.jpg?v=1546567886",
+  "https://cdn.shopify.com/s/files/1/0927/6694/products/OsloStoll_4.jpg?v=1546567886",
+  "https://cdn.shopify.com/s/files/1/0927/6694/products/OsloStoll_2.jpg?v=1546567886",
+  "https://cdn.shopify.com/s/files/1/0927/6694/products/OsloStoll_3.jpg?v=1546567886"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

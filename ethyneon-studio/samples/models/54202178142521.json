@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54202178142521",
+ "title": "Garvee Swivel Bar Stools Set of 2, 26\" Upholstered Counter Height Bar Stools with Back and Walnut Wood Legs, Mid Century Bar Chair Island Stool for Kitchen Counter, Faux Leather Barstools, Green",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-swivel-bar-stools-set-of-phk-38lw47b9?variant=54202178142521&_gsid=SfpCweUcAcPz&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpf8hkceov.jpg?v=1784706981",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpf8hkceov.jpg?v=1784706981",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp4jw71cq4.jpg?v=1784706981",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp6l8ijhtp.jpg?v=1784706980",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpvmw7qyhi.jpg?v=1784706980"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

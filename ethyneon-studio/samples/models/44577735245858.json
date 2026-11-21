@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44577735245858",
+ "title": "SEDETA 67 Inch L Shaped Computer Desk Corner Gaming Desk with LED Light 3 Wood Drawer Large Bookshelf Display Cabinet Pegboard",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-67-inch-l-shaped-computer-desk-with-led-light-display-cabinet-and-pegboard?variant=44577735245858&_gsid=N6NYL3uKqDoa&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 31999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251126-42.jpg?v=1776659482",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251126-42.jpg?v=1776659482",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251126-3_3.jpg?v=1776393517",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260917-5.jpg?v=1789641504",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260917-6.jpg?v=1789641504"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

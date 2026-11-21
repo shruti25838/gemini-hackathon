@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/39930879705150",
+ "title": "Pia 25-31 Inch Industrial Style Counter Height Stool with Adjustable Swivel Seat, Brown, Black By The Urban Port",
+ "merchant": "casagear.myshopify.com",
+ "listing_url": "https://casagear.com/products/pia-25-31-inch-industrial-style-counter-height-stool-with-adjustable-swivel-seat-brown-black-by-the-urban-port?variant=39930879705150&_gsid=okKf5iSyv1Dt&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1463/6454/files/UPT-165867_10_d8b450c0-44e0-4bd6-8376-89aee37cc27e.jpg?v=1768209782",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1463/6454/files/UPT-165867_10_d8b450c0-44e0-4bd6-8376-89aee37cc27e.jpg?v=1768209782",
+  "https://cdn.shopify.com/s/files/1/1463/6454/files/UPT-165867_11.jpg?v=1768209782",
+  "https://cdn.shopify.com/s/files/1/1463/6454/files/UPT-165867_9_497e7e69-4a39-4a7e-bd3f-d51736ef39f1.jpg?v=1768209782",
+  "https://cdn.shopify.com/s/files/1/1463/6454/files/UPT-165867_12.jpg?v=1768209782"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

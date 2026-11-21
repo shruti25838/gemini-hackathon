@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53786775486836",
+ "title": "Magnolia White Rustic Farmhouse 3-Drawer Nightstand",
+ "merchant": "bel-furniture.myshopify.com",
+ "listing_url": "https://belfurniture.com/products/magnolia-white-rustic-farmhouse-3-drawer-nightstand?variant=53786775486836&_gsid=ULwhkpNpH9Z4&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 23109,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/Gemini_Generated_Image_qph.png?v=1794082550",
+ "dimensions_m": {
+  "width": 0.6858,
+  "height": 0.67945,
+  "depth": 0.4572
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/Gemini_Generated_Image_qph.png?v=1794082550",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/BX5604_2_f3cffb94-9282-4e62-8688-3ba388bf7978.png?v=1767130745",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/bx5604_3_16a1c726-6231-4548-bb3b-0ecd663f4638.png?v=1767130745",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/BX5604_d49c7023-c269-4a89-88b2-da2b2fde086f.png?v=1767130387"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

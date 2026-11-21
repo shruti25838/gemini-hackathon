@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50522547617955",
+ "title": "Alamont Gaming Chair Racing Office Ergonomic Computer PC Adjustable Swivel Chair with Flip-up Arms, Blue/Black LeatherSoft",
+ "merchant": "bison-furniture.myshopify.com",
+ "listing_url": "https://www.bisonfurniture.com/products/gaming-chair-racing-office-ergonomic-computer-pc-adjustable-swivel-chair-with-flip-up-arms-blue-black-leathersoft?variant=50522547617955&_gsid=pkhvrAnxSdHT&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14132,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0743/1703/7731/files/10_ch00095blgg_0b617e7c-c8bf-40b2-b8ee-7fb8fada6a31.jpg?v=1793976990",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0743/1703/7731/files/10_ch00095blgg_0b617e7c-c8bf-40b2-b8ee-7fb8fada6a31.jpg?v=1793976990",
+  "https://cdn.shopify.com/s/files/1/0743/1703/7731/files/10_ch00095blgg_sample_5c5b1c85-36ee-48e7-ad41-da9ec5dde293.jpg?v=1793976990",
+  "https://cdn.shopify.com/s/files/1/0743/1703/7731/files/10_ch00095blgg_review_49c61afe-e5fd-4200-8493-675fa6d69067.jpg?v=1793976990",
+  "https://cdn.shopify.com/s/files/1/0743/1703/7731/files/10_ch00095blgg_ls.jpg?v=1793976990"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

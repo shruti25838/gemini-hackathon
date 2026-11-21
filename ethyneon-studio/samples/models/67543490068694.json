@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67543490068694",
+ "title": "Mid Century Style Bookcase Storage Shelving Unit in Walnut Wood Finish",
+ "merchant": "bay-gift-shop.myshopify.com",
+ "listing_url": "https://pantheracouture.com/products/mid-century-style-bookcase-storage-shelving-unit-in-walnut-wood-finish?variant=67543490068694&_gsid=1xqt9PuiCt1N&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 32900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0603/1553/3499/files/MDCBCP22497-2.jpg?v=1791336544",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0603/1553/3499/files/MDCBCP22497-2.jpg?v=1791336544",
+  "https://cdn.shopify.com/s/files/1/0603/1553/3499/files/MDCBCP22497-4.jpg?v=1791336544",
+  "https://cdn.shopify.com/s/files/1/0603/1553/3499/files/MDCBCP22497-3.jpg?v=1791336544",
+  "https://cdn.shopify.com/s/files/1/0603/1553/3499/files/MDCBCP22497-5.jpg?v=1791336544"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47485805986045",
+ "title": "Small Table Lamp, Boho Bedside Lamp with Linen Fabric Shade, Wood Tripod Nightstand Lamp for Nursery, Living Room, Bedroom, Narrow End Table, UL Listed, 14.2 Inch, ON/Off Switch",
+ "merchant": "hbrpem-2r.myshopify.com",
+ "listing_url": "https://lifenestliving.com/products/b0d5m3vk4t?variant=47485805986045&_gsid=TdaWf5i34Aoy&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5098,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0818/2336/7421/files/81CCpthnAoL._AC_SX679.jpg?v=1777707283",
+ "dimensions_m": {
+  "width": 0.204978,
+  "height": 0.182118,
+  "depth": 0.204978
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0818/2336/7421/files/81CCpthnAoL._AC_SX679.jpg?v=1777707283",
+  "https://cdn.shopify.com/s/files/1/0818/2336/7421/files/81gRFlxpAQL._AC_SX679.jpg?v=1777707282",
+  "https://cdn.shopify.com/s/files/1/0818/2336/7421/files/81c6B9MCbWL._AC_SX679.jpg?v=1777707283",
+  "https://cdn.shopify.com/s/files/1/0818/2336/7421/files/81t02MyFyzL._AC_SX679.jpg?v=1777707283"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

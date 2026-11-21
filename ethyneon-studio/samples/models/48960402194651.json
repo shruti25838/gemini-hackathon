@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48960402194651",
+ "title": "71 Inch Fluted Solid Wood TV Stand, Rustic Farmhouse Media Console with Open Storage for Living Room",
+ "merchant": "tresings.myshopify.com",
+ "listing_url": "https://tribesigns.com/products/71-inch-fluted-tv-stand-solid-wood-farmhouse-media-console-living-room?variant=48960402194651&_gsid=F8SfAVp4uo16&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 27999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81D75DcJCzL._AC_SL1500.jpg?v=1783578646",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81D75DcJCzL._AC_SL1500.jpg?v=1783578646",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/a90424a5c073bc2dea4cf238c2937228_b7bd53d0-b878-4c29-9ce0-880a1b22a311.png?v=1783656727",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81SvKEQeKWL._AC_SL1500.jpg?v=1783578646",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81eLtrI5r6L._AC_SL1500.jpg?v=1783578645"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

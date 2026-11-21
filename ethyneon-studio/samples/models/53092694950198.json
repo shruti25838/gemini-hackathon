@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53092694950198",
+ "title": "32 Inch Small Computer Desk with Monitor Stand, Simple Office Desk with Headphone Hook for Small Spaces, Kids Study Writing Table for Bedroom, White",
+ "merchant": "3jtzfw-cr.myshopify.com",
+ "listing_url": "https://hawkins-woodshop.com/products/32-inch-small-computer-desk-with-monitor-stand-simple-office-desk-with-headphone-hook-for-small-spaces-kids-study-writing-table-for-bedroom-white?variant=53092694950198&_gsid=zpzw8s6ndu6T&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9498,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/e4133d0ae40fa1fcf10e5278ad41429b.jpg?v=1760243142",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/e4133d0ae40fa1fcf10e5278ad41429b.jpg?v=1760243142",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/b5cc14152a1f0814a6288df65f2348d4.jpg?v=1760243141",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/6faa00e796eb7edf584ecad1717622d3.jpg?v=1760243141",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/8aa1494963a088c45a2af27fc1a8d01e.jpg?v=1760243141"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

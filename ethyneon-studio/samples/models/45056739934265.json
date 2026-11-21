@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45056739934265",
+ "title": "Beige Upholstered Desk Chair",
+ "merchant": "b3aadf-df.myshopify.com",
+ "listing_url": "https://decorbites.com/products/beige-upholstered-desk-chair?variant=45056739934265&_gsid=94Zvk7EymHDc&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17946,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0689/6418/8217/files/decorbites-armless-wide-desk-chair-modern-office-with-cross-legged-284.webp?v=1779429574",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0689/6418/8217/files/decorbites-armless-wide-desk-chair-modern-office-with-cross-legged-284.webp?v=1779429574",
+  "https://cdn.shopify.com/s/files/1/0689/6418/8217/files/decorbites-armless-wide-desk-chair-modern-office-with-cross-legged-948.webp?v=1779429531",
+  "https://cdn.shopify.com/s/files/1/0689/6418/8217/files/decorbites-armless-wide-desk-chair-modern-office-with-cross-legged-347.webp?v=1779429539",
+  "https://cdn.shopify.com/s/files/1/0689/6418/8217/files/decorbites-armless-wide-desk-chair-modern-office-with-cross-legged-157.webp?v=1779429549"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48305232937012",
+ "title": "Modern Round Side Tables Set of 2 | Solid Wood Walnut Accent Tables",
+ "merchant": "spgnii-fy.myshopify.com",
+ "listing_url": "https://laukingdom.com/products/modern-round-side-tables?variant=48305232937012&_gsid=d95Cp7z5EcUH&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0760/4450/1044/files/RET1-endtables-1.jpg?v=1788847513",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0760/4450/1044/files/RET1-endtables-1.jpg?v=1788847513",
+  "https://cdn.shopify.com/s/files/1/0760/4450/1044/files/RET1-endtables-2.jpg?v=1788847512",
+  "https://cdn.shopify.com/s/files/1/0760/4450/1044/files/RET1-endtables-3.jpg?v=1788847513",
+  "https://cdn.shopify.com/s/files/1/0760/4450/1044/files/RET1-endtables-4.jpg?v=1788847513"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

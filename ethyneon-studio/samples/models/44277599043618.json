@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44277599043618",
+ "title": "SEDETA | 67 Inch Reversible L Shaped Gaming Desk with Led Lights Power Outlet Computer Corner Desk with Drawers Storage Shelves",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-67-inch-reversible-gaming-desk-with-led-lights-power-outlet-and-storage-shelves?variant=44277599043618&_gsid=3cWmgHLb75UB&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 23999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250902-15.jpg?v=1776737309",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250902-15.jpg?v=1776737309",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250902-1_1_afa7c7d2-7111-48bd-b6aa-cd55bfddff35.jpg?v=1776737309",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250902-1_12_43307986-9034-4042-86f0-0b6a742c78c7.jpg?v=1776737309",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250902-16.jpg?v=1776737309"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

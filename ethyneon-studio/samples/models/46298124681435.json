@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46298124681435",
+ "title": "70.8\" Wood Bookshelf, 5-Tier Rustic Bookcase Display Storage Shelving Unit",
+ "merchant": "tresings.myshopify.com",
+ "listing_url": "https://tribesigns.com/products/tribesigns-70-8-inch-5-tier-bookshelf-rustic-wood-bookcase-storage-shelving-unit?variant=46298124681435&_gsid=nfAacgE1ziYp&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/708-wood-bookshelf-5-tier-rustic-bookcase-display-storage-shelving-unit-688862.jpg?v=1724687317",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/708-wood-bookshelf-5-tier-rustic-bookcase-display-storage-shelving-unit-688862.jpg?v=1724687317",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/70.8_Wood_Bookshelf_5-Tier_Rustic_Bookcase_Display_Storage_Shelving_Unit-641335.jpg?v=1751140578",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/708-wood-bookshelf-5-tier-rustic-bookcase-display-storage-shelving-unit-271693.jpg?v=1751090570",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/708-wood-bookshelf-5-tier-rustic-bookcase-display-storage-shelving-unit-705094.jpg?v=1751090570"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

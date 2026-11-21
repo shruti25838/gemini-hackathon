@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46739189661954",
+ "title": "Children's Study Chair, Solid Wood Adjustable Chair, Ergonomic Desk Chair, Study Chair With Footrest",
+ "merchant": "childedempsey.myshopify.com",
+ "listing_url": "https://woodartdeal.com/products/childrens-study-chair-solid-wood-adjustable-chair-ergonomic-desk-chair-study-chair-with-footrest?variant=46739189661954&_gsid=fohSpWkckWm6&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 33600,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/9b3d7ba3d51d4096a4eb17a91d09f1dd.png?v=1758965567",
+ "dimensions_m": {
+  "width": 0.4064,
+  "height": 0.7874,
+  "depth": 0.4826
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/9b3d7ba3d51d4096a4eb17a91d09f1dd.png?v=1758965567",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/d149644e77304b72b1e45de8c43da3f2.png?v=1757572917",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/ded18b50593843068e96c45647eed297.png?v=1759129079",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/55cdc140bfaa4f87a314d40b403e81d9.png?v=1759129079"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

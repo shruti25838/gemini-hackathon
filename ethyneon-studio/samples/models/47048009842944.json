@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47048009842944",
+ "title": "Queen Size Bed Frame 15.5 Inch Solid Wood Platform Bed with Retro Headboard",
+ "merchant": "aidens-corner.myshopify.com",
+ "listing_url": "https://buycade.com/products/queen-size-bed-frame-15-5-inch-solid-wood-platform-bed-with-retro-headboard?variant=47048009842944&_gsid=YSVf45Z44Vmp&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14099,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1648/5089/files/Queen_Size_Bed_Frame_1757936713276846_232971.jpg?v=1783552838",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1648/5089/files/Queen_Size_Bed_Frame_1757936713276846_232971.jpg?v=1783552838",
+  "https://cdn.shopify.com/s/files/1/1648/5089/files/Queen_Size_Bed_Frame_1757936714145086_446421.jpg?v=1783552838",
+  "https://cdn.shopify.com/s/files/1/1648/5089/files/Queen_Size_Bed_Frame_1757936714970475_979646.jpg?v=1783552838",
+  "https://cdn.shopify.com/s/files/1/1648/5089/files/Queen_Size_Bed_Frame_1757936715709606_125396.jpg?v=1783552838"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68010825154864",
+ "title": "Oval Solid Wood Coffee Table with Open Shelf Storage",
+ "merchant": "kbvdty-ut.myshopify.com",
+ "listing_url": "https://graintables.com/products/oval-solid-wood-coffee-table-with-open-shelf-storage?variant=68010825154864&_gsid=vXJjgPARYrca&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 139000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0980/8963/2048/files/7_2_9b7e3060-ba0b-466e-83e0-c12ef6285c39.png?v=1791870284",
+ "dimensions_m": {
+  "width": 0.6096,
+  "height": 0.4064,
+  "depth": 0.4064
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0980/8963/2048/files/7_2_9b7e3060-ba0b-466e-83e0-c12ef6285c39.png?v=1791870284",
+  "https://cdn.shopify.com/s/files/1/0980/8963/2048/files/1_2_bc8b25b4-e3a3-44b9-9f53-01bd7144fc72.png?v=1791870286",
+  "https://cdn.shopify.com/s/files/1/0980/8963/2048/files/6_2_c1c4e502-6489-4b92-b9c4-647210111027.png?v=1791870285",
+  "https://cdn.shopify.com/s/files/1/0980/8963/2048/files/4_2_26e6fda0-e9d1-49af-a8a1-02d9c1104bb2.png?v=1791870285"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

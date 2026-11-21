@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46805518942383",
+ "title": "Height-adjustable Armless Desk Chair with Wheels for Home Office Make Up-Beige",
+ "merchant": "relaxacare.myshopify.com",
+ "listing_url": "https://www.relaxacare.ca/products/height-adjustable-armless-desk-chair-with-wheels-for-home-office-make-up-beige?variant=46805518942383&_gsid=SKF8WPw9zPJJ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12100,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_14876_60d4a789-baa4-4771-a185-a1315fa850a5.jpg?v=1777225242",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_14876_60d4a789-baa4-4771-a185-a1315fa850a5.jpg?v=1777225242",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_14872_edb39f45-fdc9-41f6-816f-e0bdba687900.jpg?v=1777225242",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_14874_9a804890-3df9-45dc-9d51-eecf4f745f64.jpg?v=1777225242",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_14878_13c76810-a956-4972-9f2e-640e14fc8667.jpg?v=1777225242"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41672491532355",
+ "title": "Floor Lamps for Living Room, Dimmable LED Modern Simple Standing Lamp, Tall Lamps for Bedroom Office Dining Room Kitchen, Minimalist Black Pole Lamp with Rotary Switch, 9W LED Bulb Included, Grey",
+ "merchant": "ff7bb0-f7.myshopify.com",
+ "listing_url": "https://www.leafyloom.org/products/b0chmmgzc6?variant=41672491532355&_gsid=aJgW1w2RCBZK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3678,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/61CX0bw2rtL._AC_SX679.jpg?v=1721527757",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/61CX0bw2rtL._AC_SX679.jpg?v=1721527757",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/714IPLnhJVL._AC_SX679.jpg?v=1721527757",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/71cKRCZkEPL._AC_SX679.jpg?v=1721527757",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/710kPopZAVL._AC_SX679.jpg?v=1721527757"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49912176345304",
+ "title": "HASEEB 26\" Swivel Counter Height Bar Stools Set of 2",
+ "merchant": "homycasa20.myshopify.com",
+ "listing_url": "https://homycasa.com/products/haseeb-swivel-counter-height-bar-stools-set-of-2?variant=49912176345304&_gsid=WNe4xGzz22gr&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0508/8375/6183/files/HASEEBCOUNTERGEMINIBEIGEOAKLEGSW2PKlifestyle-01.png?v=1782815188",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0508/8375/6183/files/HASEEBCOUNTERGEMINIBEIGEOAKLEGSW2PKlifestyle-01.png?v=1782815188",
+  "https://cdn.shopify.com/s/files/1/0508/8375/6183/files/Image_HASEEBCOUNTERGEMINIBEIGEOAKLEGSW2PKSilo_31.jpg?v=1782814634",
+  "https://cdn.shopify.com/s/files/1/0508/8375/6183/files/Image_HASEEBCOUNTERGEMINIBEIGEOAKLEGSW2PKSilo_32.jpg?v=1782814634",
+  "https://cdn.shopify.com/s/files/1/0508/8375/6183/files/HASEEBCOUNTERGEMINIBEIGEOAKLEGSW2PKlifestyle-04.png?v=1782815188"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

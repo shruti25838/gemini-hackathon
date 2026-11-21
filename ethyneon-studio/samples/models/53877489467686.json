@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53877489467686",
+ "title": "Farmhouse Executive Desk with Storage and Ample File Drawer, Rustic Large Home",
+ "merchant": "twjuaz-n1.myshopify.com",
+ "listing_url": "https://reewii.com/products/farmhouse-executive-desk-with-storage-and-ample-file-drawer-rustic-large-home-writing-desk-for-bedroom-natural-47-71h?variant=53877489467686&_gsid=gaAtrcj1PkQU&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 39149,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/farmhouse-executive-desk-with-storage-and-ample-file-drawer-home.jpg?v=1791883641",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/farmhouse-executive-desk-with-storage-and-ample-file-drawer-home.jpg?v=1791883641",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/farmhouse-executive-desk-with-storage-and-ample-file-drawer-home-3.jpg?v=1791883641",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/farmhouse-executive-desk-with-storage-and-ample-file-drawer-home-4.jpg?v=1791883640",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/farmhouse-executive-desk-with-storage-and-ample-file-drawer-home-5.jpg?v=1791883641"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

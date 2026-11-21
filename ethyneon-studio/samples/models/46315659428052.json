@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46315659428052",
+ "title": "Clayton dimmable LED modern mid-century floor lamp",
+ "merchant": "artika-usa.myshopify.com",
+ "listing_url": "https://artika.com/products/clayton-dimmable-led-modern-mid-century-floor-lamp?variant=46315659428052&_gsid=Sy2gRZHu3QFf&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 4999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0074/4010/5543/files/97411cbcc031919730288ded7287c383c3dd27bb_Clayton_FLR_CL_BL_3000_300dpi_1.jpg?v=1776344949",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0074/4010/5543/files/97411cbcc031919730288ded7287c383c3dd27bb_Clayton_FLR_CL_BL_3000_300dpi_1.jpg?v=1776344949",
+  "https://cdn.shopify.com/s/files/1/0074/4010/5543/files/98a026335b216486aa295bad7f6973e33cd5d8f7_Clayton_FLR_CL_BL_3000_300dpi_3_fd96cc33-cdcd-40b0-bfa1-4b09a41db14d.jpg?v=1776344949",
+  "https://cdn.shopify.com/s/files/1/0074/4010/5543/files/328659f7afc2d1b1ad40ebceec59322fa1f737fe_Clayton_Black_FLR_CL_BL_3000_300dpi_Extra_Asset_1.jpg?v=1792245764",
+  "https://cdn.shopify.com/s/files/1/0074/4010/5543/files/07bc322440fc0416e8383628556321dc5da14df9_Clayton_Black_FLR_CL_BL_3000_300dpi_Extra_Asset_3.jpg?v=1792245764"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

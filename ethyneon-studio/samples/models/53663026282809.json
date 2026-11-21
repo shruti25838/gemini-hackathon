@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53663026282809",
+ "title": "Garvee Executive Wooden Office Desk 59 Inch \u2013 4 Storage Drawers, Keyboard Tray, Adjustable Shelves, Built-in Charging Station, Farmhouse Computer Desk for Home Office or Studio, White Brown Tabletop",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-executive-wooden-office-desk-59-in-white-brown-phk-37lju75n?variant=53663026282809&_gsid=uEg6Ct1ewpPw&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpqd4e9emz.jpg?v=1782885205",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpqd4e9emz.jpg?v=1782885205",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpbxorzu9q.jpg?v=1782885206",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp2vek026c.jpg?v=1782885205",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpdzs78ux3.jpg?v=1782885205"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

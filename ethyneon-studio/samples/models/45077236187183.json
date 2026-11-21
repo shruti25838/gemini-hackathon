@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45077236187183",
+ "title": "47\" Computer Desk with Keyboard Tray and Storage Drawers, Home Office Workstation Table with Storage Shelves, White",
+ "merchant": "91f95a-70.myshopify.com",
+ "listing_url": "https://totalfindz.com/products/47-computer-desk-with-keyboard-tray-and-storage-drawers-home-office-workstation-table-with-storage-shelves-white?variant=45077236187183&_gsid=s4gDNARCktGY&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/102_83b08beb-3d7f-4aa7-b94a-1cf7aa9e8998.webp?v=1775129175",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/102_83b08beb-3d7f-4aa7-b94a-1cf7aa9e8998.webp?v=1775129175",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/111_200b567c-090b-408b-9c77-6cd9c3debdb2.webp?v=1775129175",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/101_eb62c386-ff35-457b-8739-ff2161105259.webp?v=1775129175",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/103_e673d21c-8eb8-4a34-beb3-8ca93febf334.webp?v=1775129175"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

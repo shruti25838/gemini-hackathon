@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/64248994693489",
+ "title": "27 Inch Curved Gaming Monitor \u2013 QHD 1440P 165Hz Refresh Compueter Monitor 1ms Response DP HDMI VESA Mount 120% sRGB HDR Eye Care Slim Bezel Adjustable Stand",
+ "merchant": "we81aa-1i.myshopify.com",
+ "listing_url": "https://quickcart01.store/products/27-inch-curved-gaming-monitor-qhd-1440p-165hz-refresh-compueter-monitor-1ms-response-dp-hdmi-vesa-mount-120-srgb-hdr-eye-care-slim-bezel-adjustable-stand?variant=64248994693489&_gsid=aLjXJWWHhE2T&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14419,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1004/9532/7601/files/71S95NeUk9L._AC_SX679.jpg?v=1784794010",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1004/9532/7601/files/71S95NeUk9L._AC_SX679.jpg?v=1784794010",
+  "https://cdn.shopify.com/s/files/1/1004/9532/7601/files/81Oiyhe_y6L._AC_SX679.jpg?v=1784794010",
+  "https://cdn.shopify.com/s/files/1/1004/9532/7601/files/71ZwwxoxmeL._AC_SX679.jpg?v=1784794010",
+  "https://cdn.shopify.com/s/files/1/1004/9532/7601/files/71b_fvgTMKL._AC_SX679.jpg?v=1784794010"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

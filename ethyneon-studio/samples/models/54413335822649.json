@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54413335822649",
+ "title": "Garvee TV Stand for 65 Inch TV, Mid Century Modern TV Console with storage, Minimalist Entertainment Center with Large Drawer, for Living Room, Natural Wood",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-tv-stand-with-large-drawer-for-65-inch-natural-mhk-39wsazoa?variant=54413335822649&_gsid=5HCxEAT4Ghcy&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/cimage_941de0374beee56a.jpg?v=1788254813",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/cimage_941de0374beee56a.jpg?v=1788254813",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpajpl5wnu.jpg?v=1788254813",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpx0pu4s2h.jpg?v=1788254813",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpl3uv68uf.jpg?v=1788254813"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

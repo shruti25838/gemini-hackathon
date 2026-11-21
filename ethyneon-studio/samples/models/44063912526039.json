@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44063912526039",
+ "title": "Mid-century 5-shelf Wood Bookcase",
+ "merchant": "oriental-selected-dreamylight.myshopify.com",
+ "listing_url": "https://charmydecor.com/products/mid-century-5-shelf-wood-bookcase?variant=44063912526039&_gsid=wT1EKqznLCqJ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0632/7903/8679/files/Mid-century5-shelfWoodBookcase_3.png?v=1693913560",
+ "dimensions_m": {
+  "width": 0.80264,
+  "height": 1.64592,
+  "depth": 0.30226
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0632/7903/8679/files/Mid-century5-shelfWoodBookcase_3.png?v=1693913560",
+  "https://cdn.shopify.com/s/files/1/0632/7903/8679/files/Mid-century5-shelfWoodBookcase_4.png?v=1693913560",
+  "https://cdn.shopify.com/s/files/1/0632/7903/8679/files/Mid-century5-shelfWoodBookcase_2.png?v=1693913560",
+  "https://cdn.shopify.com/s/files/1/0632/7903/8679/files/Mid-century5-shelfWoodBookcase_5.png?v=1693913560"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

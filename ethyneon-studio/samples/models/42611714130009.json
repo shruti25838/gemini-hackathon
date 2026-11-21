@@ -1,0 +1,31 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42611714130009",
+ "title": "AirFlex2.0 Mesh Gaming Chair with Foot Rest",
+ "merchant": "techni-sport.myshopify.com",
+ "listing_url": "https://technisportusa.com/products/airflex2-0-mesh-gaming-chair?variant=42611714130009&_gsid=KS3oLbF8Vy7S&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 27900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1905/8627/files/Front_view_of_white_airflex_gaming_chair_with_footrest_bd35424b-f658-470e-a6ee-21f4d656b928.jpg",
+ "dimensions_m": {
+  "width": 0.6731,
+  "height": 1.18745,
+  "depth": 0.64135
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/Front_view_of_white_airflex_gaming_chair_with_footrest_bd35424b-f658-470e-a6ee-21f4d656b928.jpg",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/Side_view_of_white_gaming_chair_with_foot_rest.jpg?v=1744212512",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS38C-GRY-3.jpg?v=1744212525",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS38C-GRY-8.jpg?v=1744212528"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

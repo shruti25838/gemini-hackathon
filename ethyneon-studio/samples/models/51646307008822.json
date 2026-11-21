@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51646307008822",
+ "title": "White Desk With Drawers 32 Inch Space Saving Home Office Desk",
+ "merchant": "discount-muebles.myshopify.com",
+ "listing_url": "https://shipitfurniture.com/products/small-white-desk-with-drawers-for-bedroom-32-inch-home-office-computer-desk-with-fabric-storage-drawer-and-bag-study-writing-table-for-small-spaces-white?variant=51646307008822&_gsid=G9PYHKqWqzHp&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/baaee18ca1e4222bc39e5d67e3272f3c.jpg?v=1776431440",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/baaee18ca1e4222bc39e5d67e3272f3c.jpg?v=1776431440",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/22fafa5f0f2d5e7f558a72c020d0c9c8.jpg?v=1776431443",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/04d7f73c253179a7ee8c4700c1c140e0.jpg?v=1776431705",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/591229a1e5ec99b4a635ea218888562c.jpg?v=1776431707"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

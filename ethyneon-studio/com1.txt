@@ -1,0 +1,6 @@
+Built Decision 1 photo guidance and the revisioned room JSON with fixture positions, daylight estimates, preferences, and Shopify object moves that update the 3D view.
+Built and live-verified the Gemini 4 Argon Managed Agent placement planner, including room-aware slot proposals, geometry checks, and targeted replanning that preserves the other placements.
+Refined Room JSON Chat to summarize the room, suggest furnishings by room type, collect preferences, review editable Shopify placements with Argon, and finalize the draft after one confirmation.
+Extended Shopify-to-GLB generation with exact-variant photo priority, Shopify finish options, and a per-part material and color palette.
+Compiled 120 Shopify alternatives across all 30 demo products, with four same-category listings per seed in Markdown and JSON.
+Expanded the same 30 demo products to 250 Shopify alternatives and verified all 250 GLBs in the Design view cache, including three generated from saved Shopify photos.

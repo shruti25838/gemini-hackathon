@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46178535505954",
+ "title": "SEDETA\u00ae 67.9 Inch Gaming Desk with Drawers LED Lights Power Outlet Farmhouse L Shaped Office Desk with Double Hutch Storage Shelves Corner Home Office Desk for Gaming Work and Study",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-67-9-inch-gaming-desk-with-drawers-led-lights-power-outlet?variant=46178535505954&_gsid=vJmd1CokTyfd&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 32999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260803-7.jpg?v=1785738037",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260803-7.jpg?v=1785738037",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260803-6_1.jpg?v=1785726718",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260803-1.jpg?v=1785738037",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260803-3_3.jpg?v=1785725000"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49546776084793",
+ "title": "Garvee U Shaped Desk, 79 Inch Large Corner Office Desk with Monitor Stands, Reversible L Shaped Computer Gaming Desk with Power Outlets & LED Lights,U Shaped Gaming Desk (Deep Pink)",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-jojoka-u-shaped-desk-79-pho-0yte5c0i?variant=49546776084793&_gsid=wumbyTGv8ZkZ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 23399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/41bEzdzlsGL.jpg?v=1720084624",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/41bEzdzlsGL.jpg?v=1720084624",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/51RQYPl8NjL.jpg?v=1720084623",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/41wQAmNHx5L.jpg?v=1766739931",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/51whofNZ3XL.jpg?v=1766739931"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

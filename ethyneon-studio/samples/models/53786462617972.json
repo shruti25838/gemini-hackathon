@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53786462617972",
+ "title": "Magnolia Savanna White 3-Drawer Nightstand | Farmhouse Bedside Table",
+ "merchant": "bel-furniture.myshopify.com",
+ "listing_url": "https://belfurniture.com/products/magnolia-savanna-white-3-drawer-nightstand-farmhouse-bedside-table?variant=53786462617972&_gsid=AyPYqH2bUYGy&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25598,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/Gemini_Generated_Image_oqhxotoqhxotoqhx.png?v=1794082552",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/Gemini_Generated_Image_oqhxotoqhxotoqhx.png?v=1794082552",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKU-BX5603-1422_d3a412cc-400d-4683-93b6-ab6482064a05.png?v=1767124961",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKU-BX5603-1423_253fe8b5-74fa-4361-baa0-bd94843d0f3c.png?v=1767124961",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKU-BX5603-1424_0e8836ef-7112-489c-8de3-1c9a306c275f.png?v=1767124962"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

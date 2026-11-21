@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51131032174839",
+ "title": "Greer Taupe Performance Velvet Upholstered Accent Armchair",
+ "merchant": "ornate-furniture.myshopify.com",
+ "listing_url": "https://ornatehome.com/products/greer-taupe-performance-velvet-upholstered-accent-armchair-modway-eei-7102-tau?variant=51131032174839&_gsid=Xn1uhonJaxS3&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 36275,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0572/8534/5467/files/Greer-Taupe-Performance-Velvet-Upholstered-Accent-Armchair-Ornate-Home-55772262367479.jpg?v=1789210555",
+ "dimensions_m": {
+  "width": 0.6858,
+  "height": 0.7112,
+  "depth": 0.6858
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0572/8534/5467/files/Greer-Taupe-Performance-Velvet-Upholstered-Accent-Armchair-Ornate-Home-55772262367479.jpg?v=1789210555",
+  "https://cdn.shopify.com/s/files/1/0572/8534/5467/files/Greer-Taupe-Performance-Velvet-Upholstered-Accent-Armchair-Ornate-Home-55772262400247.jpg?v=1789210555",
+  "https://cdn.shopify.com/s/files/1/0572/8534/5467/files/Greer-Taupe-Performance-Velvet-Upholstered-Accent-Armchair-Ornate-Home-55772262433015.jpg?v=1789210555",
+  "https://cdn.shopify.com/s/files/1/0572/8534/5467/files/Greer-Taupe-Performance-Velvet-Upholstered-Accent-Armchair-Ornate-Home-55772262465783.jpg?v=1789210555"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

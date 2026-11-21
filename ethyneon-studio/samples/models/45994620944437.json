@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45994620944437",
+ "title": "Olive Green Velvet Modular Sectional Couch with Ottoman, 3-Seat",
+ "merchant": "vnrs4b-1g.myshopify.com",
+ "listing_url": "https://twoseventynine.com/products/sectional-couch-modular-velvet-olive-green-3-seat?variant=45994620944437&_gsid=BcwkuqWvGUG6&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 137500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/279-sectional-couch-modular-velvet-olive-green-3-seat-backdrop.jpg?v=1794881013",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/279-sectional-couch-modular-velvet-olive-green-3-seat-backdrop.jpg?v=1794881013",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/ff8893e70edb4ed996ba280bac8d3da1.jpg?v=1789227637",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/034cb778a8f34e4abb319886b8ccfc42_f19d7d05-ba1c-4248-9640-f4a80c7d166c.jpg?v=1789227637",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/28bad4aa676846e1a67a8e252b54cc07.jpg?v=1789227637"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

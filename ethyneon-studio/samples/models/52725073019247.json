@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52725073019247",
+ "title": "Large 36/41 Inch 2-Tier Wooden Modern Coffee Table With Storage Shelf-Black",
+ "merchant": "rebelstork-us.myshopify.com",
+ "listing_url": "https://fromrebel.com/products/large-3641-inch-2-tier-wooden-modern-coffee-table-with-storage-shelf-black?variant=52725073019247&_gsid=h9u6XKjjH45z&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0606/8109/3269/files/Large_41_Inch_2_tier_Wooden_Modern_Coffee_Table_Black-1.jpg?v=1772652648",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0606/8109/3269/files/Large_41_Inch_2_tier_Wooden_Modern_Coffee_Table_Black-1.jpg?v=1772652648",
+  "https://cdn.shopify.com/s/files/1/0606/8109/3269/files/Large_41_Inch_2_tier_Wooden_Modern_Coffee_Table_Black-2.jpg?v=1772652647",
+  "https://cdn.shopify.com/s/files/1/0606/8109/3269/files/Large_41_Inch_2_tier_Wooden_Modern_Coffee_Table_Black-3.jpg?v=1772652648",
+  "https://cdn.shopify.com/s/files/1/0606/8109/3269/files/Large_41_Inch_2_tier_Wooden_Modern_Coffee_Table_Black-4.jpg?v=1772652648"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

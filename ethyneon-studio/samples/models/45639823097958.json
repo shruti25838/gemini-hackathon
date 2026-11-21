@@ -1,0 +1,31 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45639823097958",
+ "title": "GTRACING Gaming Chair Mesh Computer Chair Ergonomic Recliner with Footrest White",
+ "merchant": "sjvvkk-mq.myshopify.com",
+ "listing_url": "https://esmeraldasfurniture.com/products/gtracing-gaming-chair-mesh-computer-chair-ergonomic-recliner-with-footrest-white?variant=45639823097958&_gsid=H8b1bdqRcnMP&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8052,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0693/7391/9334/files/249-11-7966_1.webp?v=1779281703",
+ "dimensions_m": {
+  "width": 0.659892,
+  "height": 1.240028,
+  "depth": 0.5334
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0693/7391/9334/files/249-11-7966_1.webp?v=1779281703",
+  "https://cdn.shopify.com/s/files/1/0693/7391/9334/files/249-11-7966_2.webp?v=1779281702",
+  "https://cdn.shopify.com/s/files/1/0693/7391/9334/files/249-11-7966_3.webp?v=1779281702",
+  "https://cdn.shopify.com/s/files/1/0693/7391/9334/files/249-11-7966_4.webp?v=1779281703"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

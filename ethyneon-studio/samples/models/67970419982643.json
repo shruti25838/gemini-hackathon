@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67970419982643",
+ "title": "Rustic Log Wood Couch with Curling Arms and Splayed Chunky Legs",
+ "merchant": "srxzde-07.myshopify.com",
+ "listing_url": "https://ashdeco.com/products/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs?variant=67970419982643&_gsid=LEGfPyQSB1qX&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 344100,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0907/5985/6435/files/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs-01-hero.jpg?v=1794404208",
+ "dimensions_m": {
+  "width": 1.1938,
+  "height": 0.762,
+  "depth": 0.4572
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0907/5985/6435/files/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs-01-hero.jpg?v=1794404208",
+  "https://cdn.shopify.com/s/files/1/0907/5985/6435/files/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs-03-chi-tiet.jpg?v=1794404208",
+  "https://cdn.shopify.com/s/files/1/0907/5985/6435/files/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs-06-nghieng.jpg?v=1794404208",
+  "https://cdn.shopify.com/s/files/1/0907/5985/6435/files/rustic-log-wood-couch-with-curling-arms-and-splayed-chunky-legs-02-goc-3-4.jpg?v=1794404208"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

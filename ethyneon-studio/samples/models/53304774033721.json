@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53304774033721",
+ "title": "Garvee Queen Platform Bed Frame with Walnut-Finish Engineered Wood, Reinforced Steel Support, Wood Slats, 900 lb Capacity, No Box Spring Needed, Headboard-Free, Walnut",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-minimalist-wood-platform-bed-frame-phk-33d59f7c?variant=53304774033721&_gsid=pu4djPRAmwu9&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/61KvxZGWj7L._AC.jpg?v=1780639879",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/61KvxZGWj7L._AC.jpg?v=1780639879",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpeaz40bmh.jpg?v=1779154924",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpo925n0jg.jpg?v=1779154926",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmppqwfrpxp.jpg?v=1779154924"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

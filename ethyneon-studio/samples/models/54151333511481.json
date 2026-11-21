@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54151333511481",
+ "title": "Garvee 3-Tier Round Side Table, Compact End Table/Bedside Table with Storage Shelf - Spiral Support, Wood Legs, Modern Vintage Accent Table for Living Room Bedroom Office, Easy Assembly - Maple Wood",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-3-tier-round-side-table-maple-wood-phk-38mr79hj?variant=54151333511481&_gsid=UGBEUSprb8Uo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 4799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpij30rsfq.jpg?v=1784281975",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpij30rsfq.jpg?v=1784281975",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmptrym90vu.jpg?v=1784281974",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp5nl0sshx.jpg?v=1784281975",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpr6isgpnh.jpg?v=1784281975"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

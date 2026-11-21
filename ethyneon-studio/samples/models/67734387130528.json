@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67734387130528",
+ "title": "Haussmann Twist Solid Wood End Table - 20 x 15 x 20 in - Walnut",
+ "merchant": "b02wk5-ne.myshopify.com",
+ "listing_url": "https://kammika.com/products/haussmann-round-twist-solid-wood-end-table-20-x-15-x-20-in-walnut?variant=67734387130528&_gsid=GCAR3oq3JTNX&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 37695,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1061/4879/0432/files/RTET201520__6_e0d6d9ae-86df-440d-bad2-a6e3327b468f.jpg?v=1792396228",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1061/4879/0432/files/RTET201520__6_e0d6d9ae-86df-440d-bad2-a6e3327b468f.jpg?v=1792396228",
+  "https://cdn.shopify.com/s/files/1/1061/4879/0432/files/RTET201520__sizing_b1bb8e55-ef38-470d-850c-89bc86bae7b6.jpg?v=1792396227",
+  "https://cdn.shopify.com/s/files/1/1061/4879/0432/files/IMG_3554_6bd437ea-433d-4887-a160-6e9363f381e8.jpg?v=1792396228",
+  "https://cdn.shopify.com/s/files/1/1061/4879/0432/files/RTET201520__4_f96bb8e2-2b1f-4dd3-a929-f3d16a5f1e96.jpg?v=1792396227"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

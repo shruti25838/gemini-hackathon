@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41425276567661",
+ "title": "Mid Century Modern Style Bookcase Storage Shelving Unit in White Wood Finish",
+ "merchant": "homepacific.myshopify.com",
+ "listing_url": "https://www.homepacific.com/products/mid-century-modern-style-bookcase-storage-shelving-unit-in-white-wood-finish?variant=41425276567661&_gsid=eZzeoiN6q7CD&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19105,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1155/3610/files/WGHBCO65442-2.jpg?v=1714194876",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1155/3610/files/WGHBCO65442-2.jpg?v=1714194876",
+  "https://cdn.shopify.com/s/files/1/1155/3610/files/WGHBCO65442-3_0a2a390d-33cb-4cc8-82f0-388d4f4b6796.jpg?v=1714194876"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

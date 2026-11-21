@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68181693300798",
+ "title": "Black Mesh Gaming Chair with Footrest",
+ "merchant": "3bbkq5-aw.myshopify.com",
+ "listing_url": "https://glomarko.com/products/black-mesh-gaming-chair-footrest?variant=68181693300798&_gsid=iVHZZbhZq9Hy&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25099,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71nrJBLE4jL.jpg?v=1793088472",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71nrJBLE4jL.jpg?v=1793088472",
+  "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71n19_l_EhL.jpg?v=1793088471",
+  "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71bUK2e88QL.jpg?v=1793088471",
+  "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71Qr73uWiHL.jpg?v=1793088471"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

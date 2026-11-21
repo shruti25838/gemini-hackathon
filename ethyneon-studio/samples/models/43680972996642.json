@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43680972996642",
+ "title": "SEDETA\u00ae 62 Inch L Shaped Gaming Desk with Led Lights Computer Desk with Power Outlet Drawers Storage Shelves Pegboard",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-62-inch-l-shaped-gaming-desk-computer-desk-with-led-lights?variant=43680972996642&_gsid=dHBK4fce1x42&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251031-23.jpg?v=1776737561",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251031-23.jpg?v=1776737561",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-62-inch-l-shaped-gaming-desk-with-drawers-and-display-cabinets-26153468035106.jpg?v=1776737561",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251031-24.jpg?v=1776737561",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20251031-20.jpg?v=1776737561"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

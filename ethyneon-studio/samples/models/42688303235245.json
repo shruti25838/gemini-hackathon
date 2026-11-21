@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42688303235245",
+ "title": "Walnut Side Table - C Shaped End Table Solid Wood",
+ "merchant": "upphomestore.myshopify.com",
+ "listing_url": "https://upphomestore.com/products/walnut-side-table-c-shaped?variant=42688303235245&_gsid=4UnwoxXF4238&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 11900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0626/7473/1181/files/walnut-c-shaped-side-table-three-legs-above-view.jpg?v=1791670358",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0626/7473/1181/files/walnut-c-shaped-side-table-three-legs-above-view.jpg?v=1791670358",
+  "https://cdn.shopify.com/s/files/1/0626/7473/1181/files/walnut-c-shaped-side-table-grain-cutout-close-up.jpg?v=1791670375",
+  "https://cdn.shopify.com/s/files/1/0626/7473/1181/files/walnut-c-shaped-end-table-top-vase-close-angle.jpg?v=1791670358",
+  "https://cdn.shopify.com/s/files/1/0626/7473/1181/files/walnut-c-shaped-side-table-armchair-sideboard.jpg?v=1791670375"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

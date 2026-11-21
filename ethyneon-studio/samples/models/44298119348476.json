@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44298119348476",
+ "title": "Art Leon Faux Leather Swivel Desk Chair with Oak Wood Legs, Metal Armrest & Vertical Channel Tufting",
+ "merchant": "us-artleon.myshopify.com",
+ "listing_url": "https://artleon.com/products/art-leon-oak-legs-desk-chair?variant=44298119348476&_gsid=L16ELbtyQqc1&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0645/6636/2364/products/DC020-YELLOWBROWN-SILO-1.jpg?v=1697184035",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/products/DC020-YELLOWBROWN-SILO-1.jpg?v=1697184035",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Faux_Leather_Swivel_Desk_Chair_with_Oak_Wood_Legs_DC020-1-YB-PU_3.jpg?v=1794795576",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/DC020-YELLOWBROWN-RS-1.jpg?v=1787540130",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/DC020-1-YB-DTL.jpg?v=1787540128"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

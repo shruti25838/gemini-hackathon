@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52354518876440",
+ "title": "EDISHINE Slim LED Table Lamp \u2013 Minimalist Desk Light for Clean Home Office Setups",
+ "merchant": "ma90cq-t3.myshopify.com",
+ "listing_url": "https://tavnio.myshopify.com/products/edishine-slim-led-table-lamp-minimalist-desk-light-for-clean-home-office-setups?variant=52354518876440&_gsid=rhTsdoLf2acK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3639,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0992/3634/8184/files/teeb09klw2hg3-var-1.jpg?v=1782964647",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0992/3634/8184/files/teeb09klw2hg3-var-1.jpg?v=1782964647",
+  "https://cdn.shopify.com/s/files/1/0992/3634/8184/files/3-color-temperature-modes-2700k-warm-4500k-neutral-6500k-day.jpg?v=1782964621",
+  "https://cdn.shopify.com/s/files/1/0992/3634/8184/files/stepless-touch-dimming-from-low-ambient-to-550-lumens-max-2.jpg?v=1782964621",
+  "https://cdn.shopify.com/s/files/1/0992/3634/8184/files/touch-control-on-power-cord-with-short-press-color-and-long.jpg?v=1782964621"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

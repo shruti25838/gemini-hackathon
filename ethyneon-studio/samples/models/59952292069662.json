@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/59952292069662",
+ "title": "ADORNEVE Wood Queen Bed Frame with Charging Station and LED Lights Mid Century Bed with Storage Headboard and 2 Cabinets 4 Cubbies",
+ "merchant": "3rpyut-hz.myshopify.com",
+ "listing_url": "https://www.adorneve.com/products/adorneve-wood-queen-bed-frame-with-charging-station-and-led-lights-mid-century-bed-with-storage-headboard-and-2-cabinets-4-cubbies?variant=59952292069662&_gsid=M6dLKxLhPYqo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 28999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/26091502-BrownWalnut_2.jpg?v=1789444843",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/26091502-BrownWalnut_2.jpg?v=1789444843",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/26091502-BrownWalnut_3.jpg?v=1789444843",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/26091502-BrownWalnut_4.jpg?v=1789444843",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/26091502-BrownWalnut_5.jpg?v=1789444843"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

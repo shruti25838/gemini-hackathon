@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53979373699385",
+ "title": "Garvee Spacious Storage Rolling Kitchen Island Cart - 40.4'' Wide Wood Top, Lockable Wheels, Towel & Spice Rack, Portable Cabinet Table for Dining Room or Kitchen - White",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-spacious-storage-rolling-kitchen-island-phk-38bmaxkm?variant=53979373699385&_gsid=th5QGh9G3FCP&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpcmvf_ej9.jpg?v=1784085950",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpcmvf_ej9.jpg?v=1784085950",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp6nys_krm.jpg?v=1784085951",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpgr95n8cd.jpg?v=1784085950",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpu0ict4sn.jpg?v=1784085950"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68228616290548",
+ "title": "SAMSUNG 32\" Odyssey G55C Series QHD 1000R Curved Gaming Monitor, 1ms(MPRT), HDR10, 165Hz, AMD Radeon FreeSync, Eye Care, Glare Free, Sharp Resolution LS32CG550ENXZA",
+ "merchant": "6hzu0g-1h.myshopify.com",
+ "listing_url": "https://www.gizoy.shop/products/samsung-32-odyssey-g55c-series-qhd-1000r-curved-gaming-monitor-1msmprt-hdr10-165hz-amd-radeon-freesync-eye-care-glare-free-sharp-resolution-ls32cg550enxza_67161fe0?variant=68228616290548&_gsid=2tPniu1boSQK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0784/4669/0548/files/06fb53f711f0726ecd3cfa888a17689403d17bb8552a37e1c0a25db8f8a74e0c.jpg?v=1794817603",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0784/4669/0548/files/06fb53f711f0726ecd3cfa888a17689403d17bb8552a37e1c0a25db8f8a74e0c.jpg?v=1794817603",
+  "https://cdn.shopify.com/s/files/1/0784/4669/0548/files/fe9b889586a54671efce63af47e11bdc5a9b0f6031805d9447e8ff587c721ffb.jpg?v=1794817603",
+  "https://cdn.shopify.com/s/files/1/0784/4669/0548/files/0f6ed3d94e18525e18e381ed9aa3c7b65845ed87969a065720b2f192c1179e0a.jpg?v=1794817603",
+  "https://cdn.shopify.com/s/files/1/0784/4669/0548/files/d69dd04eaea95e6c19c77d7d065037a49e6431d44d72c9c55c955fc38589cc80.jpg?v=1794817603"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

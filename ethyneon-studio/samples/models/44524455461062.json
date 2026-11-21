@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44524455461062",
+ "title": "Modern Black Arched Floor Lamp \u2013 65\u201d Dimmable Color Changing LED Standing Light for Living Room, Bedroom, or Stylish Office D\u00e9cor",
+ "merchant": "elevateaparrel.myshopify.com",
+ "listing_url": "https://www.gearelevation.com/products/65-modern-black-arched-floor-lamp-dimmable-color-changing-led1743033680685?variant=44524455461062&_gsid=92Dufs4JTme7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0008/5894/7642/files/905e8918-3cf0-4aa1-800b-49cf1974380d.jpg?v=1743033684",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0008/5894/7642/files/905e8918-3cf0-4aa1-800b-49cf1974380d.jpg?v=1743033684",
+  "https://cdn.shopify.com/s/files/1/0008/5894/7642/files/829e008f-d391-4125-b2c4-8c3ff82d29fb.jpg?v=1743033685",
+  "https://cdn.shopify.com/s/files/1/0008/5894/7642/files/76a40075-2085-47ed-a9fb-f1cfff903f51.jpg?v=1743033684",
+  "https://cdn.shopify.com/s/files/1/0008/5894/7642/files/Mainimage_02_582b4bcb-80b5-4263-9d7b-b2b599aa556c.webp?v=1755622111"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

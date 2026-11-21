@@ -1,0 +1,742 @@
+[
+  {
+    "room": "gaming_room",
+    "object_type": "gaming_chair",
+    "variant_id": "gid://shopify/ProductVariant/42611714130009",
+    "title": "AirFlex2.0 Mesh Gaming Chair with Foot Rest",
+    "price": {
+      "amount": 27900,
+      "currency": "USD"
+    },
+    "merchant": "techni-sport.myshopify.com",
+    "listing_url": "https://technisportusa.com/products/airflex2-0-mesh-gaming-chair?variant=42611714130009&_gsid=KS3oLbF8Vy7S&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/1905/8627/files/Front_view_of_white_airflex_gaming_chair_with_footrest_bd35424b-f658-470e-a6ee-21f4d656b928.jpg",
+    "size_m": {
+      "width": 0.6731,
+      "height": 1.18745,
+      "depth": 0.64135
+    },
+    "typical_size_m": {
+      "width": 0.66,
+      "depth": 0.66,
+      "height": 1.25
+    },
+    "style": null,
+    "model_ready": true
+  },
+  {
+    "object_type": "gaming_chair",
+    "variant_id": "gid://shopify/ProductVariant/37539024502972",
+    "title": "EPIC Racing Ergonomic Gaming Chair ER-100, Blue",
+    "price": {
+      "amount": 8999,
+      "currency": "USD"
+    },
+    "merchant": "epic-racing-usa.myshopify.com",
+    "listing_url": "https://shopepicracing.com/products/blue-gaming-chair?variant=37539024502972&_gsid=pLJ2fphHpyvw&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0504/0170/6172/products/Epic-Racing_Blue_Left.png",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.66,
+      "depth": 0.66,
+      "height": 1.25
+    },
+    "style": null,
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "gaming_chair",
+    "variant_id": "gid://shopify/ProductVariant/40700876161104",
+    "title": "GTPLAYER GT905 Fabric Gaming Chair 300LBS with Retractable Footrest & Pocket Spring Seat",
+    "price": {
+      "amount": 9999,
+      "currency": "USD"
+    },
+    "merchant": "gtracingchair.myshopify.com",
+    "listing_url": "https://gtplayer.com/products/gt905?variant=40700876161104&_gsid=K5JYWVpWZDPT&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/01_f7acc957-a659-4194-9115-9bb6f65bf316.jpg",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.66,
+      "depth": 0.66,
+      "height": 1.25
+    },
+    "style": null,
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "gaming_desk",
+    "variant_id": "gid://shopify/ProductVariant/52255511544084",
+    "title": "47-Inch Modern Computer Gaming Desk with 2 Fabric Storage Drawers | Versatile Home Office Study Table | Sturdy Writing Desk for Work & Education",
+    "price": {
+      "amount": 3399,
+      "currency": "USD"
+    },
+    "merchant": "b0pmk0-rs.myshopify.com",
+    "listing_url": "https://pdhandygo.com/products/47-inch-modern-computer-gaming-desk-with-2-fabric-storage-drawers-versatile-home-office-study-table-sturdy-writing-desk-for-work-education?variant=52255511544084&_gsid=v6ACLhngLgcW&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0999/6314/2420/files/temu_product_img_9_700eab09-ddea-4074-8dbf-349b97f9862a.jpg",
+    "size_m": {
+      "width": 1.1938,
+      "height": 0.7493,
+      "depth": 0.50038
+    },
+    "typical_size_m": {
+      "width": 1.4,
+      "depth": 0.7,
+      "height": 0.75
+    },
+    "style": "minimalist",
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "gaming_desk",
+    "variant_id": "gid://shopify/ProductVariant/52783401664797",
+    "title": "Itaar | 79 Inch Gaming Desk with 2 Fabric Drawers Long Computer Desk with Power Strip LED Lights U Shaped Desk with Storage and Cup Holder",
+    "price": {
+      "amount": 19999,
+      "currency": "USD"
+    },
+    "merchant": "87f1qg-jy.myshopify.com",
+    "listing_url": "https://www.itaarlife.com/products/itaar-79-inch-gaming-desk-with-2-fabric-drawers-long-computer-desk-with-power-strip?variant=52783401664797&_gsid=933VWvpwRTEu&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260819-white.jpg",
+    "size_m": {
+      "width": 1.99898,
+      "height": 0.762,
+      "depth": 0.6985
+    },
+    "typical_size_m": {
+      "width": 1.4,
+      "depth": 0.7,
+      "height": 0.75
+    },
+    "style": "modern",
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "gaming_desk",
+    "variant_id": "gid://shopify/ProductVariant/44878534967330",
+    "title": "SEDETA\u00ae 67 Inch Mid-Century L Shaped Office Computer Desk Corner Desk with Tall Arched Bookshelf 3 Drawers Storage Shelves Sliding Barn Door for Home Office",
+    "price": {
+      "amount": 33999,
+      "currency": "USD"
+    },
+    "merchant": "a77719-4f.myshopify.com",
+    "listing_url": "https://www.sedetalife.com/products/sedeta-67-inch-mid-century-office-computer-desk-with-3-drawers-and-tall-arched-bookshelf?variant=44878534967330&_gsid=pasKVu4grbDN&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260226-21.jpg",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 1.4,
+      "depth": 0.7,
+      "height": 0.75
+    },
+    "style": "mid_century",
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "monitor",
+    "variant_id": "gid://shopify/ProductVariant/44789114404933",
+    "title": "27\" ASUS TUF Gaming VG27AQ 1440p 165Hz IPS",
+    "price": {
+      "amount": 27900,
+      "currency": "USD"
+    },
+    "merchant": "meta-pcs.myshopify.com",
+    "listing_url": "https://www.metapcs.com/products/27-asus-vg27aq-qhd-2560x1440-ips-165hz-g-sync?variant=44789114404933&_gsid=Q4WcZY3bwLXG&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0703/5895/8149/files/rnzytqtxhqoshuut_setting_xxx_0_90_end_1000.png",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.62,
+      "depth": 0.2,
+      "height": 0.5
+    },
+    "style": null,
+    "mount": "desk",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "monitor",
+    "variant_id": "gid://shopify/ProductVariant/41854448238647",
+    "title": "Samsung Odyssey 32\" G5 QHD Curved Monitor 165Hz 1000R 1ms Black LS32CG554ENXZA",
+    "price": {
+      "amount": 14999,
+      "currency": "USD"
+    },
+    "merchant": "quick-ship-electronics.myshopify.com",
+    "listing_url": "https://quickshipelectronics.com/products/samsung-odyssey-32-g5-qhd-curved-monitor-165hz-1000r-1ms-black-ls32cg554enxza?variant=41854448238647&_gsid=wbKYibo3uZMw&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0030/0938/0421/files/4000388464-847__5.png",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.62,
+      "depth": 0.2,
+      "height": 0.5
+    },
+    "style": null,
+    "mount": "desk",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "room": "gaming_room",
+    "object_type": "side_table",
+    "variant_id": "gid://shopify/ProductVariant/50876631908516",
+    "title": "Walnut Square Accent Side Table 21.65\"/23.62\" H Wood 4 Legs Side End Table",
+    "price": {
+      "amount": 20198,
+      "currency": "USD"
+    },
+    "merchant": "clearhalo.myshopify.com",
+    "listing_url": "https://www.clearhalo.com/products/walnut-square-accent-side-table-21-65-23-62-h-wood-4-legs-side-end-table?variant=50876631908516&_gsid=DpHbjQmvY2Yq&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5314291.jpg",
+    "size_m": {
+      "width": 0.4826,
+      "height": 0.6096,
+      "depth": 0.4826
+    },
+    "typical_size_m": {
+      "width": 0.45,
+      "depth": 0.45,
+      "height": 0.6
+    },
+    "style": null,
+    "model_ready": true
+  },
+  {
+    "room": "gaming_room",
+    "object_type": "side_table",
+    "variant_id": "gid://shopify/ProductVariant/46917740036316",
+    "title": "Solid Walnut Side Table for Living Room \u2013 24\" x 12\"",
+    "price": {
+      "amount": 14999,
+      "currency": "USD"
+    },
+    "merchant": "m-w-s-store.myshopify.com",
+    "listing_url": "https://modernwoodstyle.com/products/walnut-side-table-for-living-room-24-12-solid-wood?variant=46917740036316&_gsid=wnEGS7fASF4q&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/walnut-end-table_ad5a72a6-ec97-49ad-8551-0529d6e56965.jpg",
+    "size_m": {
+      "width": 0.6096,
+      "height": 0.6477,
+      "depth": 0.3048
+    },
+    "typical_size_m": {
+      "width": 0.45,
+      "depth": 0.45,
+      "height": 0.6
+    },
+    "style": null,
+    "model_ready": true
+  },
+  {
+    "object_type": "gaming_storage",
+    "variant_id": "gid://shopify/ProductVariant/44895694192697",
+    "title": "Mydepot 6 8 9 Cube Storage Organizer, Open Bookcase, Space-Saving Display Shelf with Removable Back Panels, Easy Assembly",
+    "price": {
+      "amount": 4999,
+      "currency": "USD"
+    },
+    "merchant": "b646a1-7d.myshopify.com",
+    "listing_url": "https://b646a1-7d.myshopify.com/products/atilioo-6-cube-storage-organizer-open-bookcase-space-saving-display-shelf-with-removable-back-panels-easy-assembly?variant=44895694192697&_gsid=8XJYuA3RoXmo&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0674/6442/9625/files/6-Cube_11inShelfOpeningBlack_01.jpg",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.8,
+      "depth": 0.35,
+      "height": 0.9
+    },
+    "style": null,
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "floor_lamp",
+    "variant_id": "gid://shopify/ProductVariant/46931225313468",
+    "title": "Arched Floor Lamp 65 Inch Modern LED Dimmable with Remote 3 Color Temperatures Curved Black Floor Lamp for Bedroom Living Room Ambient Lighting Home Decor",
+    "price": {
+      "amount": 12099,
+      "currency": "USD"
+    },
+    "merchant": "vgyypu-v8.myshopify.com",
+    "listing_url": "https://veranesthome.com/products/arched-floor-lamp-65-inch-modern-led-dimmable-remote-3-color-temperatures-black?variant=46931225313468&_gsid=X7rcmBAwZusc&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0745/9310/8156/files/84c44082-a358-4d96-a4cb-87fb7eac1a08.jpg",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 0.35,
+      "depth": 0.35,
+      "height": 1.65
+    },
+    "style": "modern",
+    "mount": "floor",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "wall_art",
+    "variant_id": "gid://shopify/ProductVariant/42386296340569",
+    "title": "Minimalist Waves Wall Art",
+    "price": {
+      "amount": 6999,
+      "currency": "USD"
+    },
+    "merchant": "tailoredpainting.myshopify.com",
+    "listing_url": "https://tailoredcanvases.com/products/minimalist-waves-wall-art?variant=42386296340569&_gsid=mo1YjHcqLUzh&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_12577608-fe04-448d-91d3-a437bae60d80.jpg",
+    "size_m": {
+      "width": 0.4572,
+      "height": 0.3048,
+      "depth": 0.3048
+    },
+    "typical_size_m": {
+      "width": 0.6,
+      "depth": 0.03,
+      "height": 0.8
+    },
+    "style": "minimalist",
+    "mount": "wall",
+    "room": "gaming_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "desk",
+    "variant_id": "gid://shopify/ProductVariant/46439568900303",
+    "title": "Thirty-Two-Inch White Computer Desk with Scratch-Resistant Top and Reinforced Steel X-Frame",
+    "price": {
+      "amount": 7996,
+      "currency": "USD"
+    },
+    "merchant": "tgtwk9-fu.myshopify.com",
+    "listing_url": "https://pickavorio.shop/products/sweetcrispy-32-inch-small-computer-desk-for-bedroom-modern-white?variant=46439568900303&_gsid=2GqC5u1dpHnA&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0659/2757/7807/files/tgm-bulk-9a53ea3f9c64c79ed0f3fc3af813723d1c2c1c7432e4a3d3c621a27bf8753660.jpg",
+    "size_m": {
+      "width": 0.8128,
+      "height": 0.75438,
+      "depth": 0.500126
+    },
+    "typical_size_m": {
+      "width": 1.2,
+      "depth": 0.6,
+      "height": 0.75
+    },
+    "style": "minimalist",
+    "mount": "floor",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "object_type": "desk",
+    "variant_id": "gid://shopify/ProductVariant/45242689945910",
+    "title": "Soren Oak and White Desk with Cupboard",
+    "price": {
+      "amount": 11999,
+      "currency": "USD"
+    },
+    "merchant": "daalshome.myshopify.com",
+    "listing_url": "https://www.daals.com/products/soren-oak-and-white-desk-with-cupboard?variant=45242689945910&_gsid=sWnj3reaak7Q&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/BSD-022-WHITEOAK_main.jpg",
+    "size_m": {
+      "width": 1.397,
+      "height": 0.762,
+      "depth": 0.6096
+    },
+    "typical_size_m": {
+      "width": 1.2,
+      "depth": 0.6,
+      "height": 0.75
+    },
+    "style": "scandinavian",
+    "mount": "floor",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "object_type": "task_chair",
+    "variant_id": "gid://shopify/ProductVariant/43735793991910",
+    "title": "Amish Penn Yan Farmhouse Solid Wood X-Back Desk Chair",
+    "price": {
+      "amount": 58320,
+      "currency": "USD"
+    },
+    "merchant": "snyders-furniture-8125.myshopify.com",
+    "listing_url": "https://www.snydersfurniture.com/products/amish-penn-yan-farmhouse-solid-wood-x-back-desk-chair?variant=43735793991910&_gsid=kPdArCP7tYf2&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0660/5298/0966/files/amish-penn-yan-farmhouse-solid-wood-x-back-desk-chair-4693765.jpg",
+    "size_m": {
+      "width": 0.4318,
+      "height": 0.9652,
+      "depth": 0.4318
+    },
+    "typical_size_m": {
+      "width": 0.6,
+      "depth": 0.6,
+      "height": 1.1
+    },
+    "style": "farmhouse",
+    "mount": "floor",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "object_type": "task_chair",
+    "variant_id": "gid://shopify/ProductVariant/52574730158417",
+    "title": "Beige Bohemian Desk Chair",
+    "price": {
+      "amount": 11100,
+      "currency": "USD"
+    },
+    "merchant": "1ciab4-9q.myshopify.com",
+    "listing_url": "https://bohoharmony.com/products/beige-bohemian-desk-chair?variant=52574730158417&_gsid=ejJTDauXau1u&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0938/7950/1137/files/Beige_Bohemian_Desk_Chair.jpg",
+    "size_m": {
+      "width": 0.61976,
+      "height": 1.09982,
+      "depth": 0.61976
+    },
+    "typical_size_m": {
+      "width": 0.6,
+      "depth": 0.6,
+      "height": 1.1
+    },
+    "style": "boho",
+    "mount": "floor",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "object_type": "bookcase",
+    "variant_id": "gid://shopify/ProductVariant/45736645951684",
+    "title": "Mid Century Modern Bookcase and Shelving Unit",
+    "price": {
+      "amount": 19105,
+      "currency": "USD"
+    },
+    "merchant": "topsoil-mulch-compost-delivery-soil911-com.myshopify.com",
+    "listing_url": "https://shop.soil911.com/products/mid-century-modern-style-bookcase-storage-shelving-unit-in-white-wood-finish?variant=45736645951684&_gsid=GdgGKehez1Cq&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0621/5971/6548/files/Mid-Century-Modern-Style-Bookcase-Storage-Shelving-Unit-in-White-Wood-Finish-Tampa-Home-Garden-Store-37391608971460.jpg",
+    "size_m": {
+      "width": 0.9906,
+      "height": 1.32715,
+      "depth": 0.3048
+    },
+    "typical_size_m": {
+      "width": 0.8,
+      "depth": 0.3,
+      "height": 1.8
+    },
+    "style": "mid_century",
+    "mount": "floor",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "object_type": "desk_lamp",
+    "variant_id": "gid://shopify/ProductVariant/48637854286036",
+    "title": "VIHOSE Boho Table Lamp with Linen Shade & Wood Base, 16 Color Dimmable LED Bedside Desk Lamp, Bohemian Bedroom Nightlight for Bedroom, Nursery, Cute Bohemian Room Decor Birthday Gift",
+    "price": {
+      "amount": 2308,
+      "currency": "USD"
+    },
+    "merchant": "evbhuk-78.myshopify.com",
+    "listing_url": "https://www.nestoryshop.com/products/b0gt494p3h?variant=48637854286036&_gsid=wpLhaELs3M7B&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0792/9751/1636/files/51dgJsCS2hL._AC_SL1500.jpg",
+    "size_m": {
+      "width": 0.145034,
+      "height": 0.145034,
+      "depth": 0.199898
+    },
+    "typical_size_m": {
+      "width": 0.15,
+      "depth": 0.15,
+      "height": 0.45
+    },
+    "style": "boho",
+    "mount": "desk",
+    "room": "office",
+    "model_ready": false
+  },
+  {
+    "room": "living_room",
+    "object_type": "sofa",
+    "variant_id": "gid://shopify/ProductVariant/51604078494017",
+    "title": "ELISSA 93\" OLIVE-GREEN VELVET SOFA",
+    "price": {
+      "amount": 155900,
+      "currency": "USD"
+    },
+    "merchant": "53e921-d2.myshopify.com",
+    "listing_url": "https://reemo-furniture.com/products/elissa-93-olive-green-velvet-sofa?variant=51604078494017&_gsid=DLQyD3mRxC5c&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-0.jpeg?v=1783639392",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 2.0,
+      "depth": 0.9,
+      "height": 0.8
+    },
+    "style": null,
+    "model_ready": true
+  },
+  {
+    "object_type": "sofa",
+    "variant_id": "gid://shopify/ProductVariant/45143840456857",
+    "title": "Aspen Rustic Log Timber Comfort Sofa",
+    "price": {
+      "amount": 239900,
+      "currency": "USD"
+    },
+    "merchant": "qieptg-a5.myshopify.com",
+    "listing_url": "https://rusticliving.com/products/log-timber-comfort-sofa?variant=45143840456857&_gsid=ikVDwE84rRTf&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Aspen_Rustic_Log_Timber_Comfort_Sofa.jpg",
+    "size_m": {
+      "width": 1.9812,
+      "height": 0.9906,
+      "depth": 1.016
+    },
+    "typical_size_m": {
+      "width": 2.0,
+      "depth": 0.9,
+      "height": 0.8
+    },
+    "style": "farmhouse",
+    "mount": "floor",
+    "room": "living_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "coffee_table",
+    "variant_id": "gid://shopify/ProductVariant/53753336332601",
+    "title": "Garvee Modern 2-Tier Coffee Table with Storage Shelf \u2013 Curved Edges \u2013 Tapered Legs \u2013 Sturdy Centerpiece for Living Room \u2013 Easy Assembly \u2013 21.7 x 39.4 x 17.7 Inches \u2013 Color: Black",
+    "price": {
+      "amount": 8399,
+      "currency": "USD"
+    },
+    "merchant": "mygarvee.myshopify.com",
+    "listing_url": "https://www.garvee.com/products/garvee-modern-2-tier-coffee-table-with-storage-shelf-black-phk-38kaau7h?variant=53753336332601&_gsid=PLqXzCG4Xtsg&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpd608fyd7.jpg",
+    "size_m": {
+      "width": 0.55118,
+      "height": 0.44958,
+      "depth": 1.00076
+    },
+    "typical_size_m": {
+      "width": 1.1,
+      "depth": 0.6,
+      "height": 0.42
+    },
+    "style": "modern",
+    "mount": "floor",
+    "room": "living_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "coffee_table",
+    "variant_id": "gid://shopify/ProductVariant/47166730043650",
+    "title": "Solid Wood Oval Coffee Table, Compact Living Room Coffee Table, Double-Layer Storage Coffee Table, Modern Minimalist Coffee Table",
+    "price": {
+      "amount": 18900,
+      "currency": "USD"
+    },
+    "merchant": "childedempsey.myshopify.com",
+    "listing_url": "https://woodartdeal.com/products/solid-wood-oval-coffee-table-compact-living-room-coffee-table-double-layer-storage-coffee-table-modern-minimalist-coffee-table?variant=47166730043650&_gsid=grRqp2Uzewph&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Compact_Living_Room_Coffee_Table.jpg",
+    "size_m": {
+      "width": 1.016,
+      "height": 0.4572,
+      "depth": 0.5588
+    },
+    "typical_size_m": {
+      "width": 1.1,
+      "depth": 0.6,
+      "height": 0.42
+    },
+    "style": "minimalist",
+    "mount": "floor",
+    "room": "living_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "armchair",
+    "variant_id": "gid://shopify/ProductVariant/51684759568685",
+    "title": "Modway Langford Performance Velvet Accent Armchair",
+    "price": {
+      "amount": 31275,
+      "currency": "USD"
+    },
+    "merchant": "modern-minimal-deco.myshopify.com",
+    "listing_url": "https://www.modernroomdeco.com/products/modway-langford-performance-velvet-accent-armchair?variant=51684759568685&_gsid=rPs5X3x1uz2w&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/1697/5009/files/EEI-7056-ALM-WAL_1.jpg",
+    "size_m": {
+      "width": 0.865124,
+      "height": 0.865124,
+      "depth": 0.71501
+    },
+    "typical_size_m": {
+      "width": 0.75,
+      "depth": 0.8,
+      "height": 0.85
+    },
+    "style": "mid_century",
+    "mount": "floor",
+    "room": "living_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "tv_stand",
+    "variant_id": "gid://shopify/ProductVariant/45579704959023",
+    "title": "63\" Farmhouse TV Stand for Up to 75\" TVs, Media Console Table with 2-Tier Storage Shelves Rustic Brown",
+    "price": {
+      "amount": 11400,
+      "currency": "USD"
+    },
+    "merchant": "91f95a-70.myshopify.com",
+    "listing_url": "https://totalfindz.com/products/63-farmhouse-tv-stand-for-up-to-75-tvs-media-console-table-with-2-tier-storage-shelves-rustic-brown?variant=45579704959023&_gsid=rWP2ohUoLcJ2&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/19964455.jpg",
+    "size_m": {
+      "width": 1.599946,
+      "height": 0.450088,
+      "depth": 0.350012
+    },
+    "typical_size_m": {
+      "width": 1.6,
+      "depth": 0.4,
+      "height": 0.5
+    },
+    "style": "farmhouse",
+    "mount": "floor",
+    "room": "living_room",
+    "model_ready": false
+  },
+  {
+    "object_type": "bed_frame",
+    "variant_id": "gid://shopify/ProductVariant/14958865678378",
+    "title": "Rancho Rustic Bed",
+    "price": {
+      "amount": 99750,
+      "currency": "USD"
+    },
+    "merchant": "rustics-for-less.myshopify.com",
+    "listing_url": "https://www.rusticsforless.com/products/rancho-bed?variant=14958865678378&_gsid=5zekznr6W2F7&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/2182/7287/products/LR_CAM-90_Rancho_QS.jpg",
+    "size_m": {
+      "width": 1.7526,
+      "height": 1.7272,
+      "depth": 2.3368
+    },
+    "typical_size_m": {
+      "width": 1.6,
+      "depth": 2.1,
+      "height": 1.0
+    },
+    "style": "farmhouse",
+    "mount": "floor",
+    "room": "bedroom",
+    "model_ready": false
+  },
+  {
+    "object_type": "bed_frame",
+    "variant_id": "gid://shopify/ProductVariant/53358313636153",
+    "title": "Garvee Queen Wood Platform Bed Frame with Sturdy Slat Support, Noise-Free, Easy Assembly, Reinforced Metal Beam, Low Profile, Modern Bedroom",
+    "price": {
+      "amount": 15699,
+      "currency": "USD"
+    },
+    "merchant": "mygarvee.myshopify.com",
+    "listing_url": "https://www.garvee.com/products/garvee-queen-wood-platform-bed-frame-phk-37tmfku9?variant=53358313636153&_gsid=PnCa4uWKx7in&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpn71wvfeh.jpg",
+    "size_m": null,
+    "typical_size_m": {
+      "width": 1.6,
+      "depth": 2.1,
+      "height": 1.0
+    },
+    "style": "modern",
+    "mount": "floor",
+    "room": "bedroom",
+    "model_ready": false
+  },
+  {
+    "object_type": "nightstand",
+    "variant_id": "gid://shopify/ProductVariant/53804573983092",
+    "title": "Mission Crest Rustic Farmhouse Two-Tone Nightstand \u2013 Weathered Gray/White with Dark Top",
+    "price": {
+      "amount": 23919,
+      "currency": "USD"
+    },
+    "merchant": "bel-furniture.myshopify.com",
+    "listing_url": "https://belfurniture.com/products/mission-crest-rustic-farmhouse-two-tone-nightstand-weathered-gray-white-with-dark-top?variant=53804573983092&_gsid=Rjv7jKPN7bCZ&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKU-BX5701-1397_ad13d352-66b5-48b2-9267-7d4771c06fab.png",
+    "size_m": {
+      "width": 0.7874,
+      "height": 0.762,
+      "depth": 0.4826
+    },
+    "typical_size_m": {
+      "width": 0.45,
+      "depth": 0.4,
+      "height": 0.55
+    },
+    "style": "farmhouse",
+    "mount": "floor",
+    "room": "bedroom",
+    "model_ready": false
+  },
+  {
+    "object_type": "kitchen_island",
+    "variant_id": "gid://shopify/ProductVariant/41637225332803",
+    "title": "HOMCOM Kitchen Island Cart with Rubber Wood Top, Rolling Kitchen Island Table on Wheels with Drawers, Adjustable Shelves, Spice Rack and Towel Rack for Dining Room, Gray",
+    "price": {
+      "amount": 21998,
+      "currency": "USD"
+    },
+    "merchant": "ff7bb0-f7.myshopify.com",
+    "listing_url": "https://www.leafyloom.org/products/b0ckc15k7m?variant=41637225332803&_gsid=FfTgXZNekAFG&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/2026-01-26145824.png",
+    "size_m": {
+      "width": 1.11125,
+      "height": 0.8255,
+      "depth": 0.4445
+    },
+    "typical_size_m": {
+      "width": 0.9,
+      "depth": 0.5,
+      "height": 0.9
+    },
+    "style": "minimalist",
+    "mount": "floor",
+    "room": "kitchen",
+    "model_ready": false
+  },
+  {
+    "object_type": "bar_stool",
+    "variant_id": "gid://shopify/ProductVariant/52367439233184",
+    "title": "26\"H Swivel Wooden Backrest Counter Height Counter Stool - 3193CS",
+    "price": {
+      "amount": 21999,
+      "currency": "USD"
+    },
+    "merchant": "chairus.myshopify.com",
+    "listing_url": "https://www.chairus.com/products/ealson-26h-swivel-counter-height-counter-stool-set-of-2-3193cs?variant=52367439233184&_gsid=DXcFh7RmdaN2&utm_source=shopify&utm_medium=catalog",
+    "image_url": "https://cdn.shopify.com/s/files/1/0429/4829/6864/files/EALSON_26H_Swivel_Counter_Height_Counter_Stool_Set_of_2_-_3193CS-13.jpg",
+    "size_m": {
+      "width": 0.4699,
+      "height": 0.88265,
+      "depth": 0.4699
+    },
+    "typical_size_m": {
+      "width": 0.4,
+      "depth": 0.4,
+      "height": 0.7
+    },
+    "style": "modern",
+    "mount": "floor",
+    "room": "kitchen",
+    "model_ready": false
+  }
+]

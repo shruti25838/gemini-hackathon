@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54204056797497",
+ "title": "Garvee 2-Tier Rectangular Coffee Table, Boho Center Table with Rattan Storage Shelf, Easy Assembly, 39.4\" l",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-2-tier-rectangular-coffee-table-phk-38cnslh4?variant=54204056797497&_gsid=WVQGmxirLC5C&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 11499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpoffjbafm.jpg?v=1784729985",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpoffjbafm.jpg?v=1784729985",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpbm8jem9s.jpg?v=1784729985",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp232yfbsm.jpg?v=1784729986",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpx62pntqc.jpg?v=1784729986"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

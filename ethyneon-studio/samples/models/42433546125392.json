@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42433546125392",
+ "title": "GTPLAYER L-Shaped Gaming Desk with Power Outlets, USB Charging, RGB LED Lights & Storage Shelf",
+ "merchant": "gtracingchair.myshopify.com",
+ "listing_url": "https://gtplayer.com/products/l-shaped-gaming-desk-with-power-outlets-led-lights?variant=42433546125392&_gsid=Tc8hk2oPzXLx&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/DX-QC043-1.webp?v=1780625171",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/DX-QC043-1.webp?v=1780625171",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/DX-QC043-2.jpg?v=1780469131",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/DX-QC043-4.jpg?v=1780469132",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/DX-QC043-5.jpg?v=1780469132"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48188485861630",
+ "title": "Plank+Beam Modern Rounded Rectangular Side Table with Shelf, Solid Wood End Table for Living Room, 25in, Walnut",
+ "merchant": "umagt5-c1.myshopify.com",
+ "listing_url": "https://furnilabhome.com/products/b0ctb14z29?variant=48188485861630&_gsid=GqtJqS5ehd4R&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 30317,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0764/7992/2430/files/718PTRdLw6L._AC_SX679.jpg?v=1778682262",
+ "dimensions_m": {
+  "width": 0.37465,
+  "height": 0.6096,
+  "depth": 0.635
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0764/7992/2430/files/718PTRdLw6L._AC_SX679.jpg?v=1778682262",
+  "https://cdn.shopify.com/s/files/1/0764/7992/2430/files/61EMIwm201L._AC_SX679.jpg?v=1778682262",
+  "https://cdn.shopify.com/s/files/1/0764/7992/2430/files/81yhfZcmlLL._AC_SX679.jpg?v=1778682263",
+  "https://cdn.shopify.com/s/files/1/0764/7992/2430/files/61z5VF2IZLL._AC_SX679.jpg?v=1778682262"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67832061133102",
+ "title": "TY Ergonomic Adjustable Swivel Office Chair, Beige Velvet",
+ "merchant": "0c4cqz-rk.myshopify.com",
+ "listing_url": "https://www.straumhome.com/products/ty-ergonomic-swivel-office-chair-beige-velvet?variant=67832061133102&_gsid=QecgLCbguk8h&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1000/7579/8830/files/4870b93248c84f14a947a57b049d8e34.jpg?v=1792999948",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1000/7579/8830/files/4870b93248c84f14a947a57b049d8e34.jpg?v=1792999948",
+  "https://cdn.shopify.com/s/files/1/1000/7579/8830/files/58822f51f335402c8b01cc2a631a0127.jpg?v=1792999953",
+  "https://cdn.shopify.com/s/files/1/1000/7579/8830/files/a5520f784779445ab1d6b549e7c23a79.jpg?v=1792999953",
+  "https://cdn.shopify.com/s/files/1/1000/7579/8830/files/f381313feae542029bedfd04739344e4.jpg?v=1792999953"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

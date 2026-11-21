@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51604078494017",
+ "title": "ELISSA 93\" OLIVE-GREEN VELVET SOFA",
+ "merchant": "53e921-d2.myshopify.com",
+ "listing_url": "https://reemo-furniture.com/products/elissa-93-olive-green-velvet-sofa?variant=51604078494017&_gsid=DLQyD3mRxC5c&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 155900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-0.jpeg?v=1783639392",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-0.jpeg?v=1783639392",
+  "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-1.jpeg?v=1783639402",
+  "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-3.jpeg?v=1783639425",
+  "https://cdn.shopify.com/s/files/1/0865/2990/0865/files/elissa-93-japandi-olive-green-velvet-sofa-2.jpeg?v=1783639414"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

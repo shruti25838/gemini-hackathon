@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48848971301083",
+ "title": "VASAGLE Round Side Small End Table Accent Nightstand Solid Wood Leg - Walnut",
+ "merchant": "trendinghi.myshopify.com",
+ "listing_url": "https://trendinghi.com/products/vasagle-round-side-small-end-table-accent-nightstand-solid-wood-leg-walnut?variant=48848971301083",
+ "price": {
+  "amount": 1500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2787/4174/files/IMG_7738.jpg",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2787/4174/files/IMG_7738.jpg"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

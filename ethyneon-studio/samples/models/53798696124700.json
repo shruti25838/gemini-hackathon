@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53798696124700",
+ "title": "40/47 Inch Computer Desk with Fabric Storage Drawers, Modern Home Office Table",
+ "merchant": "rtj5ev-je.myshopify.com",
+ "listing_url": "https://2dropme.com/products/40-47-inch-computer-desk-with-fabric-storage-drawers-modern-home-office-table?variant=53798696124700&_gsid=S8FTGRAj1D4h&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0918/0135/4524/files/Black47.png?v=1769432220",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0918/0135/4524/files/Black47.png?v=1769432220",
+  "https://cdn.shopify.com/s/files/1/0918/0135/4524/files/Main_e4a2508c-e29b-4e44-89ea-8acd66f7e3ae.png?v=1769432220",
+  "https://cdn.shopify.com/s/files/1/0918/0135/4524/files/5_1c582ac1-f9b1-4dbb-b632-f381b4e61c19.png?v=1769432220",
+  "https://cdn.shopify.com/s/files/1/0918/0135/4524/files/4_b64c4c8f-9451-469e-86f3-15a41431cb52.png?v=1769432220"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

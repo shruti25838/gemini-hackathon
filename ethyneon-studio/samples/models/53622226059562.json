@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53622226059562",
+ "title": "Samsung 32\" Odyssey G65B Series Curved Gaming Monitor, 240Hz, 1ms, QHD 2560 x 1440, Swivel & Tilt Adjustable Stand, Smart TV Apps, Gaming Hub, Black, with HDMI Cable",
+ "merchant": "njg9fk-ks.myshopify.com",
+ "listing_url": "https://yipiickk.sbs/products/samsung-32-odyssey-g65b-series-curved-gaming-monitor-240hz-1ms-qhd-2560-x-1440-swivel-tilt-adjustable-stand-smart-tv-apps-gaming-hub-black-with-hdmi-cable?variant=53622226059562&_gsid=TUaJzh6Gbwh1&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1014/0899/7674/files/4a21714c070a4b5b06dd9ea272fa618257c7331787f56f6652e0efce13b068e4.jpg?v=1794830903",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1014/0899/7674/files/4a21714c070a4b5b06dd9ea272fa618257c7331787f56f6652e0efce13b068e4.jpg?v=1794830903",
+  "https://cdn.shopify.com/s/files/1/1014/0899/7674/files/b3dd0d516ce40b60de45e7ece46ea4b7b5baf5b6c62cdfc28b018b66a2b50b8b.jpg?v=1794830903",
+  "https://cdn.shopify.com/s/files/1/1014/0899/7674/files/91314cd36ef14d5abdfd52b0356c33af1fcff9c0fb79d119b889541d54c65f75.jpg?v=1794830903",
+  "https://cdn.shopify.com/s/files/1/1014/0899/7674/files/3cf10422fc50026ba7aec0bb94829d22877b2e0e73589a34a2cabeaf20d4d7bb.jpg?v=1794830903"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

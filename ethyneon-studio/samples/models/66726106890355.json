@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/66726106890355",
+ "title": "Rattan Home Office Desk with Drawer, 59\" Farmhouse Boho Executive Desk with Storage Cabinet, Large Computer Writing Table Vanity Desk for Office, Study, Living Room, Light Oak",
+ "merchant": "also-sophia.myshopify.com",
+ "listing_url": "https://alsosophia.com/products/rattan-home-office-desk-with-drawer-59-farmhouse-boho-executive-desk-with-storage-cabinet-large-computer-writing-table-vanity-desk-for-office-study-living-room-light-oak?variant=66726106890355&_gsid=HsPZRcSt7LaS&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17100,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2670/9844/files/5c62845042a2601e87d03ec1b1dd3de5.jpg?v=1790546276",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "mesh",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2670/9844/files/5c62845042a2601e87d03ec1b1dd3de5.jpg?v=1790546276",
+  "https://cdn.shopify.com/s/files/1/2670/9844/files/665eac15f056eb6a50c49f749a0a38a7.jpg?v=1790546276",
+  "https://cdn.shopify.com/s/files/1/2670/9844/files/77c74e1ce533e3882096773997f0efb8.jpg?v=1790546276",
+  "https://cdn.shopify.com/s/files/1/2670/9844/files/1240a012ce3ce449074bc54704b16771.jpg?v=1790546276"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

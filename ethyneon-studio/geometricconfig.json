@@ -1,0 +1,44 @@
+{
+  "revision": 1,
+  "category": "bedroom",
+  "dimensions": {
+    "width":  { "value_m": 4.0, "status": "confirmed" },
+    "depth":  { "value_m": 3.5, "status": "estimated" },
+    "height": { "value_m": 2.6, "status": "estimated" }
+  },
+  "design_brief": {
+    "purpose": "gaming room",
+    "styles": ["cozy"],
+    "colors": ["blue", "walnut"],
+    "priorities": ["Keep the wardrobe", "Leave room for a painting"]
+  },
+  "openings": [
+    { "id": "window_1", "type": "window", "wall": "wall_e", "width_m": 1.6, "height_m": 1.2, "position": { "x": 4.0, "y": 0.9, "z": 1.5 } },
+    { "id": "door_1", "type": "door", "wall": "wall_n", "width_m": 0.85, "height_m": 2.1, "position": { "x": 0.7, "y": 0, "z": 0 } }
+  ],
+  "existing_items": [
+    { "id": "existing_1", "kind": "wardrobe", "fixed": true, "pose": { "position": { "x": 0.35, "y": 0, "z": 2.5 } } },
+    { "id": "existing_2", "kind": "pillar", "fixed": true, "pose": { "position": { "x": 3.6, "y": 0, "z": 3.2 } } }
+  ],
+  "lighting": {
+    "status": "estimated",
+    "method": "window_geometry",
+    "window_area_m2": 1.92,
+    "painting_spots": [
+      { "wall": "wall_n", "position": { "x": 2.0, "y": 1.55, "z": 0 }, "relative_exposure": 0.14734 }
+    ]
+  },
+  "placed_products": [
+    {
+      "id": "product_table",
+      "label": "Walnut side table",
+      "variant_id": "gid://shopify/ProductVariant/50876631908516",
+      "price": { "amount": 20198, "currency": "USD" },
+      "size": { "width": 0.4826, "height": 0.6096, "depth": 0.4826 },
+      "pose": {
+        "position": { "x": 1.2, "y": 0, "z": 1.5 },
+        "rotation": { "yaw": 0, "pitch": 0, "roll": 0 }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52701607526691",
+ "title": "Black High Back Danish Office Chair | Ergonomic Desk Chair",
+ "merchant": "9345cf-82.myshopify.com",
+ "listing_url": "https://fohbuy.com/products/foh-executive-office-chair-leather-back-seat-armless-swivel-desk-chair-with-wood-frame?variant=52701607526691&_gsid=57mrNEAHJUUB&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20995,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0889/6027/0627/files/31o6K15egTL.png?v=1739401704",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0889/6027/0627/files/31o6K15egTL.png?v=1739401704",
+  "https://cdn.shopify.com/s/files/1/0889/6027/0627/files/518mmOijXGL._AC_SL1500.jpg?v=1739400201"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

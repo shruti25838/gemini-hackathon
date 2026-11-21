@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53876271317286",
+ "title": "Office Desk 56\" with 5 Drawers Storage File Cabinet, Black, Boho Rattan Style",
+ "merchant": "twjuaz-n1.myshopify.com",
+ "listing_url": "https://reewii.com/products/office-desk-56-with-5-drawers-storage-file-cabinet-black-56w-x-22d-x-30h-boho-rattan-style-adjustable-shelves-bedroom?variant=53876271317286&_gsid=4VWgAvzuvo3D&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 31899,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/office-desk-56-with-5-drawers-storage-file-cabinet-black-boho-style.jpg?v=1791883637",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/office-desk-56-with-5-drawers-storage-file-cabinet-black-boho-style.jpg?v=1791883637",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/office-desk-56-with-5-drawers-storage-file-cabinet-black-boho-style-2.jpg?v=1791883637",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/office-desk-56-with-5-drawers-storage-file-cabinet-black-boho-style-3.jpg?v=1791883637",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/office-desk-56-with-5-drawers-storage-file-cabinet-black-boho-style-4.jpg?v=1791883637"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

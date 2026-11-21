@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48353238647003",
+ "title": "23.6-Inch Solid Wood End Table with Trapezoid Base, Small Walnut Side Taable for Living Room",
+ "merchant": "tresings.myshopify.com",
+ "listing_url": "https://tribesigns.com/products/solid-wood-end-table-23-6-inch-walnut-side-table?variant=48353238647003&_gsid=2hXkRKXwf3ct&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 10999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/1800x1800_2_d347d7f5-cf13-408f-9172-96b059f464e0.jpg?v=1773295594",
+ "dimensions_m": {
+  "width": 0.299974,
+  "height": 0.599948,
+  "depth": 0.599948
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/1800x1800_2_d347d7f5-cf13-408f-9172-96b059f464e0.jpg?v=1773295594",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/1800x1800_dd02e744-14df-4773-b2cf-619c9d4ef0bc.jpg?v=1773295592",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/1800x1800_1_1097c4b8-c98c-467b-a61d-0b2ed23b611d.jpg?v=1773295593",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/1800x1800_4_2e3682cf-c40c-4ea5-8d03-e2ecb4a3b1ee.jpg?v=1773295593"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

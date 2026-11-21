@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43947819860216",
+ "title": "Modern Walnut waterfall End Table",
+ "merchant": "artisan-born.myshopify.com",
+ "listing_url": "https://artisanborn.com/products/modern-walnut-waterfall-end-table?variant=43947819860216&_gsid=2LJ5hGQzjHW1&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 116790,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0122/2747/7566/files/WalnutConsoleTable-22.jpg?v=1711402367",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0122/2747/7566/files/WalnutConsoleTable-22.jpg?v=1711402367",
+  "https://cdn.shopify.com/s/files/1/0122/2747/7566/files/WalnutWaterfallEndTable-CascadeSeries-1.jpg?v=1711402367",
+  "https://cdn.shopify.com/s/files/1/0122/2747/7566/files/WalnutConsoleTable-27.jpg?v=1711402367",
+  "https://cdn.shopify.com/s/files/1/0122/2747/7566/files/WalnutWaterfallEndTable-CascadeSeries-4.jpg?v=1711402367"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

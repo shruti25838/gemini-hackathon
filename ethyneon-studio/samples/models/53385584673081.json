@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53385584673081",
+ "title": "Garvee Minimalist Fluted Platform Bed Frame \u2013 Wooden, Low Profile, Noise-Free, Easy Assembly, No Box Spring Needed \u2013 California King Size, Charcoal Grey",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-minimalist-fluted-platform-bed-frame-phk-36cca3th?variant=53385584673081&_gsid=ioGQmPvsWG74&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19199,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmps5gh9gbh_c7492ec2-b830-4c1d-9cbd-79d51fad9c9a.jpg?v=1781004313",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmps5gh9gbh_c7492ec2-b830-4c1d-9cbd-79d51fad9c9a.jpg?v=1781004313",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp5mum1r8z_2cb142e7-a4d9-405b-9c10-62efbd88904d.jpg?v=1781004312",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp1jzuz6ma_be7ffe34-27ae-45c3-b351-dd5f5fd01afb.jpg?v=1781004313",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmphg6ippjq_eb0c28b1-07e2-472b-b372-814a234f7cc2.jpg?v=1781004312"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

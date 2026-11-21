@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42923559813367",
+ "title": "Beige Modern Swivel Office Chair Velvet Upholstered Task Chair Adjustable Height",
+ "merchant": "cocochairs.myshopify.com",
+ "listing_url": "https://cocochairs.com/products/modern-pink-velvet-ergonomic-swivel-office-chair-height-adjustable-with-wheels?variant=42923559813367&_gsid=19NL4fMUAZE6&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 92000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/6d1b1c2313b0d92f6a9162f28200c77d_ab280a7f-f591-4bae-9401-c65264b29f11.jpg?v=1723870640",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/6d1b1c2313b0d92f6a9162f28200c77d_ab280a7f-f591-4bae-9401-c65264b29f11.jpg?v=1723870640",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/6a2a73454663454c23e381aada2cf15b_b51d9f2f-dd96-4c1a-935d-614c5a36cb81.jpg?v=1723870646",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/2ffd795130ef72ffbf62891b79ff934d_5f28db1e-c7b8-4e24-9dcd-eab3b9a7e514.jpg?v=1723870657",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/14b8b6e92ee5a669896b19b344c918be_4e39f89c-0740-4177-9fd7-e8b6451181c9.jpg?v=1723870665"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

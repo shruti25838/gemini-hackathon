@@ -1,0 +1,23 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46780521971961",
+ "title": "VASAGLE Kitchen Rolling Island, Mobile Kitchen Cart with Storage on Wheels",
+ "merchant": "zielhome-us.myshopify.com",
+ "listing_url": "https://www.songmics.com/products/vasagle-vasagle-kitchen-rolling-island-mobile-kitchen-cart-with-storage-on-wheels-ukki007?variant=46780521971961&_gsid=5vCUMP1cUy7t&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0662/1764/0185/files/UKKI007Y01-1.jpg?v=1781601128",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0662/1764/0185/files/UKKI007Y01-1.jpg?v=1781601128"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68059879538866",
+ "title": "Modway Ansel Performance Velvet Accent Chair in Taupe - Stain-Resistant Velvet Lounge Chair for Living Room, Bedroom - Corner Reading Chair with Arms and Removable Cushions",
+ "merchant": "fsdqjr-1n.myshopify.com",
+ "listing_url": "https://zuinow.com/products/modway-ansel-performance-velvet-accent-chair-in-taupe-stain-resistant-velvet-lounge-chair-for-living-room-bedroom-corner-reading-chair-with-arms-and-removable-cushions?variant=68059879538866&_gsid=JSJCgtLWaybK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0787/2669/3042/files/a243d784de9c074729906ce38032e1ec46606826333bff281d9da3393eaaa976.jpg?v=1794898806",
+ "dimensions_m": {
+  "width": 1.04902,
+  "height": 0.8509,
+  "depth": 0.81788
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0787/2669/3042/files/a243d784de9c074729906ce38032e1ec46606826333bff281d9da3393eaaa976.jpg?v=1794898806",
+  "https://cdn.shopify.com/s/files/1/0787/2669/3042/files/2f7a2c88bd86239dfb3a9c04f96b56ab16413af2e22f07261a7d5a076d509cc1.jpg?v=1794898806",
+  "https://cdn.shopify.com/s/files/1/0787/2669/3042/files/9316a880b2fbe1fac7c3769347ddabbfc125a6c56d0db1dabed7fa6489760b9b.jpg?v=1794898806",
+  "https://cdn.shopify.com/s/files/1/0787/2669/3042/files/9ce03b6485f34fd6cd8e58da43e5fa88ceb4874557e2e5fc053a013d97d5e520.jpg?v=1794898806"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46689912717484",
+ "title": "Ergonomic Mesh Video Gaming Chair with Footrest Height Adjustable Computer Chair with Lumbar Support High-Back Breathable Reclining Swivel Chair for Adults Home Office &amp Work (Red)",
+ "merchant": "gwagih-p1.myshopify.com",
+ "listing_url": "https://gwagih-p1.myshopify.com/products/ergonomic-mesh-video-gaming-chair-with-footrest-height-adjustable-computer-chair-with-lumbar-support-high-back-breathable-reclining-swivel-chair-for-adults-home-office-amp-work-red?variant=46689912717484&_gsid=g55dSvYTAP24&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 22092,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0755/0605/7388/files/61P0kpnZpLL._AC_SX679.jpg?v=1782984811",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0755/0605/7388/files/61P0kpnZpLL._AC_SX679.jpg?v=1782984811",
+  "https://cdn.shopify.com/s/files/1/0755/0605/7388/files/71wsOes964L._AC_SX679.jpg?v=1782984811",
+  "https://cdn.shopify.com/s/files/1/0755/0605/7388/files/71GeYNoCFUL._AC_SX679.jpg?v=1782984811",
+  "https://cdn.shopify.com/s/files/1/0755/0605/7388/files/71dfFv2ssWL._AC_SX679.jpg?v=1782984811"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

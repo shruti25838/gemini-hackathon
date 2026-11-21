@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/69259278680306",
+ "title": "VASAGLE Farmhouse TV Stand for TVs up to 65 Inches, Entertainment Center with Storage Cabinets and Sliding Barn Doors, Media Console Table for Living Room, Rustic White and Honey Brown ULTV535W01",
+ "merchant": "803wtf-k4.myshopify.com",
+ "listing_url": "https://jiangf.online/products/vasagle-farmhouse-tv-stand-for-tvs-up-to-65-inches-entertainment-center-with-storage-cabinets-and-sliding-barn-doors-media-console-table-for-living-room-rustic-white-and-honey-brown-ultv535w01_42afbe5d?variant=69259278680306&_gsid=NCbJ24ELTG1N&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0844/6951/4482/files/c4d00833f7edabe4c610a9ea3470e0c36d8ed9d831cabfbebc893fef3923eab9.jpg?v=1794225900",
+ "dimensions_m": {
+  "width": 1.4732,
+  "height": 0.6096,
+  "depth": 0.4064
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0844/6951/4482/files/c4d00833f7edabe4c610a9ea3470e0c36d8ed9d831cabfbebc893fef3923eab9.jpg?v=1794225900",
+  "https://cdn.shopify.com/s/files/1/0844/6951/4482/files/ca3798fa6cd306efa6ba54e05827302c25718a967043bcbbc4e88d5eb8388422.jpg?v=1794225899",
+  "https://cdn.shopify.com/s/files/1/0844/6951/4482/files/d2da7e478ac12d619d2d34c492fdfc474badb67ee542e68f81c36aea94b6f11a.jpg?v=1794225900",
+  "https://cdn.shopify.com/s/files/1/0844/6951/4482/files/d3628d743575dab425cd300afc21b5825bc91548cefdc663257a2eaf7229e130.jpg?v=1794225900"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

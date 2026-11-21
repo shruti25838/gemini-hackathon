@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43762553880662",
+ "title": "Mid Century Modern 1-Drawer Nightstand Set",
+ "merchant": "nathan-home.myshopify.com",
+ "listing_url": "https://nathanjames.com/products/mid-century-modern-1-drawer-nightstand-set?variant=43762553880662&_gsid=i4jsrRonJc1H&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14398,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2179/1185/files/32750-2-HERO.jpg?v=1766486307",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/32750-2-HERO.jpg?v=1766486307",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/32750-2-LS.jpg?v=1766486307",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/32750-FEAT_efc9cd9e-b5d1-4610-922b-d9dc003b24f3.jpg?v=1783927852",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/32750-DIM_121889f8-df88-4062-8bed-9a9da30c5d9a.jpg?v=1783927852"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

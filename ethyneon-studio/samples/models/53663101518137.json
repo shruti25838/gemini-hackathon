@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53663101518137",
+ "title": "Garvee Fluted Nightstand Wood Night Stand with 3 Drawers Large Storage MDF Modern Design Metal Handles Bedroom Living Room",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-fluted-nightstand-wood-night-stand-phk-376rx8kw?variant=53663101518137&_gsid=3Df6BgvD21h3&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 11699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3o9m7su5.jpg?v=1783318089",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3o9m7su5.jpg?v=1783318089",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpywhvav8k.jpg?v=1782887886",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpgycjmzjj.jpg?v=1782887887",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpzmwnwdav.jpg?v=1782887887"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

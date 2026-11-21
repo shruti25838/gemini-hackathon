@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49452169134393",
+ "title": "Garvee Platform Queen Bed Frame with Rustic Wood Headboard, Metal Slats Support, 9 Legs, Storage, Noise-Free, Easy Assembly, Industrial Style",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-platform-queen-bed-frame-with-pho-0qlv1fzk?variant=49452169134393&_gsid=YR8W7oguY1yD&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/51KDAK-AXYL.jpg?v=1718931777",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/51KDAK-AXYL.jpg?v=1718931777",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/41LhUlWsiEL.jpg?v=1756886226",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/517Xfm-dEqL.jpg?v=1756886226",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/51_PGPICriL.jpg?v=1756886226"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

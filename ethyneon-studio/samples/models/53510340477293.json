@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53510340477293",
+ "title": "PayLessHere | 32 Inch Computer Desk | White Gold | Office Desk with Metal Frame, Adjustable Feet | Water-Resistant, Scratchproof Surface | Sturdy Writing Table for Home Office or Study | Pack of 1",
+ "merchant": "u9pe4g-vr.myshopify.com",
+ "listing_url": "https://workflowgoods.com/products/b0d9qc1zgb?variant=53510340477293&_gsid=Mb1g3SbkPCp9&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5938,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0948/0814/6285/files/61Z-t3PQH_L._AC_SX679.jpg?v=1783302554",
+ "dimensions_m": {
+  "width": 0.8128,
+  "height": 0.762,
+  "depth": 0.508
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0948/0814/6285/files/61Z-t3PQH_L._AC_SX679.jpg?v=1783302554",
+  "https://cdn.shopify.com/s/files/1/0948/0814/6285/files/71ypHKGw_mL._AC_SX679.jpg?v=1783302554",
+  "https://cdn.shopify.com/s/files/1/0948/0814/6285/files/51YovalAaxL._AC_SX679.jpg?v=1783302554",
+  "https://cdn.shopify.com/s/files/1/0948/0814/6285/files/71YWPqZqP8L._AC_SX679.jpg?v=1783302554"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

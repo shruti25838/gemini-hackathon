@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45529240338653",
+ "title": "Sofanext 61 inch L Shaped Gaming Desk with 4 Drawers & Power Outlets, Home Office Desk with Adjustable Heights Monitor Stand & Keyboard Tray, Computer Desk with LED Light, Pure Black",
+ "merchant": "440bcd-62.myshopify.com",
+ "listing_url": "https://sofanext.com/products/61-inch-l-shaped-gaming-desk-with-led-lights-power-outlets-corner-desk-with-drawers-keyboard-tray-computer-desk-with-adjustable-heights-monitor-stand-gaming-table-with-hooks-pure-black?variant=45529240338653&_gsid=H74euot4sLpC&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0690/9565/3597/files/T1_9fb87baa-47a0-41de-9c1c-a7338e96dd10.jpg?v=1721964094",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0690/9565/3597/files/T1_9fb87baa-47a0-41de-9c1c-a7338e96dd10.jpg?v=1721964094",
+  "https://cdn.shopify.com/s/files/1/0690/9565/3597/files/T8_d14ae0fc-fffe-4bb5-8491-250b261b0d57.jpg?v=1721964094",
+  "https://cdn.shopify.com/s/files/1/0690/9565/3597/files/T5_835320b3-e57a-46ca-9cbb-ea994040f39f.jpg?v=1721964094",
+  "https://cdn.shopify.com/s/files/1/0690/9565/3597/files/T6_458df439-0fbb-4ee8-82ba-ad41be6c3ae2.jpg?v=1721964094"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

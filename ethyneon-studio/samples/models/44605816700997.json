@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44605816700997",
+ "title": "LVB Black Coffee Table, Wood Metal 2 Tier Center Tables with Storage Shelf, Modern Rectangular Concrete Tea Table for Living Room, Wooden Middle Cocktail Table for Office Bedroom, 47 inch, Black Oak",
+ "merchant": "nfnwam-ty.myshopify.com",
+ "listing_url": "https://casaedita.com/products/b0cth26c9t?variant=44605816700997&_gsid=SzAk489x7EKC&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21694,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0661/3893/1269/files/718iJLVf2WL._AC_SX679.jpg?v=1770130905",
+ "dimensions_m": {
+  "width": 1.19888,
+  "height": 0.44958,
+  "depth": 0.59944
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "mesh",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0661/3893/1269/files/718iJLVf2WL._AC_SX679.jpg?v=1770130905",
+  "https://cdn.shopify.com/s/files/1/0661/3893/1269/files/61AsbGxck1L._AC_SX679.jpg?v=1770130905",
+  "https://cdn.shopify.com/s/files/1/0661/3893/1269/files/81ZGjQSj9ML._AC_SX679.jpg?v=1770130906",
+  "https://cdn.shopify.com/s/files/1/0661/3893/1269/files/71X3Mz4JGDL._AC_SX679.jpg?v=1770130905"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

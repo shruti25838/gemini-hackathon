@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48122748567867",
+ "title": "27\" Dell 1440p Qhd IPS 165Hz 1ms FreeSync Gaming Monitor",
+ "merchant": "pzdea.myshopify.com",
+ "listing_url": "https://www.pzdeals.com/products/27-dell-1440p-qhd-ips-165hz-1ms-freesync-gaming-monitor?variant=48122748567867&_gsid=ULFDh8tvCtZw&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1504/4320/files/UntitilesDesign-2024-04-02T162616.196.png?v=1712100394",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1504/4320/files/UntitilesDesign-2024-04-02T162616.196.png?v=1712100394"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

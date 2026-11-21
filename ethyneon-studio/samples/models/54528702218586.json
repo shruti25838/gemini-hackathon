@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54528702218586",
+ "title": "Coleto Office Desk Chair",
+ "merchant": "1a59c3-2.myshopify.com",
+ "listing_url": "https://memoriex.co.uk/products/coleto-rolling-desk-chair?variant=54528702218586&_gsid=UTczc29pmysU&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14100,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0776/1782/4090/files/ColetoOfficeChair_2.jpg?v=1786113029",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0776/1782/4090/files/ColetoOfficeChair_2.jpg?v=1786113029",
+  "https://cdn.shopify.com/s/files/1/0776/1782/4090/files/ColetoOfficeChair_3.jpg?v=1786113029",
+  "https://cdn.shopify.com/s/files/1/0776/1782/4090/files/ColetoOfficeChair_4.jpg?v=1786113028",
+  "https://cdn.shopify.com/s/files/1/0776/1782/4090/files/ColetoOfficeChair_5.jpg?v=1786113029"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

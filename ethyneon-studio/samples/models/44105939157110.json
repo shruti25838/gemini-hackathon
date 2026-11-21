@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44105939157110",
+ "title": "Chenille Swivel Office Chair, with Convertible Multi-Position Armrests, Comfy Double Cushioned Desk Chair for Home, Study, Vanity & Living Room, Beige",
+ "merchant": "prp1fn-iy.myshopify.com",
+ "listing_url": "https://kdrking.com/products/chenille-swivel-office-chair-with-convertible-multi-position-armrests-comfy-double-cushioned-desk-chair-for-home-study-vanity-living-room-beige?variant=44105939157110&_gsid=HjqKNVxA4NDR&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15979,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0694/7939/9542/files/28_d046d845-4ce5-456c-8748-bd6efd22b5d0.jpg?v=1788322801",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0694/7939/9542/files/28_d046d845-4ce5-456c-8748-bd6efd22b5d0.jpg?v=1788322801",
+  "https://cdn.shopify.com/s/files/1/0694/7939/9542/files/29_8f9680c5-c90f-4ff6-9837-30f3a403786f.jpg?v=1788322801",
+  "https://cdn.shopify.com/s/files/1/0694/7939/9542/files/30_341f2736-d283-4c7d-a0a1-dcc2f9c2e170.jpg?v=1788322801"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

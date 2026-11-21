@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45994730979381",
+ "title": "Olive Green Velvet 3-Seat Couch",
+ "merchant": "vnrs4b-1g.myshopify.com",
+ "listing_url": "https://twoseventynine.com/products/couch-3-seat-velvet-olive-green?variant=45994730979381&_gsid=ZAj3rakkyheg&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 116000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/279-couch-3-seat-velvet-olive-green-backdrop.jpg?v=1794882745",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/279-couch-3-seat-velvet-olive-green-backdrop.jpg?v=1794882745",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/98320900c47843fa8da1fff739ad62e6.jpg?v=1789233121",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/8f2d4ef5c02f4daea64c399fa286398f.jpg?v=1789233121",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/245f7bf5cc5442078df6bcb3c51365ad.jpg?v=1789233120"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

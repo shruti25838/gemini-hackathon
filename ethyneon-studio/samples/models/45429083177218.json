@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45429083177218",
+ "title": "Scandinavian-Inspired Solid Wood Bookshelf, Storage Shelving Unit",
+ "merchant": "childedempsey.myshopify.com",
+ "listing_url": "https://woodartdeal.com/products/scandinavian-inspired-solid-wood-bookshelf-storage-unit?variant=45429083177218&_gsid=zbBp21qYNUtG&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 39500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/3_Tiers_Storage_Shelving_1.jpg?v=1773988221",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/3_Tiers_Storage_Shelving_1.jpg?v=1773988221",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Details_of_Wood_Storage_Standing_Shelf.png?v=1773988221",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Industrial_Storage_Shelving_1.jpg?v=1773988221",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Industrial_Storage_Shelving_2.jpg?v=1773988221"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

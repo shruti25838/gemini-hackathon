@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42778863796286",
+ "title": "Ergonomic Mesh Gaming Chair with Footrest",
+ "merchant": "3bbkq5-aw.myshopify.com",
+ "listing_url": "https://glomarko.com/products/ergonomic-mesh-gaming-chair-with-footrest?variant=42778863796286",
+ "price": {
+  "amount": 32299,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71j2XO23nwL.jpg",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0630/3498/2462/files/71j2XO23nwL.jpg"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

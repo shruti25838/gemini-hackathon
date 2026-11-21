@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51590271598902",
+ "title": "Six Cube Storage Organizer White Oak 47 Inch Bookshelf",
+ "merchant": "discount-muebles.myshopify.com",
+ "listing_url": "https://shipitfurniture.com/products/6-cube-storage-organizer-with-shelf-long-wood-and-metal-cubby-bookcase-industrial-horizontal-bookshelf-white-oak-47-inch?variant=51590271598902&_gsid=E6D8MJuwL9Cc&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20199,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/859006e9f0df4849f481d416228d16d0.jpg?v=1776412053",
+ "dimensions_m": {
+  "width": 1.199896,
+  "height": 0.765048,
+  "depth": 0.344932
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/859006e9f0df4849f481d416228d16d0.jpg?v=1776412053",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/a197f668a4677020c41685e6912d1e59.jpg?v=1776412056",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/a5b4198c66461d088798da05031cb184.jpg?v=1776412058",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/163cd07e56a23f198da24d17b80d3715.jpg?v=1776412092"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

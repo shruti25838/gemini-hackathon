@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41544853356586",
+ "title": "Hacienda Rustic Bed Low footboard | Solid Pine Wood",
+ "merchant": "rustics-for-less.myshopify.com",
+ "listing_url": "https://www.rusticsforless.com/products/hacienda-bed-low-footboard?variant=41544853356586&_gsid=stZjrtr5xx4d&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 84700,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2182/7287/files/16.png?v=1752182243",
+ "dimensions_m": {
+  "width": 2.1082,
+  "height": 1.7272,
+  "depth": 0.508
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/16.png?v=1752182243",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_74.png?v=1776551090",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_73_a27d4ba0-9d84-438c-a325-06ef2a9cf4ea.png?v=1776551090",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_9_a7628248-88b8-4732-b08b-f9f3653bab20.png?v=1776551090"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

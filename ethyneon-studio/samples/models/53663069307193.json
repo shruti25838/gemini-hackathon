@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53663069307193",
+ "title": "Garvee Executive Desk with Drawer and Power Outlet, 61\" Large Farmhouse Computer Desk Home Office Wood Executive Desk with Adjustable Shelf for Work Study Writing,White and Black",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-61-in-executive-desk-with-drawer-and-power-outlet-white-black-phk-37e4bywn?variant=53663069307193&_gsid=UMytfz7yAmbQ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 37299,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/71noL6B3Z9L._AC_SL1500.jpg?v=1783306459",
+ "dimensions_m": {
+  "width": 1.5494,
+  "height": 0.8509,
+  "depth": 0.5588
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/71noL6B3Z9L._AC_SL1500.jpg?v=1783306459",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpl0lf4u1f.jpg?v=1782886892",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpsbcgl3pg.jpg?v=1782886892",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmprlguapsj.jpg?v=1782886892"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

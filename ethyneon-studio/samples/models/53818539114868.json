@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53818539114868",
+ "title": "Distressed White Farmhouse Nightstand with 3 Drawers & Black Hardware",
+ "merchant": "bel-furniture.myshopify.com",
+ "listing_url": "https://belfurniture.com/products/distressed-white-farmhouse-nightstand-with-3-drawers-black-hardware?variant=53818539114868&_gsid=MabpH34xHCmV&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21598,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKUBX580-819_1.png?v=1767971759",
+ "dimensions_m": {
+  "width": 0.7366,
+  "height": 0.6604,
+  "depth": 0.4572
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKUBX580-819_1.png?v=1767971759",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKUBX580-821_5ccfc3a5-91db-4916-a871-b78b0f877b05.png?v=1767971760",
+  "https://cdn.shopify.com/s/files/1/0064/8321/4389/files/SKUBX580-820_1.png?v=1767971759"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

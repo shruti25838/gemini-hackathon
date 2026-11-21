@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67604387987708",
+ "title": "Art Leon Pyramid Swivel Desk Chair with Wood Legs, Upholstered Accent Chair",
+ "merchant": "us-artleon.myshopify.com",
+ "listing_url": "https://artleon.com/products/art-pyramid-swivel-armless-office-desk-chair-with-solid-oak-wood-legs-base-and-fabric-upholstery?variant=67604387987708&_gsid=qXZfsopW9iig&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Pyramid_Swivel_Desk_Chair_with_Wood_Legs_CC126-1-LIGE-F_13.jpg?v=1790651367",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Pyramid_Swivel_Desk_Chair_with_Wood_Legs_CC126-1-LIGE-F_13.jpg?v=1790651367",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Pyramid_Swivel_Desk_Chair_with_Wood_Legs_CC126-1-OW-F_1.jpg?v=1793081361",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Pyramid_Swivel_Desk_Chair_with_Wood_Legs_CC126-1-OW-F_4.jpg?v=1793081378",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/Pyramid_Swivel_Desk_Chair_with_Wood_Legs_CC126-1-OW-F_5.jpg?v=1793081379"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

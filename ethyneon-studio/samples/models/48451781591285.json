@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48451781591285",
+ "title": "Farmhouse Rolling Kitchen Island Cart with Storage",
+ "merchant": "112may-qu.myshopify.com",
+ "listing_url": "https://nestifys.com/products/farmhouse-rolling-kitchen-island-cart-with-storage?variant=48451781591285&_gsid=BjDWzSGQpyza&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19299,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71Pyhp5LsSL.jpg?v=1783272847",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71Pyhp5LsSL.jpg?v=1783272847",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/716HhQ0BW5L.jpg?v=1783272847",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71vZc8gvBSL.jpg?v=1783272847",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/81YE_igdKOL.jpg?v=1783272847"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

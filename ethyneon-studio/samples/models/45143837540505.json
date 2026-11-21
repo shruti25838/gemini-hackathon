@@ -1,0 +1,23 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45143837540505",
+ "title": "Aspen Rustic Log Mountain Comfort 4 Seater",
+ "merchant": "qieptg-a5.myshopify.com",
+ "listing_url": "https://rusticliving.com/products/log-mountain-comfort-4-seater?variant=45143837540505&_gsid=5fv6KQjPMDWU&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 209900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Aspen_Rustic_Log_Mountain_Comfort_4_Seater.jpg?v=1753115569",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Aspen_Rustic_Log_Mountain_Comfort_4_Seater.jpg?v=1753115569",
+  "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Mountain_Comfort_4_Seater_Gnarly_Log.jpg?v=1756329877"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

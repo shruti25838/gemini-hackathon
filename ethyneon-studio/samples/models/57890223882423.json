@@ -1,0 +1,31 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/57890223882423",
+ "title": "GTPLAYER Office Gaming Chair, Ergonomic Mesh Desk Chair W/Footrest for Adults, WT",
+ "merchant": "wt8gy6-0y.myshopify.com",
+ "listing_url": "https://workorastore.com/products/b0hmkw5lbp?variant=57890223882423&_gsid=ayvCzyWLUYzX&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 26598,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0759/1736/1335/files/71YxKDejBmL._AC_SL1500.jpg?v=1792933899",
+ "dimensions_m": {
+  "width": 0.515112,
+  "height": 1.34112,
+  "depth": 0.530098
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0759/1736/1335/files/71YxKDejBmL._AC_SL1500.jpg?v=1792933899",
+  "https://cdn.shopify.com/s/files/1/0759/1736/1335/files/71P5M-KdOZL._AC_SL1254.jpg?v=1792933899",
+  "https://cdn.shopify.com/s/files/1/0759/1736/1335/files/71lK_vAqqOL._AC_SL1254.jpg?v=1792933899",
+  "https://cdn.shopify.com/s/files/1/0759/1736/1335/files/713PJO2epAL._AC_SL1254.jpg?v=1792933899"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

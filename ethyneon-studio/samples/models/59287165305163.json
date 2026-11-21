@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/59287165305163",
+ "title": "Modway Langford Stain-Resistant Performance Velvet Armchair \u2013 Mid Century Modern Velvet Chair with Wood Frame \u2013 Upholstered Accent Chair for Living Room or Bedroom",
+ "merchant": "cyqirw-n9.myshopify.com",
+ "listing_url": "https://rxhdqtsr.sbs/products/modway-langford-stain-resistant-performance-velvet-armchair-mid-century-modern-velvet-chair-with-wood-frame-upholstered-accent-chair-for-living-room-or-bedroom?variant=59287165305163&_gsid=7xoFEkTEzzQ8&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1075/1518/3435/files/d1cb54fd933824718a8dd788266bf2978cf3616af3664b8f9134b0120f2b94cc.jpg?v=1794668694",
+ "dimensions_m": {
+  "width": 0.71628,
+  "height": 0.86614,
+  "depth": 0.86614
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1075/1518/3435/files/d1cb54fd933824718a8dd788266bf2978cf3616af3664b8f9134b0120f2b94cc.jpg?v=1794668694",
+  "https://cdn.shopify.com/s/files/1/1075/1518/3435/files/54231425e15f6fff12b01b7aa375389faee5bbc1fb73d2d4df9c82d2f85b31e3.jpg?v=1794668694",
+  "https://cdn.shopify.com/s/files/1/1075/1518/3435/files/a42bcc8aa8db1e6a65bf5abbfa4244dfddfd14022d47841a5b180a70d45e5431.jpg?v=1794668694",
+  "https://cdn.shopify.com/s/files/1/1075/1518/3435/files/332f95db10b6f19317eb82bd748eaa7d29848ab09c600f53221f955d38684adb.jpg?v=1794668694"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

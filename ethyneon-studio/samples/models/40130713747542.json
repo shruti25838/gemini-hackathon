@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/40130713747542",
+ "title": "Wood Upholstered Counter Height Bar Stool Light Brown",
+ "merchant": "nathan-home.myshopify.com",
+ "listing_url": "https://nathanjames.com/products/gracie-bar-stool-natural-flax-fabric-brushed-grey-wood-wash?variant=40130713747542&_gsid=Rmf4eYSBV3WL&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2179/1185/files/24301-HERO_2026.jpg?v=1789644316",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/24301-HERO_2026.jpg?v=1789644316",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/24301-Bar_Stool_8b05669a-e513-4c81-af55-da43a2a5c62e.jpg?v=1783926856",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/24301-IMG2_7a906dfe-9fdf-4c92-917f-6e0c283fd776.jpg?v=1783421680",
+  "https://cdn.shopify.com/s/files/1/2179/1185/files/24301-UGC_Carousel_Image_1_543b30a7-a362-4054-b18d-e0ef591734dd.jpg?v=1783421680"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

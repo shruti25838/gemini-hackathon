@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41528787107996",
+ "title": "Remy Sofa, Three Seater, Dark Olive Velvet",
+ "merchant": "rowenandwren.myshopify.com",
+ "listing_url": "https://www.rowenandwren.co.uk/products/remy-sofa-three-seater-dark-olive-velvet?variant=41528787107996&_gsid=CrpEdznh4sjZ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 445000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0576/2960/6044/products/21-DarkOliveVelvet_858_888de4da-4d57-41b7-b6aa-a5156de70e43.jpg?v=1649191823",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/products/21-DarkOliveVelvet_858_888de4da-4d57-41b7-b6aa-a5156de70e43.jpg?v=1649191823",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/products/21_10_05_Rowen_Wren_RemySofa_041_LS_6e489b11-8686-43ca-93e7-f32729c311e1.jpg?v=1649192361",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/products/21_10_05_Rowen_Wren_RemySofa_015_LS_81f443e4-15db-43f4-bf25-03adc5534581.jpg?v=1649192361",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/products/21_10_05_Rowen_Wren_RemySofa_035_LS_5505f1d1-9dc0-4484-ad3b-062e1eaa12b5.jpg?v=1649192361"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52680125448477",
+ "title": "Itaar | L Shaped Desk with 5 Drawers and Storage Shelves Reversible Computer Desk with Bookshelf for Home Office Corner Gaming Desk with LED Lights",
+ "merchant": "87f1qg-jy.myshopify.com",
+ "listing_url": "https://www.itaarlife.com/products/itaar-l-shaped-desk-with-5-drawers-and-storage-shelves-reversible-computer-desk?variant=52680125448477&_gsid=Y5wac3mNFhtC&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260805-RusticBrown_7.jpg?v=1785919262",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260805-RusticBrown_7.jpg?v=1785919262",
+  "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260805-RusticBrown_3.jpg?v=1785919262",
+  "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260805-RusticBrown_5.jpg?v=1785919262",
+  "https://cdn.shopify.com/s/files/1/1002/4117/8909/files/20260805-RusticBrown_4.jpg?v=1785919262"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

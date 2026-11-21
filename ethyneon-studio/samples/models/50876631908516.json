@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50876631908516",
+ "title": "Walnut Square Accent Side Table 21.65\"/23.62\" H Wood 4 Legs Side End Table",
+ "merchant": "clearhalo.myshopify.com",
+ "listing_url": "https://www.clearhalo.com/products/walnut-square-accent-side-table-21-65-23-62-h-wood-4-legs-side-end-table?variant=50876631908516&_gsid=DpHbjQmvY2Yq&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20198,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5314291.jpg",
+ "dimensions_m": {
+  "width": 0.4826,
+  "height": 0.6096,
+  "depth": 0.4826
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": null,
+ "reference_image_urls": null,
+ "model_label": "Representative 3D geometry from the Shopify product image"
+}

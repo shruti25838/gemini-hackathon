@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44721121263650",
+ "title": "SEDETA\u00ae 61 Inch Farmhouse Computer Desk L Shaped Office Desk Corner Gaming Desk with LED Light Power Outlet Storage Shelves Drawers Display Cabinet",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-61-inch-farmhouse-computer-desk-with-storage-shelves-and-power-outlet?variant=44721121263650&_gsid=qy24tGP84k6r&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 26999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260109-4.jpg?v=1767939095",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260109-4.jpg?v=1767939095",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260109-1_8.jpg?v=1771991879",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260109-6.jpg?v=1767939095",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260109-5.jpg?v=1767939095"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

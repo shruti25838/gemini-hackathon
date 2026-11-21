@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ethyneon Room Chat</title>
+    <link rel="stylesheet" href="/studio-assets/studio.css">
+    <link rel="stylesheet" href="/studio-assets/room.css">
+    <script type="module" src="/studio-assets/room-chat.js"></script>
+    <script type="module" src="/studio-assets/app-nav.js"></script>
+  </head>
+  <body>
+    <main class="room-chat-page">
+      <section class="panel">
+        <header class="panel-header"><h1>Room JSON chat</h1></header>
+        <div class="plan-workspace">
+          <section class="plan-conversation" aria-label="Conversation">
+            <ol id="chat-messages" class="plan-chat" aria-label="Messages" aria-live="polite"></ol>
+            <p id="chat-status" class="scene-meta" role="status"></p>
+            <form id="chat-form" class="scene-form">
+              <label class="field">Message<textarea id="chat-input" rows="3" maxlength="700" placeholder="4 × 3.5 × 2.6 m"></textarea></label>
+              <button id="chat-send" class="primary" type="submit" disabled>Send</button>
+            </form>
+            <button id="chat-confirm" class="primary" type="button" hidden>Confirm placement</button>
+          </section>
+          <section class="plan-document" aria-labelledby="json-heading">
+            <h2 id="json-heading">Room JSON</h2>
+            <pre id="plan-json-body" tabindex="0">{}</pre>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

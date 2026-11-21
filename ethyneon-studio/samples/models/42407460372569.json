@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42407460372569",
+ "title": "Modern Abstract Minimalist Wall Art",
+ "merchant": "tailoredpainting.myshopify.com",
+ "listing_url": "https://tailoredcanvases.com/products/modern-abstract-minimalist-wall-art?variant=42407460372569&_gsid=BuEP8MoSYCpt&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_6a91b3cd-7e54-4ca6-a19b-7222918a0706.jpg?v=1750846089",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_6a91b3cd-7e54-4ca6-a19b-7222918a0706.jpg?v=1750846089",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/4_08655235-3124-43b6-9c2d-41e5765072f5.jpg?v=1750846089",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/2_2f3dc327-6de9-43e8-b8d7-7e1529a8cccd.jpg?v=1750846089",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/3_d660fe87-f471-4b28-812f-dae00a0d1e67.jpg?v=1750846089"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50774274572576",
+ "title": "Hasuit | Night Stand with 3 Drawers Rustic Vintage Farmhouse White Nightstand with Charging Station and LED Lights",
+ "merchant": "m7pguu-c7.myshopify.com",
+ "listing_url": "https://www.hasuit.com/products/hasuit-night-stand-with-3-drawers-rustic-vintage-farmhouse-white-nightstand-charging-station-led-lights?variant=50774274572576&_gsid=A5jiYWu4xeAy&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0917/6213/1232/files/20251008-3_11.jpg?v=1759908520",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "mesh",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0917/6213/1232/files/20251008-3_11.jpg?v=1759908520",
+  "https://cdn.shopify.com/s/files/1/0917/6213/1232/files/20251008-3_10.jpg?v=1759908520",
+  "https://cdn.shopify.com/s/files/1/0917/6213/1232/files/20251008-3_6_e3e8afbd-6847-4a93-bbc5-bfa47da4ac2f.jpg?v=1759908520",
+  "https://cdn.shopify.com/s/files/1/0917/6213/1232/files/20251008-3_7_5fc9783b-5840-4345-baa0-4aa218a3f4fc.jpg?v=1759908520"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

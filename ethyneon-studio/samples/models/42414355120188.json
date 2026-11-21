@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42414355120188",
+ "title": "Modern Upholstered Home Office Swivel Desk Chair with Nailhead Trim, Beige",
+ "merchant": "fendonfurniture.myshopify.com",
+ "listing_url": "https://www.fendons.com/products/modern-upholstered-home-office-swivel-desk-chair-with-nailhead-trim-beige?variant=42414355120188&_gsid=xBFVG8sFegQ5&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 49999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0612/1671/8908/files/Screenshot2024-12-16163351.png?v=1734395813",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0612/1671/8908/files/Screenshot2024-12-16163351.png?v=1734395813",
+  "https://cdn.shopify.com/s/files/1/0612/1671/8908/files/Screenshot2024-12-16163401.png?v=1734395813",
+  "https://cdn.shopify.com/s/files/1/0612/1671/8908/files/Screenshot2024-12-16163411.png?v=1734395813",
+  "https://cdn.shopify.com/s/files/1/0612/1671/8908/files/Screenshot2024-12-16163421.png?v=1734395813"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

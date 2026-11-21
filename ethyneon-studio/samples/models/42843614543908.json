@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42843614543908",
+ "title": "Asus Tuf Gaming 27    1440P Hdr Monitor (Vg27Aq3A) - Qhd (2560 X 1440), 180Hz, 1Ms, Fast Ips, 130% Srgb, Extreme Low Motion Blur",
+ "merchant": "pan0vt-0k.myshopify.com",
+ "listing_url": "https://electroeshop.com/products/asus-tuf-gaming-27-1440p-hdr-monitor-vg27aq3a-qhd-2560-x-1440-180hz-1ms-fast-ips-130-srgb-extreme-low-motion-blur?variant=42843614543908&_gsid=fNPfnH6FHGkt&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 32968,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0714/9839/9780/files/71awxc1RPRL.jpg?v=1762140123",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0714/9839/9780/files/71awxc1RPRL.jpg?v=1762140123",
+  "https://cdn.shopify.com/s/files/1/0714/9839/9780/files/71f37hmEuXL.jpg?v=1762332575",
+  "https://cdn.shopify.com/s/files/1/0714/9839/9780/files/71MIUIR55cL.jpg?v=1762332575",
+  "https://cdn.shopify.com/s/files/1/0714/9839/9780/files/71KQ0F5j40L.jpg?v=1762332575"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

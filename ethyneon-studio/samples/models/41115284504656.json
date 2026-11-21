@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41115284504656",
+ "title": " GTPLAYER LR002 Fabric Gaming Chair 300LBS with 165\u00b0 Wide Recline & Pocket Spring Cushion",
+ "merchant": "gtracingchair.myshopify.com",
+ "listing_url": "https://gtplayer.com/products/lr002?variant=41115284504656&_gsid=ks1tavnDdff2&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/lr002-pw.jpg?v=1764726358",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/lr002-pw.jpg?v=1764726358",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/4_a62dd17c-f48a-41fb-ad42-541bad6cf7a5.jpg?v=1764726358",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/5_1efdd5f8-290e-4729-b2b2-e75ece45b643.jpg?v=1764726358",
+  "https://cdn.shopify.com/s/files/1/0092/3828/2340/files/4_19861f70-419b-45bd-b10b-9178d4e8ca58.jpg?v=1764726358"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

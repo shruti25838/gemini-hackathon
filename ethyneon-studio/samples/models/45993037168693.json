@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45993037168693",
+ "title": "Walnut Solid Wood Oval Coffee Table with Drawer and Shelf, 45 in",
+ "merchant": "vnrs4b-1g.myshopify.com",
+ "listing_url": "https://twoseventynine.com/products/coffee-table-oval-solid-wood-walnut-45-in?variant=45993037168693&_gsid=NwTScAfvkifY&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 39500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/41a82fa69c414406b7e6c6abe6179d31.jpg?v=1789190859",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/41a82fa69c414406b7e6c6abe6179d31.jpg?v=1789190859",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/70ab2bd0dc9a4092b83ff3154cf17ada.jpg?v=1789190864",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/d3cc1450d6c846d6a77ce9b84e8eacdb.jpg?v=1789190865",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/e2fd6a583742423da66ad35988e57f97.jpg?v=1789190863"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

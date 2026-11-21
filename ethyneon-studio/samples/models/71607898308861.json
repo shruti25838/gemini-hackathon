@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/71607898308861",
+ "title": "Rustic Queen Solid Wood Bed Frame, Farmhouse Platform Bed with 53.5\" Tall Headboard, Heavy Duty Wood Bed Frame with",
+ "merchant": "q1esnd-da.myshopify.com",
+ "listing_url": "https://castelune.com/products/rustic-queen-solid-wood-bed-frame-farmhouse-platform-bed-with-53-5-tall-headboard-heavy-duty-wood-bed-frame-with?variant=71607898308861&_gsid=eHtMJwR9dCi9&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 63399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/91ebuC9EIHL._AC_SL1500.jpg?v=1792361068",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/91ebuC9EIHL._AC_SL1500.jpg?v=1792361068",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/71D1WGKWBkL._AC_SL1500.jpg?v=1792361068",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/91iRXcCQYSL._AC_SL1500.jpg?v=1792361068",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/91sZSIk2brL._AC_SL1500.jpg?v=1792361068"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

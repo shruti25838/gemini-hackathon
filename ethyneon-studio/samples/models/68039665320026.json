@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68039665320026",
+ "title": "ASUS TUF 32 Inch Curved Gaming Monitor - QHD (2560 x 1440), 165Hz (Supports 144Hz), 1ms, Extreme Low Motion Blur, Speaker, FreeSync Premium, VESA Mountable, DisplayPort, HDMI - VG32VQ1B",
+ "merchant": "50kapv-9b.myshopify.com",
+ "listing_url": "https://pjud.shop/products/asus-tuf-32-inch-curved-gaming-monitor-qhd-2560-x-1440-165hz-supports-144hz-1ms-extreme-low-motion-blur-speaker-freesync-premium-vesa-mountable-displayport-hdmi-vg32vq1b_dfb3cb95?variant=68039665320026&_gsid=HvxAnKMtdTgd&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0694/6642/3386/files/48a7c445d2af810e6e633b82b8ab31d17ee69f3b22fdf0e4b78767326921931a_51537276-32c1-45ac-8807-579a48d63c6c.jpg?v=1794410443",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0694/6642/3386/files/48a7c445d2af810e6e633b82b8ab31d17ee69f3b22fdf0e4b78767326921931a_51537276-32c1-45ac-8807-579a48d63c6c.jpg?v=1794410443",
+  "https://cdn.shopify.com/s/files/1/0694/6642/3386/files/ae8356fc6234ae6adf88c6ca1f4785d4e59b0a95f16074cc27995b9c3763b180_a64f200d-603e-4dc5-a338-d7c870403e7c.jpg?v=1794410444",
+  "https://cdn.shopify.com/s/files/1/0694/6642/3386/files/2327ed17ed1b45c94a5e05d5d1e868462f35ee8b2c3d407d6a4c1fd843f37bb8_663c911a-604b-44db-bbd6-da0304b71df9.jpg?v=1794410443",
+  "https://cdn.shopify.com/s/files/1/0694/6642/3386/files/9fed92b2f25aa8a940ccdcaa4f23b6702687ecdddd6c2e7338597bbd2bca39e2_ccb2cd1d-6ce2-42e6-bc05-45926ad1c658.jpg?v=1794410444"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

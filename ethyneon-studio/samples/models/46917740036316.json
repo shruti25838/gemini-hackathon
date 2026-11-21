@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46917740036316",
+ "title": "Solid Walnut Side Table for Living Room \u2013 24\" x 12\"",
+ "merchant": "m-w-s-store.myshopify.com",
+ "listing_url": "https://modernwoodstyle.com/products/walnut-side-table-for-living-room-24-12-solid-wood?variant=46917740036316&_gsid=ADTBejtoknQn&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/walnut-end-table_ad5a72a6-ec97-49ad-8551-0529d6e56965.jpg?v=1774545580",
+ "dimensions_m": {
+  "width": 0.6096,
+  "height": 0.6477,
+  "depth": 0.3048
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/walnut-end-table_ad5a72a6-ec97-49ad-8551-0529d6e56965.jpg?v=1774545580",
+  "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/walnut-side-table-for_living-room.jpg?v=1771961539",
+  "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/wooden-nightstand.jpg?v=1771961539",
+  "https://cdn.shopify.com/s/files/1/0636/2759/1900/files/handcrafted-walnut-side-table.jpg?v=1795121300"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

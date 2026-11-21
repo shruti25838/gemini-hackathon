@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41192561999914",
+ "title": "Lubbock Bed | Rustic Solid Wood Bed Frame",
+ "merchant": "rustics-for-less.myshopify.com",
+ "listing_url": "https://www.rusticsforless.com/products/lubbock-bed?variant=41192561999914&_gsid=GaortrB5Q7TW&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 109130,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2182/7287/files/LubbockBed.jpg?v=1752182284",
+ "dimensions_m": {
+  "width": 2.0955,
+  "height": 1.8034,
+  "depth": 0.762
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/LubbockBed.jpg?v=1752182284",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_-_2026-04-18T230050.472.png?v=1776574957",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_-_2026-04-18T225500.753.png?v=1776574957",
+  "https://cdn.shopify.com/s/files/1/2182/7287/files/download_-_2026-04-18T225438.905.png?v=1776574957"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

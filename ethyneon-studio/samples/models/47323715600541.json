@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47323715600541",
+ "title": "Farmhouse Rustic Wood Block Square Pedestal Side Table",
+ "merchant": "4e8e99-77.myshopify.com",
+ "listing_url": "https://www.homebaa.com/products/farmhouse-rustic-wood-block-square-side-table?variant=47323715600541&_gsid=1EpRLq9b3EAb&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0668/8417/3981/files/farmhouse-rustic-wood-block-square-side-table-2.webp?v=1793353678",
+ "dimensions_m": {
+  "width": 0.3048,
+  "height": 0.4064,
+  "depth": 0.3048
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0668/8417/3981/files/farmhouse-rustic-wood-block-square-side-table-2.webp?v=1793353678",
+  "https://cdn.shopify.com/s/files/1/0668/8417/3981/files/farmhouse-rustic-wood-block-square-side-table-1.webp?v=1793353676",
+  "https://cdn.shopify.com/s/files/1/0668/8417/3981/files/farmhouse-rustic-wood-block-square-side-table-3.webp?v=1793353681",
+  "https://cdn.shopify.com/s/files/1/0668/8417/3981/files/farmhouse-rustic-wood-block-square-side-table-4.webp?v=1793353683"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

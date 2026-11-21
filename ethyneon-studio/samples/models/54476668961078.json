@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54476668961078",
+ "title": "L Shaped Gaming Desk with Power Outlets, 47 Inch Computer Desk with 3 Drawers and Shelves, Corner Desk for Gaming, Study Writing PC Table with Storage and Reversible Shelf, White",
+ "merchant": "3jtzfw-cr.myshopify.com",
+ "listing_url": "https://hawkins-woodshop.com/products/l-shaped-gaming-desk-with-power-outlets-47-inch-computer-desk-with-3-drawers-and-shelves-corner-desk-for-gaming-study-writing-pc-table-with-storage-and-reversible-shelf-white?variant=54476668961078&_gsid=8C3U4AUzxJH5&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19098,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/71BBPiWFGML._SL1200.jpg?v=1787812138",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/71BBPiWFGML._SL1200.jpg?v=1787812138",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/41hh9wKqPaL._SL1200.jpg?v=1787812138",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/51j8HXlTekL._SL1200.jpg?v=1787812138",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/41w9EVZdkVL._SL1200.jpg?v=1787812138"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

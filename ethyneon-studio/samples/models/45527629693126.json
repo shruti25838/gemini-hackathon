@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45527629693126",
+ "title": "47 Inch Carbon Fiber Black Gaming Desk with Charging Station LED Lights Reversible Computer Desk 5 Fabric Drawers Home Office Writing Study Table",
+ "merchant": "9a936f-7f.myshopify.com",
+ "listing_url": "https://furnulem.com/products/47-inch-carbon-fiber-black-gaming-desk-with-charging-station-led-lights-reversible-computer-desk-5-fabric-drawers-home-office-writing-study-table?variant=45527629693126&_gsid=PYwAdpaoMtJL&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 11599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0623/2568/6470/files/10_753a5910-fbcd-4272-8d99-38b412d6591f.png?v=1770792072",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0623/2568/6470/files/10_753a5910-fbcd-4272-8d99-38b412d6591f.png?v=1770792072",
+  "https://cdn.shopify.com/s/files/1/0623/2568/6470/files/1_5f18b7c5-1e38-4a75-ab9f-ad56d69b8f12.png?v=1770792072",
+  "https://cdn.shopify.com/s/files/1/0623/2568/6470/files/47_e14506db-519d-4be0-8a48-3e58f4a056cd.png?v=1770792072",
+  "https://cdn.shopify.com/s/files/1/0623/2568/6470/files/2_f980b5dc-ca14-44d8-879d-c88805af28db.png?v=1770792072"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/39633902501985",
+ "title": "SUGIFT Gaming Chair Office Chair Ergonomic PC Computer Chair Reclining Racing Chair with Headrest and Lumbar Support Gaming Chair for Adults Men Women Teens Desk Chair (Black+Blue)",
+ "merchant": "sugift.myshopify.com",
+ "listing_url": "https://www.us-sugift.com/products/gamingchairblueljm-1113?variant=39633902501985&_gsid=5rV1wfkFSnKV&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12995,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/634440942203e8ab8_acc14346-5ce2-422d-a930-31f69f83ad96.jpg?v=1636776730",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/634440942203e8ab8_acc14346-5ce2-422d-a930-31f69f83ad96.jpg?v=1636776730",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/2386589546b5ffc72_4935fadb-0991-40f8-905e-4e1d57796485.jpg?v=1636776730",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/44faec9819c2464d2c_4b1215a4-135e-4f97-8e41-f6c112020c4e.jpg?v=1636776730",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/22dfd4eb2bf24e80e5_eee94195-7643-4604-891b-124281e12aad.jpg?v=1636776730"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48050452103401",
+ "title": "Tangkula Rattan Coffee Table, 40\u201dL Boho Oval Acacia Wood Cocktail Table with Tempered Glass Tabletop & PE Rattan Storage Shelf",
+ "merchant": "tangkula.myshopify.com",
+ "listing_url": "https://www.tangkula.com/products/tangkula-rattan-coffee-table-40-l-boho-oval-acacia-wood-cocktail-table-with-tempered-glass-tabletop-pe-rattan-storage-shelf?variant=48050452103401&_gsid=XYz5rAt6qb9D&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0613/8514/6601/files/image_1_bc327d98-e83b-4ddd-94aa-d67448f619e7.jpg?v=1705566636",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "mesh",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0613/8514/6601/files/image_1_bc327d98-e83b-4ddd-94aa-d67448f619e7.jpg?v=1705566636",
+  "https://cdn.shopify.com/s/files/1/0613/8514/6601/files/image_2_54dbbad5-8c89-4b9e-970b-b6574b88ba48.jpg?v=1705566636",
+  "https://cdn.shopify.com/s/files/1/0613/8514/6601/files/image_3_f4f73dea-4e7f-40ce-b0c7-a16255429b7c.jpg?v=1705566635",
+  "https://cdn.shopify.com/s/files/1/0613/8514/6601/files/image_4_80beda4d-7077-40c3-bb3b-4987918cc9dd.jpg?v=1705566634"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

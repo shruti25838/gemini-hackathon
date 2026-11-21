@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67796255899945",
+ "title": "Signature Design by Ashley 6 Cube Storage Organizer, Brown Bookshelf",
+ "merchant": "tn01up-t1.myshopify.com",
+ "listing_url": "https://brightnest-cleaners.com/products/b0f76bfkyd?variant=67796255899945&_gsid=Axtrb58ECgua&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8549,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0954/5082/5001/files/41L1YaOH3gL._AC_SL1500.jpg?v=1794357684",
+ "dimensions_m": {
+  "width": 0.602996,
+  "height": 0.899922,
+  "depth": 0.299974
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0954/5082/5001/files/41L1YaOH3gL._AC_SL1500.jpg?v=1794357684",
+  "https://cdn.shopify.com/s/files/1/0954/5082/5001/files/41yRdSfPB3L._AC_SL1500.jpg?v=1794357684",
+  "https://cdn.shopify.com/s/files/1/0954/5082/5001/files/41HG-s3o6WL._AC_SL1500.jpg?v=1794357684",
+  "https://cdn.shopify.com/s/files/1/0954/5082/5001/files/417p8xXzBnL._AC_SL1500.jpg?v=1794357684"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47580414378294",
+ "title": "Obriel Forest Green Velvet Sofa, 3-Seater",
+ "merchant": "daalshome.myshopify.com",
+ "listing_url": "https://www.daals.com/products/obriel-forest-green-velvet-sofa-3-seater?variant=47580414378294&_gsid=nfMXAhADJ9jE&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 34999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/GCSF-2299-PINE-VEL-3ST_main.jpg?v=1702305722",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/GCSF-2299-PINE-VEL-3ST_main.jpg?v=1702305722",
+  "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/GCSF-2299-PINE-VEL-3ST_scene1.jpg?v=1702305722",
+  "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/GCSF-2299-PINE-VEL_group_scene1.jpg?v=1748436465",
+  "https://cdn.shopify.com/s/files/1/0755/8073/5798/products/GCSF-2299-PINE-VEL-3ST_scene2.jpg?v=1702305722"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

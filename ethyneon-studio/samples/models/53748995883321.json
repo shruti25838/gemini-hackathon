@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53748995883321",
+ "title": "Garvee Modern 2-Tier Round Coffee Table with Storage - Open Shelf & Curved Legs - Compact Center Table for Small Living Rooms - Mark-Resistant Surface, Easy Assembly - White",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-modern-2-tier-round-coffee-white-phk-3a54xdmh?variant=53748995883321&_gsid=U2oSi6Zraoin&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp_ury2slr.jpg?v=1783569337",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp_ury2slr.jpg?v=1783569337",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp6_7r1935.jpg?v=1783569338",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpumnfakry.jpg?v=1783569338",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp8ieqx29z.jpg?v=1783569338"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

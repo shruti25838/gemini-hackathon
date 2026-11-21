@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48494603829493",
+ "title": "Mesh Gaming Chair with Footrest & Reclining Back",
+ "merchant": "112may-qu.myshopify.com",
+ "listing_url": "https://nestifys.com/products/mesh-gaming-chair-footrest-reclining?variant=48494603829493&_gsid=5s8U2fer48CN&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 22599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71bTFwyTc6L.jpg?v=1782885390",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71bTFwyTc6L.jpg?v=1782885390",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71abTb9Gg3L.jpg?v=1782885390",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71rdpMUOsqL.jpg?v=1782885390",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71E-CrUemEL.jpg?v=1782885390"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

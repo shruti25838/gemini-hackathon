@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/59490852700424",
+ "title": "Samsung Odyssey G5 G55H 32\" QHD 180Hz Curved Gaming Monitor",
+ "merchant": "xeee1y-3b.myshopify.com",
+ "listing_url": "https://voltixam.shop/products/samsung-odyssey-g5-g55h-32-qhd-180hz-curved-gaming-monitor?variant=59490852700424&_gsid=mEWfytUtTPWo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6566,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1077/0576/2056/files/488653-Product-0-I-639281376008755345.jpg?v=1794579236",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1077/0576/2056/files/488653-Product-0-I-639281376008755345.jpg?v=1794579236",
+  "https://cdn.shopify.com/s/files/1/1077/0576/2056/files/488653-Product-1-I-639281376008439297.jpg?v=1794579236",
+  "https://cdn.shopify.com/s/files/1/1077/0576/2056/files/488653-Product-2-I-639281376007068807.jpg?v=1794579236",
+  "https://cdn.shopify.com/s/files/1/1077/0576/2056/files/488653-Product-3-I-639281376006246493.jpg?v=1794579235"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

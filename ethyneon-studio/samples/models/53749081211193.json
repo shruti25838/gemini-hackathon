@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53749081211193",
+ "title": "Garvee Mid-Century Modern Wingback Accent Chair \u2013 Black Chenille Upholstered Armchair with High Back, Soft Pillow, and Sturdy Wood Legs \u2013 Comfy Seating for Living Room, Bedroom, Reading Nook, or Entryway, Black",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-mid-century-modern-wingback-accent-chair-black-phk-396hm7ul?variant=53749081211193&_gsid=futc6nekfs3y&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 14599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmppg15q7d.jpg?v=1783569877",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmppg15q7d.jpg?v=1783569877",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpw_9e384g.jpg?v=1783569878",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpz01v02wq.jpg?v=1783569877",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpeev85erz.jpg?v=1783569878"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

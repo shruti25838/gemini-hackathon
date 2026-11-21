@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41674574135363",
+ "title": "CubiCubi Computer Desk, 32 inch Small Home Office Desk for Small Spaces, Modern Simple Style for Home, Office, Study, Writing, White",
+ "merchant": "ff7bb0-f7.myshopify.com",
+ "listing_url": "https://www.leafyloom.org/products/b08bxvl3p1?variant=41674574135363&_gsid=uwa2VgUoEpi8&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7198,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/61nkya_q8fL._AC_SX679.jpg?v=1721613899",
+ "dimensions_m": {
+  "width": 0.8001,
+  "height": 0.729996,
+  "depth": 0.40005
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/61nkya_q8fL._AC_SX679.jpg?v=1721613899",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/813aOwMoKtL._AC_SX679.jpg?v=1721613899",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/71sWTbdL9zL._AC_SX679.jpg?v=1721613899",
+  "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/91XDq20YHKL._AC_SX679_86a8d7eb-0dd5-45f4-9d59-2f71abb4058f.jpg?v=1721613899"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

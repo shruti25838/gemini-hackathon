@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43445032124483",
+ "title": "EDISHINE 21.85\" Boho Table Lamp, Rustic Bedside Lamp, Water Transfer Red Wood Grain Metal Base, Beige Linen Shade, Farmhouse Nightstand Lamp for Living Room, Bedroom, Office, E26 Base",
+ "merchant": "xqwtmg-f1.myshopify.com",
+ "listing_url": "https://smartbuy10.store/products/edishine-21-85-boho-table-lamp-rustic-bedside-lamp-water-transfer-red-wood-grain-metal-base-beige-linen-shade-farmhouse-nightstand-lamp-for-living-room-bedroom-office-e26-base?variant=43445032124483&_gsid=vYKKnEiWAhZJ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0686/8896/9795/files/81uVFwjMTYL.jpg?v=1782208097",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0686/8896/9795/files/81uVFwjMTYL.jpg?v=1782208097",
+  "https://cdn.shopify.com/s/files/1/0686/8896/9795/files/71Npa6PtvSL.jpg?v=1782208096",
+  "https://cdn.shopify.com/s/files/1/0686/8896/9795/files/71YbC3XvrML.jpg?v=1782208096",
+  "https://cdn.shopify.com/s/files/1/0686/8896/9795/files/71mVZirq7sL.jpg?v=1782208096"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

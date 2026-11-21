@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44336935501858",
+ "title": "SEDETA\u00ae 94.5 Inch Convertible Computer Desk L Shaped Gaming Desk with Drawers Storage Shelves Power Outlet and LED Lights",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-94-5-inch-convertible-computer-desk-with-drawers-storage-shelves-and-led-lights?variant=44336935501858&_gsid=HcfE1TtZcwQs&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250922-3.jpg?v=1768447978",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250922-3.jpg?v=1768447978",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260629-333_10.jpg?v=1782729608",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250922-_4.jpg?v=1773657135",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20250922-2.jpg?v=1768447978"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45187069542447",
+ "title": "2-Tier Coffee Table Slatted Wood Center Table with Storage Shelf-Black",
+ "merchant": "91f95a-70.myshopify.com",
+ "listing_url": "https://totalfindz.com/products/2-tier-coffee-table-slatted-wood-center-table-with-storage-shelf-black?variant=45187069542447&_gsid=NePdTEnPoX4h&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7800,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/101_0575dc95-81f6-4ae3-b489-1832e746cf18.jpg?v=1776402753",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/101_0575dc95-81f6-4ae3-b489-1832e746cf18.jpg?v=1776402753",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/102_b4d34468-ccd4-4736-93e0-94feaca675f4.jpg?v=1776402753",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/103_b724d966-6f3f-4047-9770-b90e35c5f32c.jpg?v=1776402753",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/104_74d6191a-b1c6-4383-a710-8eb042f7ba69.jpg?v=1776402753"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46357838037150",
+ "title": "IOTXY DIY Modular Cube Bookcase - CubeXY Customizable Stackable Expandable Basic Shelving Units, 6-Cube Wooden Open Bookshelf with Removable Shelves for Books Organizer, Oak",
+ "merchant": "vjgnrd-ev.myshopify.com",
+ "listing_url": "https://organivo.us/products/b0fm3frhdr?variant=46357838037150",
+ "price": {
+  "amount": 10816,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/9326/9150/files/61YaWar21TL._AC_SL1500.jpg",
+ "dimensions_m": {
+  "width": 0.85598,
+  "height": 0.304038,
+  "depth": 0.274066
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/9326/9150/files/61YaWar21TL._AC_SL1500.jpg"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

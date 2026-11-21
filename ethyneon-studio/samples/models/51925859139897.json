@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51925859139897",
+ "title": "Garvee 70\" Long TV Stands with Storage Cabinet and Open Storage Shelf, Fluted Doors, Mid Century Modern Entertainment Center for Up to 75 Inches TV, Media TV Consoles for Living Room, Walnut",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-70-in-long-tv-stand-with-storage-shelf-fluted-doors-phk-34leygyj?variant=51925859139897&_gsid=DJ8WKTXTVx71&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3rv_lvtp.jpg?v=1770609243",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3rv_lvtp.jpg?v=1770609243",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpoylb4fx5.jpg?v=1770622230",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp7wce31bx.jpg?v=1770622230",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp8ung9pz.jpg?v=1770622230"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

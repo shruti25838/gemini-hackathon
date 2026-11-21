@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68058300842232",
+ "title": "Kitchen Island Cart, Rolling Island Table with Solid Wood Top, Trolley Cart with Drawer, Gray",
+ "merchant": "9hgbex-t1.myshopify.com",
+ "listing_url": "https://bsddepot.com/products/kitchen-island-cart-gray-801-112v80gy?variant=68058300842232&_gsid=eD6Dmab4ZeY5&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17099,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0839/4919/1416/files/2xZ1851a0639d7912.jpg?v=1794355604",
+ "dimensions_m": {
+  "width": 0.83185,
+  "height": 0.9144,
+  "depth": 0.45085
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0839/4919/1416/files/2xZ1851a0639d7912.jpg?v=1794355604",
+  "https://cdn.shopify.com/s/files/1/0839/4919/1416/files/okL5971a0639d7912.jpg?v=1794355604",
+  "https://cdn.shopify.com/s/files/1/0839/4919/1416/files/lbV5b619494afead0.jpg?v=1794355604",
+  "https://cdn.shopify.com/s/files/1/0839/4919/1416/files/n561901a0639d7912.jpg?v=1794355604"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

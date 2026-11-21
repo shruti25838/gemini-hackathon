@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44747211342075",
+ "title": "Barnwood Framed Sofa w/Standard Fabric",
+ "merchant": "ozark-cabin-decor.myshopify.com",
+ "listing_url": "https://www.ozarkcabindecor.com/products/fireside-lodge-furniture-usa-made-rustic-barnwood-framed-sofa?variant=44747211342075&_gsid=T8RZRYrFRYok&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 485999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0456/9759/7603/products/B13040-1-241800.jpg?v=1739926542",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0456/9759/7603/products/B13040-1-241800.jpg?v=1739926542",
+  "https://cdn.shopify.com/s/files/1/0456/9759/7603/files/B13050-brown-back.jpg?v=1767055105",
+  "https://cdn.shopify.com/s/files/1/0456/9759/7603/files/B13050-yakima-30.jpg?v=1767055105",
+  "https://cdn.shopify.com/s/files/1/0456/9759/7603/files/B13050-bare-straight-brown.jpg?v=1740027694"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

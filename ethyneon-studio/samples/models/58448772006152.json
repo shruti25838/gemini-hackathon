@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/58448772006152",
+ "title": "Neutral Abstract Wall Art Set of 3, Beige Minimalist Prints, Textured Modern Abstract Art, Organic Modern Living Room & Bedroom Decor",
+ "merchant": "srte1c-mk.myshopify.com",
+ "listing_url": "https://yutaartstudio.com/products/neutral-abstract-wall-art-set-of-3-beige?variant=58448772006152&_gsid=TDCrmVQqx8AT&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0931/6863/2072/files/neutral-abstract-wall-art-set-of-3.8.jpg?v=1786892108",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0931/6863/2072/files/neutral-abstract-wall-art-set-of-3.8.jpg?v=1786892108",
+  "https://cdn.shopify.com/s/files/1/0931/6863/2072/files/beige-abstract-wall-art-triptych.jpg?v=1786892135",
+  "https://cdn.shopify.com/s/files/1/0931/6863/2072/files/modern-neutral-wall-art-set..jpg?v=1786892177",
+  "https://cdn.shopify.com/s/files/1/0931/6863/2072/files/minimalist-abstract-wall-art-set-of-3..jpg?v=1786892249"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

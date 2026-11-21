@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51509370290486",
+ "title": "47 Inch Computer Desk With File Drawers For Small Space",
+ "merchant": "discount-muebles.myshopify.com",
+ "listing_url": "https://shipitfurniture.com/products/computer-desk-with-file-drawers-cabinet-47-inch-home-office-desks-with-filing-cabinet-for-small-space-gaming-study-writing-table-pc-desks-black?variant=51509370290486&_gsid=YsWU2QSnufp2&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/b14bc384af38e3f52b125aa1b7b9613c.jpg?v=1776206950",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/b14bc384af38e3f52b125aa1b7b9613c.jpg?v=1776206950",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/65393e28c3fbfb6f25562335441287e7_cc1898b9-52aa-45da-a530-76aff633b1dc.jpg?v=1776206954",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/b73e96aec343ef9dcae0fce6d3b782a6.jpg?v=1776206956",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/4469c29aedc031266005834eff53e66c.jpg?v=1776206958"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

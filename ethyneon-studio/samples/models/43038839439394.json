@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43038839439394",
+ "title": "SEDETA 79 Inch LED Wraparound Shaped Gaming Desk with 2 Fabric Drawers",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers?variant=43038839439394&_gsid=cEPtanDSwcz7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 18999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers-26786817277986.jpg?v=1767930761",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers-26786817277986.jpg?v=1767930761",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers-for-home-office-26212155883554.jpg?v=1767930761",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers-for-home-office-26212153425954.jpg?v=1770541759",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/sedeta-79-inch-wraparound-shaped-led-gaming-desk-with-2-fabric-drawers-26786817376290.jpg?v=1767930761"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

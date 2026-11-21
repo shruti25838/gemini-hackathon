@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50662463340846",
+ "title": "Mid-Century Modern Wooden Narrow Nightstand Bedside Table with Carved Drawer and Storage Shelf",
+ "merchant": "c6e8c4-2.myshopify.com",
+ "listing_url": "https://www.giratree.com/products/mid-century-modern-wooden-narrow-nightstand-bedside-table-with-carved-drawer-and-storage-shelf?variant=50662463340846&_gsid=6JbcvC92mVJP&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 10900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/WalnutMid-CenturyModernWoodenNarrowNightstandSetof2withCarvedDrawerandStorageShelf_1_08aff165-96c6-4462-95ae-68873bb32c22.jpg?v=1751870769",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/WalnutMid-CenturyModernWoodenNarrowNightstandSetof2withCarvedDrawerandStorageShelf_1_08aff165-96c6-4462-95ae-68873bb32c22.jpg?v=1751870769",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/WalnutMid-CenturyModernWoodenNarrowNightstandBedsideTablewithCarvedDrawerandStorageShelf_2_ac3640ba-610c-4aa9-a5c9-ff5219261fc7.jpg?v=1751870769",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/WalnutMid-CenturyModernWoodenNarrowNightstandBedsideTablewithCarvedDrawerandStorageShelf_3_8770bc68-3203-41a3-a779-c04dceb357e3.jpg?v=1751870769",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/WalnutMid-CenturyModernWoodenNarrowNightstandBedsideTablewithCarvedDrawerandStorageShelf_4_ae1b3b4e-b1ca-4438-98a5-a557c2fc9d45.jpg?v=1751870769"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

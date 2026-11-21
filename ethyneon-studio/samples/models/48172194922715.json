@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48172194922715",
+ "title": "62.99\u201c Farmhouse TV Stand with Storage Cabinets, Media Console for Up to 65-Inch TV",
+ "merchant": "tresings.myshopify.com",
+ "listing_url": "https://tribesigns.com/products/62-99-farmhouse-tv-stand-with-storage-cabinets-media-console-for-up-to-65-inch-tv?variant=48172194922715&_gsid=eqJq3KGVBySv&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/916xd-8g_jL._AC_SL1500.jpg?v=1768991900",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/916xd-8g_jL._AC_SL1500.jpg?v=1768991900",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/8198tK4kGZL._AC_SL1500.jpg?v=1768991900",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81EyWVwCncL._AC_SL1500.jpg?v=1768991900",
+  "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/81Fo-pB1RjL._AC_SL1500.jpg?v=1768991900"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53970672124220",
+ "title": "Farmington Farmhouse Style 1-Drawer Storage Nightstand with Shelf - Antique White",
+ "merchant": "h2patf-y0.myshopify.com",
+ "listing_url": "https://comfiqmfg.com/products/farmington-1-drawer-storage-nightstand-antique-white?variant=53970672124220&_gsid=B3Gt9kGr9n5H&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 15900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0921/5646/1372/files/836-10-55_1_324c893f-10b0-4bf2-ba4a-ea248a781cce.jpg?v=1777486196",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0921/5646/1372/files/836-10-55_1_324c893f-10b0-4bf2-ba4a-ea248a781cce.jpg?v=1777486196"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

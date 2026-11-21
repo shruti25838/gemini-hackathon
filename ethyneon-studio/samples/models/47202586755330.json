@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47202586755330",
+ "title": "Minimalist Abstract Waves Wall Art \u2013 Whispered Drift",
+ "merchant": "6wugfh-2x.myshopify.com",
+ "listing_url": "https://lumigallery.com/products/minimalist-abstract-waves-wall-art-whispered-drift?variant=47202586755330&_gsid=UVvMnngeUTRs&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20335,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0762/8859/0082/files/Minimalist_Abstract_Waves_Wall_Art_Whispered_Drift00001.jpg?v=1767630362",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0762/8859/0082/files/Minimalist_Abstract_Waves_Wall_Art_Whispered_Drift00001.jpg?v=1767630362",
+  "https://cdn.shopify.com/s/files/1/0762/8859/0082/files/Minimalist_Abstract_Waves_Wall_Art_Whispered_Drift00009.jpg?v=1767630362",
+  "https://cdn.shopify.com/s/files/1/0762/8859/0082/files/Minimalist_Abstract_Waves_Wall_Art_Whispered_Drift00007.jpg?v=1767630362",
+  "https://cdn.shopify.com/s/files/1/0762/8859/0082/files/Minimalist_Abstract_Waves_Wall_Art_Whispered_Drift00002.jpg?v=1767630362"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

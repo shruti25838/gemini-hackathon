@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45993037430837",
+ "title": "Cherry Solid Wood Oval Coffee Table with Drawer and Shelf, 45 in",
+ "merchant": "vnrs4b-1g.myshopify.com",
+ "listing_url": "https://twoseventynine.com/products/coffee-table-oval-solid-wood-cherry-45-in?variant=45993037430837&_gsid=pgKeKZPh6bZp&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 39500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/06978c0f6d924c968773832f01008d4d.jpg?v=1789190876",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/06978c0f6d924c968773832f01008d4d.jpg?v=1789190876",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/12ae46367c0449eabbad9a4c4937d98e.jpg?v=1789190881",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/978d90f8f63244f5919202135ca9a36d.jpg?v=1789190880",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/3c271a7e0015442db424bdd4ea224adb.jpg?v=1789190880"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

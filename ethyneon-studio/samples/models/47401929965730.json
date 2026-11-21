@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47401929965730",
+ "title": "32-Inch Computer Desk with Storage Drawers and Multiple Color Options",
+ "merchant": "y0knug-ay.myshopify.com",
+ "listing_url": "https://furnmivo.com/products/computer-desk-32-inch-storage-drawers-multiple?variant=47401929965730&_gsid=S2M2d6WLCMET&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9904,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0721/2397/3794/files/32-inch-computer-desk-with-storage-drawers-and-multipl-70502306-white-and-golden-32-inches.jpg?v=1785337211",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0721/2397/3794/files/32-inch-computer-desk-with-storage-drawers-and-multipl-70502306-white-and-golden-32-inches.jpg?v=1785337211",
+  "https://cdn.shopify.com/s/files/1/0721/2397/3794/files/32-inch-computer-desk-with-storage-drawers-and-multipl-70502306-detail-2.jpg?v=1785337210",
+  "https://cdn.shopify.com/s/files/1/0721/2397/3794/files/32-inch-computer-desk-with-storage-drawers-and-multipl-70502306-detail-3.jpg?v=1785337210",
+  "https://cdn.shopify.com/s/files/1/0721/2397/3794/files/32-inch-computer-desk-with-storage-drawers-and-multipl-70502306-detail-4.jpg?v=1785337210"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

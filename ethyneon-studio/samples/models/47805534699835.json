@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47805534699835",
+ "title": "27\" Dell G2724D 1440p QHD IPS 165Hz FreeSync Gaming Monitor",
+ "merchant": "pzdea.myshopify.com",
+ "listing_url": "https://www.pzdeals.com/products/27-dell-g2724d-1440p-qhd-ips-165hz-freesync-gaming-monitor-1?variant=47805534699835&_gsid=yagzKciYAnMw&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1504/4320/files/UntitilesDesign-2024-02-20T053501.308.png?v=1708436162",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1504/4320/files/UntitilesDesign-2024-02-20T053501.308.png?v=1708436162"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

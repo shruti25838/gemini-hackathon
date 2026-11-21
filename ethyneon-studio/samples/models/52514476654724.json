@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52514476654724",
+ "title": "Pixio PX278 Wave 27-inch QHD 180Hz Fast IPS Gaming Monitor, Certified Refurbished",
+ "merchant": "pixio.myshopify.com",
+ "listing_url": "https://pixiogaming.com/products/px278-wave-gaming-monitor-certified-refurbished?variant=52514476654724&_gsid=9McSoF8Vfs5k&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1208/4426/files/PX278WAVEW.png?v=1765394638",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1208/4426/files/PX278WAVEW.png?v=1765394638",
+  "https://cdn.shopify.com/s/files/1/1208/4426/files/PX278WAVEB.png?v=1765394638",
+  "https://cdn.shopify.com/s/files/1/1208/4426/files/PX278WAVEB_45L.png?v=1765394638",
+  "https://cdn.shopify.com/s/files/1/1208/4426/files/PX278WAVEK.png?v=1765394638"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

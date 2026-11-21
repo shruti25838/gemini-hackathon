@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46164077969656",
+ "title": "Reibii 71\" W Carbon Fiber Gaming Desk, L Shaped Computer Desk with Drawer & Power Outlet",
+ "merchant": "reibiifurniture.myshopify.com",
+ "listing_url": "https://reibii.com/products/71-w-gaming-desk-l-shaped-computer-desk-with-led-lights-power-outlet-black-white-brown?variant=46164077969656&_gsid=Hs8ikwd5Kx2G&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0632/4833/5096/files/Gaming_Desk_for_Dorm.webp?v=1754015321",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0632/4833/5096/files/Gaming_Desk_for_Dorm.webp?v=1754015321",
+  "https://cdn.shopify.com/s/files/1/0632/4833/5096/files/GamingDeskwithPowerOutlet-RusticBlack-size.webp?v=1754015321",
+  "https://cdn.shopify.com/s/files/1/0632/4833/5096/files/GamingDeskwithPowerOutlet-RusticBlack-3.webp?v=1754015321",
+  "https://cdn.shopify.com/s/files/1/0632/4833/5096/files/GamingDeskwithPowerOutlet-RusticBlack-4.webp?v=1754015321"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50062272659706",
+ "title": "KOMFOTT Queen/Full/Twin Size Bed Frame Farmhouse Wooden Platform Bed",
+ "merchant": "afiya-liu.myshopify.com",
+ "listing_url": "https://www.komfott.com/products/komfott-queen-full-twin-size-bed-frame-farmhouse-wooden-platform-bed?variant=50062272659706&_gsid=JVtwEhWiGjpw&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 23141,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0625/6171/4426/files/image_1_8ba40170-f430-4e96-a7df-cfed313111ec.jpg?v=1786514479",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0625/6171/4426/files/image_1_8ba40170-f430-4e96-a7df-cfed313111ec.jpg?v=1786514479",
+  "https://cdn.shopify.com/s/files/1/0625/6171/4426/files/image_1_a8df95ed-fa2b-4e10-8c73-07b6180191a1.jpg?v=1786515027",
+  "https://cdn.shopify.com/s/files/1/0625/6171/4426/files/image_1_e6b269f0-34be-43f4-9db1-c039b9232f23.jpg?v=1788314104",
+  "https://cdn.shopify.com/s/files/1/0625/6171/4426/files/image_1_224cefae-be54-4449-abb6-0778a44b5db0.jpg?v=1786514827"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

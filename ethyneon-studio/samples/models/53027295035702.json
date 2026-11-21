@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53027295035702",
+ "title": "Queen Size Bed Frame with Modern Headboard, Heavy Duty Platform Metal Base with Square Footboard and 13 Strong Slats Support, No Box Spring Needed, Black",
+ "merchant": "3jtzfw-cr.myshopify.com",
+ "listing_url": "https://hawkins-woodshop.com/products/queen-size-bed-frame-with-modern-headboard-heavy-duty-platform-metal-base-with-square-footboard-and-13-strong-slats-support-no-box-spring-needed-black?variant=53027295035702&_gsid=JS8vypUnxHnF&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 24198,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/faa83ae321f3d633667240763f2c834f.jpg?v=1758504394",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/faa83ae321f3d633667240763f2c834f.jpg?v=1758504394",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/fa1f4b8df4462b9bff02bab3cf0c02fe.jpg?v=1758504394",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/c792fd625cbfe14e8c1212bebb77c28b.jpg?v=1758504394",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/592d55ddfcb6f8ed43ca49edf9d05d54.jpg?v=1758504394"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

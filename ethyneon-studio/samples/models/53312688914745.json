@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53312688914745",
+ "title": "Garvee 6-Tier Tall Wooden Bookcase with Storage Cabinet and Door - Industrial Office Bookshelf - Open Display Shelf - Freestanding Organizer for Living Room, Bedroom - Industrial Style",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-6-tier-tall-wooden-bookcase-phk-356fwsrc?variant=53312688914745&_gsid=ZtVBd9J7YF6a&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6099,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp6o_tl8vp.jpg?v=1779341410",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp6o_tl8vp.jpg?v=1779341410",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmptg0xti61.jpg?v=1779341409",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpum41wepd.jpg?v=1779341409",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp662xek2l.jpg?v=1779341409"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48041649111286",
+ "title": "Rustic Solid Wood Bed Frame Queen Bed Vintage Housewarming Gift SINLWB003",
+ "merchant": "f6bf1c-d7.myshopify.com",
+ "listing_url": "https://www.spryinterior.com/products/rustic-solid-wood-bed-frame-queen-bed-vintage-housewarming-gift-sinlwb003?variant=48041649111286&_gsid=5Ue9FKLJ42GM&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 1920900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0693/3443/4038/files/RusticWood_77e1d3d2-d8ec-43cd-ae16-9291c3d9b8ba.png?v=1742529163",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0693/3443/4038/files/RusticWood_77e1d3d2-d8ec-43cd-ae16-9291c3d9b8ba.png?v=1742529163",
+  "https://cdn.shopify.com/s/files/1/0693/3443/4038/files/Platform_Bed_Wood.png?v=1742529877",
+  "https://cdn.shopify.com/s/files/1/0693/3443/4038/files/Wood_Headboard.png?v=1742529877",
+  "https://cdn.shopify.com/s/files/1/0693/3443/4038/files/BedFrame.png?v=1742529877"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

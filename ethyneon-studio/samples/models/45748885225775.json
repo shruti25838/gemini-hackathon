@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45748885225775",
+ "title": "AutoFull Racing Gaming Chair Ice Blue",
+ "merchant": "utofull-mx.myshopify.com",
+ "listing_url": "https://autofull.mx/products/autofull-racing-gaming-chair-iceblue?variant=45748885225775&_gsid=nBokawoEtugD&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0731/3991/3007/products/6480006c067114a0605fdf6c_378d2f63-1374-49e6-b931-4f1b6ceb490a.jpg?v=1688986153",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0731/3991/3007/products/6480006c067114a0605fdf6c_378d2f63-1374-49e6-b931-4f1b6ceb490a.jpg?v=1688986153",
+  "https://cdn.shopify.com/s/files/1/0731/3991/3007/products/6480006c067114a0605fdf6e_7aacce0a-343b-45e0-91d3-9d4abe8cfd6b.jpg?v=1688986153",
+  "https://cdn.shopify.com/s/files/1/0731/3991/3007/products/6480006c067114a0605fdf6f_b0d39e80-adc3-4b22-8f31-63cb9074a1e1.jpg?v=1688986154",
+  "https://cdn.shopify.com/s/files/1/0731/3991/3007/products/6480006c067114a0605fdf6d_d41b6c84-b316-46d9-8390-6463950c3c46.jpg?v=1688986154"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

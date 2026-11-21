@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/61700296802638",
+ "title": "GTPLAYER Gaming Chair Fabric with Pocket Spring Cushion,Computer Office Chair with Lumbar Support for Adults Linkage Armrests and Footrest Ergonomic Gamings Chairs Height Adjustable Gray",
+ "merchant": "eggggg-t6.myshopify.com",
+ "listing_url": "https://eggggg-t6.myshopify.com/products/gtplayer-gaming-chair-fabric-with-pocket-spring-cushioncomputer-office-chair-with-lumbar-support-for-adults-linkage-armrests-and-footrest-ergonomic-gamings-chairs-height-adjustable-gray_ff1810f2?variant=61700296802638&_gsid=C6X97jzBvz7Q&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 4499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1070/2225/4414/files/eefcce873cf279a448fb33a357b925c8dc45e01b04b6c903bba049faf2eaf2ce.jpg?v=1794834581",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1070/2225/4414/files/eefcce873cf279a448fb33a357b925c8dc45e01b04b6c903bba049faf2eaf2ce.jpg?v=1794834581",
+  "https://cdn.shopify.com/s/files/1/1070/2225/4414/files/66602c870c4792e5d6f4c4bd00f14ce5a90e8b0fc71bda277b3082cd63853220.jpg?v=1794834582",
+  "https://cdn.shopify.com/s/files/1/1070/2225/4414/files/3d77e03cf45b2a5ca4128ddb28b1f7b79aec5dae223f4964546221063bdebcb5.jpg?v=1794834581",
+  "https://cdn.shopify.com/s/files/1/1070/2225/4414/files/8fa71a0e442f4d9d143c2ec70585f8d9e9b4e41172f647713941c2762ce05554.jpg?v=1794834581"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42972151578810",
+ "title": "3-Tier Mid-Century Modern Wooden Bookcase w/ 3 Back Panels, Offset Legs",
+ "merchant": "bestchoiceproducts.myshopify.com",
+ "listing_url": "https://bestchoiceproducts.com/products/3-tier-mid-century-modern-wooden-bookcase-w-3-back-panels-offset-legs?variant=42972151578810&_gsid=Wj2qAZUvunqz&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0636/7991/files/SKY7025LRG-1.jpg?v=1788196296",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0636/7991/files/SKY7025LRG-1.jpg?v=1788196296",
+  "https://cdn.shopify.com/s/files/1/0636/7991/files/SKY7028LRG-1.jpg?v=1788196298",
+  "https://cdn.shopify.com/s/files/1/0636/7991/files/SKY7028LRG-2_9bd0d1f0-4e7f-497d-a774-5f14580babd8.jpg?v=1788196298",
+  "https://cdn.shopify.com/s/files/1/0636/7991/files/SKY7028LRG-3.jpg?v=1788196299"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

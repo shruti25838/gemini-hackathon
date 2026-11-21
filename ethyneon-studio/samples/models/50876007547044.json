@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50876007547044",
+ "title": "Solid Wood 4 Legs Coffee Table Modern Oval Coffee Table with Storage",
+ "merchant": "clearhalo.myshopify.com",
+ "listing_url": "https://www.clearhalo.com/products/solid-wood-4-legs-coffee-table-modern-oval-coffee-table-with-storage?variant=50876007547044&_gsid=iBRy62bcFQ3F&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20261,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5412967.jpg?v=1743358941",
+ "dimensions_m": {
+  "width": 1.0033,
+  "height": 0.4572,
+  "depth": 0.4953
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5412967.jpg?v=1743358941",
+  "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5412978.jpg?v=1743358946",
+  "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/5412970.jpg?v=1743358866",
+  "https://cdn.shopify.com/s/files/1/0525/2507/2548/files/1200x1200_97f85061-d73d-455e-856e-3957ac2cf690.jpg?v=1743358869"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

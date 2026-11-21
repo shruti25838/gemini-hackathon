@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/71679425216765",
+ "title": "81\" Farmhouse Couch with Stripe Pattern, 3 Seater Sofa with Solid Wood Legs and Rolled Wide Armrests, Comfy",
+ "merchant": "q1esnd-da.myshopify.com",
+ "listing_url": "https://castelune.com/products/81-farmhouse-couch-with-stripe-pattern-3-seater-sofa-with-solid-wood-legs-and-rolled-wide-armrests-comfy?variant=71679425216765&_gsid=MhEmxLPFwfL7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 93299,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/81h-Lmy0y_L.jpg?v=1792739070",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/81h-Lmy0y_L.jpg?v=1792739070",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/71kCarM8PrL.jpg?v=1792739070",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/818hau5froL.jpg?v=1792739070",
+  "https://cdn.shopify.com/s/files/1/0847/3624/6013/files/814gPgZdhqL.jpg?v=1792739070"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

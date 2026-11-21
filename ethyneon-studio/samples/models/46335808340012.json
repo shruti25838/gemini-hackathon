@@ -1,0 +1,23 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46335808340012",
+ "title": "Fabric Gaming Chair with Footrest and Lumbar Support, Reclining, Dark Gray",
+ "merchant": "bys-user-store-936273-0sa5hnci.myshopify.com",
+ "listing_url": "https://cozycabaret.com/products/fabric-gaming-chair-footrest-dark-gray?variant=46335808340012&_gsid=QrfHopzmGk8V&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16199,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0745/3543/6332/files/b55f3061c1b8cade4e4386d734ffe6be.jpg?v=1791247295",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0745/3543/6332/files/b55f3061c1b8cade4e4386d734ffe6be.jpg?v=1791247295"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

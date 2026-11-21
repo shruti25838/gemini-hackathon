@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42345233154137",
+ "title": "Abstract Minimalist Wave Wall Art",
+ "merchant": "tailoredpainting.myshopify.com",
+ "listing_url": "https://tailoredcanvases.com/products/abstract-minimalist-wave-wall-art?variant=42345233154137&_gsid=t5hKbfNbSoKw&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_2349c7b8-823f-4222-bb61-4aba570f4d13.jpg?v=1746428462",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_2349c7b8-823f-4222-bb61-4aba570f4d13.jpg?v=1746428462",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/2_11685b67-14dd-45ec-80de-66f99760bf37.jpg?v=1746428462",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/3_e704f086-9554-4e29-818b-6ec3738a2382.jpg?v=1746428462",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/4_d6512b86-802a-4796-95b9-b48dc25708eb.jpg?v=1746428462"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

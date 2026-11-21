@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46259562807534",
+ "title": "Z-EDGE UG27Q 27'' 165Hz QHD Curved Gaming Monitor",
+ "merchant": "z-edge-products.myshopify.com",
+ "listing_url": "https://www.z-edge.com/products/ug27q?variant=46259562807534&_gsid=J5UNb844RP7m&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0528/5547/2281/files/B0BW47KFXB.MAIN_e79afec3-2f1e-48cf-ada1-4bda5c92995d.jpg?v=1774493351",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0528/5547/2281/files/B0BW47KFXB.MAIN_e79afec3-2f1e-48cf-ada1-4bda5c92995d.jpg?v=1774493351",
+  "https://cdn.shopify.com/s/files/1/0528/5547/2281/files/B0BW47KFXB.PT01.jpg?v=1774493351",
+  "https://cdn.shopify.com/s/files/1/0528/5547/2281/files/B0BW47KFXB.PT02.jpg?v=1774493351",
+  "https://cdn.shopify.com/s/files/1/0528/5547/2281/files/B0BW47KFXB.PT03.jpg?v=1774493351"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

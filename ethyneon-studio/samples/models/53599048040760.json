@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53599048040760",
+ "title": "FurnitureR Home Office Desk Chair Comfy Ergonomic Padded Linen Fabric Upholstered\uff0cAdjustable Swivel Mid-Back Stylish Accent Vanity Chair, No Wheels, Beige",
+ "merchant": "7xsa14-kw.myshopify.com",
+ "listing_url": "https://myhomeofficedesk.com/products/b0f17n3vxk?variant=53599048040760&_gsid=gq6po3rRPudG&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12318,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0996/0433/2856/files/41QjdOXM0vL._AC_SL1500.jpg?v=1793187042",
+ "dimensions_m": {
+  "width": 0.4699,
+  "height": 0.854964,
+  "depth": 0.495046
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0996/0433/2856/files/41QjdOXM0vL._AC_SL1500.jpg?v=1793187042",
+  "https://cdn.shopify.com/s/files/1/0996/0433/2856/files/41QFoUOA-XL._AC_SL1500.jpg?v=1793187042",
+  "https://cdn.shopify.com/s/files/1/0996/0433/2856/files/41q7iDSaN3L._AC_SL1500.jpg?v=1793187042",
+  "https://cdn.shopify.com/s/files/1/0996/0433/2856/files/41xGsVNrqEL._AC_SL1500.jpg?v=1793187042"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

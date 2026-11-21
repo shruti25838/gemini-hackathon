@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43102871748764",
+ "title": "Abington Sofa, Three Seater, Dark Olive Velvet",
+ "merchant": "rowenandwren.myshopify.com",
+ "listing_url": "https://www.rowenandwren.co.uk/products/abington-sofa-three-seater-dark-olive-velvet?variant=43102871748764&_gsid=x46uFPkGB8ez&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 440000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0576/2960/6044/files/Rowen_and_wren_upholstery_DOV_4a244939-0736-4c90-9985-27c0f4422801.jpg?v=1740588665",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/files/Rowen_and_wren_upholstery_DOV_4a244939-0736-4c90-9985-27c0f4422801.jpg?v=1740588665",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/files/1.014_ABINGTON_THREE_SEATER_SAGE_VELVET_0011-2_fed20060-94a3-41a9-a76e-2a9f27b2bd58.jpg?v=1740588665",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/files/2.014_ABINGTON_THREE_SEATER_SAGE_VELVET_0027_9d4a58c9-21bb-4972-afb1-b5d3ebe0f12a.jpg?v=1740588665",
+  "https://cdn.shopify.com/s/files/1/0576/2960/6044/files/3.014_ABINGTON_THREE_SEATER_SAGE_VELVET_0031_e3f08473-28e2-4b78-8640-b3f12c075d15.jpg?v=1740588665"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

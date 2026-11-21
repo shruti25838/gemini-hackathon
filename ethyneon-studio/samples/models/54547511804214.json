@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54547511804214",
+ "title": "67\" U Shaped Computer Desk, Reversible L Shaped Gaming Desk",
+ "merchant": "3jtzfw-cr.myshopify.com",
+ "listing_url": "https://hawkins-woodshop.com/products/67-u-shaped-computer-desk-reversible-l-shaped-gaming-desk?variant=54547511804214&_gsid=aq3KtXgonHVF&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21698,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/81lQUB3gCmL._SL1200.jpg?v=1789211125",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/81lQUB3gCmL._SL1200.jpg?v=1789211125",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/51nsqef7QNL._SL1200.jpg?v=1789211125",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/51ncRjjGpIL._SL1200_d8cff758-23eb-4940-89f7-bcf0de6fdd90.jpg?v=1789211125",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/514ImOFg6dL._SL1200_90196a0c-5b13-451a-b479-6612004031f8.jpg?v=1789211125"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

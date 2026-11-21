@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44152030396668",
+ "title": "Art Leon Mid-Century Modern Faux Leather Swivel Desk Chair with Open Bentwood Backrest, No Wheels",
+ "merchant": "us-artleon.myshopify.com",
+ "listing_url": "https://artleon.com/products/art-leon-open-backrest-desk-chair?variant=44152030396668&_gsid=PdfZqgSPR2GP&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12499,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0645/6636/2364/products/CC028-GRAY_3b4714cf-461b-4d95-9812-15e6a1ff2376.jpg?v=1747979483",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/products/CC028-GRAY_3b4714cf-461b-4d95-9812-15e6a1ff2376.jpg?v=1747979483",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/CC028-1-BR-PU-JL-SILO-1.jpg?v=1747979483",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/PU_Leather_Swivel_Desk_Chair_with_Curved_Bentwood_Backrest_CC028-1-BR-PU-JL_5.jpg?v=1793267776",
+  "https://cdn.shopify.com/s/files/1/0645/6636/2364/files/PU_Leather_Swivel_Desk_Chair_with_Curved_Bentwood_Backrest_CC028-1-BR-PU-JL_6.jpg?v=1793267777"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

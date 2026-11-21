@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44584341340273",
+ "title": "Olive Green Velvet Oversized Three Seater Sofa",
+ "merchant": "0h13jd-jh.myshopify.com",
+ "listing_url": "https://chichome-decor.com/products/extra-large-3-seat-modern-velvet-sofa-oversize-sofa-clould-like-comfortable-seat-and-back-support-with-waist-pillows-and-throw-pillows-olive-green?variant=44584341340273&_gsid=ENYifBgzrUUx&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 81236,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0659/1653/4897/files/dspic_651107ee-d76a-44a5-a241-6a9174d3166a.jpg?v=1789681800",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0659/1653/4897/files/dspic_651107ee-d76a-44a5-a241-6a9174d3166a.jpg?v=1789681800",
+  "https://cdn.shopify.com/s/files/1/0659/1653/4897/files/dspic_1907cf9e-3d71-4323-884f-c7130e62fd0e.jpg?v=1789681800",
+  "https://cdn.shopify.com/s/files/1/0659/1653/4897/files/dspic_90e34cc4-acfe-401d-aac5-d5d1109ce4b9.jpg?v=1789681800",
+  "https://cdn.shopify.com/s/files/1/0659/1653/4897/files/dspic_a76083e8-4226-4ee0-8c55-5c3611412636.jpg?v=1789681800"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

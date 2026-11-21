@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47161388335362",
+ "title": "Solid Walnut Round Side Table \u2013 Handcrafted Accent Table in Small, Large & 2-Piece Set",
+ "merchant": "childedempsey.myshopify.com",
+ "listing_url": "https://woodartdeal.com/products/solid-walnut-round-side-table-handcrafted-accent-table-in-small-large-2-piece-set?variant=47161388335362&_gsid=wjoo1Ua2LokY&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 16600,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/a464bce7941f44559de60a2d1503fecc.png?v=1766483358",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/a464bce7941f44559de60a2d1503fecc.png?v=1766483358",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/06596175dd1f4bc1b42057a98f1357bb.png?v=1766483358",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/842d6adfbb2f4781b4fd4ca5efc519b7.png?v=1766483358",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/766a4b6e9c2e407584e649884c3f1211.png?v=1766483358"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

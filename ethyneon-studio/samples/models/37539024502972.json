@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/37539024502972",
+ "title": "EPIC Racing Ergonomic Gaming Chair ER-100, Blue",
+ "merchant": "epic-racing-usa.myshopify.com",
+ "listing_url": "https://shopepicracing.com/products/blue-gaming-chair?variant=37539024502972&_gsid=2SNckke9JtDs&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0504/0170/6172/products/Epic-Racing_Blue_Left.png?v=1646783529",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0504/0170/6172/products/Epic-Racing_Blue_Left.png?v=1646783529",
+  "https://cdn.shopify.com/s/files/1/0504/0170/6172/products/blue_reclined.png?v=1646783529",
+  "https://cdn.shopify.com/s/files/1/0504/0170/6172/products/Epic-Racing_Blue_Reclined.png?v=1646783529"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

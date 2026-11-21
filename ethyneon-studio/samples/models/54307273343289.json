@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54307273343289",
+ "title": "Garvee Industrial 39\" Rectangular Coffee Table, 2-Tier Center Table with Storage Shelf, Wood-Look Top & Metal Frame, Easy Assembly - Black Tube + Gray Board",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-industrial-39-rectangular-coffee-table-gray-phk-3au5xyhp?variant=54307273343289&_gsid=KwazrvkMAWZR&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 10999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpr6haouhn.jpg?v=1785895279",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpr6haouhn.jpg?v=1785895279",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpby_w4ysx.jpg?v=1785895279",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp8qu15peh.jpg?v=1785895279",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpehdx4fdz.jpg?v=1785895280"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

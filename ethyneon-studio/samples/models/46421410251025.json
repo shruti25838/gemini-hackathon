@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46421410251025",
+ "title": "VINGLI AC101 Armless Home Office Desk Chair with Wheels Upholstered Adjustable Rolling Swivel Nail Chair",
+ "merchant": "vingliwebsite.myshopify.com",
+ "listing_url": "https://vingliwebsite.myshopify.com/products/vingli-modern-mid-back-tufted-velvet-fabric-computer-chair-swivel-adjustable-accent-with-wheels-blue-grey-pink?variant=46421410251025&_gsid=U5D3z1s4nVoB&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0274/1773/9324/files/81EiKtTyHVL._AC_SL1500.jpg?v=1691565560",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0274/1773/9324/files/81EiKtTyHVL._AC_SL1500.jpg?v=1691565560",
+  "https://cdn.shopify.com/s/files/1/0274/1773/9324/files/G52002929_1.jpg?v=1691565560",
+  "https://cdn.shopify.com/s/files/1/0274/1773/9324/files/image_1_bfc6511d-aa6b-4a9c-abb0-29e054b43ee7.jpg?v=1691565560",
+  "https://cdn.shopify.com/s/files/1/0274/1773/9324/files/G52002929_1_955564c2-bc9c-4cde-aff0-064bc47d5643.jpg?v=1724057802"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

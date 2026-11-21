@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50361170231590",
+ "title": "Round Walnut Side Table | Solid Wood, 16\" Tall",
+ "merchant": "huru0q-us.myshopify.com",
+ "listing_url": "https://exoticwoodworx.com/products/round-walnut-side-table?variant=50361170231590&_gsid=jWF81RXPkgFJ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 29999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0920/9269/4822/files/rn-image_picker_lib_temp_6d48487d-583e-48c2-837e-9346b37b7bf9.png?v=1743818301",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0920/9269/4822/files/rn-image_picker_lib_temp_6d48487d-583e-48c2-837e-9346b37b7bf9.png?v=1743818301",
+  "https://cdn.shopify.com/s/files/1/0920/9269/4822/files/rn-image_picker_lib_temp_f19001c4-df38-4001-a636-a5485c130446.png?v=1743818301",
+  "https://cdn.shopify.com/s/files/1/0920/9269/4822/files/rn-image_picker_lib_temp_de1e7d3b-a996-486a-b1a4-1a577c8f6de9.png?v=1743818301",
+  "https://cdn.shopify.com/s/files/1/0920/9269/4822/files/rn-image_picker_lib_temp_8119e3a2-4c73-444e-96cf-3cad2ee5534f.png?v=1743818301"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

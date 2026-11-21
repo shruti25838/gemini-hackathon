@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/67586683699445",
+ "title": "Mesh Gaming Chair with Footrest",
+ "merchant": "112may-qu.myshopify.com",
+ "listing_url": "https://nestifys.com/products/mesh-gaming-chair-footrest?variant=67586683699445&_gsid=ukrTkuaQAVN2&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 28699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71j2XO23nwL.jpg?v=1790242111",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "leather",
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71j2XO23nwL.jpg?v=1790242111",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71fkXjqAxdL.jpg?v=1790242110",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/71p_MYk_XcL.jpg?v=1790242111",
+  "https://cdn.shopify.com/s/files/1/0752/6619/5701/files/716eMK-xLQL.jpg?v=1790242110"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

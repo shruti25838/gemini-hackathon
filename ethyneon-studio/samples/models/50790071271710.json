@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50790071271710",
+ "title": "ADORNEVE Bed Frame Queen size with 4 Storage Drawers and Charging Station  Metal and Wood Platform Bed with Upholstered Headboard and LED Lights",
+ "merchant": "3rpyut-hz.myshopify.com",
+ "listing_url": "https://www.adorneve.com/products/adorneve-bed-frame-queen-size-with-4-storage-drawers-and-charging-station-metal-and-wood-platform-bed-with-upholstered-headboard-and-led-lights?variant=50790071271710&_gsid=fwWSJFM9STwA&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 29999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/260415-grey_1_fd732c43-353b-45f7-aef4-0f896424e85a.jpg?v=1776218685",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/260415-grey_1_fd732c43-353b-45f7-aef4-0f896424e85a.jpg?v=1776218685",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/260415-grey_2_6d62fad7-739c-4824-8baa-b71d17ebeddf.jpg?v=1776218684",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/260415-grey_7_2f023585-b738-49c0-9a1f-8ca8e5252c5c.jpg?v=1776219039",
+  "https://cdn.shopify.com/s/files/1/0958/5400/2462/files/260415-grey_5_15d4494b-24e3-4eb7-9a71-68222be87322.jpg?v=1776219039"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

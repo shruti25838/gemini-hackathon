@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46939121877181",
+ "title": "Farmhouse Desk Lamps, Reading Bedside Table Lamp for Living Room, Vintage Industrial Swing Arm Pleated Light for Bedroom, E26",
+ "merchant": "c89xfy-wx.myshopify.com",
+ "listing_url": "https://eraformhome.com/products/b0br222vpp?variant=46939121877181&_gsid=1x6KWcnBU9M5&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9342,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0725/6267/1805/files/81qcTfZ3SRL._AC_SX679.jpg?v=1781545614",
+ "dimensions_m": {
+  "width": 0.22098,
+  "height": 0.52324,
+  "depth": 0.34036
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0725/6267/1805/files/81qcTfZ3SRL._AC_SX679.jpg?v=1781545614",
+  "https://cdn.shopify.com/s/files/1/0725/6267/1805/files/71iRcas7R2L._AC_SX679.jpg?v=1781545614",
+  "https://cdn.shopify.com/s/files/1/0725/6267/1805/files/71YPbhA_rL._AC_SX679.jpg?v=1781545614",
+  "https://cdn.shopify.com/s/files/1/0725/6267/1805/files/61t23O1xOZL._AC_SX679.jpg?v=1781545614"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

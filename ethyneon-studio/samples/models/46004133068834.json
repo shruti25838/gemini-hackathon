@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46004133068834",
+ "title": "SEDETA\u00ae 47 Inch Solid Pine Wood Computer Desk with 3 Wood Drawers Executive Home Office Desk for Work Study Writing Bedroom Makeup Vanity Desk",
+ "merchant": "a77719-4f.myshopify.com",
+ "listing_url": "https://www.sedetalife.com/products/sedeta-47-inch-solid-pine-wood-executive-desk-with-3-wood-drawers-for-work?variant=46004133068834&_gsid=9TBnU5GTL1Dv&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 22999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260714-50_4e1ecac3-bd87-4195-a44d-73ead7ec3aab.jpg?v=1784088566",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260714-50_4e1ecac3-bd87-4195-a44d-73ead7ec3aab.jpg?v=1784088566",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260714-10_1.jpg?v=1784011287",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260714-10_10.jpg?v=1784011287",
+  "https://cdn.shopify.com/s/files/1/0746/6434/5634/files/20260714-10_3.jpg?v=1784011286"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

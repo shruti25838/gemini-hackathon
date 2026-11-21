@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42522386366553",
+ "title": "Minimalist Waves Wall Art III",
+ "merchant": "tailoredpainting.myshopify.com",
+ "listing_url": "https://tailoredcanvases.com/products/minimalist-waves-wall-art-iii?variant=42522386366553&_gsid=VTGt6UFeWnfi&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_d85f771e-d915-4d83-8683-e933c46711c2.jpg?v=1753315603",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/1_d85f771e-d915-4d83-8683-e933c46711c2.jpg?v=1753315603",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/4_a337108c-3a7c-46c2-8360-4b5ca0a8a392.jpg?v=1753315603",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/5_c06ff4dd-51d8-492f-b5fe-17579f8c1fee.jpg?v=1753315603",
+  "https://cdn.shopify.com/s/files/1/0279/2987/0425/files/3_973b5bed-bdb3-43c8-ac95-c9aa7e87e1ba.jpg?v=1753315603"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

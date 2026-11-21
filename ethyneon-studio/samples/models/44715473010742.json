@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44715473010742",
+ "title": "Garvee Wood Platform Bed Frame, Queen Size Bed Frame, Wood Slat Support, No Box Spring Needed, Easy Assembly, Noise-Free Design, Underbed Space for Storage",
+ "merchant": "0zz1ig-ce.myshopify.com",
+ "listing_url": "https://dwellinhaus.com/products/b0g1451pzq?variant=44715473010742&_gsid=xrZi76dRskKA&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 24583,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0725/4566/5078/files/71TDrq_9Q4L._AC_SX679.jpg?v=1768900671",
+ "dimensions_m": {
+  "width": 2.0701,
+  "height": 0.25908,
+  "depth": 1.56972
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0725/4566/5078/files/71TDrq_9Q4L._AC_SX679.jpg?v=1768900671",
+  "https://cdn.shopify.com/s/files/1/0725/4566/5078/files/71L3aMV69_L._AC_SX679.jpg?v=1768900669",
+  "https://cdn.shopify.com/s/files/1/0725/4566/5078/files/71T5tnh47gL._AC_SX679_393253e4-8d82-476a-a6a5-d8eae297f317.jpg?v=1768900669",
+  "https://cdn.shopify.com/s/files/1/0725/4566/5078/files/71E5hskxbvL._AC_SX679.jpg?v=1768900669"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

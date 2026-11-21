@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/40028048982113",
+ "title": "SUGIFT Bicolor Writing-Computer Desk with Storage, Large Students-Study Desk with Shelf Home-Office PC Laptop Table Modern Wood Workstation, Oak & White",
+ "merchant": "sugift.myshopify.com",
+ "listing_url": "https://www.us-sugift.com/products/computer-desk-051003?variant=40028048982113&_gsid=2jSQYEpkq4rK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12595,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/f130c40a-352f-4967-b5e4-a8d6170b4d0c.ecb2980c37aa04512d4f942f805b9a9e.jpg?v=1652464438",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/f130c40a-352f-4967-b5e4-a8d6170b4d0c.ecb2980c37aa04512d4f942f805b9a9e.jpg?v=1652464438",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/0bafd235-48ef-4b40-84a1-1ce75a291501.d6b2f6f61f590062f3b8caf40c5884f0.jpg?v=1652464438",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/ea3315f1-bb0d-4659-833e-6fb64fe5e8d1.0b4c74ef33a97dbe19334738af9aa6df.jpg?v=1652464438",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/5962bc68-2e34-4770-8d54-9283c80baa08.c4fb8f6636b06d6fcdea328af2708dbb.jpg?v=1652464438"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

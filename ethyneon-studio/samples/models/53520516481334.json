@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53520516481334",
+ "title": "Farmhouse TV Stand for Tvs up to 65 Inches, Entertainment Center with Storage Cabinets and Sliding Barn Doors, Media Console Table for Living Room, Rustic White and Honey Brown ULTV535W01",
+ "merchant": "3jtzfw-cr.myshopify.com",
+ "listing_url": "https://hawkins-woodshop.com/products/farmhouse-tv-stand-for-tvs-up-to-65-inches-entertainment-center-with-storage-cabinets-and-sliding-barn-doors-media-console-table-for-living-room-rustic-white-and-honey-brown-ultv535w01-2?variant=53520516481334&_gsid=DWx1ZHCDHRiF&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 20898,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/0940e7a295d95eba00ca97d0ebdc6e1c.jpg?v=1767058736",
+ "dimensions_m": {
+  "width": 1.4732,
+  "height": 0.6096,
+  "depth": 0.4064
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/0940e7a295d95eba00ca97d0ebdc6e1c.jpg?v=1767058736",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/631095caa85b950b0f2c57dc7b1d400f_7dfac024-e40f-4c66-a226-bfbc799c0d14.jpg?v=1767058736",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/0d6bf14b5c44de5b8b5e68c2e947fbdf_c28aa729-93f7-4014-89fb-590dd74a1ff1.jpg?v=1767058736",
+  "https://cdn.shopify.com/s/files/1/0941/9961/1702/files/ea39d29005c3ab24a9a3cb742005fcb7_238a6728-4fb9-46a2-bf7b-82868dc8a70d.jpg?v=1767058736"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

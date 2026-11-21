@@ -1,0 +1,31 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45077436563503",
+ "title": "79 inch Gaming Desk with RGB Lights, Computer Table with Power Outlets & USB Ports, Keyboard Tray and 2 Drawers, White",
+ "merchant": "91f95a-70.myshopify.com",
+ "listing_url": "https://totalfindz.com/products/79-inch-gaming-desk-with-rgb-lights-computer-table-with-power-outlets-usb-ports-keyboard-tray-and-2-drawers-white?variant=45077436563503&_gsid=Nw6TZayZuGd2&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12400,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/jZnfda19be3902692_jpg_414ba367-315c-4584-87dd-33eda2dedac8.webp?v=1775217261",
+ "dimensions_m": {
+  "width": 1.99898,
+  "height": 0.87376,
+  "depth": 0.70612
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/jZnfda19be3902692_jpg_414ba367-315c-4584-87dd-33eda2dedac8.webp?v=1775217261",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/drtb7419be3902692_jpg_c9e16ef3-c320-41c2-bffc-67d95991ec24.webp?v=1775217261",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/cJ8e8a19be3902692_jpg_ccccc60e-78fe-4e2c-b361-1683f8b777b1.webp?v=1775217261",
+  "https://cdn.shopify.com/s/files/1/0615/3322/5007/files/E2b77119be3902692_jpg_b9b01f70-d016-40e9-91b0-b5d505fa4f72.webp?v=1775217261"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

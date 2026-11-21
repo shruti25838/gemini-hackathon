@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45994578673717",
+ "title": "Green Velvet 3-Seat Couch, 85 in Wide",
+ "merchant": "vnrs4b-1g.myshopify.com",
+ "listing_url": "https://twoseventynine.com/products/couch-3-seat-velvet-green-85-in?variant=45994578673717&_gsid=vGjuNVXhPKYu&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 91500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/8993d35061504cf19cc1a65e99329efb.jpg?v=1789225646",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/8993d35061504cf19cc1a65e99329efb.jpg?v=1789225646",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/686225c5ae0449d7b7c59eb674fcc985.jpg?v=1789225687",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/505588084bf9413b82f3f9314d74e31d.jpg?v=1789225686",
+  "https://cdn.shopify.com/s/files/1/0666/3087/7237/files/32b5293bf2a84fcca0655b3dfee52387.jpg?v=1789225686"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

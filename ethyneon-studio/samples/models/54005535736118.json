@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54005535736118",
+ "title": "Dimmable Floor Lamp Sixty EightInch Black Industrial",
+ "merchant": "discount-muebles.myshopify.com",
+ "listing_url": "https://shipitfurniture.com/products/dimmable-floor-lamp-farmhouse-standing-lamp-with-elegant-metal-cage-industrial-tall-tree-floor-lamps-for-living-room-bedroom-study-room-office-2000lm-led-bulbs-included-68-black?variant=54005535736118&_gsid=NNkoC8Df3YZ4&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/271b8abc8b2192007df62dc830160a6c.jpg?v=1781978457",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/271b8abc8b2192007df62dc830160a6c.jpg?v=1781978457",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/5990e7538129c940f08d410e9cb4c7a0.jpg?v=1778275497",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/0c7f438ce9be930b44203faacf142839.jpg?v=1778275497",
+  "https://cdn.shopify.com/s/files/1/0743/1746/3862/files/420428d8892e3b03e1dde497b7adf3bc.jpg?v=1778275497"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

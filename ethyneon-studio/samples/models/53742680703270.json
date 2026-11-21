@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53742680703270",
+ "title": "Stackble Cube Storage Organizer \u2013 Focus-Friendly Modular Bookshelf for Study Room, 6-Cube Office Organizer",
+ "merchant": "w0f46n-28.myshopify.com",
+ "listing_url": "https://tevrano.myshopify.com/products/stackble-cube-storage-organizer-focus-friendly-modular-bookshelf-for-study-room-6-cube-office-organizer?variant=53742680703270&_gsid=dUhDzMwQzzfV&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3249,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1025/6583/9142/files/eiob08hk78c5b-var-1.jpg?v=1787358833",
+ "dimensions_m": {
+  "width": 0.29972,
+  "height": 0.29972,
+  "depth": 0.29972
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1025/6583/9142/files/eiob08hk78c5b-var-1.jpg?v=1787358833",
+  "https://cdn.shopify.com/s/files/1/1025/6583/9142/files/6-cube-modular-design-with-11-8-x-11-8-x-11-8-individual-cub.jpg?v=1787358780",
+  "https://cdn.shopify.com/s/files/1/1025/6583/9142/files/polyethylene-plastic-sheets-with-sturdy-metal-frame-and-abs.jpg?v=1787358780",
+  "https://cdn.shopify.com/s/files/1/1025/6583/9142/files/15-lb-per-cube-weight-capacity-suitable-for-clothes-books-an.jpg?v=1787358780"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

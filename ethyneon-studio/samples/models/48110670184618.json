@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48110670184618",
+ "title": "SAFAVIEH Lighting Collection Kyler Rustic Farmhouse Brown Wood Finish 28-inch Bedroom Living Room Home Office Desk Nightstand Table Lamp (LED Bulb Included)",
+ "merchant": "1gkpt2-wr.myshopify.com",
+ "listing_url": "https://brightdesk-co.com/products/b07wss24zc?variant=48110670184618&_gsid=L2pMDAEWmzyu&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7333,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0672/4812/8170/files/81NHK12-kCL._AC_SX679.jpg?v=1773409177",
+ "dimensions_m": {
+  "width": 0.3302,
+  "height": 0.6985,
+  "depth": 0.3302
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0672/4812/8170/files/81NHK12-kCL._AC_SX679.jpg?v=1773409177",
+  "https://cdn.shopify.com/s/files/1/0672/4812/8170/files/81VevBpn25L._AC_SX679.jpg?v=1773409177",
+  "https://cdn.shopify.com/s/files/1/0672/4812/8170/files/81r1kGZjgSL._AC_SX679.jpg?v=1773409177"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48449810628826",
+ "title": "24\" Boho Farmhouse Wood Counter Height Bar Stool with Woven Cane Back",
+ "merchant": "phi-villa.myshopify.com",
+ "listing_url": "https://www.phivillaus.com/products/24-boho-farmhouse-counter-height-bar-stool-with-woven-cane-back?variant=48449810628826&_gsid=XAXCCzmudUUF&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0571/9906/7328/files/farmhousecounterbarstoolsetof2.jpg?v=1787292401",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "mesh",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0571/9906/7328/files/farmhousecounterbarstoolsetof2.jpg?v=1787292401",
+  "https://cdn.shopify.com/s/files/1/0571/9906/7328/files/Farmhouse_Counter_Height_Bar_Stool_with_Woven_Cane_Back.jpg?v=1787292904",
+  "https://cdn.shopify.com/s/files/1/0571/9906/7328/files/Linen_Seat_Material.jpg?v=1791858759",
+  "https://cdn.shopify.com/s/files/1/0571/9906/7328/files/IF-599_3.jpg?v=1787212547"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

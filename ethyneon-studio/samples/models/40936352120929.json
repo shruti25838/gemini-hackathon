@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/40936352120929",
+ "title": "SUGIFT 2-Tier Industrial Rectangular Coffee Table with Storage Shelf-Black",
+ "merchant": "sugift.myshopify.com",
+ "listing_url": "https://www.us-sugift.com/products/coffee-table-dhl54?variant=40936352120929&_gsid=8fMshJctymP7&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13200,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/0.54.jpg?v=1691476486",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/0.54.jpg?v=1691476486",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/1.54.jpg?v=1691476486",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/2.54.jpg?v=1691476486",
+  "https://cdn.shopify.com/s/files/1/0013/2422/0513/products/3.541db5ec5748873fb5.jpg?v=1691476486"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

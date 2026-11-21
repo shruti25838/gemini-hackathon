@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47609712476315",
+ "title": "Homrest Executive Wingback Office Chair \u2013 Green PU Leather High Back Desk Chair",
+ "merchant": "hommagic.myshopify.com",
+ "listing_url": "https://homrest.com/products/homrest-executive-wingback-office-chair-green-pu-leather-high-back-desk-chair?variant=47609712476315&_gsid=FkEgJTLiK5kT&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 32599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0459/6318/2235/files/13_1_a24e9ccc-dfce-4be6-92d7-3e4e3f5d4802.jpg?v=1764062573",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0459/6318/2235/files/13_1_a24e9ccc-dfce-4be6-92d7-3e4e3f5d4802.jpg?v=1764062573",
+  "https://cdn.shopify.com/s/files/1/0459/6318/2235/files/3_1_9095f25c-b332-429a-b378-d34300ec0391.jpg?v=1772266142",
+  "https://cdn.shopify.com/s/files/1/0459/6318/2235/files/5_1_ce56453c-adda-4eaa-9aac-67159c8fe29a.jpg?v=1772266142",
+  "https://cdn.shopify.com/s/files/1/0459/6318/2235/files/6_1_2be734d9-d739-4f28-923a-d077eaaf4274.jpg?v=1772266142"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

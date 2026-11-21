@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49797131895097",
+ "title": "Garvee Kitchen Island Car with Storage, Wood Top Rolling Mobile Carts on Wheels with Drawer and Storage Cabinet, White",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-gaomon-kitchen-island-car-with-pho-0ydo658q-1?variant=49797131895097&_gsid=hbkBiEfkQ9Vo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 23699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/610I-LeQ8HL_d6d1cfee-829d-439b-8925-e6a8d6d80a6f.jpg?v=1722404049",
+ "dimensions_m": {
+  "width": 0.44958,
+  "height": 0.8001,
+  "depth": 1.09982
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/610I-LeQ8HL_d6d1cfee-829d-439b-8925-e6a8d6d80a6f.jpg?v=1722404049",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/614f_CMGFSL_d7041c37-0f2e-49df-9ca4-a4205f160620.jpg?v=1722404049",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81rBGURpRNL_a4a1cf3a-83ea-4916-bc48-a4a2782d9fce.jpg?v=1722404049",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/81Z1lvWuK_L_6ed43851-672d-440b-a8bc-e13fdab4d916.jpg?v=1722404050"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,27 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47004455829679",
+ "title": "32 Inch Computer Desk Small Home Office Desk with Charging Station-White",
+ "merchant": "relaxacare.myshopify.com",
+ "listing_url": "https://www.relaxacare.ca/products/32-inch-computer-desk-small-home-office-desk-with-charging-station-white?variant=47004455829679&_gsid=c48juVf2iUBa&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_8818.jpg?v=1780598006",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_8818.jpg?v=1780598006",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_8816.jpg?v=1780598006",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_8817.jpg?v=1780598006",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_8819.jpg?v=1780598006"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

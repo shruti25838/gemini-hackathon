@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54243554558265",
+ "title": "Garvee Set of 3 26 Inch Swivel Counter Height Bar Stools with Back, Bentwood Legs & Faux Leather Upholstery for Kitchen Counter",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-set-of-3-26-inch-ppg-3586gx5r?variant=54243554558265&_gsid=G4MZgVkNxAoB&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 39999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmprady0uqo.jpg?v=1785131022",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmprady0uqo.jpg?v=1785131022",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpn5vs0arj_6905cf4b-1dde-4bbe-9848-af9334bbdc8d.jpg?v=1785131228",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpefxz8e07.jpg?v=1785131027",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3e7aor7r.jpg?v=1785131020"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

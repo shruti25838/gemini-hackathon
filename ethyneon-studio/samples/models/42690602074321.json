@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42690602074321",
+ "title": "Wood Rectangular 2-Tier Accent Side Table",
+ "merchant": "lakeside-asc.myshopify.com",
+ "listing_url": "https://www.lakeside.com/products/wood-rectangular-2-tier-accent-side-table?variant=42690602074321&_gsid=KLi3Qd4A3kK8&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 4399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0653/8048/3281/files/Square_Side_Table_Walnut_2144492_zm_a9bd108c-32cd-4105-bf97-3b9bd6519dae.jpg?v=1754904209",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0653/8048/3281/files/Square_Side_Table_Walnut_2144492_zm_a9bd108c-32cd-4105-bf97-3b9bd6519dae.jpg?v=1754904209",
+  "https://cdn.shopify.com/s/files/1/0653/8048/3281/files/108756_zm_161a162a-42fa-46c2-a8b4-1f8470008202.jpg?v=1754904209",
+  "https://cdn.shopify.com/s/files/1/0653/8048/3281/files/Square_Side_Table_Walnut_2144492_zm1_6ff4e6ae-88c8-4809-8b13-fd71f0742210.jpg?v=1754904209",
+  "https://cdn.shopify.com/s/files/1/0653/8048/3281/files/Square_Side_Table_Walnut_2144492_zm2_67831778-ed73-4f97-bb04-9a6c88c59b92.jpg?v=1754904209"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

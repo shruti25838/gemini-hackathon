@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/68025577767278",
+ "title": "YITAHOME 79\" Rustic Brown U-Shaped Desk with Drawers & Charging Station",
+ "merchant": "idbie2-am.myshopify.com",
+ "listing_url": "https://www.archivesystema.com/products/b0gqst314t?variant=68025577767278&_gsid=o9nVSt2E2TCt&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25199,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0980/5774/8846/files/51rql-heRKL._AC_SL1500.jpg?v=1794067825",
+ "dimensions_m": {
+  "width": 1.99898,
+  "height": 0.88392,
+  "depth": 1.19888
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0980/5774/8846/files/51rql-heRKL._AC_SL1500.jpg?v=1794067825",
+  "https://cdn.shopify.com/s/files/1/0980/5774/8846/files/51RUq1VJFXL._AC_SL1500.jpg?v=1794067825",
+  "https://cdn.shopify.com/s/files/1/0980/5774/8846/files/51asENZp8qL._AC_SL1500.jpg?v=1794067825",
+  "https://cdn.shopify.com/s/files/1/0980/5774/8846/files/51ehgvw1XqL._AC_SL1500.jpg?v=1794067825"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

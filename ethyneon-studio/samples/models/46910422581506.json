@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46910422581506",
+ "title": "Industrial Solid Wood Coffee Table \u2013 Handcrafted Design with Metal Legs for Modern Living Spaces",
+ "merchant": "childedempsey.myshopify.com",
+ "listing_url": "https://woodartdeal.com/products/industrial-solid-wood-coffee-table-thick-1-2-top-with-metal-base-multiple-sizes-colors?variant=46910422581506&_gsid=aCf4YThNova6&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 24500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Industrial_Solid_Wood_Coffee_Table.jpg?v=1782528263",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/Industrial_Solid_Wood_Coffee_Table.jpg?v=1782528263",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/walnut_1fc283de-818b-4903-8302-555d86344199.jpg?v=1782447740",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/natural_oak.jpg?v=1782447741",
+  "https://cdn.shopify.com/s/files/1/0615/1995/4178/files/detail_e8f9d732-c81a-449b-8655-6960fb3c9ab1.png?v=1782459372"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47001716097199",
+ "title": "Solid Wood Side Table Square End Table with Thickened Top and Curved Edge-Walnut",
+ "merchant": "relaxacare.myshopify.com",
+ "listing_url": "https://www.relaxacare.ca/products/solid-wood-side-table-square-end-table-with-thickened-top-and-curved-edge-walnut?variant=47001716097199&_gsid=tmzvM6DAT12o&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 4300,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Solid_Wood_Side_Tabl_1772430457872188_701779.jpg?v=1780542576",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Solid_Wood_Side_Tabl_1772430457872188_701779.jpg?v=1780542576",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Solid_Wood_Side_Tabl_1772430459950103_672749.jpg?v=1780542576",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Solid_Wood_Side_Tabl_1772430460975910_444364.jpg?v=1780542576",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Solid_Wood_Side_Tabl_1772430458888138_531897.jpg?v=1780542576"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

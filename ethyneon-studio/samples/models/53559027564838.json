@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53559027564838",
+ "title": "TOPMAX Farmhouse Rustic 2-piece Counter Height Wood Kitchen Dining Stools",
+ "merchant": "twjuaz-n1.myshopify.com",
+ "listing_url": "https://reewii.com/products/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-dining-stools-for-small-places-walnut?variant=53559027564838&_gsid=ojr1HUG6NdT8&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 18806,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-stools.jpg?v=1791883538",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-stools.jpg?v=1791883538",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-stools-3.jpg?v=1791883538",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-stools-4.jpg?v=1791883538",
+  "https://cdn.shopify.com/s/files/1/1027/1526/1222/files/topmax-farmhouse-rustic-2-piece-counter-height-wood-kitchen-stools-5.jpg?v=1791883538"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

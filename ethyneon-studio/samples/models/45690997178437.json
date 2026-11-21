@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45690997178437",
+ "title": "Serta\u00ae Hannah Executive Home Office Desk Chair, Ergonomic Mid-Back with Lumbar Support, Firm Seat Cushion, Layered Body Pillows, Padded Armrests, Swivel Base, Easy Assembly, Microfiber, Beige",
+ "merchant": "c1j9e6-ju.myshopify.com",
+ "listing_url": "https://core-offices.com/products/b00avuqp0s?variant=45690997178437&_gsid=2F3HeoxcPxrs&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 18849,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0717/2544/9285/files/41-r5uRU9hL._AC_SL1500.jpg?v=1788526375",
+ "dimensions_m": {
+  "width": 0.62865,
+  "height": 1.1176,
+  "depth": 0.73025
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0717/2544/9285/files/41-r5uRU9hL._AC_SL1500.jpg?v=1788526375",
+  "https://cdn.shopify.com/s/files/1/0717/2544/9285/files/51ink6rdv7L._AC_SL1500.jpg?v=1788526376",
+  "https://cdn.shopify.com/s/files/1/0717/2544/9285/files/51ykpYwolNL._AC_SL1500.jpg?v=1788526375",
+  "https://cdn.shopify.com/s/files/1/0717/2544/9285/files/51ddl2AltrL._AC_SL1500.jpg?v=1788526375"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

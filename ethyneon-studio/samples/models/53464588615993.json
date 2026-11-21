@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53464588615993",
+ "title": "Garvee Boho Rattan Bed Frame with Wooden Platform \u2013 Queen Size, Woven Headboard, Mid-Century Footboard, Underbed Storage, Sturdy Slats, Easy Assembly, Walnut, QUEEN",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-boho-rattan-bed-frame-with-phk-38cbsx8r?variant=53464588615993&_gsid=Qabbo6CZ5XWg&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp_z5inat8.jpg?v=1781500710",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp_z5inat8.jpg?v=1781500710",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp29094z94.jpg?v=1781500711",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpo1jnqo8p.jpg?v=1781500710",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpxil4u8j3.jpg?v=1781500710"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46803871269039",
+ "title": "360\u00b0 Height Adjustable Swivel Upholstered Desk Computer Chair with Hand-woven Back-Beige",
+ "merchant": "relaxacare.myshopify.com",
+ "listing_url": "https://www.relaxacare.ca/products/360-height-adjustable-swivel-upholstered-desk-computer-chair-with-hand-woven-back-beige?variant=46803871269039&_gsid=bMs1DwWcUrNJ&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 13200,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_48813_1_100034_1aa327db-061f-4b58-b393-89acdad2562b.jpg?v=1777176940",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_48813_1_100034_1aa327db-061f-4b58-b393-89acdad2562b.jpg?v=1777176940",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_48813_1_100032_bb3eb031-145d-45b8-b8d2-f963a4f36f86.jpg?v=1777176940",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_48813_1_100033_ab67dbd8-82ef-4bb5-9b16-55cc1f8a3b75.jpg?v=1777176940",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/image_48813_1_100035_f60947a8-250a-4512-8167-d33fc3cd5764.jpg?v=1777176940"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

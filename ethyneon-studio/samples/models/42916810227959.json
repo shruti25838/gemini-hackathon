@@ -1,0 +1,28 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42916810227959",
+ "title": "Luxury Green Velvet Upholstered Sofa 3Seater Sofa Solid Wood Frame 82.7\" Sofa",
+ "merchant": "cocochairs.myshopify.com",
+ "listing_url": "https://cocochairs.com/products/luxury-green-velvet-upholstered-sofa-3seater-sofa-solid-wood-frame-827-sofa?variant=42916810227959&_gsid=sFbLAnztm39y&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 400511,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/83d1b9506fd8b5d0c71ccab0beef244f.jpg?v=1723852414",
+ "dimensions_m": {
+  "width": 2.10058,
+  "height": 0.8001,
+  "depth": 0.94996
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/83d1b9506fd8b5d0c71ccab0beef244f.jpg?v=1723852414",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/3b36d7367377f02810213e7bf6d78f90.jpg?v=1723852421",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/0f6d3fbdc254ebe2bcc7bd438659b075.jpg?v=1723852428",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/5f2c13b04f8e5706d034727b07f8cff1.jpg?v=1723852435"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

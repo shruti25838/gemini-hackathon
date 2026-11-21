@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48562850267361",
+ "title": "Solid Wood Oval Coffee Table",
+ "merchant": "2uk5j3-0i.myshopify.com",
+ "listing_url": "https://cozynesthomegoods.com/products/solid-wood-oval-coffee-table-b0bgpspbrm?variant=48562850267361&_gsid=Yt1GYaBLcuxr&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 53939,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0828/2741/1681/files/91eLXQB-EHL._AC_SX679.jpg?v=1781589199",
+ "dimensions_m": {
+  "width": 1.14046,
+  "height": 0.46228,
+  "depth": 0.70104
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0828/2741/1681/files/91eLXQB-EHL._AC_SX679.jpg?v=1781589199",
+  "https://cdn.shopify.com/s/files/1/0828/2741/1681/files/61o-dWOfaPL._AC_SX679.jpg?v=1781589199",
+  "https://cdn.shopify.com/s/files/1/0828/2741/1681/files/81-4UWzTLCL._AC_SX679.jpg?v=1781589199",
+  "https://cdn.shopify.com/s/files/1/0828/2741/1681/files/811qn-3UJqL._AC_SX679.jpg?v=1781589199"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

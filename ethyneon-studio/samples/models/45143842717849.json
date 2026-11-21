@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45143842717849",
+ "title": "Rustic Farmhouse Mountain Comfort Sofa",
+ "merchant": "qieptg-a5.myshopify.com",
+ "listing_url": "https://rusticliving.com/products/rustic-mountain-comfort-sofa?variant=45143842717849&_gsid=51kLVi1kgKYP&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 179900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Aspen_Rustic_Mountain_Comfort_Sofa.jpg?v=1753133822",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "leather",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Aspen_Rustic_Mountain_Comfort_Sofa.jpg?v=1753133822",
+  "https://cdn.shopify.com/s/files/1/0666/3634/9593/files/Farmhouse_Classic_Wood_Style.jpg?v=1775169993"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

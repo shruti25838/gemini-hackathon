@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/45675237933242",
+ "title": "Contemporary Minimalist Abstract Wall Art",
+ "merchant": "sh23ah-mm.myshopify.com",
+ "listing_url": "https://s101.com/products/contemporary-minimalist-abstract-wall-art?_gsid=YEpEmyRt1yQK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 6999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0684/6952/2618/files/1_34379443-7294-4a6a-9134-f8d38bb07601.jpg?v=1772461705",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0684/6952/2618/files/1_34379443-7294-4a6a-9134-f8d38bb07601.jpg?v=1772461705",
+  "https://cdn.shopify.com/s/files/1/0684/6952/2618/files/5_b8dc27c4-af12-4bb3-a75a-79f705b27f6d.jpg?v=1772461706",
+  "https://cdn.shopify.com/s/files/1/0684/6952/2618/files/2_b1326ed4-bb15-4d74-9373-49eba6559362.jpg?v=1772461706",
+  "https://cdn.shopify.com/s/files/1/0684/6952/2618/files/3_9370d5c9-23a4-4b0d-b894-53ee6474e77c.jpg?v=1772461705"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

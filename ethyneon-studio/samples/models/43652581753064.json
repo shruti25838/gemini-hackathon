@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43652581753064",
+ "title": "Mountain Wildlife Lodge Sofa",
+ "merchant": "cabinplace.myshopify.com",
+ "listing_url": "https://www.cabinplace.com/products/mountain-moose-lodge-sofa?variant=43652581753064&_gsid=RoCe2ogKAV3r&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 189999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0635/0202/4936/files/130923520_5d0df3ba-4bcd-4e1f-b1d8-23624e225112.jpg?v=1690899658",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0635/0202/4936/files/130923520_5d0df3ba-4bcd-4e1f-b1d8-23624e225112.jpg?v=1690899658"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

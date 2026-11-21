@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51204349428029",
+ "title": "Fabric Gaming Chair with Pocket Spring Cushion and Adjustable Recliner",
+ "merchant": "tuc0vz-cy.myshopify.com",
+ "listing_url": "https://levfurniture.com/products/fabric-gaming-chair-pocket-spring-cushion-adjustable-recliner?variant=51204349428029&_gsid=HoabdRRiHJUm&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0970/3941/7661/files/71PINBcPi5L._AC_SX569.jpg?v=1766933709",
+ "dimensions_m": {
+  "width": 0.739648,
+  "height": 1.3208,
+  "depth": 1.3716
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0970/3941/7661/files/71PINBcPi5L._AC_SX569.jpg?v=1766933709",
+  "https://cdn.shopify.com/s/files/1/0970/3941/7661/files/719edveekzL.jpg?v=1766767520",
+  "https://cdn.shopify.com/s/files/1/0970/3941/7661/files/81jCNvtMvaL.jpg?v=1766767520",
+  "https://cdn.shopify.com/s/files/1/0970/3941/7661/files/91bf5guqlbL.jpg?v=1766767520"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

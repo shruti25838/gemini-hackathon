@@ -1,0 +1,26 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43710125506649",
+ "title": "Ergon Mesh Gaming Chair With Footrest",
+ "merchant": "techni-sport.myshopify.com",
+ "listing_url": "https://technisportusa.com/products/ergon-mesh-chair-with-footrest?variant=43710125506649&_gsid=o6xHoB6pj91q&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 28900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS95C-TEA-5-LS_92588c49-a22d-4620-9346-9c56c4a3b77c.webp?v=1784820909",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "mesh",
+  "metal",
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS95C-TEA-5-LS_92588c49-a22d-4620-9346-9c56c4a3b77c.webp?v=1784820909",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS95C-TEA-4_919d8061-a61e-4b72-a822-b1ba309b401b.webp?v=1784820909",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS95C-TEA-3_be96c5d1-e03f-4c3d-8ddf-ced8377bf82c.webp?v=1784820909",
+  "https://cdn.shopify.com/s/files/1/1905/8627/files/RTA-TS95C-TEA-SW_362fae0a-fed4-439e-a063-489128d88497.webp?v=1784820909"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

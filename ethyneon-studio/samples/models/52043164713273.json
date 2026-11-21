@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52043164713273",
+ "title": "Garvee Mid-Century Modern Armchair with Wood Frame, Linen Fabric Accent Chair with Classic Vertical Stripe, Reading Leisure Chair for Living Room, Gray",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-mid-century-modern-accent-chair-wood-gray-phk-37ag9d20?variant=52043164713273&_gsid=ocyCXJcMjAkX&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12599,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3w1_3wej.jpg?v=1774235426",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp3w1_3wej.jpg?v=1774235426",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpvuetasha.jpg?v=1774336712",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpd5ml9ghx.jpg?v=1774336712",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp4x2bbmoy.jpg?v=1774336712"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52597733982497",
+ "title": "LG 27GS60QC-B 27\" QHD 180Hz Curved Gaming Monitor AMD FreeSync QHD 2K",
+ "merchant": "quantum-connection-inc.myshopify.com",
+ "listing_url": "https://www.quantumconnection.ca/products/lg-27gs60qc-b-27-qhd-180hz-curved-gaming-monitor-amd-freesync-qhd-2k-open-box?variant=52597733982497&_gsid=1Je4RTpDCHfF&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 10000,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0784/9489/2321/files/57_8fd486b9-0c6f-431e-bcae-58048b89500b.jpg?v=1776918674",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "plastic"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0784/9489/2321/files/57_8fd486b9-0c6f-431e-bcae-58048b89500b.jpg?v=1776918674",
+  "https://cdn.shopify.com/s/files/1/0784/9489/2321/files/57_d0566bcc-133e-485a-bd71-912586dafb44.jpg?v=1776918674",
+  "https://cdn.shopify.com/s/files/1/0784/9489/2321/files/57_919ac82d-ea33-442f-8069-94bb34003c88.jpg?v=1776918674",
+  "https://cdn.shopify.com/s/files/1/0784/9489/2321/files/57_7111ad4a-c856-4c63-895a-60b1c764f9cb.jpg?v=1776918674"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

@@ -1,0 +1,29 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42917200232695",
+ "title": "Modern Green Velvet Upholstered Sofa 3Seater Sofa Gold Stainless Steel Base",
+ "merchant": "cocochairs.myshopify.com",
+ "listing_url": "https://cocochairs.com/products/modern-green-velvet-upholstered-sofa-3seater-sofa-gold-stainless-steel-base?variant=42917200232695&_gsid=os1gm74tfbxi&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 280408,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/85f3793cf3fe5f072363a433f6d5f6ca.jpg?v=1723865513",
+ "dimensions_m": {
+  "width": 1.99898,
+  "height": 0.70104,
+  "depth": 0.8509
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/85f3793cf3fe5f072363a433f6d5f6ca.jpg?v=1723865513",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/78ef6019ac29e78e17c66500ade18ec1.jpg?v=1723865519",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/feded8f7defbe19511fb39d8b001553e.jpg?v=1723865524",
+  "https://cdn.shopify.com/s/files/1/0609/3094/9367/products/8e9c78f9fb5c63b0ec54069adc747a71.jpg?v=1723865530"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

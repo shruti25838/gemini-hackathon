@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47938571993265",
+ "title": "Ellis Solid Wood End Table - Walnut",
+ "merchant": "madeleinehomestore-staging.myshopify.com",
+ "listing_url": "https://www.mh-london.com/products/ellis-end-table-walnut?variant=47938571993265&_gsid=F5s7TXAs8WjN&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0620/9119/8641/files/MH-TB-21088-3_4thRightWB.jpg?v=1701159141",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0620/9119/8641/files/MH-TB-21088-3_4thRightWB.jpg?v=1701159141",
+  "https://cdn.shopify.com/s/files/1/0620/9119/8641/files/MH-TB-21088-Floor_WallSet.jpg?v=1701159141",
+  "https://cdn.shopify.com/s/files/1/0620/9119/8641/files/MH-TB-21088-FrontSet.jpg?v=1701159141",
+  "https://cdn.shopify.com/s/files/1/0620/9119/8641/files/MH-TB-21088-AllVariationSet.jpg?v=1701159141"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

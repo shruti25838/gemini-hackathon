@@ -1,0 +1,24 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/50255437267246",
+ "title": "39\" Mid-Century Modern Oval Fluted Coffee Table with Curved Edges",
+ "merchant": "c6e8c4-2.myshopify.com",
+ "listing_url": "https://www.giratree.com/products/mid-century-modern-oval-fluted-curved-round-wooden-coffee-table-with-fluted-legs?variant=50255437267246&_gsid=KKraymqw9YZW&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 12900,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/NaturalMidCenturyModernOvalFlutedCurvedRoundWoodenCoffeeTablewithFlutedLegs_4.jpg?v=1747131192",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/NaturalMidCenturyModernOvalFlutedCurvedRoundWoodenCoffeeTablewithFlutedLegs_4.jpg?v=1747131192",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/NaturalMidCenturyModernOvalFlutedCurvedRoundWoodenCoffeeTablewithFlutedLegs_3.jpg?v=1747131192",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/NaturalMidCenturyModernOvalFlutedCurvedRoundWoodenCoffeeTablewithFlutedLegs_5.jpg?v=1747131191",
+  "https://cdn.shopify.com/s/files/1/0667/5965/5726/files/NaturalMidCenturyModernOvalFlutedCurvedRoundWoodenCoffeeTablewithFlutedLegs_6.jpg?v=1747131192"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

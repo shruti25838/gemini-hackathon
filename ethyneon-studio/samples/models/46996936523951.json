@@ -1,0 +1,25 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46996936523951",
+ "title": "Floral Accent Chair Farmhouse Boho Armchair with Solid Wood Legs and High Back-Beige",
+ "merchant": "relaxacare.myshopify.com",
+ "listing_url": "https://www.relaxacare.ca/products/floral-accent-chair-farmhouse-boho-armchair-with-solid-wood-legs-and-high-back-beige?variant=46996936523951&_gsid=sKVwUx7sCYgD&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17800,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Floral_Accent_Chair__1759490828882833_147326.jpg?v=1780600342",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Floral_Accent_Chair__1759490828882833_147326.jpg?v=1780600342",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Floral_Accent_Chair__1759490827466964_129428.jpg?v=1780600342",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Floral_Accent_Chair__1759490828181613_793862.jpg?v=1780600342",
+  "https://cdn.shopify.com/s/files/1/0085/5166/1649/files/Floral_Accent_Chair__1759490829631450_148981.jpg?v=1780600342"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}

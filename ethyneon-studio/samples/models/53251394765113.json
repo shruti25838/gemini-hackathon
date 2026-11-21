@@ -1,0 +1,30 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53251394765113",
+ "title": "Garvee 54 in Fluted Home Office Desk with 5 Drawers, File Storage, 2 AC Outlets, USB-A and USB-C Charging Station, Natural Oak",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-fluted-home-office-desk-storage-phk-35drntd7?variant=53251394765113&_gsid=BEsKS6Zz1pZV&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 19799,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp65d_xcr3.jpg?v=1777966998",
+ "dimensions_m": {
+  "width": 1.3716,
+  "height": 0.762,
+  "depth": 0.54864
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic",
+  "wood"
+ ],
+ "reference_image_urls": [
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp65d_xcr3.jpg?v=1777966998",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpamlx13lu.jpg?v=1777966997",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmpfbdkdjw1.jpg?v=1777966999",
+  "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp_02q34yp.jpg?v=1777966998"
+ ],
+ "model_label": "Approximate geometry and materials based on Shopify listing photos"
+}
