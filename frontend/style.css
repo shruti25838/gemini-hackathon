@@ -42,3 +42,4 @@ table { width:100%; border-collapse:collapse; font-size:12px; } td { padding:3px
 #transcript { max-height:140px; overflow:auto; margin-top:6px; font-size:12px; }
 #transcript .tx { padding:2px 0; } #transcript .you { color:var(--text); } #transcript .ethyneon { color:var(--ar); }
 .prod input.buy { width:18px; height:18px; accent-color: var(--ar); }
+#doorManual button { margin: 4px 4px 0 0; padding: 4px 10px; }
