@@ -169,3 +169,59 @@ The browser talks to the loopback studio route. `/api/studio/command` exposes th
 The automated suite covers the local HTTP contract, Gemini and Shop MCP request formats, Shopify-only catalog filtering, ambiguous managed-run timeouts, and the Agora SDK token. A live Agora join requires the two client devices and their Agora project. The Gemini key comes from the temporary account's AI Studio project.
 
 [Agora SDK token reference](https://docs.agora.io/en/api-reference/api-ref/server-sdk/platform/python) · [Shop MCP quickstart](https://shop.dev/docs/quickstart) · [Gemini Decisions API](https://aistudio.google.com/docs/decisions-api) · [Antigravity Managed Agent](https://aistudio.google.com/docs/antigravity-agent)
+
+## Run Studio next to the Ethyneon purchase server
+
+Studio shows the room and the products. It does not decide what can be bought and it does not mint
+checkout links. Every purchase decision goes to the Ethyneon server in the repository root, which
+owns the development-store rules, the approval record, the reconciliation and its own Decision 1
+audit. With no purchase server configured there is no purchase path at all: products still render
+and the audit still runs, and every line is view-only.
+
+Two processes, two ports.
+
+Both servers default to port 8000, so Studio moves to 8001.
+
+```sh
+# Terminal 1, repository root. The purchase server.
+scripts/dev backend                                                     # 127.0.0.1:8000
+
+# Terminal 2, ethyneon-studio. The Studio.
+.venv/bin/python -m uvicorn backend.app:app --host 127.0.0.1 --port 8001
+```
+
+Then in `ethyneon-studio/.env`:
+
+| Name | Value | Meaning |
+| --- | --- | --- |
+| `ETHYNEON_API_BASE` | `http://127.0.0.1:8000` | Where to ask. Unset means no purchase path. |
+| `ETHYNEON_API_TOKEN` | the purchase server's bearer token | Sent as a header only, never in a body or a log. |
+| `SHOPIFY_SHOPS` | `ethyneon.myshopify.com` | Limits discovery to the connected store. Empty means public Shop discovery, and those products are view-only. |
+
+Both names also appear in `.env.example`, without values. The server prints a warning at startup for
+each one that is missing, so a misconfigured demo is obvious before anyone clicks.
+
+On the purchase server side, a hosted checkout link is issued only when `LIVE_CART_WRITES=1` and the
+store domain is on `ALLOWED_CART_STORE_DOMAINS`. With either gate shut, Studio's audit still reaches
+`ready` and the response carries no link, with the reason on the cart.
+
+The development store is password-protected, so the first thing the hosted checkout shows is
+Shopify's store password page. That is expected. Enter the storefront password, and the cart and the
+test checkout follow. Cards are entered on Shopify's hosted page; this app never sees them, and no
+order exists unless the shopper presses Pay there.
+
+## Third-party assets and licenses
+
+Written during the Gemini 4 NYC Hackathon, November 2026. Nothing in this table is vendored into the
+repository: the browser libraries load from a CDN at the pinned version, and the sample room photos
+and generated meshes stay in `samples/`, which git ignores.
+
+| Asset | Where | License | Note |
+| --- | --- | --- | --- |
+| three.js 0.180.0 | `backend/static/*.html`, from jsDelivr | MIT | `three.module.js` and `examples/jsm` loaders |
+| Agora RTC SDK NG 4.23.4 | `backend/static/voice.html`, from jsDelivr | Agora SDK license, free tier | Voice only. Needs an Agora project to join a channel. |
+| Poly Haven interior HDRIs | source for `samples/rooms/`, 28 photo sets | CC0 | Cut into 100° camera views by `scripts/make_room_samples.py`; `manifest.json` records each source |
+| `samples/shopify-walnut-side-table.glb` | generated preview mesh | not stated, confirm with Mitran | Built by the model pipeline from a public Shopify listing's photos; treat as merchant-owned until confirmed |
+| Shopify product data, photos and copy | Shop MCP and Storefront API responses | merchant-owned | Shown as labelled discovery. Never mirrored into the development store, and never purchasable here. |
+| Generated 3D models for merchant products | `.cache/product-models/`, git-ignored | derived from merchant-owned photos | Approximate stand-in geometry, labelled as such on screen |
+| Inter, Helvetica Neue, SF Mono, Menlo | CSS `font-family` stacks | system fonts | Named, not bundled. No font file ships with this repository. |

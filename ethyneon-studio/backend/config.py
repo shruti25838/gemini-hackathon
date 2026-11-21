@@ -18,6 +18,11 @@ class Settings:
     shopify_shops: tuple[str, ...] = ()
     shopify_storefront_domain: str = ""
     shopify_storefront_token: str = field(default="", repr=False)
+    # Ethyneon purchase server. Studio never mints a cart link itself; it asks
+    # this server, which owns the dev-store rules, the approval record and the
+    # Decision 1 audit. Unset means no purchase path at all.
+    ethyneon_api_base: str = ""
+    ethyneon_api_token: str = field(default="", repr=False)
 
     @classmethod
     def load(cls) -> "Settings":
@@ -49,4 +54,6 @@ class Settings:
             shopify_shops=shops,
             shopify_storefront_domain=storefront,
             shopify_storefront_token=value("SHOPIFY_STOREFRONT_TOKEN"),
+            ethyneon_api_base=value("ETHYNEON_API_BASE").rstrip("/"),
+            ethyneon_api_token=value("ETHYNEON_API_TOKEN"),
         )

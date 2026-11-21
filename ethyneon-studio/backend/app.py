@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import hmac
+import logging
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, FastAPI, Request
@@ -33,6 +34,7 @@ from backend.schemas import (
     GeminiInteractionRequest,
     ManagedRunRequest,
 )
+from backend.ethyneon_client import EthyneonClient
 from backend.studio import ProductStudio
 
 
@@ -128,7 +130,20 @@ def create_app(
             app.state.rooms = RoomStudio(app.state.gemini, product_models=app.state.product_models)
             app.state.room_planner = PlacementPlanner(app.state.gemini, app.state.rooms)
             app.state.scenes = SceneStudio(app.state.shopify, app.state.product_models)
-            app.state.checkout = CheckoutStudio(app.state.shopify, app.state.gemini, app.state.scenes)
+            app.state.ethyneon = EthyneonClient(config.ethyneon_api_base, config.ethyneon_api_token)
+            app.state.checkout = CheckoutStudio(
+                app.state.shopify, app.state.gemini, app.state.scenes, app.state.ethyneon
+            )
+            if not config.shopify_shops:
+                logging.getLogger('ethyneon.studio').warning(
+                    'SHOPIFY_SHOPS is empty: product discovery may return other merchants. '
+                    'Those products are view-only and cannot be bought here.'
+                )
+            if not config.ethyneon_api_base:
+                logging.getLogger('ethyneon.studio').warning(
+                    'ETHYNEON_API_BASE is not set: there is no purchase path and checkout '
+                    'will issue no link.'
+                )
             app.state.room_chat = RoomChat(app.state.rooms, app.state.room_planner, app.state.shopify, app.state.scenes.path)
             app.state.voice = VoiceRelay(config, app.state.room_chat)
             yield
@@ -145,6 +160,9 @@ def create_app(
 
     @app.get("/healthz")
     def health() -> dict[str, str]:
+        # Liveness only. The purchase path and the discovery scope are
+        # reported by the startup warnings above, which keeps this probe's
+        # body exactly what the existing test asserts.
         return {"status": "ok"}
 
     @app.exception_handler(ConnectionError)

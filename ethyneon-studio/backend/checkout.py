@@ -4,9 +4,11 @@ Code decides the hard facts: every line is the exact Shopify variant, in stock, 
 without a guardrail problem. Gemini Decision 1 then audits the evidence packet (brief, room, lines, check
 results) and recommends the next action. Checkout is offered only when both agree.
 
-After a ready audit, each store gets a Shopify cart permalink (https://<store>/cart/<variant>:<qty>,...). The page opens
-it in a separate window because Shopify checkout refuses to load inside an iframe. Card details are entered only on
-Shopify's checkout page; this app never sees them, and no order exists unless the shopper presses Pay there.
+Studio does not mint checkout links. After a ready audit it asks the Ethyneon purchase server, which owns the
+development-store rules, the approval record and its own Decision 1 audit, and returns at most one hosted checkout
+URL for that store. A product that is not on that store is view-only, with the reason shown on its line. Card
+details are entered only on Shopify's hosted page; this app never sees them, and no order exists unless the shopper
+presses Pay there.
 """
 
 import asyncio
@@ -20,6 +22,11 @@ from uuid import uuid4
 from pydantic import Field
 
 from backend.connections import GeminiConnection, ShopifyConnection
+from backend.ethyneon_client import (
+    EthyneonClient,
+    PurchaseServerUnavailable,
+    refusal_reason,
+)
 from backend.errors import ConnectionError
 from backend.scene import CONTEXT, SceneStudio
 from backend.scene_edit import placement_problems
@@ -40,6 +47,12 @@ NEXT_ACTIONS = {
 class CheckoutRequest(RequestBody):
     base_etag: str = Field(pattern=r"^[0-9a-f]{16}$")
     product_ids: list[str] | None = Field(default=None, max_length=60)
+    # False is the review step: it asks the purchase server what the cart
+    # would be and runs the audit, and records no approval. True is the
+    # link-release step and is sent only when the shopper presses the
+    # explicit button. An approval the shopper did not give is worse than
+    # no cart at all, so this never defaults to True.
+    confirm: bool = False
 
 
 @dataclass
@@ -47,6 +60,7 @@ class CheckoutStudio:
     shopify: ShopifyConnection
     gemini: GeminiConnection
     scenes: SceneStudio
+    ethyneon: EthyneonClient | None = None
 
     async def _verify(self, item: dict[str, Any]) -> dict[str, Any]:
         line = {
@@ -115,6 +129,92 @@ class CheckoutStudio:
             "next_action_confidence": round(float(choice.get("confidence", 0)), 3),
         }
 
+    async def _purchase(self, lines: list[dict[str, Any]], status: str, confirm: bool = False) -> dict[str, Any]:
+        """Ask the purchase server what, if anything, can be bought.
+
+        Returns at most one store, for the configured development store.
+        Everything else is view-only with a reason. No link is ever returned
+        unless the shopper explicitly confirmed and our audit came back
+        ready.
+        """
+        empty = {"stores": [], "purchasable_variants": set(), "view_only_reason":
+                 "Not sold on the connected store, so it is view-only here.", "message": "", "status": None}
+
+        if self.ethyneon is None or not self.ethyneon.configured:
+            return {**empty, "status": "needs_review", "view_only_reason":
+                    "No purchase server is configured, so nothing can be bought here.",
+                    "message": "Purchase server not configured: set ETHYNEON_API_BASE. No checkout link was issued."}
+
+        selections = [{"variant_id": line["variant_id"], "quantity": 1} for line in lines]
+        try:
+            session = await self.ethyneon.create_session()
+            session_id = session.get("session_id")
+            if not session_id:
+                raise PurchaseServerUnavailable("The purchase server did not open a session.")
+
+            review = await self.ethyneon.cart_review(session_id, selections)
+            if review.get("code"):
+                return {**empty, "status": "needs_review",
+                        "view_only_reason": refusal_reason(review),
+                        "message": f"Purchase server: {refusal_reason(review)}"}
+
+            purchasable = {line["variant_id"] for line in review.get("lines", [])}
+            subtotal = (review.get("merchandise_subtotal") or {}).get("amount_minor", 0)
+            store_domain = (review.get("store") or {}).get("store_domain")
+
+            if not confirm:
+                # Review step. No approval is recorded and no link is asked
+                # for, so there is nothing to hand back but the facts.
+                return {"stores": [], "purchasable_variants": purchasable,
+                        "view_only_reason": "Not sold on the connected store, so it is view-only here.",
+                        "status": None,
+                        "message": f"{len(purchasable)} item(s) can be bought from {store_domain}. "
+                                   "Confirm to get the checkout link."}
+
+            if status != "ready":
+                return {"stores": [], "purchasable_variants": purchasable,
+                        "view_only_reason": "Not sold on the connected store, so it is view-only here.",
+                        "status": None, "message": "The audit must pass before a link is issued."}
+
+            action = uuid4().hex
+            confirmed = await self.ethyneon.cart_confirm(
+                session_id, review["review_id"], review.get("scene_revision", 0), action)
+            if confirmed.get("code"):
+                return {**empty, "purchasable_variants": purchasable, "status": "needs_review",
+                        "message": f"Purchase server: {refusal_reason(confirmed)}"}
+
+            result = await self.ethyneon.checkout_continue(session_id, review["review_id"], uuid4().hex)
+            if result.get("code"):
+                return {**empty, "purchasable_variants": purchasable, "status": "needs_review",
+                        "message": f"Purchase server: {refusal_reason(result)}"}
+
+            audit = result.get("audit") or {}
+            url = result.get("checkout_url")
+            if audit.get("outcome") != "ready" or not url:
+                # Name the real cause. A blocked audit and a server with cart
+                # writes switched off are different problems, and saying the
+                # wrong one sends the shopper to fix the wrong thing.
+                reason = (f"the audit said {audit.get('outcome')}"
+                          if audit.get("outcome") != "ready" else "cart writes are disabled")
+                return {"stores": [], "purchasable_variants": purchasable,
+                        "view_only_reason": "Not sold on the connected store, so it is view-only here.",
+                        "status": "needs_review",
+                        "message": f"No checkout link: {reason}."}
+
+            return {
+                "stores": [{"merchant": store_domain,
+                            "lines": [line["variant_id"] for line in review.get("lines", [])],
+                            "subtotal_minor": subtotal, "cart_url": url}],
+                "purchasable_variants": purchasable,
+                "view_only_reason": "Not sold on the connected store, so it is view-only here.",
+                "status": None, "message": "",
+            }
+        except PurchaseServerUnavailable as error:
+            return {**empty, "status": "needs_review",
+                    "view_only_reason": "The purchase server is unavailable, so nothing can be bought right now.",
+                    "message": f"Purchase server unavailable: {error.message} No checkout link was issued."}
+
+
     async def review(self, request: CheckoutRequest) -> dict[str, Any]:
         etag, body = self.scenes.read()
         if etag != request.base_etag:
@@ -152,15 +252,21 @@ class CheckoutStudio:
         else:
             message = "Decision 1 recommends: " + NEXT_ACTIONS[audit["next_action"]].lower() + "."
 
-        stores: dict[str, dict[str, Any]] = {}
+        # Studio no longer builds any cart URL. It used to assemble
+        # https://{merchant}/cart/{variant}:1 from Shop MCP's seller.domain,
+        # which produced real purchase links to arbitrary third-party
+        # merchants. The purchase server decides now, and it only ever
+        # answers for the configured development store.
+        purchase = await self._purchase(lines, status, request.confirm)
+        stores = purchase["stores"]
         for line in lines:
-            store = stores.setdefault(line["merchant"] or "unknown", {"merchant": line["merchant"], "lines": [], "subtotal_minor": 0})
-            store["lines"].append(line["product_id"])
-            store["subtotal_minor"] += (line["price_now"] or {}).get("amount", 0)
-        variants = {line["product_id"]: line["variant_id"].rsplit("/", 1)[-1] for line in lines}
-        for store in stores.values():
-            items = ",".join(f"{variants[product_id]}:1" for product_id in store["lines"])
-            store["cart_url"] = f"https://{store['merchant']}/cart/{items}" if store["merchant"] else None
+            line["purchasable"] = line["variant_id"] in purchase["purchasable_variants"]
+            if not line["purchasable"]:
+                line["purchase_note"] = purchase["view_only_reason"]
+        if purchase["message"]:
+            message = f"{message} {purchase['message']}".strip()
+        if purchase["status"]:
+            status = purchase["status"]
         fingerprint = hashlib.sha1(json.dumps([[l["variant_id"], (l["price_now"] or {}).get("amount")] for l in lines]).encode()).hexdigest()[:16]
         currency = next(iter(currencies), "USD")
         return {
@@ -168,7 +274,7 @@ class CheckoutStudio:
             "scene_etag": etag, "scene_revision": scene["revision"], "cart_fingerprint": fingerprint,
             "status": status, "message": message, "lines": lines, "checks": checks, "decision": audit,
             "subtotal": {"amount": sum((line["price_now"] or {}).get("amount", 0) for line in lines), "currency": currency},
-            "stores": list(stores.values()) if status == "ready" else [],
+            "stores": stores,
             "order": {"placed": False, "payment_taken": False,
                       "note": "Card details are entered on Shopify's secure checkout, never in this app. "
                               "No order is placed unless you press Pay there."},
