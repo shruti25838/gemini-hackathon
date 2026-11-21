@@ -10,7 +10,9 @@ import json
 import secrets
 import time
 
-from . import gates, shop
+from ai import gates
+
+from . import shop
 from .state import Session
 
 

@@ -26,7 +26,7 @@ class DraftDim(BaseModel):
 
 
 class DraftOpening(BaseModel):
-    wall: Literal["back", "right", "front", "left"]
+    wall: Literal["wall_n", "wall_e", "wall_s", "wall_w"]
     type: Literal["door", "window", "opening"]
     offset_m: float = Field(description="distance from the start of the wall to the near edge of the opening")
     width_m: float
@@ -47,7 +47,7 @@ class DraftItem(BaseModel):
 
 
 class DraftWall(BaseModel):
-    id: Literal["back", "right", "front", "left"]
+    id: Literal["wall_n", "wall_e", "wall_s", "wall_w"]
     color_hex: str
     visible: bool
 
@@ -64,10 +64,11 @@ class RoomDraft(BaseModel):
 
 
 ROOM_SYSTEM = """You convert one room photo into an approximate rectangular room model.
-Coordinate frame (metres): the camera looks roughly at the BACK wall. Floor x runs left->right
-along the back wall from 0 to width_m; z runs from the back wall (z=0) toward the camera (z=depth_m).
-Walls: back (z=0), right (x=width_m), front (z=depth_m, usually behind the camera), left (x=0).
-Opening offset_m is measured from x=0 for back/front walls and from z=0 for left/right walls.
+Coordinate frame (metres): the camera looks roughly at the far wall, wall_n. Floor x runs left->right
+along wall_n from 0 to width_m; z runs from wall_n (z=0) toward the camera (z=depth_m).
+Walls: wall_n = far wall (z=0), wall_e = right-hand wall (x=width_m), wall_s = wall behind the camera
+(z=depth_m), wall_w = left-hand wall (x=0).
+Opening offset_m is measured from x=0 for wall_n/wall_s and from z=0 for wall_e/wall_w.
 Existing item x,z are the centre of its floor footprint; w is along x, d along z.
 Estimate sizes from familiar references (doors ~0.8-0.9 m wide and ~2.0 m tall, desks ~0.75 m high,
 outlets ~0.3 m above floor). Do not invent things you cannot see: list them in uncertainties instead.
@@ -85,12 +86,12 @@ def validate_room(spec: RoomSpec) -> RoomSpec:
         if not math.isfinite(v) or not lo <= v <= hi:
             raise RoomSpecError(f"{key}={v} outside supported range {lo}-{hi} m")
     W, D, H = spec.width_m.value_m, spec.depth_m.value_m, spec.height_m.value_m
-    if {w.id for w in spec.walls} != {"back", "right", "front", "left"}:
+    if {w.id for w in spec.walls} != {"wall_n", "wall_e", "wall_s", "wall_w"}:
         have = {w.id for w in spec.walls}
-        spec.walls += [Wall(id=w) for w in ("back", "right", "front", "left") if w not in have]
+        spec.walls += [Wall(id=w) for w in ("wall_n", "wall_e", "wall_s", "wall_w") if w not in have]
     kept = []
     for o in spec.openings:
-        length = W if o.wall in ("back", "front") else D
+        length = W if o.wall in ("wall_n", "wall_s") else D
         vals = [o.offset_m, o.width_m, o.height_m, o.sill_m]
         if not all(math.isfinite(v) for v in vals) or o.width_m <= 0.2 or o.offset_m < -0.05 or o.offset_m + o.width_m > length + 0.05:
             spec.notes.append(f"Dropped {o.type} {o.id}: lies outside the {o.wall} wall")
@@ -108,12 +109,14 @@ def validate_room(spec: RoomSpec) -> RoomSpec:
         it.z = min(max(it.z, it.d / 2), D - it.d / 2)
         items.append(it)
     spec.existing_items = items
+    if spec.status == "draft":
+        spec.status = "validated"
     return spec
 
 
 def draft_to_spec(d: RoomDraft, revision: int = 1) -> RoomSpec:
     spec = RoomSpec(
-        revision=revision,
+        room_revision=revision,
         width_m=Dimension(value_m=d.width_m.value_m, confidence=d.width_m.confidence),
         depth_m=Dimension(value_m=d.depth_m.value_m, confidence=d.depth_m.confidence),
         height_m=Dimension(value_m=d.height_m.value_m, confidence=d.height_m.confidence),
@@ -139,7 +142,7 @@ def photo_to_roomspec(image: bytes, mime: str, thinking: str = "medium") -> tupl
 
 # ---------- door clip ----------
 class DoorDraft(BaseModel):
-    door_wall: Literal["back", "right", "front", "left", "unknown"]
+    door_wall: Literal["wall_n", "wall_e", "wall_s", "wall_w", "unknown"]
     hinge_side: Literal["left", "right", "unknown"]
     swing: Literal["in", "out", "unknown"]
     max_angle_deg: float
@@ -149,8 +152,8 @@ class DoorDraft(BaseModel):
 
 
 DOOR_SYSTEM = """You analyse a short clip of a door opening, filmed from inside the room.
-Report: which room wall it is on (same frame as the room model: back wall is the one the main
-photo faced), the hinge side as seen from inside the room facing that wall, whether the door swings
+Report: which room wall it is on (same frame as the room model: wall_n is the far wall the main
+photo faced, wall_e on its right, wall_w on its left, wall_s behind the camera), the hinge side as seen from inside the room facing that wall, whether the door swings
 into the room or out of it, the maximum opening angle you observe, and the timestamp where this is
 clearest. Scrub the clip and zoom on the hinge. If something is not visible, answer 'unknown'."""
 
@@ -176,7 +179,7 @@ def apply_door(spec: RoomSpec, door: DoorDraft, opening_id: Optional[str] = None
     target.motion = DoorMotion(hinge_side=door.hinge_side, swing=door.swing,
                                max_angle_deg=max(15.0, min(door.max_angle_deg, 180.0)),
                                source="inferred", confidence=door.confidence, evidence_ts=door.evidence_ts)
-    spec.revision += 1
+    spec.room_revision += 1
     return spec, ""
 
 
@@ -199,6 +202,7 @@ def anchor_measurement(spec: RoomSpec, field: Literal["width_m", "depth_m", "hei
         o.offset_m, o.width_m, o.height_m, o.sill_m = (round(v * k, 3) for v in (o.offset_m, o.width_m, o.height_m, o.sill_m))
     for it in s.existing_items:
         it.x, it.z, it.w, it.d, it.h = (round(v * k, 3) for v in (it.x, it.z, it.w, it.d, it.h))
-    s.revision += 1
+    s.room_revision += 1
+    s.scale_reference = f"{field} confirmed by shopper at {value_m} m"
     s.notes.append(f"Scale anchored on {field}={value_m} m (factor {k:.2f})")
     return validate_room(s)

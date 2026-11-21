@@ -14,25 +14,42 @@ uv venv .venv && source .venv/bin/activate && uv pip install -r requirements.txt
 cp .env.example .env            # add GEMINI_API_KEY and Shopify Storefront credentials
 uvicorn backend.app:app --port 8000
 open http://localhost:8000
-python -m pytest -q             # 25 tests, no network
+python -m pytest -q             # 41 tests, no network
+python scripts/e2e_mock.py      # whole journey on fixtures (MOCK_AI=1), no keys needed
 ```
+
+## Layout (team integration contract)
+
+| Folder | Lane | What |
+|---|---|---|
+| `ai/` | **A (this build's deep lane)** | `analyze_room`, `validate_room_spec`, `handle_command`, `plan_workflow`, `run_workflow`, `run_checkout_gates`, `run_recovery` (exported from `ai/__init__.py`) |
+| `fit/` | C | `solver.py`, standard library only, mounted unchanged into the Argon and Carbon sandboxes |
+| `backend/` | C (thin here) | FastAPI routes, session state, Shopify Storefront, cart and checkout |
+| `frontend/` | B (thin here) | three.js room, uploads, activity panel, review and checkout screens |
+| `contracts/` | shared | one Pydantic model per file, owner noted in each; `interfaces.py` has the Protocol stubs and `Command` |
+| `fixtures/` | shared | A's `*.sample.json` (regenerate with `scripts/gen_ai_fixtures.py`) and `ai_mock_outputs.json` |
+
+Conventions follow the contract: wall IDs `wall_n/e/s/w`, fit results `fits | tight | does_not_fit | unknown`,
+money in minor units, lengths in metres. `MOCK_AI=1` serves saved outputs labeled `mock` and never calls the sandboxes.
 
 ## Which model does what
 
 | Job | Model | Where |
 |---|---|---|
-| Photo -> typed `RoomSpec` with per-field confidence | Gemini 4 Neon | `backend/vision.py` |
-| Door clip -> hinge side, swing, angle, evidence timestamp (agentic video) | Gemini 4 Neon, thinking high | `backend/vision.py` |
-| Request -> typed workflow DAG over registered ops | Gemini 4 Neon | `backend/workflow.py` |
-| Voice/text -> typed command (raw audio in) | Gemini 4 Hydrogen, thinking low | `backend/intake.py` |
-| Layout proposal and repair, in an Antigravity sandbox running `solver.py` | Gemini 4 Argon (Managed Agent) | `backend/agents.py` |
-| Independent test in a fresh sandbox (door angles, +3 cm tolerance, path) | Gemini 4 Carbon (Managed Agent) | `backend/agents.py` |
-| Gates: photo quality/privacy, door-clip coverage, request routing, catalog prompt injection, checkout audit | Gemini Decision 1 | `backend/gates.py` |
+| Photo -> typed `RoomSpec` with per-field confidence | Gemini 4 Neon | `ai/vision.py` |
+| Door clip -> hinge side, swing, angle, evidence timestamp (agentic video) | Gemini 4 Neon, thinking high | `ai/vision.py` |
+| Request -> typed workflow DAG over registered ops | Gemini 4 Neon | `ai/workflow.py` |
+| Voice/text -> typed command (raw audio in) | Gemini 4 Hydrogen, thinking low | `ai/intake.py` |
+| Layout proposal and repair, in an Antigravity sandbox running `solver.py` | Gemini 4 Argon (Managed Agent) | `ai/agents.py` |
+| Independent test in a fresh sandbox (door angles, +3 cm tolerance, path) | Gemini 4 Carbon (Managed Agent) | `ai/agents.py` |
+| Recovery: pick one registered action after a failed step (rule table if Argon is down) | Gemini 4 Argon | `ai/recovery.py` |
+| Gates: photo quality/privacy, door-clip coverage, request routing, catalog prompt injection, checkout audit | Gemini Decision 1 | `ai/gates.py` |
 
 ## Rules enforced in code
 
 - The model proposes; code validates and executes. Plans may only use registered ops, with typed args and no cycles. Mandatory steps (scale check, door inspection, commit) are inserted by the validator.
-- Every Managed Agent claim is re-run by the server with the same `solver.py`. Only server-verified layouts are committed. Agents never touch the cart, the approval or checkout.
+- The layout commits instantly from the server solver; the Argon/Carbon sandbox review runs in the background and can only offer an alternative, never apply one.
+- Every Managed Agent claim is re-run by the server with the same `fit/solver.py`. Only server-verified layouts are committed. Agents never touch the cart, the approval or checkout.
 - If an agent or model is unavailable, the run falls back to the deterministic solver or a template plan. The fallback is visible in the activity panel and the fit badge (`local-fallback`).
 - Hydrogen's intent and Decision 1's route must agree, otherwise Ethyneon asks the user.
 - A single confirmed measurement rescales every still-estimated length (one photo has one unknown scale). Confirmed values are never overwritten.

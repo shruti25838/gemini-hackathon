@@ -17,7 +17,11 @@ from pydantic import BaseModel  # noqa: E402
 
 from contracts.schemas import DoorMotion, SceneRevision  # noqa: E402
 
-from . import agents, checkout, gates, gemini, intake, shop, solver, state, vision, workflow  # noqa: E402
+from ai import agents, commands, gates, gemini, vision, workflow
+from ai import room as ai_room
+from fit import solver
+
+from . import checkout, shop, state  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 app = FastAPI(title="Ethyneon")
@@ -51,7 +55,8 @@ app.mount("/static", StaticFiles(directory=FRONT), name="static")
 
 @app.get("/api/health")
 def health():
-    return {"gemini": gemini.configured(), "shopify_live": shop.live(), "fixture_catalog": shop.fixture_mode()}
+    return {"gemini": gemini.configured(), "mock_ai": gemini.mock_ai(), "shopify_live": shop.live(),
+            "fixture_catalog": shop.fixture_mode()}
 
 
 @app.post("/api/session")
@@ -118,14 +123,14 @@ async def _read(f: UploadFile) -> bytes:
 
 
 PRESET_ROOM = {
-    "revision": 1, "width_m": {"value_m": 3.2, "source": "default", "confidence": 1.0},
+    "room_revision": 1, "width_m": {"value_m": 3.2, "source": "default", "confidence": 1.0},
     "depth_m": {"value_m": 3.0, "source": "default", "confidence": 1.0},
     "height_m": {"value_m": 2.5, "source": "default", "confidence": 1.0},
-    "walls": [{"id": w, "color_hex": "#d9d4cc"} for w in ("back", "right", "front", "left")],
-    "openings": [{"id": "door1", "wall": "back", "type": "door", "offset_m": 2.2, "width_m": 0.8, "confidence": 1.0},
-                 {"id": "window1", "wall": "left", "type": "window", "offset_m": 0.9, "width_m": 1.2, "height_m": 1.2,
+    "walls": [{"id": w, "color_hex": "#d9d4cc"} for w in ("wall_n", "wall_e", "wall_s", "wall_w")],
+    "openings": [{"id": "door1", "wall": "wall_n", "type": "door", "offset_m": 2.2, "width_m": 0.8, "confidence": 1.0},
+                 {"id": "window1", "wall": "wall_w", "type": "window", "offset_m": 0.9, "width_m": 1.2, "height_m": 1.2,
                   "sill_m": 0.9, "confidence": 1.0}],
-    "existing_items": [], "notes": ["PRESET ROOM: not from your photo. Edit the dimensions to match your room."],
+    "existing_items": [], "status": "preset", "notes": ["PRESET ROOM: not from your photo. Edit the dimensions to match your room."],
 }
 
 
@@ -137,7 +142,7 @@ def use_preset(sid: str):
     spec = RoomSpec(**PRESET_ROOM)
     s.set_room(spec)
     if not s.scene:
-        s.commit_scene(SceneRevision(rev=0, room_revision=spec.revision))
+        s.commit_scene(SceneRevision(rev=0, room_revision=spec.room_revision))
     s.emit("roomspec", "warn", "Using the labeled PRESET room (not from a photo). Enter your real wall length.")
     return {"room": spec.model_dump()}
 
@@ -146,26 +151,29 @@ def use_preset(sid: str):
 async def upload_photo(sid: str, file: UploadFile = File(...)):
     s = S(sid)
     img, mime = await _read(file), file.content_type or "image/jpeg"
-    g = gates.room_photo(img, mime)
-    s.gate_log.append(g.model_dump())
-    s.emit("gate.room_photo", "ok" if g.passed else "warn", g.message or "Photo accepted", answers=g.answers,
-           latency_ms=g.latency_ms)
-    if not g.passed and not g.degraded:
-        return {"accepted": False, "gate": g.model_dump()}
-    s.emit("roomspec", "started", "Gemini 4 Neon is reading the room")
-    try:
-        spec, meta = vision.photo_to_roomspec(img, mime)
-    except (gemini.GeminiError, vision.RoomSpecError) as e:
-        s.emit("roomspec", "error", f"Could not build a room from this photo: {e}")
-        raise HTTPException(422, "Could not build a room from this photo. Try another angle or enter dimensions.")
+    s.emit("roomspec", "started", "Decision 1 photo gate, then Gemini 4 Neon reads the room")
+    a = ai_room.analyze_room(img, sid, mime)
+    s.gate_log.append(a.gate.model_dump())
+    s.emit("gate.room_photo", "ok" if a.gate.passed else "warn", a.gate.message or "Photo accepted",
+           answers=a.gate.answers, latency_ms=a.gate.latency_ms)
+    if not a.accepted:
+        s.emit("roomspec", "warn" if a.room_spec is None and not a.gate.passed else "error", a.message)
+        if a.gate.passed or a.gate.degraded:
+            raise HTTPException(422, a.message)
+        return {"accepted": False, "gate": a.gate.model_dump()}
+    v = ai_room.validate_room_spec(a.room_spec)  # C validates before commit
+    if not v.ok:
+        s.emit("roomspec", "error", "Room draft failed validation: " + "; ".join(v.errors))
+        raise HTTPException(422, "The room draft was invalid. Try another photo or use the preset room.")
+    spec = v.room_spec
     s.set_room(spec)
     if not s.scene:
-        s.commit_scene(SceneRevision(rev=0, room_revision=spec.revision,
+        s.commit_scene(SceneRevision(rev=0, room_revision=spec.room_revision,
                                      wall_colors={w.id: w.color_hex for w in spec.walls}))
     s.emit("roomspec", "ok", f"Room {spec.width_m.value_m:.2f} x {spec.depth_m.value_m:.2f} m, "
-           f"{len(spec.openings)} openings, {len(spec.existing_items)} items", latency_ms=meta["latency_ms"],
+           f"{len(spec.openings)} openings, {len(spec.existing_items)} items", latency_ms=a.latency_ms,
            notes=spec.notes)
-    return {"accepted": True, "gate": g.model_dump(), "room": spec.model_dump()}
+    return {"accepted": True, "gate": a.gate.model_dump(), "room": spec.model_dump()}
 
 
 @app.post("/api/session/{sid}/door")
@@ -212,7 +220,7 @@ def door_manual(sid: str, body: DoorManual):
     if not o:
         raise HTTPException(404, "no such opening")
     o.motion = DoorMotion(hinge_side=body.hinge_side, swing=body.swing, source="confirmed", confidence=1.0)
-    spec.revision += 1
+    spec.room_revision += 1
     s.set_room(spec)
     _recheck(s, "door corrected by shopper")
     return {"room": spec.model_dump()}
@@ -252,100 +260,36 @@ def _recheck(s: state.Session, why: str):
 # ---------- commands ----------
 @app.post("/api/session/{sid}/command")
 async def command(sid: str, text: Optional[str] = Form(None), audio: Optional[UploadFile] = File(None)):
+    """B -> C route. A's handle_command interprets; this server applies the result."""
     s = S(sid)
     if not text and not audio:
         raise HTTPException(400, "say or type something")
     audio_bytes = await _read(audio) if audio else None
-    ctx = workflow.room_summary(s)
     try:
-        parsed = intake.parse(text=text, audio=audio_bytes, audio_mime=(audio.content_type if audio else "audio/webm"),
-                              context=ctx)
+        res = commands.handle_command(s, text=text, audio=audio_bytes,
+                                      audio_mime=(audio.content_type if audio else "audio/webm"))
     except gemini.GeminiError:
         s.emit("intake", "error", "Taking longer than usual. Please try again or type it.")
         raise HTTPException(503, "model unavailable")
-    cmd = intake.Command(**parsed["command"])
-    s.emit("intake", "ok", f"“{cmd.transcript}” -> {cmd.intent}", command=parsed["command"],
-           route=parsed["route"]["answers"], agree=parsed["agree"], latency_ms=parsed["latency_ms"])
-    if parsed["clarify"]:
-        s.emit("intake", "needs_input", parsed["clarify"])
-        return {"status": "clarify", "message": parsed["clarify"], "parsed": parsed}
-
-    if any(v is not None for v in cmd.brief_patch.model_dump().values()):
-        s.brief, changed = intake.apply_brief_patch(s.brief, cmd.brief_patch, s.room.existing_items if s.room else [])
-        if changed:
-            s.emit("brief", "ok", f"Updated {', '.join(changed)}", brief=s.brief.model_dump())
-            if s.approval:
-                s.approval = None
-                s.emit("approval", "warn", "Brief changed; previous cart approval voided")
-
-    if cmd.intent == "measurement_correction" and cmd.measurement_m:
-        return measure(sid, Measure(field=cmd.measurement_field or "width_m", value_m=cmd.measurement_m))
-    if cmd.intent == "cart_review":
-        return {"status": "review", "review": _review(s)}
-    if cmd.intent == "move_furniture":
-        return _voice_move(s, cmd)
-    if not s.room:
-        raise HTTPException(400, "Add a room photo first")
-
-    # fast paths: one validated op, no planner round-trip
-    if cmd.intent == "style_edit":
-        steps = [{"id": "style", "op": "apply_style_edit",
-                  "args": {k: v for k, v in dict(wall_id=cmd.wall_id, color_hex=cmd.color_hex, lighting=cmd.lighting).items() if v}}]
-        plan = workflow.validate_plan(s, workflow.WorkflowPlan(goal="style_edit", steps=[workflow.PlanStep(**x) for x in steps]))
-        _bg(s, workflow.execute, s, plan)
-        return {"status": "running", "plan": plan.model_dump(), "planner": "fast-path"}
-    if cmd.intent == "product_search" and cmd.swap_category and cmd.finish and s.scene and s.scene.placements:
-        plan = workflow.validate_plan(s, workflow.WorkflowPlan(goal="swap_finish", steps=[
-            workflow.PlanStep(id="swap", op="swap_finish", args={"category": cmd.swap_category, "finish": cmd.finish})]))
-        _bg(s, workflow.execute, s, plan)
-        return {"status": "running", "plan": plan.model_dump(), "planner": "fast-path"}
-
-    try:
-        plan, meta = workflow.propose_plan(s, f"{cmd.transcript}\nParsed: {cmd.model_dump_json()}", cmd.intent)
-    except workflow.PlanError as e:
-        s.emit("planner", "error", f"Plan rejected by validator: {e}")
-        plan, meta = workflow.validate_plan(s, workflow.template_plan(cmd.intent)), {"source": "template"}
-    s.emit("planner", "ok" if meta.get("source") == "neon" else "warn",
-           f"{'Neon' if meta.get('source') == 'neon' else 'Template (Neon unavailable)'} plan: "
-           + " -> ".join(st.op for st in plan.steps), plan=plan.model_dump(), rationale=meta.get("rationale"))
-    _bg(s, workflow.execute, s, plan)
-    return {"status": "running", "plan": plan.model_dump(), "planner": meta.get("source")}
-
-
-def _voice_move(s: state.Session, cmd: intake.Command):
-    if not (s.scene and s.scene.placements and s.room):
-        return {"status": "clarify", "message": "There is nothing to move yet."}
-    target = (cmd.move_target or "").lower()
-    cands = [p for p in s.scene.placements if not p.locked and (p.category in target or target in p.category)]
-    if len(cands) != 1:
-        msg = "Which item should I move? Tap it in the room." if cands or not target else f"I can't find '{target}' in the design."
-        s.emit("move", "needs_input", msg, candidates=[p.key for p in cands])
-        return {"status": "clarify", "message": msg, "candidates": [p.key for p in cands]}
-    p = cands[0]
-    dest = (cmd.move_destination or "").lower()
-    pose = _resolve_destination(s, p, dest)
-    if not pose:
-        s.emit("move", "needs_input", f"Where exactly? Drag the {p.category} or name a wall, window or door.")
-        return {"status": "clarify", "message": "Where should it go? Drag it, or name a wall or the window."}
-    return move(s.id, MoveBody(key=p.key, x=pose[0], z=pose[1], rot=pose[2]))
-
-
-def _resolve_destination(s, p, dest: str):
-    room = s.room.model_dump()
-    target_open = None
-    for kind in ("window", "door"):
-        if kind in dest:
-            target_open = next((o for o in s.room.openings if o.type == kind), None)
-    wall = next((w for w in ("back", "right", "front", "left") if w in dest), None)
-    if target_open:
-        wall = target_open.wall
-        along = target_open.offset_m + target_open.width_m / 2
-    elif wall:
-        along = (s.room.width_m.value_m if wall in ("back", "front") else s.room.depth_m.value_m) / 2
-    else:
-        return None
-    x, z, rot = solver._against_wall(room, wall, along, p.w, p.d)
-    return x, z, rot
+    if res.brief is not None and res.brief_changed:
+        s.brief = res.brief
+        s.emit("brief", "ok", f"Updated {', '.join(res.brief_changed)}", brief=s.brief.model_dump())
+        if s.approval:
+            s.approval = None
+            s.emit("approval", "warn", "Brief changed; previous cart approval voided")
+    out = {"status": res.status, "action": res.action, "message": res.message, "intent": res.intent}
+    if res.status == "needs_input":
+        return {**out, "status": "clarify", **res.payload}
+    if res.action == "measurement":
+        return measure(sid, Measure(**res.payload))
+    if res.action == "cart_review":
+        return {**out, "status": "review", "review": _review(s)}
+    if res.action == "move":
+        return move(sid, MoveBody(**res.payload))
+    if res.action == "run_plan":
+        _bg(s, workflow.execute, s, res.plan)
+        return {**out, "status": "running", "plan": res.plan.model_dump(), "planner": res.plan.source}
+    return out
 
 
 class MoveBody(BaseModel):

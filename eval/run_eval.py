@@ -28,21 +28,22 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 load_dotenv(ROOT / ".env")
 
-from backend import gates, gemini, solver, vision  # noqa: E402
-from backend.models import NEON  # noqa: E402
+from ai import gates, gemini, vision  # noqa: E402
+from fit import solver  # noqa: E402
+from ai.models import NEON  # noqa: E402
 from contracts.schemas import DoorMotion  # noqa: E402
 
 DESK = {"w": 1.4, "d": 0.7, "h": 0.75}
 
 
 class BaselineAnswer(BaseModel):
-    verdict: Literal["fits", "no_fit"]
+    verdict: Literal["fits", "does_not_fit"]
     reason: str
 
 
 def truth_room(t: dict) -> dict:
     d = t["door"]
-    return {"revision": 1, "width_m": {"value_m": t["width_m"]}, "depth_m": {"value_m": t["depth_m"]},
+    return {"room_revision": 1, "width_m": {"value_m": t["width_m"]}, "depth_m": {"value_m": t["depth_m"]},
             "height_m": {"value_m": t.get("height_m", 2.5)}, "walls": [], "existing_items": [],
             "openings": [{"id": "door1", "wall": d["wall"], "type": "door", "offset_m": d["offset_m"], "width_m": d["width_m"],
                           "motion": {"hinge_side": d["hinge_side"], "swing": d["swing"]}}]}
@@ -54,7 +55,7 @@ def desk_at(room: dict, wall: str, along: float) -> dict:
 
 
 def fit_label(room: dict, wall: str, along: float) -> str:
-    return "no_fit" if solver.check(room, [desk_at(room, wall, along)])["status"] == "no_fit" else "fits"
+    return "does_not_fit" if solver.check(room, [desk_at(room, wall, along)])["status"] == "does_not_fit" else "fits"
 
 
 def load(path: Path) -> tuple[bytes, str]:
@@ -101,14 +102,14 @@ def run_case(c: dict, skip_baseline: bool) -> dict:
     for along in c.get("desk_probe_along", []):
         truth = fit_label(troom, t["door"]["wall"], along)
         st = solver.check(sroom, [desk_at(sroom, t["door"]["wall"], along)])["status"]
-        eth = {"no_fit": "no_fit", "unknown": "unknown"}.get(st, "fits")
+        eth = {"does_not_fit": "does_not_fit", "unknown": "unknown"}.get(st, "fits")
         p = {"along_m": along, "truth": truth, "ethyneon": eth}
         if not skip_baseline:
             parts = [gemini.image_part(img, mime)]
             if c.get("door_clip"):
                 parts.append(gemini.video_part(*load(ROOT / c["door_clip"])))
             parts.append(gemini.text_part(
-                f"The {t['door']['wall']} wall is {t['width_m'] if t['door']['wall'] in ('back','front') else t['depth_m']} m long. "
+                f"The {t['door']['wall']} wall is {t['width_m'] if t['door']['wall'] in ('wall_n','wall_s') else t['depth_m']} m long. "
                 f"I want a {DESK['w']} x {DESK['d']} m desk against the {t['door']['wall']} wall, its centre {along} m from the "
                 f"wall's start (the left end when facing it from inside). Will it fit without blocking the door's swing?"))
             b, _ = gemini.generate_structured(NEON, parts, BaselineAnswer, thinking="high")
@@ -139,7 +140,7 @@ def summarize(results: list[dict]) -> str:
         if not ps:
             continue
         correct = sum(p[sysname] == p["truth"] for p in ps)
-        false_fit = sum(p[sysname] == "fits" and p["truth"] == "no_fit" for p in ps)
+        false_fit = sum(p[sysname] == "fits" and p["truth"] == "does_not_fit" for p in ps)
         unknown = sum(p[sysname] == "unknown" for p in ps)
         lines.append(f"**{sysname}**: {correct}/{len(ps)} fit verdicts correct, {false_fit} false 'fits' "
                      f"(desk would hit the door), {unknown} honest 'unknown'")

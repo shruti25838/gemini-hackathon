@@ -110,6 +110,8 @@ def generate_structured(
     Returns (parsed, meta). Retries once on malformed output, then raises.
     """
     _check_thinking(model, thinking)
+    if mock_ai():
+        return _mock_output(out), {"model": model, "latency_ms": 0, "interaction_id": "mock", "source": "mock"}
     kwargs: dict[str, Any] = dict(
         model=model,
         input=parts,
@@ -148,6 +150,8 @@ def decide(parts: list[dict] | str, questions: dict[str, dict]) -> tuple[dict, d
     """Run Decision 1 over shared input. Returns ({qid: answer_dict}, meta)."""
     from .models import DECISION
 
+    if mock_ai():
+        return _mock_decide(questions), {"model": DECISION, "latency_ms": 0, "source": "mock"}
     t0 = time.time()
     r = beta_client().decisions.create(model=DECISION, input=parts, questions=questions)
     answers = {k: (v.model_dump() if hasattr(v, "model_dump") else dict(v)) for k, v in (r.answers or {}).items()}
@@ -155,6 +159,40 @@ def decide(parts: list[dict] | str, questions: dict[str, dict]) -> tuple[dict, d
     if getattr(r, "prompt_feedback", None):
         meta["prompt_feedback"] = r.prompt_feedback.model_dump()
     return answers, meta
+
+
+def mock_ai() -> bool:
+    return os.getenv("MOCK_AI") == "1"
+
+
+_MOCKS: dict | None = None
+
+
+def _mock_output(out):
+    global _MOCKS
+    if _MOCKS is None:
+        from pathlib import Path
+        _MOCKS = json.loads((Path(__file__).resolve().parent.parent / "fixtures" / "ai_mock_outputs.json").read_text())
+    if out.__name__ not in _MOCKS:
+        raise GeminiError(f"MOCK_AI has no saved output for {out.__name__}")
+    return out.model_validate(_MOCKS[out.__name__])
+
+
+def _mock_decide(questions: dict) -> dict:
+    """Saved-style answers: confident yes, no person, best score, first sensible choice."""
+    ans = {}
+    for k, q in questions.items():
+        if q["type"] == "noul":
+            p = 0.05 if "person" in k else 0.92
+            ans[k] = {"type": "noul", "noul": p, "confidence": max(p, 1 - p)}
+        elif q["type"] == "score":
+            n = len(q["criteria"])
+            ans[k] = {"type": "score", "score": float(n - 1), "confidence": 0.9, "probabilities": {}, "legend": {}}
+        else:
+            keys = list(q["criteria"])
+            pick = next((c for c in ("ready", "product_search", "style_edit") if c in keys), keys[0])
+            ans[k] = {"type": "choice", "choice": pick, "confidence": 0.9, "probabilities": {c: (0.9 if c == pick else 0.1 / max(1, len(keys) - 1)) for c in keys}}
+    return ans
 
 
 def configured() -> bool:

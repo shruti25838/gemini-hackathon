@@ -23,7 +23,7 @@ class BriefPatch(BaseModel):
     style: Optional[list[str]] = None
     categories: Optional[list[Literal["desk", "chair", "monitor", "lighting", "storage"]]] = None
     keep_door_clear: Optional[bool] = None
-    preferred_wall: Optional[Literal["back", "right", "front", "left"]] = None
+    preferred_wall: Optional[Literal["wall_n", "wall_e", "wall_s", "wall_w"]] = None
     keep_existing_labels: Optional[list[str]] = Field(None, description="labels of existing items the user wants to keep")
 
 
@@ -31,7 +31,7 @@ class Command(BaseModel):
     transcript: str
     intent: Intent
     brief_patch: BriefPatch
-    wall_id: Optional[Literal["back", "right", "front", "left", "all"]] = None
+    wall_id: Optional[Literal["wall_n", "wall_e", "wall_s", "wall_w", "all"]] = None
     color_hex: Optional[str] = Field(None, description="#rrggbb for a named color, e.g. olive -> #708238")
     lighting: Optional[Literal["daylight", "evening", "rgb"]] = None
     swap_category: Optional[Literal["desk", "chair", "monitor", "lighting", "storage"]] = None
@@ -47,7 +47,8 @@ SYSTEM = """You turn a shopper's spoken or typed request about designing their r
 Transcribe audio verbatim into `transcript`. Only fill fields the shopper actually said. Convert spoken
 units to metres and named colors to hex. Never invent a budget, product or measurement.
 'Make that wall olive' -> style_edit, color_hex. 'Show me the walnut desk' -> product_search with swap_category=desk,
-finish=walnut. 'The desk wall is 3.2 metres' -> measurement_correction, width_m=3.2 (the desk wall is the back wall).
+finish=walnut. 'The desk wall is 3.2 metres' -> measurement_correction, width_m=3.2 (the desk wall is wall_n, the far wall in the photo).
+Walls: wall_n = far/back wall in the photo, wall_e = right, wall_w = left, wall_s = behind the camera/front.
 If the request mixes intents, pick the one that changes products/money and list the rest in ambiguities."""
 
 

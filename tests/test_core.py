@@ -1,13 +1,14 @@
 import pytest
 
-from backend import gates, state, vision, workflow
+from ai import gates, vision, workflow
+from backend import state
 from contracts.schemas import (DesignBrief, Dimension, Opening, RoomSpec, SceneRevision, Wall, WorkflowPlan, PlanStep)
 
 
 def make_room(width=3.0, depth=3.0):
     return RoomSpec(width_m=Dimension(value_m=width), depth_m=Dimension(value_m=depth), height_m=Dimension(value_m=2.5),
-                    walls=[Wall(id=w) for w in ("back", "right", "front", "left")],
-                    openings=[Opening(id="door1", wall="back", type="door", offset_m=width - 1.0, width_m=0.8)])
+                    walls=[Wall(id=w) for w in ("wall_n", "wall_e", "wall_s", "wall_w")],
+                    openings=[Opening(id="door1", wall="wall_n", type="door", offset_m=width - 1.0, width_m=0.8)])
 
 
 def session_with_room():
@@ -75,14 +76,14 @@ def test_invalid_room_rejected():
 
 def test_opening_outside_wall_dropped():
     r = make_room()
-    r.openings.append(Opening(id="w9", wall="back", type="window", offset_m=2.8, width_m=1.0))
+    r.openings.append(Opening(id="w9", wall="wall_n", type="window", offset_m=2.8, width_m=1.0))
     r = vision.validate_room(r)
     assert all(o.id != "w9" for o in r.openings)
 
 
 def test_unknown_hinge_never_guessed():
     r = make_room()
-    d = vision.DoorDraft(door_wall="back", hinge_side="unknown", swing="in", max_angle_deg=90, evidence_ts="00:02",
+    d = vision.DoorDraft(door_wall="wall_n", hinge_side="unknown", swing="in", max_angle_deg=90, evidence_ts="00:02",
                          confidence=0.4, reasoning="hinge occluded")
     r2, problem = vision.apply_door(r, d)
     assert problem and r2.openings[0].motion is None
@@ -166,3 +167,40 @@ def test_unknown_dims_product_kept_and_fit_unknown(monkeypatch):
     workflow.op_commit_scene_preview(s, {}, ctx)
     assert "v1" in s.extra_variant_ids
     assert s.fit.status == "unknown"
+
+
+# ---------- recovery ----------
+def test_recovery_falls_back_to_rule_when_argon_down(monkeypatch):
+    from ai import recovery
+    def boom(*a, **k):
+        raise RuntimeError("down")
+    monkeypatch.setattr(recovery.gemini, "generate_structured", boom)
+    from backend.shop import ShopError
+    run = recovery.run_recovery(recovery.new_run("discover_shopify_variants", ShopError("429"), 3, {}))
+    assert run.chosen_action == "refresh_shopify" and run.chosen_by == "fallback_rule"
+
+
+def test_recovery_rejects_unregistered_choice(monkeypatch):
+    from ai import recovery
+    monkeypatch.setattr(recovery.gemini, "generate_structured",
+                        lambda *a, **k: (recovery._Choice(action="add_to_cart", rationale="x"), {}))
+    run = recovery.run_recovery(recovery.new_run("x", RuntimeError("weird"), 1, {}))
+    assert run.chosen_action == "pause" and run.chosen_by == "fallback_rule"
+
+
+def test_workflow_failure_retries_once_then_pauses(monkeypatch):
+    from ai import recovery
+    monkeypatch.setattr(recovery.gemini, "generate_structured", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("down")))
+    calls = {"n": 0}
+    def flaky(s, args, ctx):
+        calls["n"] += 1
+        from backend.shop import ShopError
+        raise ShopError("rate limited")
+    monkeypatch.setitem(workflow.OPS, "discover_shopify_variants", flaky)
+    s = session_with_room()
+    s.commit_scene(SceneRevision(rev=0, room_revision=1))
+    plan = workflow.validate_plan(s, WorkflowPlan(goal="x", steps=[PlanStep(id="shop", op="discover_shopify_variants")]))
+    out = workflow.execute(s, plan)
+    assert calls["n"] == 2  # one automatic retry, never more
+    assert out["status"] == "error" and len(s.recovery_runs) == 2
+    assert s.scene.rev == 1  # last verified scene untouched

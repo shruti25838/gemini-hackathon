@@ -6,7 +6,7 @@
       "photo": "eval/data/friend-apt-1.jpg",
       "door_clip": "eval/data/friend-apt-1-door.mp4",
       "truth": {"width_m": 3.2, "depth_m": 2.9, "height_m": 2.5,
-                "door": {"wall": "back", "offset_m": 2.3, "width_m": 0.8, "hinge_side": "left", "swing": "in"}},
+                "door": {"wall": "wall_n", "offset_m": 2.3, "width_m": 0.8, "hinge_side": "left", "swing": "in"}},
       "labels": {"is_room": true, "person_visible": false},
       "held_out": true,
       "desk_probe_along": [0.8, 1.5, 2.3, 2.7]

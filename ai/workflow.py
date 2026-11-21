@@ -15,9 +15,12 @@ from pydantic import BaseModel, Field, ValidationError
 
 from contracts.schemas import Placement, PlanStep, SceneRevision, WorkflowPlan
 
-from . import agents, gates, gemini, shop, solver
+from backend import shop
+from fit import solver
+
+from . import agents, gates, gemini
 from .models import NEON
-from .state import Session
+from backend.state import Session
 
 import os
 
@@ -42,7 +45,7 @@ class NoArgs(BaseModel):
 
 
 class StyleArgs(BaseModel):
-    wall_id: Optional[Literal["back", "right", "front", "left", "all"]] = None
+    wall_id: Optional[Literal["wall_n", "wall_e", "wall_s", "wall_w", "all"]] = None
     color_hex: Optional[str] = Field(None, pattern=r"^#[0-9a-fA-F]{6}$")
     lighting: Optional[Literal["daylight", "evening", "rgb"]] = None
     accent_hex: Optional[str] = Field(None, pattern=r"^#[0-9a-fA-F]{6}$")
@@ -98,10 +101,11 @@ def room_summary(s: Session) -> str:
             f"existing items: {[i.label for i in r.existing_items]}; current scene items: {sel or 'none'}.")
 
 
-def propose_plan(s: Session, request: str, route: str) -> tuple[WorkflowPlan, dict]:
+def propose_plan(s: Session, request: str, route: str, brief=None) -> tuple[WorkflowPlan, dict]:
     import json
 
-    prompt = (f"Shopper request: {request}\nRouted as: {route}\nBrief: {s.brief.model_dump_json()}\n"
+    brief = brief or s.brief
+    prompt = (f"Shopper request: {request}\nRouted as: {route}\nBrief: {brief.model_dump_json()}\n"
               f"Room evidence: {room_summary(s)}")
     try:
         d, meta = gemini.generate_structured(NEON, prompt, DraftPlan, system=PLANNER_SYSTEM, thinking="medium")
@@ -112,9 +116,10 @@ def propose_plan(s: Session, request: str, route: str) -> tuple[WorkflowPlan, di
             except json.JSONDecodeError:
                 args = {}
             steps.append(PlanStep(id=st.id, op=st.op, after=st.after, args=args))
-        plan = WorkflowPlan(plan_id=uuid.uuid4().hex[:8], goal=d.goal, steps=steps)
+        src = "mock" if meta.get("source") == "mock" else "neon"
+        plan = WorkflowPlan(plan_id=uuid.uuid4().hex[:8], goal=d.goal, steps=steps, source=src)
         meta["rationale"] = d.rationale
-        meta["source"] = "neon"
+        meta["source"] = src
     except gemini.GeminiError as e:
         plan, meta = template_plan(route), {"source": "template", "error": str(e)}
     return validate_plan(s, plan), meta
@@ -130,7 +135,7 @@ def template_plan(route: str) -> WorkflowPlan:
                            ("commit", "commit_scene_preview", ["plan"], {})],
     }
     steps = T.get(route, T["product_search"])
-    return WorkflowPlan(plan_id=uuid.uuid4().hex[:8], goal=route,
+    return WorkflowPlan(plan_id=uuid.uuid4().hex[:8], goal=route, source="template",
                         steps=[PlanStep(id=i, op=o, after=a, args=g) for i, o, a, g in steps])
 
 
@@ -171,7 +176,7 @@ def validate_plan(s: Session, plan: WorkflowPlan) -> WorkflowPlan:
     commit = next(st for st in plan.steps if st.op == "commit_scene_preview")
     commit.after = [st.id for st in plan.steps if st is not commit]
     _toposort(plan.steps)
-    plan.base_room_revision = s.room.revision if s.room else 0
+    plan.base_room_revision = s.room.room_revision if s.room else 0
     plan.base_scene_rev = s.scene.rev if s.scene else 0
     return plan
 
@@ -194,7 +199,7 @@ def _toposort(steps: list[PlanStep]) -> list[list[PlanStep]]:
 # ---------- ops ----------
 def _working_scene(s: Session, ctx: dict) -> SceneRevision:
     if "scene" not in ctx:
-        base = s.scene or SceneRevision(rev=0, room_revision=s.room.revision if s.room else 0)
+        base = s.scene or SceneRevision(rev=0, room_revision=s.room.room_revision if s.room else 0)
         ctx["scene"] = base.model_copy(deep=True)
     return ctx["scene"]
 
@@ -213,7 +218,7 @@ def op_confirm_measurement_if_needed(s: Session, args: dict, ctx: dict):
     r = s.room
     if r and not any(getattr(r, k).source == "confirmed" for k in ("width_m", "depth_m", "height_m")):
         raise NeedsInput({"kind": "measurement", "field": "width_m", "estimate": r.width_m.value_m,
-                          "prompt": f"I estimated the back wall at {r.width_m.value_m:.2f} m. What is its real length?"})
+                          "prompt": f"I estimated the far wall (wall_n) at {r.width_m.value_m:.2f} m. What is its real length?"})
     s.emit("confirm_measurement_if_needed", "ok", "Scale anchored by a confirmed measurement")
 
 
@@ -319,7 +324,7 @@ def op_plan_and_test_layout(s: Session, args: dict, ctx: dict):
 def op_apply_style_edit(s: Session, args: dict, ctx: dict):
     sc = _working_scene(s, ctx)
     if args.get("color_hex"):
-        walls = ["back", "right", "front", "left"] if args.get("wall_id") in (None, "all") else [args["wall_id"]]
+        walls = ["wall_n", "wall_e", "wall_s", "wall_w"] if args.get("wall_id") in (None, "all") else [args["wall_id"]]
         for w in walls:
             sc.wall_colors[w] = args["color_hex"]
     if args.get("lighting"):
@@ -349,7 +354,7 @@ def op_swap_finish(s: Session, args: dict, ctx: dict):
            variant_id=new.variant_id, dims_changed=dims_changed)
     if dims_changed:
         rep = solver.check(s.room.model_dump(), [p.model_dump() for p in sc.placements])
-        if rep["status"] == "no_fit":
+        if rep["status"] == "does_not_fit":
             s.emit("swap_finish", "warn", "New dimensions conflict; re-planning that item")
             op_plan_and_test_layout(s, {}, ctx)
 
@@ -361,7 +366,7 @@ def op_commit_scene_preview(s: Session, args: dict, ctx: dict):
         rep["checked_by"] = ctx["fit"].get("checked_by", rep["checked_by"])
     if ctx.get("fit_unknowns"):
         rep["unknowns"] += ctx["fit_unknowns"]
-        if rep["status"] != "no_fit":
+        if rep["status"] != "does_not_fit":
             rep["status"] = "unknown"
     committed = s.commit_scene(sc, base_rev=ctx["base_scene_rev"])
     from contracts.schemas import FitReport
@@ -435,6 +440,7 @@ def execute(s: Session, plan: WorkflowPlan, ctx: Optional[dict] = None) -> dict:
             if not todo:
                 continue
             for st in todo:
+                st.state = "running"
                 s.emit(st.op, "started", f"step {st.id}", step_id=st.id)
             if len(todo) == 1:
                 OPS[todo[0].op](s, todo[0].args, ctx)
@@ -444,15 +450,46 @@ def execute(s: Session, plan: WorkflowPlan, ctx: Optional[dict] = None) -> dict:
                     for f in futs:
                         f.result()
             ctx["done"].update(st.id for st in todo)
+            for st in todo:
+                st.state = "done"
     except NeedsInput as ni:
         s.pending_input = {"plan": plan, "ctx": ctx, "request": ni.request}
         s.emit("workflow", "needs_input", ni.request["prompt"], request=ni.request)
         return {"status": "needs_input", "request": ni.request}
-    except Exception as e:  # typed failure surfaced; last verified scene is untouched
-        s.emit("workflow", "error", f"{type(e).__name__}: {str(e)[:300]}")
-        return {"status": "error", "error": f"{type(e).__name__}: {e}"}
+    except Exception as e:  # typed failure -> RecoveryRun; last verified scene is untouched
+        return _recover(s, plan, ctx, e)
     s.pending_input = None
     return {"status": "done", "rev": ctx.get("committed_rev")}
+
+
+def _recover(s: Session, plan: WorkflowPlan, ctx: dict, err: Exception) -> dict:
+    from . import recovery
+    failed = next((st.op for st in plan.steps if st.id not in ctx["done"]), "unknown")
+    attempt = ctx.get("recovery_attempts", 0)
+    run = recovery.new_run(failed, err, s.scene.rev if s.scene else 0,
+                           {"room_revision": s.room.room_revision if s.room else 0, "scene_rev": s.scene.rev if s.scene else 0},
+                           attempt=attempt)
+    s.emit("workflow", "error", f"{failed} failed: {run.error_class}: {str(err)[:200]}")
+    run = recovery.run_recovery(run)
+    s.recovery_runs.append(run)
+    s.emit("recovery", "info", f"Recovery chose '{run.chosen_action}' ({run.chosen_by}): {run.rationale}",
+           run=run.model_dump())
+    if run.chosen_action in ("retry_read_once", "replan_affected", "refresh_shopify") and attempt < 1:
+        ctx["recovery_attempts"] = attempt + 1
+        run.outcome = "resolved"
+        return execute(s, plan, ctx)  # completed steps are kept; only unfinished ones rerun
+    if run.chosen_action in ("request_measurement", "request_rescan", "switch_input_mode", "request_new_review"):
+        prompt = {"request_measurement": "Please measure one wall and type it in.",
+                  "request_rescan": "Please take a clearer photo of the room.",
+                  "switch_input_mode": "Voice or the model is having trouble. Please type your request.",
+                  "request_new_review": "Please review the cart again."}[run.chosen_action]
+        run.outcome, run.pending_input = "pending_input", {"kind": run.chosen_action, "prompt": prompt}
+        s.pending_input = {"plan": plan, "ctx": ctx, "request": {"kind": run.chosen_action, "prompt": prompt}}
+        s.emit("workflow", "needs_input", prompt)
+        return {"status": "needs_input", "request": run.pending_input, "recovery": run.model_dump()}
+    run.outcome = "paused"
+    s.emit("workflow", "warn", "Paused. The last verified room and scene are unchanged.")
+    return {"status": "error", "error": f"{run.error_class}", "recovery": run.model_dump()}
 
 
 def resume(s: Session) -> dict:

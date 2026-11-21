@@ -1,0 +1,121 @@
+{
+ "accepted": true,
+ "gate": {
+  "gate": "room_photo",
+  "passed": true,
+  "action": "build_roomspec",
+  "message": "",
+  "answers": {
+   "is_room": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   },
+   "person_visible": {
+    "type": "noul",
+    "noul": 0.05,
+    "confidence": 0.95
+   },
+   "usable": {
+    "type": "score",
+    "score": 2.0,
+    "confidence": 0.9,
+    "probabilities": {},
+    "legend": {}
+   },
+   "door_visible": {
+    "type": "noul",
+    "noul": 0.92,
+    "confidence": 0.92
+   }
+  },
+  "latency_ms": 0,
+  "degraded": false
+ },
+ "room_spec": {
+  "room_revision": 1,
+  "width_m": {
+   "value_m": 3.0,
+   "source": "estimated",
+   "confidence": 0.6
+  },
+  "depth_m": {
+   "value_m": 2.9,
+   "source": "estimated",
+   "confidence": 0.5
+  },
+  "height_m": {
+   "value_m": 2.5,
+   "source": "estimated",
+   "confidence": 0.6
+  },
+  "scale_reference": null,
+  "walls": [
+   {
+    "id": "wall_n",
+    "color_hex": "#d8d2c8",
+    "color_source": "sampled_from_photo"
+   },
+   {
+    "id": "wall_e",
+    "color_hex": "#d8d2c8",
+    "color_source": "sampled_from_photo"
+   },
+   {
+    "id": "wall_s",
+    "color_hex": "#d9d4cc",
+    "color_source": "default"
+   },
+   {
+    "id": "wall_w",
+    "color_hex": "#d8d2c8",
+    "color_source": "sampled_from_photo"
+   }
+  ],
+  "openings": [
+   {
+    "id": "door1",
+    "wall": "wall_n",
+    "type": "door",
+    "offset_m": 2.1,
+    "width_m": 0.8,
+    "height_m": 2.0,
+    "sill_m": 0.0,
+    "motion": null,
+    "confidence": 0.8
+   },
+   {
+    "id": "window2",
+    "wall": "wall_w",
+    "type": "window",
+    "offset_m": 0.9,
+    "width_m": 1.1,
+    "height_m": 1.2,
+    "sill_m": 0.9,
+    "motion": null,
+    "confidence": 0.7
+   }
+  ],
+  "existing_items": [
+   {
+    "id": "item1",
+    "label": "monitor",
+    "x": 0.5,
+    "z": 2.5,
+    "w": 0.55,
+    "d": 0.25,
+    "h": 0.45,
+    "keep": true,
+    "confidence": 0.7
+   }
+  ],
+  "free_zones": [],
+  "floor_color_hex": "#8a7560",
+  "status": "validated",
+  "notes": [
+   "MOCK_AI: saved output, not from your photo"
+  ]
+ },
+ "message": "",
+ "latency_ms": 0
+}

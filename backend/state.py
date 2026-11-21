@@ -34,6 +34,7 @@ class Session:
     extra_variant_ids: list[str] = field(default_factory=list)  # cart lines with no floor footprint (lighting)
     last_review: Optional[dict] = None
     last_alternative: Optional[dict] = None
+    recovery_runs: list = field(default_factory=list)
     lock: threading.RLock = field(default_factory=threading.RLock)
 
     # ----- scene -----

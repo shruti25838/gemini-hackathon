@@ -20,10 +20,11 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
-from . import gemini, solver
+from . import gemini
+from fit import solver
 from .models import ANTIGRAVITY_AGENT, ARGON, CARBON
 
-SOLVER_SRC = (Path(__file__).parent / "solver.py").read_text()
+SOLVER_SRC = (Path(__file__).resolve().parent.parent / "fit" / "solver.py").read_text()
 AGENT_TIMEOUT_S = float(os.getenv("AGENT_TIMEOUT_S", "120"))
 AGENT_MAX_TOKENS = int(os.getenv("AGENT_MAX_TOKENS", "120000"))
 MAX_REPAIRS = int(os.getenv("AGENT_MAX_REPAIRS", "1"))
@@ -71,7 +72,7 @@ authoritative fit checker) and input.json (room, fixed items, products to place,
 1. Run `python solver.py search input.json` to get collision-free candidates.
 2. You may try other positions by editing a copy of input.json and running `python solver.py check`.
 3. Prefer positions that serve the brief (style, preferred wall, keeping the door clear) but NEVER
-   return a layout that `solver.py check` reports as no_fit.
+   return a layout that `solver.py check` reports as does_not_fit.
 Only use product keys present in input.json. Do not invent products.
 Your FINAL message must be ONLY this JSON object (not the solver's output):
 {"placements":[{"key":"...","x":0.0,"z":0.0,"rot":0}], "commands_run":["..."],
@@ -93,6 +94,8 @@ def _run_agent(model: str, system: str, task: str, payload: dict, out: type[Base
                on_event=None, previous_id: Optional[str] = None, timeout_s: Optional[float] = None,
                max_tokens: Optional[int] = None) -> tuple[BaseModel, dict]:
     timeout_s = timeout_s or AGENT_TIMEOUT_S
+    if gemini.mock_ai():
+        raise AgentUnavailable("MOCK_AI: sandbox agents are not called")
     env = {"sources": [
         {"type": "inline", "content": SOLVER_SRC, "target": "/workspace/solver.py"},
         {"type": "inline", "content": json.dumps(payload, indent=1), "target": "/workspace/input.json"},
@@ -173,7 +176,7 @@ def _coerce(out: type[BaseModel], obj: dict, executed: list[str]) -> BaseModel:
                          unresolved=[])
         elif out is TestReport and ("status" in obj or "collisions" in obj or "angles" in obj):
             cols = obj.get("collisions", []) + [c for a in obj.get("angles", []) for c in a.get("collisions", [])]
-            m = TestReport(verdict="fail" if cols or obj.get("status") == "no_fit" else "pass",
+            m = TestReport(verdict="fail" if cols or obj.get("status") == "does_not_fit" else "pass",
                            findings=[Finding(kind=c.get("kind", "overlap") if c.get("kind") in Finding.model_fields["kind"].annotation.__args__ else "overlap",
                                              item_key=c["a"], other=c["b"], detail=c.get("detail", ""),
                                              command="python solver.py check input.json") for c in cols],

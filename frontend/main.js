@@ -56,7 +56,7 @@ function buildRoom() {
   floor.rotation.x = -Math.PI / 2; floor.position.set(W / 2, 0, D / 2); floor.name = "floor";
   roomGroup.add(floor);
   const wallColor = (id) => (sc.wall_colors || {})[id] || (r.walls.find((w) => w.id === id) || {}).color_hex || "#d9d4cc";
-  const walls = { back: [W, [W / 2, H / 2, 0], 0], left: [D, [0, H / 2, D / 2], Math.PI / 2], right: [D, [W, H / 2, D / 2], -Math.PI / 2] };
+  const walls = { wall_n: [W, [W / 2, H / 2, 0], 0], wall_w: [D, [0, H / 2, D / 2], Math.PI / 2], wall_e: [D, [W, H / 2, D / 2], -Math.PI / 2] };
   for (const [id, [len, pos, rotY]] of Object.entries(walls)) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(len, H), new THREE.MeshStandardMaterial({ color: wallColor(id), side: THREE.DoubleSide, transparent: true, opacity: 0.92 }));
     m.position.set(...pos); m.rotation.y = rotY; roomGroup.add(m);
@@ -66,9 +66,9 @@ function buildRoom() {
     const color = o.type === "door" ? 0xff5ea8 : 0x66ccff;
     const g = new THREE.Mesh(new THREE.PlaneGeometry(o.width_m, o.height_m), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.55, side: THREE.DoubleSide }));
     const mid = o.offset_m + o.width_m / 2, y = o.sill_m + o.height_m / 2;
-    if (o.wall === "back") g.position.set(mid, y, 0.01);
-    else if (o.wall === "front") { g.position.set(mid, y, D - 0.01); }
-    else if (o.wall === "left") { g.position.set(0.01, y, mid); g.rotation.y = Math.PI / 2; }
+    if (o.wall === "wall_n") g.position.set(mid, y, 0.01);
+    else if (o.wall === "wall_s") { g.position.set(mid, y, D - 0.01); }
+    else if (o.wall === "wall_w") { g.position.set(0.01, y, mid); g.rotation.y = Math.PI / 2; }
     else { g.position.set(W - 0.01, y, mid); g.rotation.y = Math.PI / 2; }
     roomGroup.add(g);
   }
@@ -116,7 +116,7 @@ addEventListener("pointerup", async () => {
 
 // ---------- UI rendering ----------
 function render() {
-  const key = JSON.stringify([st.room?.revision, st.scene?.rev, st.fit?.status, st.door_arcs?.length, st.scene?.lighting, st.scene?.wall_colors]);
+  const key = JSON.stringify([st.room?.room_revision, st.scene?.rev, st.fit?.status, st.door_arcs?.length, st.scene?.lighting, st.scene?.wall_colors]);
   if (key !== sceneKey) { sceneKey = key; buildRoom(); }
   const fb = $("fitBadge"); const fs = st.fit?.status || "—";
   fb.textContent = `fit: ${fs}${st.fit?.checked_by?.length ? " · " + st.fit.checked_by.join(" + ") : ""}`; fb.className = `badge ${fs}`;
@@ -130,7 +130,7 @@ function render() {
 function renderDims() {
   const r = st.room; if (!r) return;
   const row = (k, label) => `<label>${label} <span><input data-f="${k}" value="${r[k].value_m.toFixed(2)}"> m <span class="src ${r[k].source}">${r[k].source}</span></span></label>`;
-  $("roomDims").innerHTML = `<div class="dims">${row("width_m", "Back wall")}${row("depth_m", "Depth")}${row("height_m", "Height")}</div>
+  $("roomDims").innerHTML = `<div class="dims">${row("width_m", "Far wall (wall_n)")}${row("depth_m", "Depth")}${row("height_m", "Height")}</div>
     <p class="hint">Measure one wall and type it in: every estimated length rescales from it.</p>
     ${r.notes.length ? `<p class="hint">Uncertain: ${r.notes.slice(-3).join("; ")}</p>` : ""}`;
   $("roomDims").querySelectorAll("input").forEach((inp) => inp.onchange = () =>
@@ -267,7 +267,7 @@ $("reviewBtn").onclick = () => post("/review").then(showReview).catch((e) => fla
 // ---------- boot ----------
 (async () => {
   const h = await (await fetch("/api/health")).json();
-  $("status").innerHTML = `<span class="${h.gemini ? "live" : "off"}">Gemini ${h.gemini ? "live" : "no key"}</span>
+  $("status").innerHTML = `<span class="${h.mock_ai ? "fixture" : h.gemini ? "live" : "off"}">${h.mock_ai ? "AI: MOCK (saved outputs)" : h.gemini ? "Gemini live" : "Gemini: no key"}</span>
     <span class="${h.shopify_live ? "live" : h.fixture_catalog ? "fixture" : "off"}">${h.shopify_live ? "Shopify live" : h.fixture_catalog ? "Fixture catalog · not live" : "Shopify not configured"}</span>`;
   if (!SID) { SID = (await (await fetch("/api/session", { method: "POST" })).json()).id; sessionStorage.setItem("ethyneon_sid", SID); }
   await refresh();

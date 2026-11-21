@@ -4,7 +4,8 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-from backend import agents, app as appmod, gates, gemini, intake, shop, vision, workflow
+from ai import agents, gates, gemini, intake, vision, workflow
+from backend import app as appmod, shop
 from contracts.schemas import CatalogOffer
 
 
@@ -26,8 +27,8 @@ def client(monkeypatch):
         if out is vision.RoomDraft:
             return out(width_m={"value_m": 2.8, "confidence": 0.6}, depth_m={"value_m": 3.0, "confidence": 0.5},
                        height_m={"value_m": 2.5, "confidence": 0.6},
-                       walls=[{"id": w, "color_hex": "#ddd", "visible": w != "front"} for w in ("back", "right", "front", "left")],
-                       openings=[{"wall": "back", "type": "door", "offset_m": 1.9, "width_m": 0.8, "height_m": 2.0,
+                       walls=[{"id": w, "color_hex": "#ddd", "visible": w != "wall_s"} for w in ("wall_n", "wall_e", "wall_s", "wall_w")],
+                       openings=[{"wall": "wall_n", "type": "door", "offset_m": 1.9, "width_m": 0.8, "height_m": 2.0,
                                   "confidence": 0.8, "evidence": "right side"}],
                        existing_items=[{"label": "monitor", "x": 0.5, "z": 1.5, "w": 0.5, "d": 0.2, "h": 0.4, "confidence": 0.7}],
                        floor_color_hex="#8a7560", uncertainties=[]), {"latency_ms": 5}

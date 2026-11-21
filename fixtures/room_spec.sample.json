@@ -1,0 +1,92 @@
+{
+ "room_revision": 2,
+ "width_m": {
+  "value_m": 3.2,
+  "source": "confirmed",
+  "confidence": 1.0
+ },
+ "depth_m": {
+  "value_m": 3.093,
+  "source": "estimated",
+  "confidence": 0.5
+ },
+ "height_m": {
+  "value_m": 2.667,
+  "source": "estimated",
+  "confidence": 0.6
+ },
+ "scale_reference": "width_m confirmed by shopper at 3.2 m",
+ "walls": [
+  {
+   "id": "wall_n",
+   "color_hex": "#d8d2c8",
+   "color_source": "sampled_from_photo"
+  },
+  {
+   "id": "wall_e",
+   "color_hex": "#d8d2c8",
+   "color_source": "sampled_from_photo"
+  },
+  {
+   "id": "wall_s",
+   "color_hex": "#d9d4cc",
+   "color_source": "default"
+  },
+  {
+   "id": "wall_w",
+   "color_hex": "#d8d2c8",
+   "color_source": "sampled_from_photo"
+  }
+ ],
+ "openings": [
+  {
+   "id": "door1",
+   "wall": "wall_n",
+   "type": "door",
+   "offset_m": 2.24,
+   "width_m": 0.853,
+   "height_m": 2.133,
+   "sill_m": 0.0,
+   "motion": {
+    "hinge_side": "left",
+    "swing": "in",
+    "max_angle_deg": 90,
+    "source": "inferred",
+    "confidence": 0.8,
+    "evidence_ts": "00:02"
+   },
+   "confidence": 0.8
+  },
+  {
+   "id": "window2",
+   "wall": "wall_w",
+   "type": "window",
+   "offset_m": 0.96,
+   "width_m": 1.173,
+   "height_m": 1.28,
+   "sill_m": 0.96,
+   "motion": null,
+   "confidence": 0.7
+  }
+ ],
+ "existing_items": [
+  {
+   "id": "item1",
+   "label": "monitor",
+   "x": 0.533,
+   "z": 2.667,
+   "w": 0.587,
+   "d": 0.267,
+   "h": 0.48,
+   "keep": true,
+   "confidence": 0.7
+  }
+ ],
+ "free_zones": [],
+ "floor_color_hex": "#8a7560",
+ "status": "validated",
+ "notes": [
+  "MOCK_AI: saved output, not from your photo",
+  "Scale anchored on width_m=3.2 m (factor 1.07)"
+ ]
+}

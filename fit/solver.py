@@ -52,17 +52,17 @@ def door_geometry(room: dict, opening: dict):
     wall, off, width = opening["wall"], opening["offset_m"], opening["width_m"]
     # start point of the wall, direction along it, inward normal
     spec = {
-        "back": ((0.0, 0.0), (1, 0), (0, 1)),
-        "right": ((W, 0.0), (0, 1), (-1, 0)),
-        "front": ((0.0, D), (1, 0), (0, -1)),
-        "left": ((0.0, 0.0), (0, 1), (1, 0)),
+        "wall_n": ((0.0, 0.0), (1, 0), (0, 1)),
+        "wall_e": ((W, 0.0), (0, 1), (-1, 0)),
+        "wall_s": ((0.0, D), (1, 0), (0, -1)),
+        "wall_w": ((0.0, 0.0), (0, 1), (1, 0)),
     }[wall]
     (sx, sz), (ax, az), (nx, nz) = spec
     a = (sx + ax * off, sz + az * off)                  # opening start
     b = (sx + ax * (off + width), sz + az * (off + width))  # opening end
     motion = opening.get("motion") or {}
     hinge_side = motion.get("hinge_side", "left")
-    # "left" as seen from inside facing the wall. Facing the wall means looking
+    # "wall_w" as seen from inside facing the wall. Facing the wall means looking
     # along -n; left-hand direction is then rot90 of that view.
     view = (-nx, -nz)
     left_dir = (view[1], -view[0])  # rotate view -90deg (x,z with y up: left of view)
@@ -114,10 +114,10 @@ def check(room: dict, placements: list[dict], scene_rev: int = 0, angle_max: flo
         r = footprint(p)
         rects[p["key"]] = r
         oob = []
-        if r[0] < -EPS: oob.append("left")
-        if r[1] < -EPS: oob.append("back")
-        if r[2] > W + EPS: oob.append("right")
-        if r[3] > D + EPS: oob.append("front")
+        if r[0] < -EPS: oob.append("wall_w")
+        if r[1] < -EPS: oob.append("wall_n")
+        if r[2] > W + EPS: oob.append("wall_e")
+        if r[3] > D + EPS: oob.append("wall_s")
         for wid in oob:
             collisions.append({"a": p["key"], "b": f"wall:{wid}", "kind": "out_of_bounds",
                                "detail": f"{p['key']} extends past the {wid} wall"})
@@ -151,14 +151,14 @@ def check(room: dict, placements: list[dict], scene_rev: int = 0, angle_max: flo
     pos_gaps = [g for g in gaps if g >= 0]
     min_gap = round(min(pos_gaps), 3) if pos_gaps else None
     if collisions:
-        status = "no_fit"
+        status = "does_not_fit"
     elif unknowns:
         status = "unknown"
     elif min_gap is not None and min_gap < TIGHT_GAP_M:
         status = "tight"
     else:
         status = "fits"
-    return {"scene_rev": scene_rev, "room_revision": room.get("revision", 1), "status": status,
+    return {"scene_rev": scene_rev, "room_revision": room.get("room_revision", 1), "status": status,
             "collisions": collisions, "min_gap_m": min_gap, "unknowns": unknowns,
             "solver_version": VERSION, "checked_by": ["server"]}
 
@@ -171,17 +171,17 @@ def _near_opening(room, o, rect, margin=1.0) -> bool:
 
 
 # ---------- search ----------
-WALL_ORDER = ["back", "left", "right", "front"]
+WALL_ORDER = ["wall_n", "wall_w", "wall_e", "wall_s"]
 
 
 def _against_wall(room, wall, along_pos, w, d):
     """Centre of a w x d footprint with its back against `wall` at `along_pos`."""
     W, D = _dim(room, "width_m"), _dim(room, "depth_m")
-    if wall == "back":
+    if wall == "wall_n":
         return along_pos, d / 2, 0
-    if wall == "front":
+    if wall == "wall_s":
         return along_pos, D - d / 2, 180
-    if wall == "left":
+    if wall == "wall_w":
         return d / 2, along_pos, 90
     return W - d / 2, along_pos, 270
 
@@ -202,7 +202,7 @@ def search(room: dict, fixed: list[dict], items: list[dict], preferred_wall: str
             continue
         best = None
         for wall in walls:
-            length = W if wall in ("back", "front") else D
+            length = W if wall in ("wall_n", "wall_s") else D
             n = int(length / step)
             for i in range(n + 1):
                 pos = i * step
