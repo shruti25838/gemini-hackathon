@@ -1,0 +1,39 @@
+# Standalone distribution of the Ethyneon fit engine.
+#
+# The engine speaks in the shared `contracts` models, which live in a sibling
+# directory, so a complete wheel has to carry both packages. A build backend
+# will not reach above its own project directory, which is why there is a
+# staged build:
+#
+#     python scripts/build_fit_package.py          builds a complete wheel
+#     pip install dist/ethyneon_fit-*.whl
+#     python -m fit check --input case.json
+#
+# Installing this directory directly also works, and gives you `fit` alone:
+#
+#     pip install ./fit
+#
+# That is enough when `contracts` is already importable, for example in this
+# repository. In a bare sandbox, use the staged wheel.
+#
+# `backend` is deliberately absent, and tests/fit/test_no_forbidden_imports.py
+# reads the source to keep it that way.
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ethyneon-fit"
+version = "0.2.0"
+description = "Room-fit geometry for Ethyneon. Pure Python, no web, database or network."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.9,<3"]
+
+[project.scripts]
+ethyneon-fit = "fit.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+sources = {"." = "fit"}

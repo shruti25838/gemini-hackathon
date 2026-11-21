@@ -338,3 +338,200 @@ def distance_to_room_edge(
     for x, y in polygon:
         gaps.extend([x, y, room_width_m - x, room_depth_m - y])
     return min(gaps) if gaps else 0.0
+
+
+# --------------------------------------------------------------------------
+# Richer output: intersections, closest pairs, corridors
+# --------------------------------------------------------------------------
+
+
+def polygon_intersection(subject: Sequence[Point], clip: Sequence[Point]) -> Polygon:
+    """Sutherland-Hodgman clipping. Exact for the convex shapes used here.
+
+    Returns the overlapping area as a polygon, or an empty list when the two
+    do not overlap. Lane B draws this, so it has to be the real region and
+    not a bounding box.
+    """
+    def inside(point: Point, edge_a: Point, edge_b: Point) -> bool:
+        return (edge_b[0] - edge_a[0]) * (point[1] - edge_a[1]) - (
+            edge_b[1] - edge_a[1]
+        ) * (point[0] - edge_a[0]) >= -EPSILON
+
+    def intersect(p1: Point, p2: Point, edge_a: Point, edge_b: Point) -> Point:
+        x1, y1 = p1
+        x2, y2 = p2
+        x3, y3 = edge_a
+        x4, y4 = edge_b
+        denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        if abs(denominator) < EPSILON:
+            return p2
+        a = x1 * y2 - y1 * x2
+        b = x3 * y4 - y3 * x4
+        return (
+            (a * (x3 - x4) - (x1 - x2) * b) / denominator,
+            (a * (y3 - y4) - (y1 - y2) * b) / denominator,
+        )
+
+    output: list[Point] = list(_counter_clockwise(subject))
+    clip_polygon = list(_counter_clockwise(clip))
+
+    for index in range(len(clip_polygon)):
+        if not output:
+            return []
+        edge_a = clip_polygon[index]
+        edge_b = clip_polygon[(index + 1) % len(clip_polygon)]
+        current_input = output
+        output = []
+        for i in range(len(current_input)):
+            current = current_input[i]
+            previous = current_input[i - 1]
+            if inside(current, edge_a, edge_b):
+                if not inside(previous, edge_a, edge_b):
+                    output.append(intersect(previous, current, edge_a, edge_b))
+                output.append(current)
+            elif inside(previous, edge_a, edge_b):
+                output.append(intersect(previous, current, edge_a, edge_b))
+
+    return [_round_point(p) for p in output]
+
+
+def _signed_area(polygon: Sequence[Point]) -> float:
+    total = 0.0
+    for index in range(len(polygon)):
+        x1, y1 = polygon[index]
+        x2, y2 = polygon[(index + 1) % len(polygon)]
+        total += x1 * y2 - x2 * y1
+    return total / 2.0
+
+
+def _counter_clockwise(polygon: Sequence[Point]) -> Sequence[Point]:
+    return polygon if _signed_area(polygon) >= 0 else list(reversed(polygon))
+
+
+def polygon_area(polygon: Sequence[Point]) -> float:
+    return abs(_signed_area(polygon))
+
+
+def _round_point(point: Point, places: int = 4) -> Point:
+    """Round for output stability. Same input must give identical bytes."""
+    return (round(point[0] + 0.0, places), round(point[1] + 0.0, places))
+
+
+def round_polygon(polygon: Sequence[Point], places: int = 4) -> Polygon:
+    return [_round_point(p, places) for p in polygon]
+
+
+def closest_points(a: Sequence[Point], b: Sequence[Point]) -> tuple[Point, Point, float]:
+    """The nearest pair of points between two polygons, and the gap.
+
+    Reported so a reader can see where a clearance was measured rather than
+    being handed a bare number.
+    """
+    best: tuple[Point, Point, float] = ((0.0, 0.0), (0.0, 0.0), float("inf"))
+    for i in range(len(a)):
+        a1, a2 = a[i], a[(i + 1) % len(a)]
+        for j in range(len(b)):
+            b1, b2 = b[j], b[(j + 1) % len(b)]
+            for point, start, end in (
+                (a1, b1, b2),
+                (a2, b1, b2),
+                (b1, a1, a2),
+                (b2, a1, a2),
+            ):
+                distance = point_segment_distance(point, start, end)
+                if distance < best[2]:
+                    other = _closest_point_on_segment(point, start, end)
+                    pair = (point, other) if point in (a1, a2) else (other, point)
+                    best = (_round_point(pair[0]), _round_point(pair[1]), distance)
+    return best
+
+
+def _closest_point_on_segment(point: Point, start: Point, end: Point) -> Point:
+    segment = subtract(end, start)
+    length_sq = dot(segment, segment)
+    if length_sq < EPSILON * EPSILON:
+        return start
+    t = max(0.0, min(1.0, dot(subtract(point, start), segment) / length_sq))
+    return (start[0] + segment[0] * t, start[1] + segment[1] * t)
+
+
+def corridor_width_profile(
+    corridor: Sequence[Point], obstacles: Sequence[Sequence[Point]], samples: int = 9
+) -> list[dict]:
+    """How wide the corridor stays along its length, and where it narrows.
+
+    The corridor is treated as a straight run between its two short ends. At
+    each sample the free width is the corridor width minus whatever intrudes
+    from either side.
+    """
+    if len(corridor) < 3:
+        return []
+
+    xs = [p[0] for p in corridor]
+    ys = [p[1] for p in corridor]
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+    width_x = max_x - min_x
+    width_y = max_y - min_y
+    runs_along_y = width_y >= width_x
+    full_width = width_x if runs_along_y else width_y
+
+    # Evenly spaced samples alone can step straight over a narrow obstacle:
+    # a 0.4 m box between 0.44 m samples is invisible. So the sample set also
+    # includes every obstacle's leading and trailing edge, and the midpoint
+    # between them, which is where a narrowing is actually deepest.
+    samples = max(2, samples)
+    along_min, along_max = (min_y, max_y) if runs_along_y else (min_x, max_x)
+    positions: set[float] = {
+        along_min + (along_max - along_min) * (index / samples)
+        for index in range(samples + 1)
+    }
+    for obstacle in obstacles:
+        if not obstacle:
+            continue
+        coordinates = [p[1] for p in obstacle] if runs_along_y else [p[0] for p in obstacle]
+        low, high = min(coordinates), max(coordinates)
+        for position in (low, high, (low + high) / 2.0):
+            if along_min - EPSILON <= position <= along_max + EPSILON:
+                positions.add(min(max(position, along_min), along_max))
+
+    profile: list[dict] = []
+    for position in sorted(positions):
+        t = 0.0 if along_max == along_min else (position - along_min) / (along_max - along_min)
+        if runs_along_y:
+            y = position
+            slice_polygon = [
+                (min_x, y - EPSILON),
+                (max_x, y - EPSILON),
+                (max_x, y + EPSILON),
+                (min_x, y + EPSILON),
+            ]
+        else:
+            x = position
+            slice_polygon = [
+                (x - EPSILON, min_y),
+                (x + EPSILON, min_y),
+                (x + EPSILON, max_y),
+                (x - EPSILON, max_y),
+            ]
+
+        blocked = 0.0
+        for obstacle in obstacles:
+            overlap = polygon_intersection(slice_polygon, obstacle)
+            if not overlap:
+                continue
+            if runs_along_y:
+                span = max(p[0] for p in overlap) - min(p[0] for p in overlap)
+            else:
+                span = max(p[1] for p in overlap) - min(p[1] for p in overlap)
+            blocked = max(blocked, span)
+
+        at = position
+        profile.append(
+            {
+                "at_m": round(at, 4),
+                "axis": "y" if runs_along_y else "x",
+                "free_width_m": round(max(0.0, full_width - blocked), 4),
+            }
+        )
+    return profile

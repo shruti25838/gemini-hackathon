@@ -1,0 +1,128 @@
+{
+  "name": "does_not_fit_blocks_walking_route",
+  "description": "The desk lands across the route from the door.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [],
+      "existing_items": [],
+      "free_zones": [
+        {
+          "zone_id": "route_door_to_desk",
+          "label": "Door to desk",
+          "area": {
+            "points": [
+              {
+                "x_m": 0.2,
+                "y_m": 3.9
+              },
+              {
+                "x_m": 1.1,
+                "y_m": 3.9
+              },
+              {
+                "x_m": 1.1,
+                "y_m": 0.8
+              },
+              {
+                "x_m": 0.2,
+                "y_m": 0.8
+              }
+            ]
+          },
+          "purpose": "walking_route"
+        }
+      ],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [],
+    "placement": {
+      "object_id": "obj_desk",
+      "pose": {
+        "x_m": 0.7,
+        "y_m": 2.0,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 0.7,
+        "y_m": 2.0,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "rotation_deg": 0.0
+      }
+    }
+  },
+  "expected": {
+    "result": "does_not_fit",
+    "failing_check": "walking_route",
+    "cause_contains": "walking route",
+    "geometry": {
+      "corridors": 1
+    }
+  }
+}

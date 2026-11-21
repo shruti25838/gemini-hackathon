@@ -19,7 +19,7 @@ surface so the other lanes can import against it.
 
 from __future__ import annotations
 
-SOLVER_VERSION = "fit/0.1.0"
+SOLVER_VERSION = "fit/0.2.0"
 
 # Defaults, overridable through backend config. Stated in every FitReport's
 # assumptions so a result is always self-describing.

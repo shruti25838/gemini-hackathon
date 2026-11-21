@@ -1,0 +1,121 @@
+{
+  "name": "does_not_fit_overlaps_kept_item",
+  "description": "The shopper is keeping their monitor; the desk lands on it.",
+  "input": {
+    "room_spec": {
+      "room_revision": 1,
+      "session_id": "sandbox",
+      "dimensions_m": {
+        "width_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "depth_m": {
+          "value_m": 4.0,
+          "evidence_status": "confirmed",
+          "source": "live"
+        },
+        "height_m": {
+          "value_m": 2.5,
+          "evidence_status": "confirmed",
+          "source": "live"
+        }
+      },
+      "walls": [
+        {
+          "wall_id": "wall_n",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_e",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_s",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        },
+        {
+          "wall_id": "wall_w",
+          "length_m": 4.0,
+          "color": {
+            "hex": "#cccccc",
+            "evidence_status": "confirmed",
+            "source": "generated"
+          }
+        }
+      ],
+      "floor": {
+        "floor_id": "floor",
+        "color": {
+          "hex": "#cccccc",
+          "evidence_status": "confirmed",
+          "source": "generated"
+        }
+      },
+      "openings": [],
+      "existing_items": [],
+      "free_zones": [],
+      "evidence_status": "confirmed",
+      "source": "generated"
+    },
+    "placements": [
+      {
+        "object_id": "obj_monitor",
+        "label": "Kept monitor",
+        "pose": {
+          "x_m": 2.0,
+          "y_m": 1.0,
+          "rotation_deg": 0.0
+        },
+        "footprint": {
+          "x_m": 2.0,
+          "y_m": 1.0,
+          "width_m": 0.6,
+          "depth_m": 0.25,
+          "rotation_deg": 0.0
+        },
+        "locked": true
+      }
+    ],
+    "placement": {
+      "object_id": "obj_desk",
+      "pose": {
+        "x_m": 2.0,
+        "y_m": 1.0,
+        "rotation_deg": 0.0
+      },
+      "footprint": {
+        "x_m": 2.0,
+        "y_m": 1.0,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "rotation_deg": 0.0
+      }
+    }
+  },
+  "expected": {
+    "result": "does_not_fit",
+    "tentative": false,
+    "failing_check": "locked_object_overlap",
+    "cause_contains": "overlap",
+    "geometry": {
+      "overlaps_at_least": 1
+    }
+  }
+}

@@ -81,6 +81,7 @@ Python, callable on the server. Signatures are in `contracts/interfaces.py`.
 | `search_catalog(requirements, limit)` | `backend/catalog.py` | `list[CatalogOffer]` |
 | `get_offer(variant_id)` | `backend/catalog.py` | a fresh `CatalogOffer`, never cached |
 | `check_fit(room_spec, scene, placement, offers)` | `fit/engine.py` | `FitReport` |
+| `analyze_fit(...)` | `fit/analysis.py` | `FitAnalysis`: the report plus overlap polygons, door swept areas, corridor profiles, the measured clearance with its endpoints, and a one-sentence cause |
 | `compute_budget(lines, budget)` | `backend/budget.py` | `BudgetResult`, integer minor units |
 | `commit_revision(kind, patch, base_revision, action_id)` | `backend/revisions.py` | `CommitResult` or a conflict |
 | `emit_event(activity_event)` | `backend/events.py` | writes to SQLite and pushes to `/ws/events` |
@@ -93,6 +94,37 @@ Python, callable on the server. Signatures are in `contracts/interfaces.py`.
 `fit/` imports nothing but the standard library and `contracts/`, so the same
 code runs inside the Argon and Carbon sandboxes.
 `tests/fit/test_no_forbidden_imports.py` reads the source and enforces that.
+
+### The fit engine has its own guide and command line
+
+Lane A should read **[docs/FIT_ENGINE.md](FIT_ENGINE.md)** rather than this
+section. It has the input and output JSON shapes with worked examples, the
+exit codes, the golden cases, and the rules about tentative and unknown.
+
+```bash
+python -m fit check --input case.json --output result.json
+python -m fit check --input case.json            # result to stdout
+cat case.json | python -m fit check --input -    # or from stdin
+python -m fit version
+
+python scripts/build_fit_package.py --verify     # standalone wheel for a sandbox
+python scripts/make_fit_cases.py                 # regenerate the golden cases
+```
+
+Exit codes are `0` for a result of any kind including `does_not_fit` and
+`unknown`, `2` for malformed input with a JSON error and no traceback, and
+`1` for an internal failure.
+
+The engine is installable on its own as `ethyneon-fit`. The wheel carries
+`fit` and `contracts` and needs only pydantic;
+`scripts/build_fit_package.py --verify` installs it into a throwaway virtual
+environment and runs a golden case through it, so the claim is checked rather
+than asserted. `fit/geometry.py` on its own has no dependency at all.
+
+Four contract additions are proposed in section 6 of that document, covering
+the two new check names, the geometry block, the plain-English cause and the
+clearance endpoints. **None has been made**; everything extra travels outside
+the `FitReport` until Person C approves them.
 
 ### Rules C enforces, which you cannot work around from another lane
 
@@ -246,6 +278,7 @@ Mock-mode and supporting fixtures:
 | `fixtures/fit_report_does_not_fit.sample.json` | a failing fit, for the replay |
 | `fixtures/budget_lines.sample.json` | `BudgetLine` samples |
 | `fixtures/failures/failure_cases.json` | ten deliberately bad samples, each saying where it must be caught |
+| `fixtures/fit_cases/*.json` | 15 golden fit cases, each with an input the CLI takes and a hand-written expected block |
 | `fixtures/photos/` | **not committed.** B supplies `room_good.jpg` and `room_poor.jpg`; see the README there |
 
 ---

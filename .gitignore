@@ -38,3 +38,7 @@ Thumbs.db
 SHOPIFY_*.txt
 GEMINI_*.txt
 AGORA_*.txt
+
+# built distributions
+dist/
+*.whl
