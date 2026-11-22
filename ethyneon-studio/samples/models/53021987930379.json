@@ -1,0 +1,17 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/53021987930379",
+ "title": "Ande Side Table",
+ "merchant": "noo-ma.myshopify.com",
+ "listing_url": "https://noo.ma/products/ande-side-table-orange-peel?variant=53021987930379&_gsid=MY4upoeRTpjo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 26500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0254/3963/3488/files/nooma_FUR1084_AndeSideTable_OrangePeel-1.png?v=1751456190",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal"
+ ]
+}

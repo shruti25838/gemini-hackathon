@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/55460849516835",
+ "title": "Allana 57.5\" LED Floor Lamp",
+ "merchant": "8u0n3b-yy.myshopify.com",
+ "listing_url": "https://fablehouse.co/products/allana-57-5-led-floor-lamp?variant=55460849516835&_gsid=sKMGqdjKsJNC&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8100,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0996/5223/9651/files/download_61_59d9de5b-379b-4949-af40-c0e09243ea38.png?v=1786530604",
+ "dimensions_m": {
+  "width": 0.19812,
+  "height": 1.4605,
+  "depth": 0.19812
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal"
+ ]
+}

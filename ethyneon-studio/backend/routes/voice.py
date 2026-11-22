@@ -25,7 +25,7 @@ def voice_agora_token(request: Request, channel: Annotated[str, Query(pattern=r"
 
 
 @router.websocket("/live")
-async def voice_live(websocket: WebSocket, room_id: str | None = None) -> None:
+async def voice_live(websocket: WebSocket, room_id: str | None = None, session: str | None = None) -> None:
     origin = websocket.headers.get("origin")
     host = websocket.headers.get("host", "")
     local_origin = origin is None or re.fullmatch(r"https?://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?", origin)
@@ -35,8 +35,10 @@ async def voice_live(websocket: WebSocket, room_id: str | None = None) -> None:
         return
     if room_id is not None and not re.fullmatch(r"[0-9a-f]{32}", room_id):
         room_id = None
+    if session is not None and not re.fullmatch(r"[0-9a-f]{32}", session):
+        session = None
     await websocket.accept()
-    await websocket.app.state.voice.run(websocket, room_id)
+    await websocket.app.state.voice.run(websocket, room_id, session)
     try:
         await websocket.close()
     except RuntimeError:

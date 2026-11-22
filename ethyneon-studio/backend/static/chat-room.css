@@ -1,0 +1,52 @@
+.chat-room { max-width: 1680px; margin: 0 auto; padding: 18px clamp(14px, 3vw, 40px); display: grid; grid-template-columns: minmax(320px, 420px) minmax(0, 1fr) minmax(235px, 290px); gap: 16px; align-items: start; }
+.chat-column { display: flex; flex-direction: column; gap: 10px; padding-bottom: 14px; max-height: calc(100dvh - 120px); position: sticky; top: 12px; }
+.chat-column > * { margin-inline: 14px; }
+.chat-column .panel-header { margin: 0; border-bottom: 1px solid var(--border); }
+.chat-column h1 { font-size: 20px; margin: 0; letter-spacing: -0.03em; }
+.chat-column .plan-chat { min-height: 160px; max-height: none; flex: 1 1 auto; }
+.chat-form { display: flex; gap: 8px; align-items: stretch; }
+.chat-form textarea { flex: 1; min-width: 0; resize: none; font: inherit; font-size: 13px; color: #eef2ec; background: #111512; border: 1px solid var(--border); border-radius: 9px; padding: 9px; }
+.chat-form button { padding: 0 16px; }
+.chat-hints { display: flex; flex-wrap: wrap; gap: 5px; }
+.chat-hints button { border: 1px solid var(--border); background: #1b201c; color: #cdd6cb; border-radius: 999px; padding: 4px 10px; font-size: 11px; }
+.chat-hints button:hover { border-color: var(--accent); color: var(--accent); }
+.suggested { border: 1px solid #6b5420; background: #1d1a12; border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+.suggested-head { display: flex; justify-content: space-between; align-items: baseline; }
+.suggested-head h2 { margin: 0; font-size: 13px; color: #ffd27a; }
+.suggested-head b { font-size: 13px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.suggested ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.suggested li button { width: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; text-align: left; padding: 6px 8px; border-radius: 8px; border: 1px solid transparent; background: #14120c; color: inherit; font-size: 12px; }
+.suggested li button:hover, .suggested li button[aria-pressed="true"] { border-color: #ffd27a; }
+.suggested li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggested li b { font-variant-numeric: tabular-nums; }
+.suggested li[data-placed="true"] button { background: #141815; }
+.suggested ul:empty, #suggested-empty:empty { display: none; }
+.suggested-head { gap: 8px; }
+.suggested-head b { white-space: nowrap; }
+.room-json summary { font-size: 12px; color: var(--muted); cursor: pointer; }
+.room-json pre { max-height: 30dvh; overflow: auto; font-size: 11px; background: #0e120f; padding: 10px; border-radius: 8px; white-space: pre-wrap; }
+.chat-room .stage { position: static; }
+.chat-room .room-viewport { height: calc(100dvh - 200px); min-height: 460px; }
+.price-tag.proposed { border-color: #ffd27a; color: #ffd27a; border-style: dashed; }
+@media (max-width: 1240px) {
+  .chat-room { grid-template-columns: minmax(320px, 380px) minmax(0, 1fr); }
+  .chat-room .suggested { grid-column: 2; }
+  .chat-column { grid-row: span 2; }
+}
+@media (max-width: 980px) {
+  .chat-room { grid-template-columns: minmax(0, 1fr); }
+  .chat-column { grid-row: auto; position: static; max-height: none; }
+  .chat-room .suggested { grid-column: auto; }
+  .chat-room .stage { order: -1; }
+  .chat-room .room-viewport { height: 55dvh; }
+}
+.voice-toggle { flex: 0 0 auto; border: 1px solid #4d6e44; background: #1b231c; color: var(--accent); border-radius: 9px; padding: 0 12px; font-size: 12px; font-weight: 650; }
+.voice-toggle[data-live="true"] { background: #ff8f80; color: #2a1210; border-color: #ff8f80; }
+.checkout-btn { width: 100%; margin-top: 4px; font-size: 14px; font-weight: 700; letter-spacing: 0.01em; background: var(--accent); color: #0d1a0f; border: none; border-radius: 10px; padding: 12px 20px; cursor: pointer; transition: opacity 0.15s; }
+.checkout-btn:not(:disabled):hover { opacity: 0.88; }
+.checkout-btn:disabled { opacity: 0.45; cursor: default; }
+
+.rotate-tools { display: flex; align-items: center; gap: 6px; padding: 0 12px 8px; }
+.rotate-tools button { border: 1px solid var(--border); background: #202622; color: #d1dad1; border-radius: 7px; padding: 5px 10px; font-size: 12px; }
+.rotate-tools button:hover { border-color: var(--accent); color: var(--accent); }
+.rotate-tools span { font-size: 11px; color: var(--muted); }

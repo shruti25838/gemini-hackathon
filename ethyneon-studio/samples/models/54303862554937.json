@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/54303862554937",
+ "title": "Garvee Contemporary 55\" Gray Sideboard Buffet Cabinet \u2013 4 Doors, 3 Drawers, Adjustable Shelves \u2013 Versatile Storage for Kitchen, Dining, Living Room, Coffee Bar \u2013 Gray 5289",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-contemporary-55-gray-sideboard-buffet-mhk-38qsjvvr?variant=54303862554937&_gsid=MHhVMCA2dKrx&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 30199,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmph1w61tgn.jpg?v=1785835892",
+ "dimensions_m": {
+  "width": 1.399794,
+  "height": 0.81026,
+  "depth": 0.38608
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ]
+}

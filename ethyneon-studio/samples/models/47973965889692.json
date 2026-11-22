@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/47973965889692",
+ "title": "Modern Sturdy Home Office Writing Desk for Small Spaces",
+ "merchant": "kvk51i-0n.myshopify.com",
+ "listing_url": "https://warebay.com/products/modern-computer-desk-small-spaces?variant=47973965889692&_gsid=wTX6cQGsXGYK&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0729/5719/8492/files/exec-6ccc9127-aa04-409f-b46f-796b2dc9b34e.png?v=1793103575",
+ "dimensions_m": {
+  "width": 0.8001,
+  "height": 0.72898,
+  "depth": 0.39878
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ]
+}

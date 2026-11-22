@@ -1,0 +1,18 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/49352834908353",
+ "title": "NEEWER NF01 1500lm Smart RGBW Corner Floor Lamp",
+ "merchant": "neewer-com.myshopify.com",
+ "listing_url": "https://neewer.com/products/neewr-nf01-1500lm-smart-rgbw-corner-floor-lamp-with-16-million-colors-66608200?variant=49352834908353&_gsid=nhv5NxTKmgu5&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0225/2960/5706/files/1_60e090e7-312e-41d7-9bc5-39e8b7c74a9d.jpg?v=1769507508",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "plastic"
+ ]
+}

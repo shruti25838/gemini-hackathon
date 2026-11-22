@@ -50,9 +50,10 @@ export class SceneViewer extends RoomViewer {
     let down = null;
     canvas.addEventListener("pointerdown", (event) => {
       down = [event.clientX, event.clientY];
-      if (this.moveId && this.pick(event) === this.moveId) {
-        const {group} = this.products.get(this.moveId);
-        this.dragging = {id: this.moveId, start: group.position.clone()};
+      const picked = this.moveId || this.dragAny ? this.pick(event) : null;
+      if (picked && (this.dragAny || picked === this.moveId)) {
+        const {group} = this.products.get(picked);
+        this.dragging = {id: picked, start: group.position.clone()};
         this.controls.enabled = false;
         canvas.setPointerCapture(event.pointerId);
       }
@@ -69,6 +70,7 @@ export class SceneViewer extends RoomViewer {
         this.dragging = null;
         this.controls.enabled = true;
         if (group.position.distanceTo(start) > 0.01) this.onMoved?.(id, {x: group.position.x, z: group.position.z});
+        else if (this.dragAny) this.select(id);  // a click without movement still selects
         return;
       }
       if (!down || Math.hypot(event.clientX - down[0], event.clientY - down[1]) > 5) return;

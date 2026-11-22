@@ -1,0 +1,17 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/46389605957858",
+ "title": "Wood Framed Botanical Print",
+ "merchant": "f621a6-4.myshopify.com",
+ "listing_url": "https://shopjosephineinteriors.com/products/wood-framed-glass-wall-dcor-w-botanical-print-4-styles?variant=46389605957858&_gsid=kBp8eLYescoS&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 9500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0675/0358/7554/files/df6782a.jpg?v=1740430020",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ]
+}

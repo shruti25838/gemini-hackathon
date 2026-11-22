@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/58145790853280",
+ "title": "Faux Fur Bean Bag Floor Lazy Sofa",
+ "merchant": "chairus.myshopify.com",
+ "listing_url": "https://www.chairus.com/products/faux-fur-bean-bag-loveseat-floor-sofa?variant=58145790853280&_gsid=SKQpBekfuEr6&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 25999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0429/4829/6864/files/Faux_Fur_Bean_Bag_Floor_Lazy_Sofa_3_dc0deaf5-8780-4307-b796-bce41c635185.jpg?v=1789131147",
+ "dimensions_m": {
+  "width": 1.524,
+  "height": 0.7112,
+  "depth": 0.889
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ]
+}

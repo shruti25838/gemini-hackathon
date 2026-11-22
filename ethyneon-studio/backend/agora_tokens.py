@@ -7,7 +7,7 @@ from backend.config import Settings
 from backend.errors import ConnectionError
 
 
-TOKEN_TTL_SECONDS = 15 * 60
+TOKEN_TTL_SECONDS = 60 * 60
 AGORA_CREDENTIAL = re.compile(r"[0-9a-fA-F]{32}")
 
 

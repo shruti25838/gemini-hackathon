@@ -45,9 +45,8 @@ def parse_budget(text: str) -> int | None:
 
 
 def _products(session) -> list[dict[str, Any]]:
-    draft = session.draft or {}
-    published = session.published or {}
-    return [*draft.get("proposed_products", []), *(draft.get("placed_products") or published.get("placed_products") or [])]
+    document = session.draft or session.published or {}
+    return [*(document.get("placed_products") or []), *(document.get("proposed_products") or [])]
 
 
 def _total(products: list[dict[str, Any]]) -> int:
@@ -55,10 +54,27 @@ def _total(products: list[dict[str, Any]]) -> int:
 
 
 def with_budget(session, text: str) -> str:
-    """The planner instruction, carrying the remembered budget."""
-    if not getattr(session, "budget_minor", None):
+    """The planner instruction, carrying the remembered budget.
+    When the message itself sets a budget and the current total is over it, turn the
+    instruction into an explicit replan so Argon swaps items rather than just noting the limit.
+    """
+    budget = getattr(session, "budget_minor", None)
+    if not budget:
         return text[:700]
-    note = f"\nBudget: keep the total of all suggested Shopify items under {money(session.budget_minor)}."
+    total = _total(_products(session))
+    # If the user's message contained a budget trigger and the plan is over, make it
+    # an explicit replan instruction so Argon acts immediately without a second prompt.
+    if parse_budget(text) is not None and total and total > budget:
+        instruction = (
+            f"The shopper wants the full room plan to cost under {money(budget)} total. "
+            f"The current plan totals {money(total)}, which is {money(total - budget)} over budget. "
+            "Replace or remove items to bring the total under the budget. "
+            "Keep as many items as possible but swap expensive ones for cheaper alternatives. "
+            "Return a complete revised layout within budget."
+        )
+        note = f"\nBudget: keep the total of all suggested Shopify items under {money(budget)}."
+        return instruction[:700 - len(note)] + note
+    note = f"\nBudget: keep the total of all suggested Shopify items under {money(budget)}."
     return text[:700 - len(note)] + note
 
 
@@ -148,13 +164,14 @@ def handle(session, text: str) -> str | None:
         session.budget_minor = budget
         total = _total(_products(session))
         if total and total > budget:
-            return (f"Budget set to {money(budget)}. The current plan totals {money(total)}, {money(total - budget)} over. "
-                    "Say \"replan within budget\" and I'll swap in cheaper items.")
+            # Plan is over budget — return None so the message goes straight to Argon.
+            # with_budget() will inject a full replan instruction for Argon to act on immediately.
+            return None
         return f"Budget set to {money(budget)}. I'll keep every suggestion within it."
     question = text.rstrip().endswith("?") or re.match(r"\s*(?:where|which|is|are|should|how|does|do|can)\b", text, re.I)
     action = re.search(r"\b(?:add|buy|place|put|move|hang|swap|remove|replace)\b", text, re.I)
     if PAINTING.search(text) and (question or not action):
         return painting_advice(session)
-    if SUGGEST.search(text):
+    if SUGGEST.search(text) and (question or not action):
         return suggestions(session)
     return None

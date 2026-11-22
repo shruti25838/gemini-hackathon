@@ -1,5 +1,6 @@
 import { ProductViewer } from "./viewer.js";
 import { SceneViewer, modelDot, priceLabel, setDot } from "./scene-viewer.js";
+import { createAlternativeSearch } from "./shopify-alternatives.js";
 
 const byId = (id) => document.getElementById(id);
 const POLL_MS = 1500;
@@ -15,6 +16,26 @@ let previewing = null;
 const records = new Map();
 const modelState = new Map();  // variant_id -> cached | missing | building | failed
 const STATE_TEXT = {cached: "3D cached", missing: "No 3D · click to build", building: "Building 3D…", failed: "3D failed · click to retry"};
+
+// ---- Session persistence: remember selected product and scroll position across navigation ----
+const SESSION_KEY = "ethyneon.scene_state";
+function saveSessionState() {
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+      selectedId: selected?.id ?? null,
+      scrollTop: document.querySelector(".cart")?.scrollTop ?? 0,
+    }));
+  } catch {}
+}
+function loadSessionState() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+function clearSessionState() {
+  try { sessionStorage.removeItem(SESSION_KEY); } catch {}
+}
 
 const room = new SceneViewer(byId("room-viewer"), (item) => selectProduct(item), {
   onMoved: (id, point) => editScene({op: "move", product_id: id, position: point}, "Moved."),
@@ -210,8 +231,19 @@ async function poll() {
     const response = await fetch("/studio/scene/config", {headers: etag ? {"If-None-Match": `"${etag}"`} : {}});
     if (response.status === 200) {
       const body = await response.json();
+      const isFirstLoad = etag === null;
       etag = body.etag;
       await render(body.scene);
+      // Restore selected product from session after the very first load.
+      if (isFirstLoad) {
+        const saved = loadSessionState();
+        if (saved?.selectedId) {
+          const item = body.scene.placed_products.find((p) => p.id === saved.selectedId);
+          if (item) {
+            room.select(item.id);
+          }
+        }
+      }
     } else if (response.status !== 304 && !scene) {
       const body = await response.json().catch(() => ({}));
       byId("stage-title").textContent = body.message ?? "Waiting for geometricconfig.json";
@@ -233,6 +265,7 @@ function clearSelection() {
   room.selectedId = null;
   room.highlight();
   renderCart();
+  saveSessionState();
 }
 
 function showFacts(title, price, rows, listing, variantId) {
@@ -281,6 +314,7 @@ async function selectProduct(item) {
   byId("use-product").hidden = true;
   if (room.moveId !== item.id) setModes();
   editMessage("");
+  saveSessionState();
   const cm = (m) => Math.round(m * 100);
   showFacts(item.label, item.price, [
     ["Size", `${cm(item.size.width)} × ${cm(item.size.depth)} × ${cm(item.size.height)} cm`],
@@ -298,27 +332,12 @@ async function selectProduct(item) {
     byId("listing").hidden = !url;
     if (url) byId("listing").href = url.href;
   });
-  loadSimilar(item);
+  alternatives.load(item);
 }
 
-async function loadSimilar(item) {
-  const list = byId("similar");
-  list.replaceChildren();
-  if (!item.variant_id) {
-    byId("similar-status").textContent = "This product has no Shopify variant to compare.";
-    return;
-  }
-  byId("similar-status").textContent = "Searching Shopify…";
-  try {
-    const result = await post("/studio/scene/similar", {variant_id: item.variant_id, query: item.label, limit: 9});
-    if (selected?.id !== item.id) return;
-    byId("similar-status").textContent = result.results.length ? "" : "Shopify returned no alternatives.";
-    list.replaceChildren(...result.results.map((offer) => suggestionCard(offer)));
-    refreshStates(result.results.map((offer) => offer.variant_id));
-  } catch (error) {
-    if (selected?.id === item.id) byId("similar-status").textContent = "Could not load suggestions: " + error.message;
-  }
-}
+const alternatives = createAlternativeSearch({
+  post, renderCard: suggestionCard, refreshStates, getSelected: () => selected,
+});
 
 function suggestionCard(offer) {
   const card = document.createElement("button");
@@ -517,8 +536,7 @@ byId("link-form").addEventListener("submit", async (event) => {
     byId("edit-tools").hidden = true;
     byId("use-product").hidden = true;
     byId("add-product").hidden = false;
-    byId("similar").replaceChildren();
-    byId("similar-status").textContent = "";
+    alternatives.reset();
     const size = record.dimensions_m;
     const cm = (m) => Math.round(m * 100);
     showFacts(record.title, record.price, [["Size", size ? `${cm(size.width)} × ${cm(size.depth)} × ${cm(size.height)} cm` : "From photos"]],

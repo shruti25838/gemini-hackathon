@@ -1,0 +1,18 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/48166658801883",
+ "title": "47\" Computer Desk with 5 Drawers, Compact Storage Home Office Desk",
+ "merchant": "tresings.myshopify.com",
+ "listing_url": "https://tribesigns.com/products/47-computer-desk-with-5-drawers-compact-storage-home-office-desk?variant=48166658801883&_gsid=5kqT21JXZ5h3&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0506/8963/8555/files/2_e66cb7f4-30be-4fe1-9ad3-7cea6f883d91.jpg?v=1768893152",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ]
+}

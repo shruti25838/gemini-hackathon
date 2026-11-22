@@ -1,0 +1,18 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/32846840660077",
+ "title": "FAMILY & Children",
+ "merchant": "personal-prints.myshopify.com",
+ "listing_url": "https://personal-prints.com/products/family-children-brown-woodgrain-background?variant=32846840660077&_gsid=RL6G8sGEvn6x&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 17995,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0519/6157/files/personal-prints-art-family-children-family-personalized-name-art-personalized-gifts-wall-decor-1195443941.jpg?v=1759179052",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "wood"
+ ]
+}

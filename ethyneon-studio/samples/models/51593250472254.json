@@ -1,0 +1,17 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51593250472254",
+ "title": "Golden Autumn Forest",
+ "merchant": "canvasap.myshopify.com",
+ "listing_url": "https://www.canvasartprints.com.au/products/golden-autumn-forest?variant=51593250472254&_gsid=aTAjZaUaUPwN&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 5400,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0771/7290/0158/files/AP746-Main_1c5be86e-9510-4417-ad21-f0726ebe89e9.jpg?v=1746155940",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric"
+ ]
+}

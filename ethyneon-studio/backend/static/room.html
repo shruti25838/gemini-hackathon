@@ -40,6 +40,12 @@
             <span class="result-count" id="photo-count">0 / 5</span>
           </div>
           <div class="side-body">
+            <button type="button" class="primary live-toggle" id="live-toggle">📷 Use live camera</button>
+            <div class="demo-video">
+              <select id="demo-room" aria-label="Sample room for the demo video"></select>
+              <button type="button" id="demo-toggle">▶ Play demo video</button>
+            </div>
+            <p class="live-or">or upload photos</p>
             <label class="dropzone" id="dropzone">
               <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple>
               <strong>Add 2 to 5 photos of the room</strong>
@@ -162,6 +168,16 @@
           <div class="empty-stage" id="empty-stage">
             <p>Your photos become an editable 3D room here.</p>
             <p class="hint">Walls, floor, doors and windows come from Gemini 4 Neon. Decision 1 checks the photos cover enough of the room first.</p>
+          </div>
+          <div class="live-cam" id="live-cam" hidden>
+            <video id="live-video" autoplay muted playsinline></video>
+            <div class="live-guide" role="status" aria-live="polite">
+              <i id="live-arrow" aria-hidden="true">◎</i>
+              <p id="live-text">Point the camera at the main wall.</p>
+              <div class="live-bar" aria-hidden="true"><em id="live-bar"></em></div>
+              <small id="live-meta">Views kept 0 / 5 · gemini-decision-1</small>
+            </div>
+            <button type="button" class="live-stop" id="live-stop">Stop camera</button>
           </div>
           <div class="busy" id="busy" hidden><span class="spinner" aria-hidden="true"></span><span id="busy-text">Working…</span></div>
           <p class="viewport-hint" id="room-hint" hidden>Drag to orbit · Right-drag to pan · Scroll to zoom</p>

@@ -1,0 +1,19 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/44132953587790",
+ "title": "GTRACING GT099F Gaming Chair with Footrest",
+ "merchant": "gtracing2.myshopify.com",
+ "listing_url": "https://gtracing.com/products/footrest-series-gt099f?variant=44132953587790&_gsid=3pxcSoSj2eWW&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7299,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0100/7484/9358/files/GT099NAF-RD_1.jpg?v=1786073138",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "leather",
+  "metal",
+  "plastic"
+ ]
+}

@@ -47,6 +47,7 @@
 .product-facts dd { margin: 0; }
 .product-facts a { font-size: 12px; margin-left: auto; }
 .pop-alternatives { border-top: 1px solid var(--border); padding: 8px 12px 12px; }
+#search-more-alternatives { margin-top: 10px; }
 .pop-alt-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .pop-alt-head h3 { margin: 0; font-size: 12px; }
 .ghost-button { border: 1px solid var(--border); background: #202622; color: #d1dad1; border-radius: 7px; padding: 4px 8px; font-size: 11px; }

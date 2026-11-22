@@ -1,4 +1,4 @@
-> **Ethyneon Studio (feature/mitran).** The full working flow: room photos → Decision 1 full-coverage gate → Gemini 4 Neon room → chat or voice planning (Argon, Gemini 3.8 Live) → Design view with cached 3D Shopify products, guarded edits, Shopify link → 3D, and a Decision 1 checkout audit. Run every command below from this `ethyneon-studio/` folder, and copy `.env.example` to `.env` with your own keys.
+> **Ethyneon Studio (feature/mitran).** The full working flow: live camera or photos → Decision 1 full-coverage gate → Gemini 4 Neon room → chat or voice planning (Argon, Gemini 3.8 Live) with drag-and-drop → Design view with cached 3D Shopify products, guarded edits, Shopify link → 3D, and a Decision 1 checkout audit. Run every command below from this `ethyneon-studio/` folder, copy `.env.example` to `.env` with your own keys, and open http://127.0.0.1:8000/.
 
 # Ethyneon Python connection layer
 
@@ -29,7 +29,7 @@ Open `http://127.0.0.1:8000/docs` for typed requests and the bearer-token field.
 
 | Project | Route | Request and result |
 | --- | --- | --- |
-| Room Studio | `GET /api/agora/token?channel=ethyneon-room&uid=42` | Returns `appId`, `rtcToken`, `rtmToken`, `expireAt`, `channel`, and `uid`. The token has RTC and Signaling privileges and lasts 15 minutes. Use the numeric UID for RTC and its string form for Signaling. |
+| Room Studio | `GET /api/agora/token?channel=ethyneon-room&uid=42` | Returns `appId`, `rtcToken`, `rtmToken`, `expireAt`, `channel`, and `uid`. The token has RTC and Signaling privileges and lasts 60 minutes. Use the numeric UID for RTC and its string form for Signaling. |
 | Design Studio | `POST /api/gemini/interactions` | Send `input` as text or Gemini content blocks. Select one of the four Gemini 4 models, and optionally pass an Interactions `response_format`. |
 | Room and Design Studios, Checkout | `POST /api/gemini/decisions` | Send `input` and named `questions` with `noul`, `choice`, or `score` types. The reply includes Gemini's answers and confidence. |
 | Design Studio | `POST /api/gemini/managed-runs` | Send `input` and select Argon or Carbon. Starts a background Antigravity run with a token budget and returns its interaction ID. |

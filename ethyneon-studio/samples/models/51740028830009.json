@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/51740028830009",
+ "title": "Garvee Farmhouse 3-Tier Bookcase, Rustic Plain Book Shelf with Storage Open Display Bookshelves, Space-Saving Industrial Design Home Decor Furniture for Office, Living Room, Bedroom, Black",
+ "merchant": "mygarvee.myshopify.com",
+ "listing_url": "https://www.garvee.com/products/garvee-farmhouse-3-tier-book-shelf-with-open-display-black-pho-0zzp0r8c?variant=51740028830009&_gsid=vhSfnLhMo8zs&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 8699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0724/6698/9369/files/shopify_2Fai_images_2Ftmp43fkjite.jpg?v=1769768216",
+ "dimensions_m": {
+  "width": 0.8001,
+  "height": 1.016,
+  "depth": 0.30988
+ },
+ "dimension_source": "shopify_selected_size",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ]
+}

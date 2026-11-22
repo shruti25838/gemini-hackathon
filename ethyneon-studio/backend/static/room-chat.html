@@ -6,29 +6,102 @@
     <title>Ethyneon Room Chat</title>
     <link rel="stylesheet" href="/studio-assets/studio.css">
     <link rel="stylesheet" href="/studio-assets/room.css">
+    <link rel="stylesheet" href="/studio-assets/scene.css">
+    <link rel="stylesheet" href="/studio-assets/chat-room.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
     <script type="module" src="/studio-assets/room-chat.js"></script>
+    <script type="module" src="/studio-assets/chat-room.js"></script>
     <script type="module" src="/studio-assets/app-nav.js"></script>
   </head>
   <body>
-    <main class="room-chat-page">
-      <section class="panel">
-        <header class="panel-header"><h1>Room JSON chat</h1></header>
-        <div class="plan-workspace">
-          <section class="plan-conversation" aria-label="Conversation">
-            <ol id="chat-messages" class="plan-chat" aria-label="Messages" aria-live="polite"></ol>
-            <p id="chat-status" class="scene-meta" role="status"></p>
-            <form id="chat-form" class="scene-form">
-              <label class="field">Message<textarea id="chat-input" rows="3" maxlength="700" placeholder="4 × 3.5 × 2.6 m"></textarea></label>
-              <button id="chat-send" class="primary" type="submit" disabled>Send</button>
-            </form>
-            <button id="chat-confirm" class="primary" type="button" hidden>Confirm placement</button>
-          </section>
-          <section class="plan-document" aria-labelledby="json-heading">
-            <h2 id="json-heading">Room JSON</h2>
-            <pre id="plan-json-body" tabindex="0">{}</pre>
-          </section>
+    <main class="chat-room">
+      <section class="panel chat-column" aria-labelledby="chat-title">
+        <header class="panel-header compact">
+          <div><p class="eyebrow">Plan · chat mode</p><h1 id="chat-title">Room chat</h1></div>
+        </header>
+        <ol id="chat-messages" class="plan-chat" aria-label="Messages" aria-live="polite"></ol>
+        <div id="room-types" class="chat-hints" role="group" aria-label="Room type" hidden></div>
+        <p id="chat-planning" class="scene-meta model-line" role="status" hidden>
+          <span class="spinner" aria-hidden="true"></span><span>Argon is planning and checking Shopify items…</span>
+        </p>
+        <p id="chat-status" class="scene-meta" role="status"></p>
+        <form id="chat-form" class="chat-form">
+          <label class="sr-only" for="chat-input">Message</label>
+          <textarea id="chat-input" rows="2" maxlength="700" placeholder="4 × 3.5 × 2.6 m"></textarea>
+          <button id="chat-send" class="primary" type="submit" disabled>Send</button>
+        </form>
+        <div id="planning-hints" class="chat-hints" aria-label="Things to try" hidden>
+          <button type="button" data-say="make it under $1,200">make it under $1,200</button>
+          <button type="button" data-say="what do you suggest?">what do you suggest?</button>
+          <button type="button" data-say="where should I hang a painting?">painting light?</button>
+        </div>
+        <details class="room-json">
+          <summary id="json-heading">Room JSON</summary>
+          <pre id="plan-json-body" tabindex="0">{}</pre>
+        </details>
+      </section>
+
+      <section class="panel stage" aria-labelledby="stage-title">
+        <div class="panel-header">
+          <div><p class="eyebrow" id="stage-eyebrow">Live room</p><h2 id="stage-title">Waiting for the room size</h2></div>
+          <div class="view-actions" role="group" aria-label="Camera">
+            <button type="button" data-view="overview">Overview</button>
+            <button type="button" data-view="plan">Plan</button>
+            <button type="button" data-view="eye">Eye level</button>
+          </div>
+        </div>
+        <div class="viewport room-viewport" role="region" aria-label="Live 3D room">
+          <div id="room-viewer"></div>
+          <p class="viewport-hint">Drag products to move them · Click one to rotate or swap · Amber = not confirmed yet</p>
+          <aside class="product-pop" id="product-pop" aria-labelledby="product-title" hidden>
+            <div class="pop-head">
+              <div>
+                <p class="eyebrow" id="product-eyebrow">Selected product</p>
+                <h2 id="product-title"></h2>
+                <p class="product-state" id="product-state"></p>
+              </div>
+              <button type="button" class="pop-close" id="close-product" aria-label="Close product panel">×</button>
+            </div>
+            <div class="pop-viewport">
+              <div id="product-viewer"></div>
+              <p class="viewport-empty" id="product-message"></p>
+            </div>
+            <div class="rotate-tools" id="rotate-tools" role="group" aria-label="Rotate this product" hidden>
+              <button type="button" id="rotate-left" aria-label="Rotate 15 degrees left">⟲ 15°</button>
+              <button type="button" id="rotate-right" aria-label="Rotate 15 degrees right">⟳ 15°</button>
+              <span>Drag it on the floor to move</span>
+            </div>
+            <div class="product-facts" id="product-facts" hidden>
+              <p class="product-price" id="product-price"></p>
+              <dl id="facts"></dl>
+              <a id="listing" target="_blank" rel="noopener noreferrer" hidden>Shopify ↗</a>
+            </div>
+            <div class="pop-alternatives">
+              <div class="pop-alt-head">
+                <h3>Alternatives on Shopify</h3>
+              </div>
+              <p class="similar-status" id="similar-status"></p>
+              <div class="similar" id="similar"></div>
+              <button type="button" class="ghost-button" id="search-more-alternatives" hidden>Search more alternatives</button>
+            </div>
+          </aside>
         </div>
       </section>
+      <aside class="panel suggested" id="suggested" aria-labelledby="suggested-title">
+        <div class="suggested-head"><h2 id="suggested-title">Items in the room</h2><b id="suggested-total"></b></div>
+        <p id="suggested-empty" class="scene-meta">Room items will appear here.</p>
+        <ul id="suggested-list"></ul>
+        <button id="chat-confirm" class="primary" type="button" hidden>Confirm placement</button>
+        <button id="move-to-checkout" class="primary checkout-btn" type="button" disabled aria-describedby="checkout-readiness">Move to Checkout →</button>
+        <p id="checkout-readiness" class="scene-meta" role="status">Confirm placement to check the room.</p>
+      </aside>
     </main>
   </body>
 </html>

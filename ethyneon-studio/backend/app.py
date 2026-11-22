@@ -4,7 +4,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 import httpx
@@ -20,6 +20,7 @@ from backend.routes.voice import router as voice_router
 from backend.scene import SceneStudio
 from backend.checkout import CheckoutStudio
 from backend.routes.scene import router as scene_router
+from backend.routes.samples import router as samples_router
 from backend.room_planner import PlacementPlanner
 from backend.routes.agora import router as agora_router
 from backend.routes.room import check_room_capture, get_room, get_room_plan, revise_room, router as room_router, scan_room, start_room_plan
@@ -129,7 +130,8 @@ def create_app(
             app.state.room_planner = PlacementPlanner(app.state.gemini, app.state.rooms)
             app.state.scenes = SceneStudio(app.state.shopify, app.state.product_models)
             app.state.checkout = CheckoutStudio(app.state.shopify, app.state.gemini, app.state.scenes)
-            app.state.room_chat = RoomChat(app.state.rooms, app.state.room_planner, app.state.shopify, app.state.scenes.path)
+            app.state.room_chat = RoomChat(app.state.rooms, app.state.room_planner, app.state.shopify,
+                                           app.state.checkout, app.state.scenes.path)
             app.state.voice = VoiceRelay(config, app.state.room_chat)
             yield
 
@@ -137,11 +139,16 @@ def create_app(
     app.state.settings = config
     app.include_router(api)
     app.include_router(scene_router)
+    app.include_router(samples_router)
     app.include_router(voice_router)
     app.include_router(room_chat_router)
     app.include_router(room_router)
     app.include_router(studio_router)
     app.mount("/studio-assets", StaticFiles(directory=STUDIO_ASSETS), name="studio-assets")
+
+    @app.get("/", include_in_schema=False)
+    def home() -> RedirectResponse:
+        return RedirectResponse("/studio/room")
 
     @app.get("/healthz")
     def health() -> dict[str, str]:

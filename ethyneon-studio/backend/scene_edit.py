@@ -140,6 +140,14 @@ def replacement_problem(label: str, new_label: str, old: dict[str, float], new: 
             f"in {', '.join(too_big)}. Choose a smaller alternative or move things first.")
 
 
+def replace_product(item: dict[str, Any], replacement: Replacement, size: dict[str, float] | None) -> None:
+    item.update(variant_id=replacement.variant_id, label=replacement.title[:120],
+                price=replacement.price, listing_url=replacement.listing_url)
+    item.pop("model", None)
+    if size:
+        item["size"] = size
+
+
 def add_product(config: dict[str, Any], edit: SceneEdit, size: dict[str, float], scene_of) -> list[str]:
     """Place a new product at the first spot that passes every guardrail, scanning from the room's centre."""
     from uuid import uuid4
@@ -191,12 +199,7 @@ def apply_edit(config: dict[str, Any], edit: SceneEdit, replacement_size: dict[s
         rotation["yaw"], other_rotation["yaw"] = other_rotation.get("yaw", 0), rotation.get("yaw", 0)
         return [edit.product_id, edit.other_id]
     if edit.op == "replace":
-        new = edit.replacement
-        item.update({"variant_id": new.variant_id, "label": new.title[:120], "price": new.price,
-                     "listing_url": new.listing_url})
-        item.pop("model", None)
-        if replacement_size:
-            item["size"] = replacement_size
+        replace_product(item, edit.replacement, replacement_size)
         return [edit.product_id]
     config["placed_products"] = [entry for entry in config["placed_products"] if entry is not item]
     return []

@@ -1,0 +1,17 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/55172288151891",
+ "title": "Handwoven Bamboo USB Table Lamp",
+ "merchant": "giw0f0-v3.myshopify.com",
+ "listing_url": "https://nola-avenue.com/products/handwoven-bamboo-usb-table-lamp?variant=55172288151891&_gsid=XshWoekLDDLx&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 7699,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0992/6239/8803/files/handwoven-bamboo-usb-table-lamp-1.jpg?v=1791449330",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ]
+}

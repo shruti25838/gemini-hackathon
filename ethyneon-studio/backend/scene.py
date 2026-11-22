@@ -446,10 +446,26 @@ class SceneStudio:
             for entry in catalog if entry["object_type"] == kind and entry["variant_id"] != variant_id
         ][:limit] if kind else []
 
-    async def similar(self, variant_id: str, query: str, limit: int = 6) -> dict[str, Any]:
+    async def similar(self, variant_id: str, query: str, limit: int = 6, *,
+                      live_only: bool = False, cursor: str | None = None) -> dict[str, Any]:
         query = " ".join(query.split())[:120]
         if not query:
             raise ConnectionError(422, "similar_query_missing", "Provide a product name to compare.")
+        if live_only:
+            pagination = {"limit": limit}
+            if cursor:
+                pagination["cursor"] = cursor
+            document = await self.shopify.search_catalog({"query": query, "context": CONTEXT, "pagination": pagination})
+            offers = []
+            for product in document["products"]:
+                variant = product["variants"][0]
+                if variant["id"] == variant_id:
+                    continue
+                offers.append({**catalog_offer(product, variant), "listing_url": variant.get("url")})
+            page = document.get("pagination") or {}
+            next_cursor = page.get("cursor") if page.get("has_next_page") else None
+            return {"results": offers, "next_cursor": next_cursor if next_cursor != cursor else None,
+                    "source": "shopify_search"}
         # Demo mix: half cached alternatives with ready 3D models, half live Shopify results built on click.
         cached = self.catalog_alternatives(variant_id, (limit + 1) // 2)
         document = await self.shopify.search_catalog({"query": query, "context": CONTEXT, "pagination": {"limit": limit + 6}})

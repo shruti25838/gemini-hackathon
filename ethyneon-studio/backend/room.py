@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 import io
 import json
 import math
+from pathlib import Path
 import re
 from typing import Any, Literal
 from uuid import uuid4
@@ -632,8 +633,27 @@ class RoomStudio:
                 502, "room_draft_invalid", "Gemini returned a room layout outside the supported contract.", retryable=True,
             ) from exc
 
+    # Rooms survive a server restart: the latest revision and gate are saved under .cache/rooms/.
+    ROOM_STORE = Path(__file__).resolve().parents[1] / ".cache" / "rooms"
+
+    def _persist(self, room_id: str, record: RoomRecord) -> None:
+        try:
+            self.ROOM_STORE.mkdir(parents=True, exist_ok=True)
+            path = self.ROOM_STORE / f"{room_id}.json"
+            path.with_suffix(".tmp").write_text(json.dumps({
+                "revisions": [spec.model_dump(mode="json") for spec in record.revisions[-5:]], "gate": record.gate}))
+            path.with_suffix(".tmp").replace(path)
+        except OSError:
+            pass
+
     def _record(self, room_id: str) -> RoomRecord:
         record = self.rooms.get(room_id)
+        if record is None and re.fullmatch(r"[0-9a-f]{32}", room_id):
+            path = self.ROOM_STORE / f"{room_id}.json"
+            if path.exists():
+                saved = json.loads(path.read_text())
+                record = RoomRecord(revisions=[RoomSpec.model_validate(spec) for spec in saved["revisions"]], gate=saved["gate"])
+                self.rooms[room_id] = record
         if record is None:
             raise ConnectionError(404, "room_not_found", "This room session has expired. Upload the photos again.")
         return record
@@ -700,6 +720,7 @@ class RoomStudio:
         spec.design_brief = await self._preferences(spec.preference)
         record = RoomRecord(revisions=[spec], gate=gate)
         self.rooms[room_id] = record
+        self._persist(room_id, record)
         return self._response(record)
 
     def get(self, room_id: str) -> dict[str, Any]:
@@ -765,6 +786,7 @@ class RoomStudio:
             raise ConnectionError(409, "stale_revision", "The room changed since this edit started. Reload and try again.",
                                   details={"latest_revision": record.revisions[-1].revision})
         record.revisions.append(spec)
+        self._persist(room_id, record)
         result = self._response(record)
         record.actions[request.action_id] = result
         return result

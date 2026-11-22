@@ -1,0 +1,21 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/41633570390083",
+ "title": "Modway Render Mid-Century Modern Low Profile 46 Inch Media Console TV Stand in Charcoal, 46\"",
+ "merchant": "ff7bb0-f7.myshopify.com",
+ "listing_url": "https://www.leafyloom.org/products/b099kvxbsl?variant=41633570390083&_gsid=SWbPiibusaEN&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 21938,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0597/1971/2835/files/51JCExqdodL._AC_SX679.jpg?v=1720762296",
+ "dimensions_m": {
+  "width": 1.1811,
+  "height": 0.4318,
+  "depth": 0.3429
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ]
+}

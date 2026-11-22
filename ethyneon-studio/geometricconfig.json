@@ -1,44 +1,752 @@
 {
-  "revision": 1,
+  "room_id": "915f916843c548e1a497598108767866",
+  "revision": 52,
   "category": "bedroom",
+  "category_source": "user",
   "dimensions": {
-    "width":  { "value_m": 4.0, "status": "confirmed" },
-    "depth":  { "value_m": 3.5, "status": "estimated" },
-    "height": { "value_m": 2.6, "status": "estimated" }
+    "width": {
+      "value_m": 3.0,
+      "status": "estimated"
+    },
+    "depth": {
+      "value_m": 4.0,
+      "status": "estimated"
+    },
+    "height": {
+      "value_m": 2.6,
+      "status": "estimated"
+    }
   },
-  "design_brief": {
-    "purpose": "gaming room",
-    "styles": ["cozy"],
-    "colors": ["blue", "walnut"],
-    "priorities": ["Keep the wardrobe", "Leave room for a painting"]
+  "floor": {
+    "color": "#b59e84",
+    "color_source": "sampled_from_photo",
+    "material": "laminate"
   },
+  "walls": [
+    {
+      "color": "#9e9e9e",
+      "color_source": "sampled_from_photo",
+      "material": "paint",
+      "id": "wall_n",
+      "length_m": 3.0,
+      "observed": true,
+      "start": {
+        "x": 0.0,
+        "y": 0,
+        "z": 0.0
+      },
+      "end": {
+        "x": 3.0,
+        "y": 0,
+        "z": 0.0
+      },
+      "height_m": 2.6
+    },
+    {
+      "color": "#9e9e9e",
+      "color_source": "sampled_from_photo",
+      "material": "paint",
+      "id": "wall_e",
+      "length_m": 4.0,
+      "observed": true,
+      "start": {
+        "x": 3.0,
+        "y": 0,
+        "z": 0.0
+      },
+      "end": {
+        "x": 3.0,
+        "y": 0,
+        "z": 4.0
+      },
+      "height_m": 2.6
+    },
+    {
+      "color": "#8c8e91",
+      "color_source": "sampled_from_photo",
+      "material": "wallpaper",
+      "id": "wall_s",
+      "length_m": 3.0,
+      "observed": true,
+      "start": {
+        "x": 0.0,
+        "y": 0,
+        "z": 4.0
+      },
+      "end": {
+        "x": 3.0,
+        "y": 0,
+        "z": 4.0
+      },
+      "height_m": 2.6
+    },
+    {
+      "color": "#9e9e9e",
+      "color_source": "sampled_from_photo",
+      "material": "paint",
+      "id": "wall_w",
+      "length_m": 4.0,
+      "observed": true,
+      "start": {
+        "x": 0.0,
+        "y": 0,
+        "z": 0.0
+      },
+      "end": {
+        "x": 0.0,
+        "y": 0,
+        "z": 4.0
+      },
+      "height_m": 2.6
+    }
+  ],
   "openings": [
-    { "id": "window_1", "type": "window", "wall": "wall_e", "width_m": 1.6, "height_m": 1.2, "position": { "x": 4.0, "y": 0.9, "z": 1.5 } },
-    { "id": "door_1", "type": "door", "wall": "wall_n", "width_m": 0.85, "height_m": 2.1, "position": { "x": 0.7, "y": 0, "z": 0 } }
+    {
+      "id": "window_1",
+      "type": "window",
+      "wall": "wall_n",
+      "offset_m": 0.6,
+      "width_m": 1.8,
+      "height_m": 1.5,
+      "sill_m": 0.8,
+      "hinge": "none",
+      "swing": "none",
+      "status": "estimated",
+      "evidence_photo": 1,
+      "position": {
+        "x": 1.5,
+        "y": 0.8,
+        "z": 0.0
+      }
+    },
+    {
+      "id": "door_1",
+      "type": "door",
+      "wall": "wall_s",
+      "offset_m": 2.05,
+      "width_m": 0.85,
+      "height_m": 2.05,
+      "sill_m": 0.0,
+      "hinge": "right",
+      "swing": "inward",
+      "status": "estimated",
+      "evidence_photo": 3,
+      "position": {
+        "x": 2.4749999999999996,
+        "y": 0.0,
+        "z": 4.0
+      }
+    }
   ],
   "existing_items": [
-    { "id": "existing_1", "kind": "wardrobe", "fixed": true, "pose": { "position": { "x": 0.35, "y": 0, "z": 2.5 } } },
-    { "id": "existing_2", "kind": "pillar", "fixed": true, "pose": { "position": { "x": 3.6, "y": 0, "z": 3.2 } } }
+    {
+      "id": "existing_1",
+      "label": "Wall-mounted air conditioner",
+      "pose": {
+        "position": {
+          "x": 0.11000000000000003,
+          "y": 2.15,
+          "z": 0.55
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.8,
+        "depth": 0.22,
+        "height": 0.28
+      },
+      "kind": "air_conditioner",
+      "fixed": true,
+      "pose_source": "photo",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": 1
+    }
   ],
+  "placed_products": [
+    {
+      "id": "product_c89549e0a7ae47bda8908e51ede217cd",
+      "label": "COMHOMA 6 Wood Cube Storage Organizer with Open Back and Removable Back Panels, 11In Brown Cube Storage Bookshelf, Cubicle Shelf Bookcase for Home Office Bedroom Living Room, Vertical or Horizontal",
+      "pose": {
+        "position": {
+          "x": 1.502,
+          "y": 0.0,
+          "z": 1.869
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.5842,
+        "depth": 0.2794,
+        "height": 0.889
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/46938410123453",
+      "merchant": "c89xfy-wx.myshopify.com",
+      "listing_url": "https://eraformhome.com/products/b0fs1wd8h2?variant=46938410123453",
+      "price": {
+        "amount": 8908,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_b1b6c78a24e24b6ea7d50a4d029bdbc0",
+      "label": "Ulf - Modern Black Nightstand Small Bedside Table",
+      "pose": {
+        "position": {
+          "x": 0.25,
+          "y": 0.0,
+          "z": 0.85
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.39624,
+        "depth": 0.44958,
+        "height": 0.44958
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/41398358442116",
+      "merchant": "bo-ha-co.myshopify.com",
+      "listing_url": "https://bo-ha.com/products/ulf-modern-black-nightstand-small-bedside-table?variant=41398358442116&_gsid=RSnMRMza6KDL&utm_source=shopify&utm_medium=catalog",
+      "price": {
+        "amount": 9995,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_2278a13da6a14a66adf4310246f1dd34",
+      "label": "Ulf - Modern Black Nightstand Small Bedside Table",
+      "pose": {
+        "position": {
+          "x": 1.749,
+          "y": 0.0,
+          "z": 2.677
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.39624,
+        "depth": 0.44958,
+        "height": 0.44958
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/41398358442116",
+      "merchant": "bo-ha-co.myshopify.com",
+      "listing_url": "https://bo-ha.com/products/ulf-modern-black-nightstand-small-bedside-table?variant=41398358442116&_gsid=ruNySGADTiWU&utm_source=shopify&utm_medium=catalog",
+      "price": {
+        "amount": 9995,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_b02d60cddec1449a92c845973d232477",
+      "label": "100% Solid Wood 2-Door Wardrobe Armoire with Raised Panel Doors, Bedroom Closet Storage - Metro Collection",
+      "pose": {
+        "position": {
+          "x": 1.171,
+          "y": 0.0,
+          "z": 3.599
+        },
+        "rotation": {
+          "yaw": 180.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.95885,
+        "depth": 0.52705,
+        "height": 1.8288
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/43420296937519",
+      "merchant": "c7a33b-3.myshopify.com",
+      "listing_url": "https://www.palaceimportsinc.com/products/solid-wood-metro-wardrobe-armoire-with-raised-panel-doors-white-7101d-1?variant=43420296937519&_gsid=URmZ16BDMLse&utm_source=shopify&utm_medium=catalog",
+      "price": {
+        "amount": 91999,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_a66f8126c96b46afa0b6cef5b4848cc7",
+      "label": "Huracan Gaming Chair with Footrest, Adjustable Ergonomic Computer Office Chair with Lumba Pillow, Video Game Computer Chairs for Adults, Racing Style Reclining Backrest Office Desk Chairs, Blue",
+      "pose": {
+        "position": {
+          "x": 2.7,
+          "y": 0.0,
+          "z": 0.9
+        },
+        "rotation": {
+          "yaw": 270.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.54102,
+        "depth": 0.4572,
+        "height": 0.39878
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/46900457636036",
+      "merchant": "1vjin0-wv.myshopify.com",
+      "listing_url": "https://gamegearusstore.com/products/b0h87mhxtj?variant=46900457636036",
+      "price": {
+        "amount": 13998,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_7de721885f6842ad89e259669951f4cb",
+      "label": "Children's Study Chair, Solid Wood Adjustable Chair, Ergonomic Desk Chair, Study Chair With Footrest",
+      "pose": {
+        "position": {
+          "x": 2.1,
+          "y": 0.0,
+          "z": 0.9
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.4064,
+        "depth": 0.4826,
+        "height": 0.7874
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/46739189661954",
+      "merchant": "childedempsey.myshopify.com",
+      "listing_url": "https://woodartdeal.com/products/childrens-study-chair-solid-wood-adjustable-chair-ergonomic-desk-chair-study-chair-with-footrest?variant=46739189661954",
+      "price": {
+        "amount": 33600,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_selected_size"
+    },
+    {
+      "id": "product_bc581a5ddf59426c8bc351394d97f6ae",
+      "label": "Carnaby 4 Drawer Dresser",
+      "pose": {
+        "position": {
+          "x": 2.75,
+          "y": 0.0,
+          "z": 2.4
+        },
+        "rotation": {
+          "yaw": 270.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.889,
+        "depth": 0.4064,
+        "height": 0.762
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/45242580533558",
+      "merchant": "daalshome.myshopify.com",
+      "listing_url": "https://www.daals.com/products/carnaby-2-over-2-chest-of-drawers?variant=45242580533558&_gsid=Rzt2M4QshW9T&utm_source=shopify&utm_medium=catalog",
+      "price": {
+        "amount": 8999,
+        "currency": "USD"
+      },
+      "dimension_source": "shopify_listing_description"
+    },
+    {
+      "id": "product_9daafaa495d84ce285d48aa09903ebb2",
+      "label": "Blue Rose Flowers Book Canvas Wall Art 12x12 Set of 3 Framed Bedroom Decor (12 inch x 12 inch x 3 panels / Blue Flower Art)",
+      "pose": {
+        "position": {
+          "x": 2.452,
+          "y": 1.25,
+          "z": 0.757
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.9,
+        "depth": 0.04,
+        "height": 0.6
+      },
+      "kind": "furniture",
+      "fixed": false,
+      "pose_source": "user",
+      "keep": true,
+      "status": "estimated",
+      "evidence_photo": null,
+      "variant_id": "gid://shopify/ProductVariant/48061205217458",
+      "merchant": "rm1d10-ms.myshopify.com",
+      "listing_url": "https://om-sanctuary.com/products/b07vwvgv1d?variant=48061205217458&_gsid=sPKLDyv3KdXV&utm_source=shopify&utm_medium=catalog",
+      "price": {
+        "amount": 5099,
+        "currency": "USD"
+      },
+      "dimension_source": "planner_slot_estimate"
+    }
+  ],
+  "preference": "",
+  "design_brief": {
+    "purpose": "bedroom",
+    "styles": [],
+    "colors": [],
+    "priorities": [
+      "sleeping",
+      "clothing storage",
+      "workspace"
+    ]
+  },
+  "views": [
+    {
+      "photo": 1,
+      "facing_wall": "wall_n",
+      "notes": "Shows wall_n with window and curtain, and wall_w with wall-mounted air conditioner and outlets."
+    },
+    {
+      "photo": 2,
+      "facing_wall": "wall_n",
+      "notes": "Shows right side of window on wall_n and plain grey wall_e."
+    },
+    {
+      "photo": 3,
+      "facing_wall": "wall_s",
+      "notes": "Shows wall_s with door near wall_e and geometric patterned wallpaper extending onto wall_w."
+    },
+    {
+      "photo": 4,
+      "facing_wall": "wall_w",
+      "notes": "Shows corner of wall_s and wall_w with patterned wallpaper transitioning to plain grey paint."
+    },
+    {
+      "photo": 5,
+      "facing_wall": "wall_w",
+      "notes": "Transition frame blending wall_w wallpaper with wall_n window and air conditioner."
+    }
+  ],
+  "scale_cues": [
+    "interior door height (~2.05 m) and width (~0.85 m) in photo 3",
+    "wall-mounted split air conditioner (~0.8 m wide) in photo 1",
+    "wall outlets and light switch in photos 1 and 3"
+  ],
+  "missing_evidence": [
+    "Floor is not visible in any photo; floor material and color are estimated",
+    "Lower halves of walls and window sill height are not visible; sill_m is estimated",
+    "Room depth is estimated from ceiling and wall proportions",
+    "Door swing direction is not clearly visible and is estimated as inward"
+  ],
+  "warnings": [],
+  "photo_count": 5,
   "lighting": {
     "status": "estimated",
     "method": "window_geometry",
-    "window_area_m2": 1.92,
+    "window_area_m2": 2.7,
+    "windows": [
+      {
+        "opening_id": "window_1",
+        "wall": "wall_n",
+        "center": {
+          "x": 1.5,
+          "y": 1.55,
+          "z": 0.0
+        },
+        "area_m2": 2.7
+      }
+    ],
     "painting_spots": [
-      { "wall": "wall_n", "position": { "x": 2.0, "y": 1.55, "z": 0 }, "relative_exposure": 0.14734 }
+      {
+        "wall": "wall_n",
+        "position": {
+          "x": 0.3,
+          "y": 1.55,
+          "z": 0.0
+        },
+        "relative_exposure": 0.0
+      },
+      {
+        "wall": "wall_s",
+        "position": {
+          "x": 1.025,
+          "y": 1.55,
+          "z": 4.0
+        },
+        "relative_exposure": 0.16409
+      },
+      {
+        "wall": "wall_e",
+        "position": {
+          "x": 3.0,
+          "y": 1.55,
+          "z": 2.0
+        },
+        "relative_exposure": 0.20736
+      },
+      {
+        "wall": "wall_w",
+        "position": {
+          "x": 0.0,
+          "y": 1.55,
+          "z": 2.0
+        },
+        "relative_exposure": 0.20736
+      }
     ]
   },
-  "placed_products": [
+  "planned_slots": [
     {
-      "id": "product_table",
-      "label": "Walnut side table",
-      "variant_id": "gid://shopify/ProductVariant/50876631908516",
-      "price": { "amount": 20198, "currency": "USD" },
-      "size": { "width": 0.4826, "height": 0.6096, "depth": 0.4826 },
+      "label": "Bed",
+      "shopify_query": "queen platform bed frame",
+      "mount": "floor",
       "pose": {
-        "position": { "x": 1.2, "y": 0, "z": 1.5 },
-        "rotation": { "yaw": 0, "pitch": 0, "roll": 0 }
-      }
+        "position": {
+          "x": 1.0,
+          "y": 0.0,
+          "z": 2.0
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 0.95
+      },
+      "reason": "Centered along the west wall with its headboard against wall_w, leaving clear circulation around the bed, beneath the window on wall_n, and near the door on wall_s.",
+      "id": "slot_1"
+    },
+    {
+      "label": "Nightstand",
+      "shopify_query": "compact bedside nightstand",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 0.25,
+          "y": 0.0,
+          "z": 0.85
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.5,
+        "depth": 0.45,
+        "height": 0.6
+      },
+      "reason": "Tucked along the west wall beside the head of the bed and safely below the wall-mounted air conditioner.",
+      "id": "slot_2"
+    },
+    {
+      "label": "Nightstand",
+      "shopify_query": "compact bedside nightstand",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 0.25,
+          "y": 0.0,
+          "z": 3.15
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.5,
+        "depth": 0.45,
+        "height": 0.6
+      },
+      "reason": "Balances the second side of the bed along the west wall for bedside storage and lighting.",
+      "id": "slot_3"
+    },
+    {
+      "label": "Wardrobe",
+      "shopify_query": "two door bedroom wardrobe",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 0.8,
+          "y": 0.0,
+          "z": 3.7
+        },
+        "rotation": {
+          "yaw": 180.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 1.2,
+        "depth": 0.6,
+        "height": 2.0
+      },
+      "reason": "Placed against the south wall to the left of the door opening, keeping the door swing and approach completely clear.",
+      "id": "slot_4"
+    },
+    {
+      "label": "Desk",
+      "shopify_query": "compact bedroom writing desk",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 2.7,
+          "y": 0.0,
+          "z": 0.9
+        },
+        "rotation": {
+          "yaw": 270.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 1.2,
+        "depth": 0.6,
+        "height": 0.75
+      },
+      "reason": "Positioned against the northeast section of the east wall to benefit from natural light from the north window.",
+      "id": "slot_5"
+    },
+    {
+      "label": "Desk Chair",
+      "shopify_query": "upholstered ergonomic desk chair",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 2.1,
+          "y": 0.0,
+          "z": 0.9
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.55,
+        "depth": 0.55,
+        "height": 0.85
+      },
+      "reason": "Paired directly with the desk while leaving walkway clearance between the desk area and the bed.",
+      "id": "slot_6"
+    },
+    {
+      "label": "Dresser",
+      "shopify_query": "3 drawer bedroom chest",
+      "mount": "floor",
+      "pose": {
+        "position": {
+          "x": 2.75,
+          "y": 0.0,
+          "z": 2.4
+        },
+        "rotation": {
+          "yaw": 270.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.9,
+        "depth": 0.5,
+        "height": 0.85
+      },
+      "reason": "Placed along the east wall opposite the bed for folded clothing storage while staying clear of the door approach at the south end.",
+      "id": "slot_7"
+    },
+    {
+      "label": "Framed Wall Art",
+      "shopify_query": "framed bedroom canvas wall art",
+      "mount": "wall",
+      "pose": {
+        "position": {
+          "x": 0.02,
+          "y": 1.25,
+          "z": 2.0
+        },
+        "rotation": {
+          "yaw": 90.0,
+          "pitch": 0.0,
+          "roll": 0.0
+        }
+      },
+      "size": {
+        "width": 0.9,
+        "depth": 0.04,
+        "height": 0.6
+      },
+      "reason": "Centered on the west wall painting spot above the headboard (y = 1.55 - 0.30 = 1.25, offset 0.02 m from wall_w) to create a focal point without direct window glare.",
+      "id": "slot_8"
     }
   ]
 }

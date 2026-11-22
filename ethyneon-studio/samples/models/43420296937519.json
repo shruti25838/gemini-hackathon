@@ -1,0 +1,22 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/43420296937519",
+ "title": "100% Solid Wood 2-Door Wardrobe Armoire with Raised Panel Doors, Bedroom Closet Storage - Metro Collection",
+ "merchant": "c7a33b-3.myshopify.com",
+ "listing_url": "https://www.palaceimportsinc.com/products/solid-wood-metro-wardrobe-armoire-with-raised-panel-doors-white-7101d-1?variant=43420296937519&_gsid=kGfBtQBeZe8j&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 91999,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0594/2516/1263/files/27a309_eb2ddd4f565a4fee845fc89936416a88_mv2.jpg?v=1735319316",
+ "dimensions_m": {
+  "width": 0.95885,
+  "height": 1.8288,
+  "depth": 0.52705
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "metal",
+  "wood"
+ ]
+}

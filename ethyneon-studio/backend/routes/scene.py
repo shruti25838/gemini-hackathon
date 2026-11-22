@@ -8,6 +8,8 @@ from pydantic import Field
 
 from backend.connections import SHOPIFY_VARIANT_ID
 from backend.errors import ConnectionError
+from backend.room_chat import review_products
+from backend.scene import scene_room
 from backend.scene_edit import SceneEdit
 from backend.checkout import CheckoutRequest
 from backend.routes.studio import STUDIO_ASSETS, require_local_studio
@@ -28,6 +30,8 @@ class StatusBody(RequestBody):
 class SimilarBody(VariantBody):
     query: str = Field(min_length=1, max_length=200)
     limit: int = Field(default=6, ge=1, le=12)
+    live_only: bool = False
+    cursor: str | None = Field(default=None, min_length=1, max_length=1024)
 
 
 @router.get("")
@@ -52,7 +56,9 @@ async def scene_product(body: VariantBody, request: Request) -> dict[str, Any]:
 
 @router.post("/similar")
 async def scene_similar(body: SimilarBody, request: Request) -> dict[str, Any]:
-    return await request.app.state.scenes.similar(body.variant_id, body.query, body.limit)
+    return await request.app.state.scenes.similar(
+        body.variant_id, body.query, body.limit, live_only=body.live_only, cursor=body.cursor,
+    )
 
 
 @router.post("/models/status")
@@ -89,3 +95,20 @@ class LinkBody(RequestBody):
 async def scene_import(body: LinkBody, request: Request) -> dict[str, Any]:
     """Paste a Shopify product link; returns the product with a cached 3D model."""
     return await request.app.state.scenes.product_from_link(body.url)
+
+
+@router.get("/chat/{session_id}")
+async def scene_for_chat(session_id: Annotated[str, PathParam(pattern=r"^[0-9a-f]{32}$")], request: Request) -> dict[str, Any]:
+    """Show the exact products that a confirmation would save."""
+    state = await request.app.state.room_chat.get(session_id)
+    document = dict(state["document"] or {})
+    proposed = document.get("proposed_products") or []
+    if "dimensions" not in document or len(document["dimensions"]) < 3:
+        return {"phase": state["phase"], "scene": None}
+    document["placed_products"] = review_products(document)
+    scene = scene_room(document)
+    proposed_ids = {item.get("id") for item in proposed}
+    for item in scene["placed_products"]:
+        item["proposed"] = item["id"] in proposed_ids
+    scene["room_id"] = f"chat-{session_id}"
+    return {"phase": state["phase"], "review_id": state.get("review_id"), "scene": scene}

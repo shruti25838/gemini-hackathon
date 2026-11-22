@@ -1,0 +1,23 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/52255511544084",
+ "title": "47-Inch Modern Computer Gaming Desk with 2 Fabric Storage Drawers | Versatile Home Office Study Table | Sturdy Writing Desk for Work & Education",
+ "merchant": "b0pmk0-rs.myshopify.com",
+ "listing_url": "https://pdhandygo.com/products/47-inch-modern-computer-gaming-desk-with-2-fabric-storage-drawers-versatile-home-office-study-table-sturdy-writing-desk-for-work-education?variant=52255511544084&_gsid=HCGnPy8pvkbo&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 3399,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/0999/6314/2420/files/temu_product_img_9_700eab09-ddea-4074-8dbf-349b97f9862a.jpg?v=1774066179",
+ "dimensions_m": {
+  "width": 1.1938,
+  "height": 0.7493,
+  "depth": 0.50038
+ },
+ "dimension_source": "shopify_listing_description",
+ "source": "generated_proxy",
+ "materials": [
+  "fabric",
+  "metal",
+  "wood"
+ ]
+}

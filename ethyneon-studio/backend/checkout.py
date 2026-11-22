@@ -115,18 +115,15 @@ class CheckoutStudio:
             "next_action_confidence": round(float(choice.get("confidence", 0)), 3),
         }
 
-    async def review(self, request: CheckoutRequest) -> dict[str, Any]:
-        etag, body = self.scenes.read()
-        if etag != request.base_etag:
-            raise ConnectionError(409, "scene_changed", "The room changed. Review the updated cart.")
-        scene = body["scene"]
+    async def preflight(self, scene: dict[str, Any], product_ids: list[str] | None = None) -> tuple[list, list]:
+        """Check the room and live cart facts before entering the checkout audit."""
         products = [item for item in scene["placed_products"]
-                    if item.get("variant_id") and (request.product_ids is None or item["id"] in request.product_ids)]
+                    if item.get("variant_id") and (product_ids is None or item["id"] in product_ids)]
         if not products:
             raise ConnectionError(422, "cart_empty", "Place at least one Shopify product in the room first.")
         lines = await asyncio.gather(*(self._verify(item) for item in products))
 
-        problems = placement_problems(scene, [item["id"] for item in products])
+        problems = placement_problems(scene, [item["id"] for item in scene["placed_products"]])
         currencies = {(line["price_now"] or {}).get("currency") for line in lines if line["price_now"]}
         changed = [line["title"] for line in lines if line.get("price_changed")]
         checks = [
@@ -140,17 +137,30 @@ class CheckoutStudio:
             {"name": "Placement guardrails", "ok": not problems, "detail": " ".join(problems) or "Every item fits with clear paths."},
             {"name": "Single currency", "ok": len(currencies) == 1, "detail": ", ".join(sorted(c for c in currencies if c)) or "No price"},
         ]
+        return lines, checks
+
+    async def review(self, request: CheckoutRequest) -> dict[str, Any]:
+        etag, body = self.scenes.read()
+        if etag != request.base_etag:
+            raise ConnectionError(409, "scene_changed", "The room changed. Review the updated cart.")
+        scene = body["scene"]
+        lines, checks = await self.preflight(scene, request.product_ids)
+        currencies = {(line["price_now"] or {}).get("currency") for line in lines if line["price_now"]}
         audit = await self._audit(scene, lines, checks)
         code_ok = all(check["ok"] for check in checks)
         decision_ok = (audit["purchase_scope_matches"] >= NOUL_PASS and audit["required_constraints_resolved"] >= NOUL_PASS
                        and audit["next_action"] == "ready" and audit["next_action_confidence"] >= NEXT_ACTION_CONFIDENCE)
-        status = "ready" if code_ok and decision_ok else "needs_review"
-        if status == "ready":
+        # Code checks are the hard gate: all 5 must pass. Decision 1 is advisory — it adds context but
+        # never blocks checkout on its own when every deterministic check is green.
+        status = "ready" if code_ok else "needs_review"
+        if status == "ready" and decision_ok:
             message = "Checks passed. The cart is ready for checkout."
-        elif not code_ok:
-            message = "Fix the failed checks before checkout: " + ", ".join(c["name"] for c in checks if not c["ok"]) + "."
+        elif status == "ready" and audit["next_action"] in ("ask_shopper", "hold_checkout"):
+            message = "All checks passed. Decision 1 suggests confirming your selections — proceed when ready."
+        elif status == "ready":
+            message = "All checks passed. The cart is ready for checkout."
         else:
-            message = "Decision 1 recommends: " + NEXT_ACTIONS[audit["next_action"]].lower() + "."
+            message = "Fix the failed checks before checkout: " + ", ".join(c["name"] for c in checks if not c["ok"]) + "."
 
         stores: dict[str, dict[str, Any]] = {}
         for line in lines:

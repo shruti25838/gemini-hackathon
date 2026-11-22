@@ -25,13 +25,15 @@ LIVE_URL = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelangu
 LIVE_MODEL = "models/gemini-3.8-live"
 VOICE = "Puck"
 PLAN_POLL_S = 2.0
-PLAN_TIMEOUT_S = 180.0
+PLAN_TIMEOUT_S = 600.0
 MAX_AUDIO_CHUNK = 64_000
 MAX_FRAME = 400_000
 
 INSTRUCTIONS = """\
 You are Ethyneon's voice room designer. The shopper talks to you. They may also turn on their camera; if no image arrives, do not mention a camera.
 Keep replies short and spoken, one or two sentences.
+When the room chat asks for a room type, offer choices such as living room, bedroom, gaming room, office, or kitchen.
+When the shopper chooses, send the room type to room_chat before asking for measurements or planning.
 When the shopper gives the room size, call room_chat with it written as "W × D × H m", for example "4 × 3.5 × 2.6 m".
 For anything about the room's measurements, the room's purpose, style, colours, budget, furniture, placement,
 or changes to the plan, call room_chat with the shopper's words, then say the reply it returns in your own words.
@@ -62,43 +64,77 @@ class VoiceRelay:
         self.settings = settings
         self.chat = chat
 
-    async def run(self, browser: WebSocket, room_id: str | None) -> None:
+    async def run(self, browser: WebSocket, room_id: str | None, session_id: str | None = None) -> None:
         if not self.settings.gemini_api_key:
             await browser.send_json({"type": "error", "message": "Configure GEMINI_API_KEY on the server."})
             return
-        try:
-            state = self.chat.start(StartRoomChat(room_id=room_id))
-        except ConnectionError as error:
-            state = self.chat.start(StartRoomChat())
-            await browser.send_json({"type": "notice", "message": error.payload["message"] + " Starting without it."})
+        state = None
+        if session_id:
+            try:
+                state = await self.chat.get(session_id)
+            except ConnectionError:
+                state = None
+        if state is None:
+            try:
+                state = self.chat.start(StartRoomChat(room_id=room_id))
+            except ConnectionError as error:
+                state = self.chat.start(StartRoomChat())
+                await browser.send_json({"type": "notice", "message": error.payload["message"] + " Starting without it."})
         session_id = state["id"]
-        try:
-            async with websockets.connect(f"{LIVE_URL}?key={self.settings.gemini_api_key}", max_size=None,
-                                          open_timeout=15, ping_interval=20) as gemini:
-                await gemini.send(json.dumps({"setup": {
-                    "model": LIVE_MODEL,
-                    "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {
-                        "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": VOICE}}}},
-                    "systemInstruction": {"parts": [{"text": INSTRUCTIONS}]},
-                    "tools": TOOLS,
-                    "inputAudioTranscription": {}, "outputAudioTranscription": {},
-                }}))
-                await asyncio.wait_for(gemini.recv(), 15)
-                await browser.send_json({"type": "ready", "model": LIVE_MODEL.removeprefix("models/"), "chat": state})
-                opening = state["messages"][-1]["text"] if state["messages"] else "Ask for the room's measurements."
-                await self._prompt(gemini, f"Greet the shopper briefly, then say this from the room planner: {opening}")
-                tasks = [
-                    asyncio.create_task(self._from_browser(browser, gemini, session_id)),
-                    asyncio.create_task(self._from_gemini(browser, gemini, session_id)),
-                ]
-                done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-                for task in pending:
-                    task.cancel()
-                for task in done:
-                    if task.exception() and not isinstance(task.exception(), (WebSocketDisconnect, websockets.ConnectionClosed)):
-                        raise task.exception()
-        except (OSError, asyncio.TimeoutError, websockets.InvalidStatus, websockets.ConnectionClosedError) as error:
-            await self._safe_send(browser, {"type": "error", "message": f"Gemini Live is unavailable ({type(error).__name__})."})
+        resumption = {}
+        reconnect = False
+        failures = 0
+        while failures < 3:
+            started = asyncio.get_running_loop().time()
+            handle = resumption.get("handle")
+            try:
+                async with websockets.connect(f"{LIVE_URL}?key={self.settings.gemini_api_key}", max_size=None,
+                                              open_timeout=15, ping_interval=20) as gemini:
+                    await gemini.send(json.dumps({"setup": {
+                        "model": LIVE_MODEL,
+                        "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {
+                            "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": VOICE}}}},
+                        "systemInstruction": {"parts": [{"text": INSTRUCTIONS}]},
+                        "tools": TOOLS,
+                        "inputAudioTranscription": {}, "outputAudioTranscription": {},
+                        "contextWindowCompression": {"slidingWindow": {}},
+                        "sessionResumption": {"handle": handle} if handle else {},
+                    }}))
+                    setup = json.loads(await asyncio.wait_for(gemini.recv(), 15))
+                    if "setupComplete" not in setup:
+                        raise OSError("Gemini Live did not acknowledge setup")
+                    state = await self.chat.get(session_id)
+                    await browser.send_json({"type": "ready", "model": LIVE_MODEL.removeprefix("models/"), "chat": state})
+                    opening = state["messages"][-1]["text"] if state["messages"] else "Ask for the room's measurements."
+                    if not handle:
+                        intro = "Continue the room conversation" if reconnect else "Greet the shopper briefly"
+                        await self._prompt(gemini, f"{intro}. The latest room chat message was: {opening}")
+                    tasks = [
+                        asyncio.create_task(self._from_browser(browser, gemini, session_id)),
+                        asyncio.create_task(self._from_gemini(browser, gemini, session_id, resumption,
+                                                             state["phase"] == "planning")),
+                    ]
+                    try:
+                        done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+                        for task in done:
+                            task.result()
+                    finally:
+                        for task in tasks:
+                            task.cancel()
+                        await asyncio.gather(*tasks, return_exceptions=True)
+            except WebSocketDisconnect:
+                return
+            except (OSError, asyncio.TimeoutError, websockets.InvalidStatus, websockets.ConnectionClosed):
+                # A rejected resume handle falls back to the same application chat on a fresh Live session.
+                if handle and asyncio.get_running_loop().time() - started < 5:
+                    resumption.clear()
+            elapsed = asyncio.get_running_loop().time() - started
+            failures = 0 if elapsed >= 60 else failures + 1
+            reconnect = True
+            await self._safe_send(browser, {"type": "interrupted"})
+            await self._safe_send(browser, {"type": "notice", "message": "Reconnecting voice…"})
+            await asyncio.sleep(min(failures, 2))
+        await self._safe_send(browser, {"type": "error", "message": "Gemini Live could not reconnect. Start voice again to continue your room chat."})
 
     @staticmethod
     async def _safe_send(browser: WebSocket, payload: dict[str, Any]) -> None:
@@ -131,23 +167,48 @@ class VoiceRelay:
                 await self._safe_send(browser, {"type": "chat", "chat": result["chat"]})
                 await self._prompt(gemini, f"The shopper pressed Confirm placement. Tell them: {result['reply']}")
 
-    async def _from_gemini(self, browser: WebSocket, gemini, session_id: str) -> None:
-        async for raw in gemini:
-            message = json.loads(raw)
-            content = message.get("serverContent") or {}
-            for part in (content.get("modelTurn") or {}).get("parts", []):
-                if "inlineData" in part:
-                    await browser.send_json({"type": "audio", "data": part["inlineData"]["data"]})
-            if text := (content.get("inputTranscription") or {}).get("text"):
-                await browser.send_json({"type": "caption", "role": "you", "text": text})
-            if text := (content.get("outputTranscription") or {}).get("text"):
-                await browser.send_json({"type": "caption", "role": "gemini", "text": text})
-            if content.get("interrupted"):
-                await browser.send_json({"type": "interrupted"})
-            if content.get("turnComplete"):
-                await browser.send_json({"type": "turn_complete"})
-            for call in (message.get("toolCall") or {}).get("functionCalls", []):
-                asyncio.create_task(self._tool(browser, gemini, session_id, call))
+    async def _from_gemini(self, browser: WebSocket, gemini, session_id: str,
+                           resumption: dict[str, str], planning: bool) -> None:
+        tasks = set()
+
+        def finish_task(task):
+            tasks.discard(task)
+            if not task.cancelled():
+                task.exception()
+
+        if planning:
+            task = asyncio.create_task(self._await_plan(browser, gemini, session_id))
+            tasks.add(task)
+            task.add_done_callback(finish_task)
+        try:
+            async for raw in gemini:
+                message = json.loads(raw)
+                if update := message.get("sessionResumptionUpdate"):
+                    if update.get("resumable") and update.get("newHandle"):
+                        resumption["handle"] = update["newHandle"]
+                if "goAway" in message:
+                    return
+                content = message.get("serverContent") or {}
+                for part in (content.get("modelTurn") or {}).get("parts", []):
+                    if "inlineData" in part:
+                        await browser.send_json({"type": "audio", "data": part["inlineData"]["data"]})
+                if text := (content.get("inputTranscription") or {}).get("text"):
+                    await browser.send_json({"type": "caption", "role": "you", "text": text})
+                if text := (content.get("outputTranscription") or {}).get("text"):
+                    await browser.send_json({"type": "caption", "role": "gemini", "text": text})
+                if content.get("interrupted"):
+                    await browser.send_json({"type": "interrupted"})
+                if content.get("turnComplete"):
+                    await browser.send_json({"type": "turn_complete"})
+                for call in (message.get("toolCall") or {}).get("functionCalls", []):
+                    task = asyncio.create_task(self._tool(browser, gemini, session_id, call))
+                    tasks.add(task)
+                    task.add_done_callback(finish_task)
+        finally:
+            pending = tuple(tasks)
+            for task in pending:
+                task.cancel()
+            await asyncio.gather(*pending, return_exceptions=True)
 
     async def _tool(self, browser: WebSocket, gemini, session_id: str, call: dict[str, Any]) -> None:
         name, args = call.get("name"), call.get("args") or {}
@@ -165,7 +226,7 @@ class VoiceRelay:
             "response": {"reply": result["reply"], "phase": result["chat"]["phase"]},
         }]}}))
         if result["chat"]["phase"] == "planning":
-            asyncio.create_task(self._await_plan(browser, gemini, session_id))
+            await self._await_plan(browser, gemini, session_id)
 
     async def _room_chat(self, session_id: str, text: str) -> dict[str, Any]:
         before = await self.chat.get(session_id)

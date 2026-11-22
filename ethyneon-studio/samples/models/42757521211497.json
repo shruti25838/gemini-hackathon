@@ -1,0 +1,17 @@
+{
+ "variant_id": "gid://shopify/ProductVariant/42757521211497",
+ "title": "Nest Media Console",
+ "merchant": "thuma-bed.myshopify.com",
+ "listing_url": "https://thuma.co/products/nest-media-console?_gsid=mpXJyBzu4Geb&utm_source=shopify&utm_medium=catalog",
+ "price": {
+  "amount": 133500,
+  "currency": "USD"
+ },
+ "image_url": "https://cdn.shopify.com/s/files/1/2448/0687/files/thuma-the-credenza-2x1-drawers-walnut-1_2.png?v=1767823299",
+ "dimensions_m": null,
+ "dimension_source": "unknown",
+ "source": "generated_proxy",
+ "materials": [
+  "wood"
+ ]
+}

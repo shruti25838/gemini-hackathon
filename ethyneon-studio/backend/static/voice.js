@@ -3,6 +3,7 @@ import { savedRoom } from "./app-nav.js";
 const byId = (id) => document.getElementById(id);
 const FRAME_MS = 1000;
 const PHASES = {
+  room_type: "Room type",
   measurements: "Measurements", planning_brief: "Preferences", planning: "Planning", review: "Review", placed: "Placed",
 };
 // Converts microphone audio to 16-bit PCM in 100 ms chunks at the context's 16 kHz rate.
@@ -31,6 +32,7 @@ let media = null;          // {stream, video, agora: {client, tracks}, remoteVid
 let capture = null;        // {context, node, source}
 let playback = null;       // {context, next, sources, destination, agoraTrack}
 let frameTimer = null;
+let voiceSession = new URL(location.href).searchParams.get("session");
 let micMuted = false;
 let cameraHidden = true;  // camera is optional; voice works without it
 let lastCaption = null;
@@ -241,7 +243,10 @@ async function start() {
       await media.agora.client.publish(playback.agoraTrack);
     }
     line("working", "spinner", "Connecting to", {model: "gemini-3.8-live"});
-    socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/studio/voice/live${roomId ? `?room_id=${roomId}` : ""}`);
+    const params = new URLSearchParams();
+    if (roomId) params.set("room_id", roomId);
+    if (voiceSession) params.set("session", voiceSession);
+    socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/studio/voice/live?${params}`);
     socket.onmessage = ({data}) => onMessage(JSON.parse(data), video);
     socket.onclose = () => stop("Voice session ended.");
     socket.onerror = () => line("blocked", "Could not reach the voice server.");
@@ -255,7 +260,9 @@ async function start() {
 
 function onMessage(message, video) {
   if (message.type === "ready") {
+    voiceSession = message.chat.id;
     controls(true);
+    clearInterval(frameTimer);
     sendFrames(video);
     renderChat(message.chat);
     line("ok", "Live with", {model: message.model}, cameraHidden ? "· listening (camera off)" : "· listening and seeing your camera");
