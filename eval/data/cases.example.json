@@ -1,0 +1,66 @@
+{
+  "_README": "An annotated example, not a case. Nothing here is real: there is no such room, no such photo file, and the numbers are made up. Copy this to cases.json, delete this example and write real ones. eval/CASES.md explains every field and how to measure the door offset.",
+
+  "_required": "id, author, group, photo, truth.width_m, truth.depth_m. An outside case also needs consent.granted.",
+
+  "cases": [
+    {
+      "id": "example-only-not-a-real-room",
+      "author": "nobody",
+      "group": "outside",
+
+      "_consent": "Required for every outside case. Withdrawable at any time.",
+      "consent": {
+        "granted": false,
+        "date": null,
+        "note": "This is an example. Nobody consented to anything, because there is nothing here to consent to."
+      },
+
+      "_photo": "Relative to the repository root. Two to five photos of one room from the same standing position; list the first here.",
+      "photo": "eval/data/example-only-not-a-real-room-1.jpg",
+
+      "_truth": "Tape measured, wall to wall at floor level, in metres. Not estimated, not from a plan.",
+      "truth": {
+        "width_m": 3.2,
+        "depth_m": 2.9,
+        "height_m": 2.45
+      },
+
+      "_door": "The most useful part of a case. Offset is along the wall from its start, walls running clockwise from wall_n. If unsure which corner, say so in note and we convert.",
+      "door": {
+        "wall_id": "wall_n",
+        "offset_m": 2.3,
+        "width_m": 0.81,
+        "hinge_side": "left",
+        "swing_direction": "inward",
+        "note": "measured from the corner on my left while facing the door wall from inside"
+      },
+
+      "_probes": "Placements to test. Centre position and footprint, in metres. Include some inside the door swing and some clear of it, or the report cannot tell a careful verdict from a lucky one.",
+      "probes": [
+        {
+          "object_id": "desk-in-the-swing",
+          "width_m": 1.4,
+          "depth_m": 0.7,
+          "x_m": 2.3,
+          "y_m": 0.35,
+          "rotation_deg": 0
+        },
+        {
+          "object_id": "desk-clear-of-the-swing",
+          "width_m": 1.4,
+          "depth_m": 0.7,
+          "x_m": 0.8,
+          "y_m": 0.35,
+          "rotation_deg": 0
+        }
+      ],
+
+      "_labels": "What the photo gate should conclude. Used to score the gate, optional.",
+      "labels": {
+        "is_room": true,
+        "person_visible": false
+      }
+    }
+  ]
+}

@@ -66,6 +66,8 @@ FORBIDDEN_PATHS: list[tuple[str, re.Pattern[str]]] = [
     ("database", re.compile(r"\.sqlite(-shm|-wal)?$|\.sqlite3$|\.db$")),
     ("cache_dir", re.compile(r"(^|/)\.(cache|pytest_cache|mypy_cache)/")),
     ("room_photo", re.compile(r"^fixtures/photos/.*\.(jpe?g|png|heic)$")),
+    ("eval_room_media", re.compile(r"^eval/data/.*\.(jpe?g|png|heic|mp4|mov)$")),
+    ("eval_cases", re.compile(r"^eval/data/cases\.json$")),
     ("key_file", re.compile(r"\.(key|pem|p12|pfx)$")),
     ("os_cruft", re.compile(r"(^|/)(\.DS_Store|Thumbs\.db)$")),
     ("credential_dump", re.compile(r"(?i)(token|secret|credential)s?\.(txt|json|eml)$")),

@@ -115,3 +115,18 @@ def test_forbidden_paths_cover_the_standing_rules() -> None:
     assert not hits(".env.example")
     assert not hits("fixtures/photos/README.md")
     assert not hits("backend/app.py")
+
+
+def test_nobodys_room_photograph_can_be_committed_through_eval() -> None:
+    """An evaluation case carries somebody's room and, outside the team, their
+    consent. Neither the media nor the case file is committed. See eval/CASES.md."""
+
+    def hits(path: str) -> bool:
+        return any(rx.search(path) for _, rx in secret_scan.FORBIDDEN_PATHS)
+
+    assert hits("eval/data/cases.json")
+    assert hits("eval/data/a-neighbours-room-1.jpg")
+    assert hits("eval/data/door-opening.mp4")
+    assert not hits("eval/data/cases.example.json")
+    assert not hits("eval/CASES.md")
+    assert not hits("eval/run_eval.py")

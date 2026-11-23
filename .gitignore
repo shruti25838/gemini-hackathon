@@ -60,3 +60,14 @@ ethyneon-studio/samples/*
 !ethyneon-studio/samples/rooms/
 ethyneon-studio/samples/models/
 ethyneon-studio/samples/catalog/
+
+# Evaluation cases. A room photograph belongs to whoever took it, and an
+# outside case carries recorded consent, so a real case and its media are
+# reviewed before anything is committed. The annotated example stays.
+eval/data/cases.json
+eval/data/*.jpg
+eval/data/*.jpeg
+eval/data/*.png
+eval/data/*.heic
+eval/data/*.mp4
+eval/data/*.mov
