@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ethyneon</title>
+<link rel="stylesheet" href="/static/style.css" />
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<header>
+  <div class="brand">Ethyneon <span class="mark">Ar · C₂H₂ · Ne</span></div>
+  <div id="status" class="pills"></div>
+</header>
+<main>
+  <section class="col left">
+    <div class="card">
+      <h3>1 · Your room</h3>
+      <label class="btn">Upload room photo<input id="photo" type="file" accept="image/*" capture="environment" hidden></label>
+      <button class="secondary" id="presetBtn" title="Labeled fallback, not your room">Use preset room</button>
+      <p class="hint">Photos are re-encoded in your browser to strip location data before upload.</p>
+      <img id="photoPreview" alt="" />
+      <div id="roomDims"></div>
+    </div>
+    <div class="card">
+      <h3>2 · The door</h3>
+      <label class="btn">Upload a clip of the door opening<input id="doorClip" type="file" accept="video/*" capture="environment" hidden></label>
+      <div id="doorInfo" class="hint"></div>
+      <div id="doorManual"></div>
+    </div>
+  </section>
+
+  <section class="col center">
+    <div id="viewport"></div>
+    <div class="toolbar">
+      <span id="fitBadge" class="badge">fit: —</span>
+      <button id="undoBtn">Undo</button>
+      <span class="hint">Drag an item to move it. Locked items are your own furniture.</span>
+    </div>
+    <div id="altCard" class="card warn" hidden></div>
+  </section>
+
+  <section class="col right">
+    <div class="card">
+      <h3>3 · Tell Ethyneon</h3>
+      <form id="cmdForm">
+        <input id="cmdText" placeholder="Build a purple and blue dual-monitor setup under $1,200 and keep the door clear" />
+        <button type="submit">Send</button>
+        <button type="button" id="micBtn" title="Hands-free voice: just talk; talk over it to interrupt">🎙 Talk</button>
+      </form>
+      <div class="hint"><span id="selInfo">Tap an item to select it.</span>
+        <label class="btn secondary" style="padding:2px 8px">📷 Point at it<input id="frameIn" type="file" accept="image/*" capture="environment" hidden></label>
+        <span id="frameInfo"></span></div>
+      <div id="clarify" class="clarify" hidden></div>
+      <div class="hint" id="voiceState"></div>
+      <div id="transcript"></div>
+    </div>
+    <div class="card">
+      <h3>Products <span id="subtotal" class="hint"></span></h3>
+      <div id="products"></div>
+      <button id="reviewBtn">Review cart</button>
+      <div id="review"></div>
+    </div>
+    <div class="card grow">
+      <h3>Activity</h3>
+      <ol id="activity"></ol>
+    </div>
+  </section>
+</main>
+<script type="module" src="/static/main.js"></script>
+</body>
+</html>
