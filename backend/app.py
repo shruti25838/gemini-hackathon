@@ -37,6 +37,7 @@ from backend.errors import (
 )
 from backend.lane_a import (
     get_lane_a,
+    install_lane_a_from_settings,
     lane_a_delegation,
     lane_a_is_stubbed,
     lane_a_name,
@@ -57,6 +58,7 @@ async def lifespan(_app: FastAPI):
     print(f"  commerce: {'live dev store' if settings.commerce_is_live else 'MOCK_COMMERCE'}")
     print(f"  shop mcp: {'enabled' if settings.shop_mcp else 'disabled'} (discovery only)")
     print("  cart writes: disabled in Phase 1")
+    print(f"  lane A: {install_lane_a_from_settings(settings)}")
     yield
 
 
