@@ -18,6 +18,20 @@ SHOPIFY_VARIANT_ID = r"^gid://shopify/(v|ProductVariant)/[A-Za-z0-9_-]+$"
 INTERACTION_ID = r"^[A-Za-z0-9_-]+$"
 ShopTool = Literal["search_catalog", "get_product", "lookup_catalog"]
 
+# Shop MCP searches the public Shop catalog, which spans every merchant. A
+# result from it is something to look at, not something this app can sell.
+# The UI and the server say that in the same words on purpose: a shopper who
+# reads the label and a developer who reads the refusal should not have to
+# work out that they are the same rule.
+VIEW_ONLY_REASON = (
+    "Browse results come from other merchants, are for viewing only, "
+    "and cannot be bought here."
+)
+NO_SHOPPABLE_STORE_REASON = (
+    "No development store is connected, so nothing can be placed in a room "
+    "or bought here."
+)
+
 
 def invalid_response(provider: str) -> ConnectionError:
     return ConnectionError(
@@ -139,6 +153,21 @@ class GeminiConnection:
 class ShopifyConnection:
     http: httpx.AsyncClient
     shops: tuple[str, ...] = ()
+
+    @property
+    def source(self) -> str:
+        return "shop_mcp"
+
+    async def require_shoppable(self, variant_id: str, context: dict[str, str]) -> dict[str, Any]:
+        """Refuse. Shop MCP sells nothing here, so every variant it knows is view only.
+
+        `CatalogConnection` overrides this with the real check against the
+        development store. It lives here as well so that a caller never has
+        to ask which connection it was handed: anything that places a product
+        in a room or spends money calls this and gets either a verified
+        variant or a refusal, never a silent pass.
+        """
+        raise ConnectionError(409, "no_shoppable_store", NO_SHOPPABLE_STORE_REASON)
 
     async def _call(self, name: ShopTool, catalog: dict[str, Any]) -> dict[str, Any]:
         if self.shops:
