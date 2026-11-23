@@ -111,6 +111,56 @@ def test_it_defaults_to_mock_mode(client: TestClient) -> None:
     assert health["fixture_catalog"] is True
 
 
+def test_the_bootstrap_blanks_shopify_before_her_dotenv_can_fill_it() -> None:
+    """The guard that keeps this demo off the real store.
+
+    Her app.py calls load_dotenv() at import, which walks up and finds the
+    repository root's .env, and her shop.py checks live() before
+    fixture_mode(). Started without this guard the demo reported
+    shopify_live: true and talked to the development store.
+
+    This test runs the bootstrap in a subprocess with the variables set to
+    realistic values, the way a loaded .env would leave them, and checks they
+    come back blank. Asserting os.environ in this process would prove
+    nothing, because the suite already blanks them.
+    """
+    import subprocess
+    import sys
+
+    program = (
+        "import os, sys;"
+        "os.environ.pop('LANE_A_DEMO_LIVE_SHOPIFY', None);"
+        f"sys.path.insert(0, {str(DEMO_ROOT)!r});"
+        "import lane_a_demo;"
+        "print(repr(os.environ.get('SHOPIFY_STORE_DOMAIN')));"
+        "print(repr(os.environ.get('SHOPIFY_STOREFRONT_TOKEN')));"
+        "print(repr(os.environ.get('MOCK_AI')))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", program],
+        capture_output=True, text=True, cwd=DEMO_ROOT,
+        env={
+            **{k: v for k, v in __import__("os").environ.items()},
+            "SHOPIFY_STORE_DOMAIN": "ethyneon.myshopify.com",
+            "SHOPIFY_STOREFRONT_TOKEN": "a-token-shaped-string",
+        },
+    )
+    assert result.returncode == 0, result.stderr
+    domain, token, mock_ai = result.stdout.split()
+
+    assert domain == "''", "the demo must blank the store domain"
+    assert token == "''", "the demo must blank the storefront token"
+    assert mock_ai == "'1'"
+
+
+def test_the_live_store_needs_an_explicit_opt_in() -> None:
+    source = (DEMO_ROOT / "lane_a_demo" / "__init__.py").read_text(encoding="utf-8")
+
+    assert "LANE_A_DEMO_LIVE_SHOPIFY" in source
+    assert 'os.environ["SHOPIFY_STORE_DOMAIN"] = ""' in source
+    assert 'os.environ["SHOPIFY_STOREFRONT_TOKEN"] = ""' in source
+
+
 def test_the_fixture_catalogue_is_labelled_not_live(client: TestClient) -> None:
     fixture = DEMO_ROOT / "eval" / "data" / "fixture_catalog.json"
     assert fixture.is_file(), "her mock catalogue should ship with the demo"

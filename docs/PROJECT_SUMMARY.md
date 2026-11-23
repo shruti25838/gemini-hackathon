@@ -55,16 +55,17 @@ Nothing in this table is a claim we have not run.
 | --- | --- |
 | Contracts, JSON schemas, fixtures | **Real.** Twelve models, one file each, generated schemas checked in CI |
 | The fit engine (`fit/`) | **Real.** Pure geometry, no network or database. 15 of 15 golden cases |
-| Room photo gate and room draft | **Real** with a Gemini key, **stub** without, and it says which |
-| Studio pages: room, scene, product, voice, chat | **Real.** All five boot and serve |
-| Product 3D models | **Real** where the merchant publishes a mesh; **generated** from listing photos otherwise, and labelled as approximate on screen |
-| Catalog reads from the dev store | **Real** when credentialed, **mock** otherwise |
+| Room photo gate and room draft | **Not working today.** The code path is real and installed, but the Gemini key is invalid: every call returns `401 API key not valid`, and `/studio/room/scan` answers `provider_authentication_failed`. With a working key this is the one lane A function that is genuinely real |
+| Studio pages: room, scene, product, voice, chat | **Real.** All five boot and serve. Room and product render their empty states correctly; the scene view waits on a file that was deliberately not taken from `feature/mitran` |
+| Product 3D models | **Not demonstrated.** Our development store's products carry no photographs and publish no `Model3d`, so there is no merchant mesh to load and nothing for the generator to read. Generation also needs Gemini, which is down. Anything the 3D view would show for one of our products today is a **plain stand-in**, not a model of that product |
+| Catalog reads from the dev store | **Real and verified in this run.** `GET /api/catalog/search?query=Walnut Gaming Desk` returns 4 shoppable offers from `ethyneon.myshopify.com` with confirmed dimensions from metafields |
 | Shop MCP discovery | **Real.** Four read-only tools allowlisted, twelve purchase tools blocked |
-| Cart review, approval, reconciliation | **Real** |
+| Cart review, approval, reconciliation | **Real and verified in this run**, against a live dev-store variant |
 | Live cart write | **Real, and off by default** behind two gates |
-| Hosted checkout handoff | **Real.** Verified end to end on the development store |
+| Hosted checkout handoff | **Real, verified earlier and separately.** The paid run was done through `scripts/live_cart_smoke.py` with `LIVE_CART_WRITES=1`: card 1 approved and the order appeared in Shopify Orders, card 2 declined. It was **not** done through the Studio's checkout button, which has never been exercised against a real payment |
 | Payment confirmation | **Not done, deliberately.** The app reports `payment_unconfirmed` after a real paid order, because order lookup is off. We do not claim money we have not read back |
-| Lane A agents beyond room analysis | **Delegated to stubs.** `/api/health` names all seven functions individually |
+| Lane A in the running backend | **Real for room-photo analysis only.** `analyze_room` is Karishma's code. `validate_room_spec` and `run_checkout_gates` are delegated to our own modules. The other four are labelled stubs. `/api/health` names all seven |
+| The Argon placement planner and Carbon | **Not exercised.** Neither ran at any point in this demo. Argon appears in the Studio's room planner and Carbon in the sandbox design, and neither was reached |
 | `web/` React app | **A shell.** Health and contract types only. The Studio is the front end |
 | Evaluation harness | **Runs, with zero cases.** See below |
 
@@ -72,12 +73,35 @@ Nothing in this table is a claim we have not run.
 
 | Suite | Environment | Result |
 | --- | --- | --- |
-| Root (`tests/`) | `.venv`, Python 3.10 | **772 pass offline** |
+| Root (`tests/`) | `.venv`, Python 3.10 | **774 pass offline** |
 | Studio (`ethyneon-studio/tests/`) | own `.venv`, Python 3.12 | **110 pass offline** |
 | Live checks | needs credentials | 17, deselected by default, skip rather than fail |
 | `scripts/e2e_mock.sh` | the pull request gate | all 6 steps pass |
 
 Both suites were run with credentials blanked and the network blocked.
+
+### What a live run looks like today
+
+Both servers were started and walked on 23 November 2026, on demo data only.
+What worked, and what did not:
+
+| Step | Result |
+| --- | --- |
+| Backend boots, `/api/health` honest about every mock and every lane A function | **works** |
+| Live dev-store search for "Walnut Gaming Desk" | **works.** 4 shoppable offers, Walnut $329.00 and Black $299.00, dimensions 1.40 x 0.60 x 0.75 m from metafields, no photographs on any of them |
+| Place that variant in a room, verified against the store | **works.** A `variant_verified` event is written |
+| Cart review and approval | **works.** $329.00, within budget, `approved` |
+| Checkout audit with cart writes off | **works, and correctly withheld the link.** The audit returned `unavailable` because the Decisions call needs the same invalid Gemini key, and because the audit did not pass, no checkout URL was produced. It is absent from the response and absent from `/api/state` |
+| Fit verdict, desk inside an inward-opening door | **works.** `does_not_fit`, failing check `door_swing`, cause: *"The open door would hit obj_desk by 0.60 m."* |
+| All five Studio pages serve, 28 CC0 sample sets listed | **works** |
+| Room photos to a 3D room | **does not work.** Invalid Gemini key |
+| Product search inside the Studio | **does not work as our store.** The Studio needs its own `SHOPIFY_STOREFRONT_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN`; with only `SHOPIFY_SHOPS` it falls back to Shop MCP, which returns other merchants |
+| Karishma's lane A demo: preset room, door swing, planner, activity trail | **works**, every mocked value labelled |
+
+One bug was found and fixed during this run. The Storefront client fell back
+from the private to the public auth header on 401 only, and our store answers
+403, so every live catalog read had been failing while `/api/health` still
+reported `commerce: live`. Health reports configuration, not reachability.
 
 ### The evaluation harness has no cases, on purpose
 
@@ -165,9 +189,16 @@ integrated by copying files between branches rather than by merging them, so
 
 ## Known gaps
 
+- **The Gemini key is invalid.** Every model call returns `401 API key not
+  valid`, so the photo gate, the room draft, the product mesh generator, the
+  Decision 1 checkout audit and the Argon planner are all unreachable right
+  now. Nothing is wrong with the code paths; the credential needs replacing.
 - No evaluation cases, as above.
 - Payment is never confirmed from the handoff.
 - Four of the seven lane A functions are stubs, and say so.
+- Our development store's products have no photographs, so no product has a
+  real 3D model. Anything shown in a 3D product view is a plain stand-in.
+- The Studio needs its own Storefront domain and token to search our store.
 - The `web/` React app is a shell; the Studio is the real front end.
 - No license has been chosen, so the code is not licensed for reuse yet.
 - `feature/mitran` cannot be checked out on Windows at all: it contains

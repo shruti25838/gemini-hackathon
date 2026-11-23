@@ -17,38 +17,75 @@ cd demos\karishma-lane-a
 
 Then open <http://127.0.0.1:8010>.
 
-Mock mode is the default: `lane_a_demo/__init__.py` sets `MOCK_AI=1` and
-`ETHYNEON_FIXTURE_CATALOG=1` unless you have deliberately set them otherwise.
-Her `shop.py` cannot reach Shopify without `SHOPIFY_STORE_DOMAIN` and
-`SHOPIFY_STOREFRONT_TOKEN`, and nothing here sets them.
+Mock mode is the default, and keeping it that way took more than a flag.
 
-`GET /api/health` reports what is real:
+Her `app.py` calls `load_dotenv()` at import time. That is her code and is
+left alone, but with no argument it searches upwards from the working
+directory, finds the repository root's `.env`, and loads the real Shopify
+credentials. Her `shop.py` then checks `live()` **before** `fixture_mode()`,
+so a configured store beats the fixture catalogue. Started naively, this demo
+talked to the real development store and reported `shopify_live: true`.
+
+So `lane_a_demo/__init__.py` blanks `SHOPIFY_STORE_DOMAIN` and
+`SHOPIFY_STOREFRONT_TOKEN` before her import runs. python-dotenv does not
+override a variable that is already set, so that is what holds. It also sets
+`MOCK_AI=1` and `ETHYNEON_FIXTURE_CATALOG=1`, those by `setdefault` so an
+explicit choice still wins.
+
+`GET /api/health` should report:
 
 ```json
 {"gemini": true, "mock_ai": true, "shopify_live": false,
  "voice_mode": "hydrogen", "fixture_catalog": true}
 ```
 
-One caveat worth knowing: her `app.py` calls `load_dotenv()` at import time,
-which is her code and is left alone. If the repository root has a populated
-`.env`, that file will be read. Run this from a shell where you do not mind
-that, or clear the variables first.
+If `shopify_live` is ever `true` here, the demo is on the real store and the
+guard has failed. To do that deliberately, set `LANE_A_DEMO_LIVE_SHOPIFY=1`.
+
+The repository root `.env` is still read for everything else, so run this
+from a shell where you do not mind that.
 
 ## What works
 
-Verified by booting it, not by reading it:
+Driven in a real browser on 127.0.0.1:8010, not read off the source.
 
 | Screen | State |
 | --- | --- |
-| Page loads, three.js viewport, status pills | works |
-| "Use preset room" builds a 3.2 by 3.0 m room with two openings | works |
-| Voice and text commands route through her planner | works, labelled `MOCK_AI:` |
-| Drag to move an item, with live fit feedback | works |
-| Review and approve | works, against her fixture catalogue |
-| Upload a room photo, upload a door clip | needs a Gemini key, untested here |
+| Page loads, three.js viewport, status pills | **works** |
+| "Use preset room" builds a 3.2 by 3.0 m room with two openings | **works** |
+| Setting the door by hand: hinge left or right, opens in or out | **works**, the swing renders in 3D and the room line reads `confirmed` |
+| Text command routes through her intake, brief and planner | **works**, every value labelled `MOCK_AI:` |
+| Activity panel shows each step and its provenance | **works** |
+| Product search, products list, review and approve | **does not work here.** See below |
+| Fit verdict on a placed product | **not reachable**, because no product can be placed |
+| Upload a room photo, upload a door clip | **not working.** Needs a valid Gemini key |
 
-Every mocked value arrives prefixed `MOCK_AI:` in her own copy, which is the
-behaviour that made it safe to demo in the first place.
+### Why the product steps stop
+
+The planner runs, reaches `discover_shopify_variants`, and the activity panel
+shows:
+
+```
+workflow  inspect_room_motion failed: LaneANotWired: backend.shop.fetch_catalog
+          is not wired. Use our CatalogService.search_catalog, which carries
+          store, shoppable and dimension_source that her CatalogOffer has no
+          field for.
+recovery  Recovery chose 'pause' (mock): MOCK_AI: saved recovery choice
+workflow  Paused. The last verified room and scene are unchanged.
+```
+
+That is `ai/karishma/shim.py` doing its job. The vendored copy of her code is
+deliberately not wired to a catalogue, because the integration only connects
+`analyze_room`, and a half-connected catalogue would let her `CatalogOffer`,
+which has no `shoppable` or `store` field, reach a cart.
+
+This demo points at that vendored copy rather than carrying a second copy of
+her AI modules, so it inherits the shim. The trade is honest: the room, the
+door and the planner are hers and run, and the product path refuses out loud
+rather than pretending.
+
+Her original branch does run the product path end to end against her fixture
+catalogue, on `karishma/full-build`.
 
 ## What this is, exactly
 
