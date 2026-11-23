@@ -5,7 +5,13 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
-from backend.connections import GeminiConnection, ShopifyConnection, SHOPIFY_VARIANT_ID, interaction_output_text
+from backend.connections import (
+    VIEW_ONLY_REASON,
+    GeminiConnection,
+    ShopifyConnection,
+    SHOPIFY_VARIANT_ID,
+    interaction_output_text,
+)
 from backend.errors import ConnectionError
 from backend.product_models import ProductModelConnection, catalog_gallery, merge_gallery
 from backend.schemas import CatalogContext, RequestBody
@@ -20,6 +26,14 @@ class StudioCommand(CatalogContext):
     command: str = Field(min_length=1, max_length=400)
     visible: list[StudioVariant] = Field(default_factory=list, max_length=4)
     selected_variant_id: str | None = Field(default=None, pattern=SHOPIFY_VARIANT_ID)
+    # "browse" searches every merchant on Shop and sells nothing. "store"
+    # searches the connected development store, which is the only place
+    # anything can be bought from. Browse is the default because a shopper
+    # arriving at an empty grid wants to see furniture, and a four-product
+    # development store is not furniture shopping. Nothing about what can
+    # be bought depends on this field: that is decided server side, per
+    # variant, by CatalogConnection.require_shoppable.
+    mode: Literal["browse", "store"] = "browse"
 
 
 class Intent(BaseModel):
@@ -77,7 +91,14 @@ def quick_intent(command: str) -> Intent | None:
     return None
 
 
-def catalog_offer(product: dict[str, Any], variant: dict[str, Any]) -> dict[str, Any]:
+def catalog_offer(product: dict[str, Any], variant: dict[str, Any], *, shoppable: bool = True) -> dict[str, Any]:
+    """One result card.
+
+    `merchant` and `listing_url` are not decoration. A card for somebody
+    else's product has to name them and link to their listing, and the card
+    has to say it cannot be bought here. `shoppable` travels with the offer
+    so the front end never has to infer it from which search was run.
+    """
     photos = merge_gallery(catalog_gallery(variant.get("media", [])), catalog_gallery(product.get("media", [])))
     return {
         "variant_id": variant["id"],
@@ -86,6 +107,9 @@ def catalog_offer(product: dict[str, Any], variant: dict[str, Any]) -> dict[str,
         "image_url": photos[0] if photos else None,
         "options": variant.get("options") or [],
         "price": variant.get("price"),
+        "listing_url": variant.get("url") or product.get("url"),
+        "shoppable": bool(shoppable),
+        "view_only_reason": None if shoppable else VIEW_ONLY_REASON,
     }
 
 
@@ -145,19 +169,25 @@ class ProductStudio:
         except ValidationError as exc:
             raise ConnectionError(502, "studio_intent_invalid", "Gemini could not interpret that edit. Try one command.") from exc
 
-    async def _search(self, query: str, context: dict[str, str], limit: int) -> list[dict[str, Any]]:
-        document = await self.shopify.search_catalog({
-            "query": query, "context": context, "pagination": {"limit": limit},
-        })
-        return document["products"]
+    async def _search(
+        self, query: str, context: dict[str, str], limit: int, mode: str = "store",
+    ) -> list[dict[str, Any]]:
+        catalog = {"query": query, "context": context, "pagination": {"limit": limit}}
+        search = self.shopify.browse_catalog if mode == "browse" else self.shopify.search_catalog
+        return (await search(catalog))["products"]
 
-    async def _add_headrest(self, variant_id: str, context: dict[str, str]) -> dict[str, Any]:
+    def _shoppable(self, mode: str) -> bool:
+        """Browse never sells. Store sells only when a Storefront store is set."""
+        return mode != "browse" and self.shopify.source == "storefront_api"
+
+    async def _add_headrest(self, variant_id: str, context: dict[str, str], mode: str) -> dict[str, Any]:
         selected = (await self.shopify.lookup_variant(variant_id, context))["products"][0]
         description = ProductModelConnection._description(selected.get("description"))
         if not re.search(r"\bchairs?\b", f"{selected['title']} {description}", re.I):
             return {"action": "message", "message": "Select a chair for the headrest preview."}
 
-        products = await self._search("universal strap-on gaming chair neck pillow headrest cushion", context, 12)
+        products = await self._search(
+            "universal strap-on gaming chair neck pillow headrest cushion", context, 12, mode)
         choices = [
             (headrest_score(product, variant), variant["id"])
             for product in products for variant in product["variants"]
@@ -173,9 +203,12 @@ class ProductStudio:
         intent = await self._intent(request)
         value = intent.value.strip()
         if intent.action == "search" and value:
-            products = await self._search(value, context, 4)
-            results = [catalog_offer(product, product["variants"][0]) for product in products[:4]]
-            return {"action": "show_results", "query": value, "results": results}
+            shoppable = self._shoppable(request.mode)
+            products = await self._search(value, context, 4, request.mode)
+            results = [catalog_offer(product, product["variants"][0], shoppable=shoppable)
+                       for product in products[:4]]
+            return {"action": "show_results", "query": value, "mode": request.mode,
+                    "shoppable": shoppable, "results": results}
         if intent.action == "select":
             if value not in {"1", "2", "3", "4"} or int(value) > len(request.visible):
                 return {"action": "message", "message": "Choose an available card or search Shopify first."}
@@ -192,5 +225,5 @@ class ProductStudio:
         if intent.action == "set_color" and HEX_COLOR.fullmatch(value):
             return {"action": "set_color", "variant_id": variant, "color": value.lower()}
         if intent.action == "add_headrest":
-            return await self._add_headrest(variant, context)
+            return await self._add_headrest(variant, context, request.mode)
         return {"action": "message", "message": HELP}

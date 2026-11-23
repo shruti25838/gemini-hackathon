@@ -474,7 +474,7 @@ class SceneStudio:
         document = await self.shopify.search_catalog({"query": query, "context": CONTEXT, "pagination": {"limit": limit + 6}})
         offers, seen = [], {offer["title"] for offer in cached} | {offer["variant_id"] for offer in cached}
         for product in document["products"]:
-            offer = catalog_offer(product, product["variants"][0])
+            offer = catalog_offer(product, product["variants"][0], shoppable=bool(self.shoppable_store))
             if (offer["variant_id"] == variant_id or offer["title"] in seen or offer["variant_id"] in seen
                     or self.model_state(offer["variant_id"]) == "cached"):
                 continue

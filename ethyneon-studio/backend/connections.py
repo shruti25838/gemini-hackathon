@@ -158,6 +158,14 @@ class ShopifyConnection:
     def source(self) -> str:
         return "shop_mcp"
 
+    async def browse_catalog(self, catalog: dict[str, Any]) -> dict[str, Any]:
+        """Shop MCP is already the cross-merchant surface, so this is a search
+        that labels what it returns. `CatalogConnection` overrides it to drop
+        the shop filter first."""
+        document = await self.search_catalog(catalog)
+        return {**document, "source": "shop_mcp", "shoppable": False,
+                "view_only_reason": VIEW_ONLY_REASON}
+
     async def require_shoppable(self, variant_id: str, context: dict[str, str]) -> dict[str, Any]:
         """Refuse. Shop MCP sells nothing here, so every variant it knows is view only.
 
