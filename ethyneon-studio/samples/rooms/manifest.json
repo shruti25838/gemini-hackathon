@@ -1,0 +1,366 @@
+[
+  {
+    "folder": "kitchen-5-photos",
+    "intended_use": "kitchen",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_house",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.1,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "gaming-room-5-photos",
+    "intended_use": "gaming_room",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_1",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.52,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "living-room-3-photos",
+    "intended_use": "living_room",
+    "plain_room": true,
+    "photos": 3,
+    "headings_deg": [
+      0.0,
+      120.0,
+      240.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/lebombo",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.05,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "living-room-4-photos",
+    "intended_use": "living_room",
+    "plain_room": true,
+    "photos": 4,
+    "headings_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/lebombo",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.72,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "living-room-5-photos",
+    "intended_use": "living_room",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/lebombo",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.77,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "working-room-3-photos",
+    "intended_use": "office",
+    "plain_room": true,
+    "photos": 3,
+    "headings_deg": [
+      0.0,
+      120.0,
+      240.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/unfinished_office",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.27,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "working-room-4-photos",
+    "intended_use": "office",
+    "plain_room": true,
+    "photos": 4,
+    "headings_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/unfinished_office",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.58,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "working-room-5-photos",
+    "intended_use": "office",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/unfinished_office",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.46,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "bedroom-4-photos",
+    "intended_use": "bedroom",
+    "plain_room": true,
+    "photos": 4,
+    "headings_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_3",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.22,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "bedroom-5-photos",
+    "intended_use": "bedroom",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_3",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.43,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "study-room-4-photos",
+    "intended_use": "office",
+    "plain_room": true,
+    "photos": 4,
+    "headings_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_2",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.46,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "study-room-5-photos",
+    "intended_use": "office",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_2",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.56,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "guest-room-3-photos",
+    "intended_use": "bedroom",
+    "plain_room": true,
+    "photos": 3,
+    "headings_deg": [
+      0.0,
+      120.0,
+      240.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_4",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.05,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "guest-room-4-photos",
+    "intended_use": "bedroom",
+    "plain_room": true,
+    "photos": 4,
+    "headings_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_4",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.53,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  },
+  {
+    "folder": "guest-room-5-photos",
+    "intended_use": "bedroom",
+    "plain_room": true,
+    "photos": 5,
+    "headings_deg": [
+      0.0,
+      72.0,
+      144.0,
+      216.0,
+      288.0
+    ],
+    "fov_deg": 100,
+    "pitch_deg": -12,
+    "source": "https://polyhaven.com/a/small_empty_room_4",
+    "license": "CC0 1.0",
+    "decision_1_check": {
+      "status": "pass",
+      "coverage": 3.63,
+      "coverage_max": 4,
+      "builds": true,
+      "next_step": null,
+      "checked": "2026-11-21"
+    }
+  }
+]

@@ -47,4 +47,16 @@ dist/
 *.sqlite*
 fixtures/photos/*.jpeg
 fixtures/photos/*.jpg
-ethyneon-studio/samples/
+
+# Lane B sample assets.
+#
+# The CC0 room photo sets are committed, together with the manifest that
+# records each set's source, headings and licence.
+#
+# The generated product models and the alternatives catalogues are not.
+# They are built from other merchants' product photography and listing
+# data, and this repository records no licence covering them.
+ethyneon-studio/samples/*
+!ethyneon-studio/samples/rooms/
+ethyneon-studio/samples/models/
+ethyneon-studio/samples/catalog/

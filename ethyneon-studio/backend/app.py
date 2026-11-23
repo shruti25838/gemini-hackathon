@@ -26,6 +26,7 @@ from backend.room_planner import PlacementPlanner
 from backend.routes.agora import router as agora_router
 from backend.routes.room import check_room_capture, get_room, get_room_plan, revise_room, router as room_router, scan_room, start_room_plan
 from backend.routes.room_chat import router as room_chat_router
+from backend.routes.samples import router as samples_router
 from backend.routes.studio import STUDIO_ASSETS, router as studio_router, studio_command
 from backend.schemas import (
     CatalogProductRequest,
@@ -181,6 +182,7 @@ def create_app(
     app.include_router(room_chat_router)
     app.include_router(room_router)
     app.include_router(studio_router)
+    app.include_router(samples_router)
     app.mount("/studio-assets", StaticFiles(directory=STUDIO_ASSETS), name="studio-assets")
 
     @app.get("/healthz")
