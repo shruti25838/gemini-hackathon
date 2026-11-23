@@ -551,3 +551,199 @@ byId("toggle-items").addEventListener("click", async (event) => {
   (await viewer)?.setItems(on);
 });
 controls();
+
+// ---------- Live camera capture: Decision 1 guides the shopper until coverage is full ----------
+const LIVE_INTERVAL_MS = 2000;
+const NEW_VIEW_DIFFERENCE = 12;   // mean grey-level change (0-255) that counts as a new direction
+const MIN_DETAIL = 6;             // edge energy below this is too blurry or dark to keep
+let live = null;                  // {stream, timer, prints: [], checking}
+
+function fingerprint(source) {
+  const small = document.createElement("canvas");
+  small.width = 32;
+  small.height = 24;
+  const context = small.getContext("2d", {willReadFrequently: true});
+  context.drawImage(source, 0, 0, 32, 24);
+  const pixels = context.getImageData(0, 0, 32, 24).data;
+  const grey = new Float32Array(32 * 24);
+  for (let i = 0; i < grey.length; i += 1) grey[i] = (pixels[i * 4] + pixels[i * 4 + 1] + pixels[i * 4 + 2]) / 3;
+  let detail = 0;
+  for (let y = 1; y < 24; y += 1) {
+    for (let x = 1; x < 32; x += 1) detail += Math.abs(grey[y * 32 + x] - grey[y * 32 + x - 1]) + Math.abs(grey[y * 32 + x] - grey[(y - 1) * 32 + x]);
+  }
+  return {grey, detail: detail / (31 * 23)};
+}
+
+function difference(a, b) {
+  let sum = 0;
+  for (let i = 0; i < a.length; i += 1) sum += Math.abs(a[i] - b[i]);
+  return sum / a.length;
+}
+
+function liveGuide(text, {arrow = "◎", state = "", progress = null} = {}) {
+  const guide = document.querySelector(".live-guide");
+  guide.dataset.state = state;
+  byId("live-arrow").textContent = arrow;
+  byId("live-text").textContent = text;
+  if (progress !== null) byId("live-bar").style.width = `${Math.min(100, progress * 100)}%`;
+  byId("live-meta").textContent = `Views kept ${photos.length} / ${MAX_PHOTOS} · gemini-decision-1`;
+}
+
+async function grabFrame(video) {
+  const scale = Math.min(1, MAX_EDGE / Math.max(video.videoWidth, video.videoHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(video.videoWidth * scale);
+  canvas.height = Math.round(video.videoHeight * scale);
+  canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.86));
+  return {url: URL.createObjectURL(blob), data: canvas.toDataURL("image/jpeg", 0.86).split(",", 2)[1], content_type: "image/jpeg"};
+}
+
+async function liveTick() {
+  if (!live || live.checking || busy) return;
+  const video = byId("live-video");
+  if (!video.videoWidth) return;
+  const print = fingerprint(video);
+  if (print.detail < MIN_DETAIL) {
+    liveGuide("Hold steady and make sure the room is lit.", {arrow: "◎"});
+    return;
+  }
+  const nearest = live.prints.length ? Math.min(...live.prints.map((kept) => difference(kept.grey, print.grey))) : Infinity;
+  if (nearest < NEW_VIEW_DIFFERENCE) {
+    if (capture && capture.status !== "pass") {
+      liveGuide(`${capture.follow_up.message}.`, {arrow: DIRECTION_ICON[capture.follow_up.direction] ?? "⟲"});
+    } else if (!capture) {
+      liveGuide("Got this view. Turn slowly to the next wall.", {arrow: "→"});
+    }
+    return;
+  }
+  live.checking = true;
+  try {
+    const frame = await grabFrame(video);
+    if (photos.length >= MAX_PHOTOS) {
+      URL.revokeObjectURL(photos[1].url);  // keep photo 1 (the main wall); replace the oldest other view
+      photos.splice(1, 1);
+      live.prints.splice(1, 1);
+    }
+    photos.push(frame);
+    live.prints.push(print);
+    renderThumbs();
+    liveGuide("New view captured. Checking coverage…", {arrow: "…"});
+    await checkCapture();
+    if (!live) return;
+    const result = capture;
+    if (!result) return;
+    const progress = result.coverage.score / result.coverage.max;
+    if (result.status === "pass") {
+      liveGuide("Full coverage ✓ Building your 3D room…", {arrow: "✓", state: "pass", progress: 1});
+      await stopLive(false);
+      await build();
+    } else if (result.status === "rejected") {
+      liveGuide(result.message, {arrow: "✕", progress});
+    } else {
+      liveGuide(`${result.follow_up.message}.`, {arrow: DIRECTION_ICON[result.follow_up.direction] ?? "⟲", progress});
+    }
+  } finally {
+    if (live) live.checking = false;
+  }
+}
+
+// Demo video: a sample room streamed like a phone turning around it (slow pan plus crossfade between views).
+const DEMO_VIEW_MS = 4500;
+const DEMO_FADE_MS = 700;
+async function demoStream(folder) {
+  const list = await fetch("/studio/samples/rooms").then((response) => response.json());
+  const set = list.find((entry) => entry.folder === folder);
+  if (!set) throw new Error("That sample room is not available.");
+  const images = await Promise.all(set.photos.map((name) => new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Could not load the sample room."));
+    image.src = `/studio/samples/rooms/${folder}/${name}`;
+  })));
+  const canvas = document.createElement("canvas");
+  canvas.width = 1280;
+  canvas.height = 720;
+  const context = canvas.getContext("2d");
+  const start = performance.now();
+  const draw = (image, progress, alpha) => {
+    const zoom = 1.14;
+    const width = canvas.width * zoom;
+    const height = width * image.height / image.width;
+    context.globalAlpha = alpha;
+    context.drawImage(image, -(width - canvas.width) * progress, (canvas.height - height) / 2, width, height);
+  };
+  const timer = setInterval(() => {
+    const elapsed = performance.now() - start;
+    const index = Math.floor(elapsed / DEMO_VIEW_MS) % images.length;
+    const within = (elapsed % DEMO_VIEW_MS) / DEMO_VIEW_MS;
+    context.globalAlpha = 1;
+    context.fillStyle = "#000";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    draw(images[index], within, 1);
+    const fadeStart = 1 - DEMO_FADE_MS / DEMO_VIEW_MS;
+    if (within > fadeStart) draw(images[(index + 1) % images.length], 0, (within - fadeStart) / (1 - fadeStart));
+    context.globalAlpha = 1;
+  }, 1000 / 24);
+  const stream = canvas.captureStream(24);
+  stream.getVideoTracks()[0].addEventListener("ended", () => clearInterval(timer));
+  stream.stopDemo = () => clearInterval(timer);
+  return stream;
+}
+
+async function startLive(demoFolder = null) {
+  try {
+    const stream = demoFolder ? await demoStream(demoFolder) : await navigator.mediaDevices.getUserMedia({
+      video: {facingMode: {ideal: "environment"}, width: {ideal: 1280}, height: {ideal: 720}}, audio: false,
+    });
+    for (const photo of photos) URL.revokeObjectURL(photo.url);
+    photos = [];
+    capture = null;
+    renderThumbs();
+    byId("live-video").srcObject = stream;
+    byId("live-cam").hidden = false;
+    byId("empty-stage").hidden = true;
+    byId("live-toggle").textContent = demoFolder ? "📷 Use live camera" : "■ Stop camera";
+    byId("demo-toggle").textContent = demoFolder ? "■ Stop demo" : "▶ Play demo video";
+    document.querySelector(".live-badge")?.remove();
+    if (demoFolder) {
+      byId("live-cam").append(Object.assign(document.createElement("span"), {className: "live-badge", textContent: `Demo video · ${demoFolder}`}));
+    }
+    live = {stream, prints: [], checking: false, timer: setInterval(liveTick, LIVE_INTERVAL_MS)};
+    liveGuide("Point the camera at the main wall, then turn slowly around the room.", {arrow: "◎", progress: 0});
+    notify("Live camera on. Turn slowly; Decision 1 tells you what to capture next.");
+  } catch (error) {
+    notify(error.name === "NotAllowedError" ? "Allow camera access to scan the room live." : `Camera unavailable: ${error.message}`, true);
+  }
+}
+
+async function stopLive(showEmpty = true) {
+  if (!live) return;
+  clearInterval(live.timer);
+  live.stream.stopDemo?.();
+  for (const track of live.stream.getTracks()) track.stop();
+  live = null;
+  byId("live-video").srcObject = null;
+  byId("live-cam").hidden = true;
+  if (showEmpty && !room) byId("empty-stage").hidden = false;
+  byId("live-toggle").textContent = "📷 Use live camera";
+  byId("demo-toggle").textContent = "▶ Play demo video";
+  document.querySelector(".live-badge")?.remove();
+}
+
+byId("live-toggle").addEventListener("click", async () => {
+  const startCamera = !live || Boolean(live.stream.stopDemo);  // idle or demo → real camera; camera on → stop it
+  if (live) await stopLive();
+  if (startCamera) startLive();
+});
+byId("demo-toggle").addEventListener("click", async () => {
+  if (live) return stopLive();
+  startLive(byId("demo-room").value);
+});
+fetch("/studio/samples/rooms").then((response) => response.json()).then((sets) => {
+  byId("demo-room").replaceChildren(...sets.map((set) => new Option(set.folder.replace(/-(\d)-photos$/, " ($1 views)").replaceAll("-", " "), set.folder)));
+  const preferred = sets.find((set) => set.folder === "gaming-room-5-photos");
+  if (preferred) byId("demo-room").value = preferred.folder;
+}).catch(() => { byId("demo-toggle").disabled = true; });
+byId("live-stop").addEventListener("click", () => stopLive());
+addEventListener("pagehide", () => stopLive(false));
