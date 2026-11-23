@@ -6,8 +6,8 @@ test checkout.
 
 **Status: lane C complete, money path verified live.** State and revisions,
 the fit engine, the catalog layer, cart approval, the live cart write and the
-checkout audit are built and tested. **874 tests pass offline across the two
-suites: 764 here and 110 in the Studio**, plus 17 live checks that are
+checkout audit are built and tested. **882 tests pass offline across the two
+suites: 772 here and 110 in the Studio**, plus 17 live checks that are
 deselected unless you ask for them.
 
 The whole money path has run end to end on the development store: a real cart
@@ -132,7 +132,7 @@ on, at <http://127.0.0.1:8000/api/health>.
 
 ```bash
 bash scripts/e2e_mock.sh                      # the gate for every pull request
-.venv/Scripts/python -m pytest -q             # 764 offline tests, no network
+.venv/Scripts/python -m pytest -q             # 772 offline tests, no network
 .venv/Scripts/python -m pytest -m network -q  # 17 live checks, needs keys
 .venv/Scripts/python scripts/secret_scan.py   # run before every commit
 .venv/Scripts/python scripts/check_access.py  # prove access, prints no secrets
@@ -348,7 +348,7 @@ ENABLE_ORDER_LOOKUP=0  # payment never claimed
 Before the demo:
 
 ```bash
-.venv/Scripts/python -m pytest -q                # 764 offline, no network
+.venv/Scripts/python -m pytest -q                # 772 offline, no network
 .venv/Scripts/python scripts/check_access.py     # prints no secrets
 .venv/Scripts/python scripts/live_cart_smoke.py  # must say LIVE_CART_WRITES off
 ```

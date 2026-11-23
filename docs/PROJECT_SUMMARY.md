@@ -72,7 +72,7 @@ Nothing in this table is a claim we have not run.
 
 | Suite | Environment | Result |
 | --- | --- | --- |
-| Root (`tests/`) | `.venv`, Python 3.10 | **764 pass offline** |
+| Root (`tests/`) | `.venv`, Python 3.10 | **772 pass offline** |
 | Studio (`ethyneon-studio/tests/`) | own `.venv`, Python 3.12 | **110 pass offline** |
 | Live checks | needs credentials | 17, deselected by default, skip rather than fail |
 | `scripts/e2e_mock.sh` | the pull request gate | all 6 steps pass |

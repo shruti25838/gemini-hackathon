@@ -241,6 +241,14 @@ class ShopifyStorefront:
     PRIVATE_HEADER = "Shopify-Storefront-Private-Token"
     PUBLIC_HEADER = "X-Shopify-Storefront-Access-Token"
 
+    # What Shopify answers when the token is real but sent under the wrong
+    # header. It documents 401, and returns 403 against our development store
+    # on the 2026-10 endpoint. Treating only 401 as "wrong header" meant a
+    # public token never fell back: every catalog read failed with
+    # "Storefront returned HTTP 403" while /api/health still said commerce
+    # was live, because health reports configuration and not reachability.
+    WRONG_HEADER_STATUSES = frozenset({401, 403})
+
     def _headers(self, auth_header: str) -> dict[str, str]:
         return {"Content-Type": "application/json", auth_header: self._token}
 
@@ -261,7 +269,10 @@ class ShopifyStorefront:
         variables = variables or {}
 
         response = self._post(self._auth_header, query, variables)
-        if response.status_code == 401 and self._auth_header == self.PRIVATE_HEADER:
+        if (
+            response.status_code in self.WRONG_HEADER_STATUSES
+            and self._auth_header == self.PRIVATE_HEADER
+        ):
             # A public access token was configured instead. Switch once and
             # remember, so later calls do not pay for the retry.
             retry = self._post(self.PUBLIC_HEADER, query, variables)
