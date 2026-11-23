@@ -114,7 +114,19 @@ def test_the_vendored_copy_still_matches_her_original():
 
 
 def test_this_solver_decides_nothing_user_facing():
-    """The engine decides. Nothing outside ai/ and tests/ may import this."""
+    """The engine decides every fit the product reports.
+
+    Three places may import this solver, and the third is the interesting one.
+
+      ai/      the adapter and her vendored modules, which is where it lives
+      tests/   here
+      demos/karishma-lane-a/   her standalone demo, which is explicitly not
+               the product: it runs her front end against her backend and her
+               geometry, on its own port, in mock mode, wired to nothing
+
+    Anything else importing it means her solver has reached a verdict a
+    shopper could act on, which is the thing the fit engine exists to own.
+    """
     import subprocess
     from pathlib import Path
 
@@ -125,9 +137,10 @@ def test_this_solver_decides_nothing_user_facing():
         cwd=repo_root, capture_output=True, text=True,
     ).stdout.split()
 
+    allowed = ("ai/", "tests/", "demos/karishma-lane-a/")
     assert found, "expected at least this test file to reference the vendored solver"
     for path in found:
-        assert path.startswith(("ai/", "tests/")), (
+        assert path.startswith(allowed), (
             f"{path} imports the vendored solver. The fit engine is the only thing "
-            f"that may decide a fit."
+            f"that may decide a fit the product reports."
         )
