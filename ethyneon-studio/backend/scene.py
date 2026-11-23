@@ -280,6 +280,13 @@ class SceneStudio:
             raw = self.path.read_bytes()
             if hashlib.sha1(raw).hexdigest()[:16] != request.base_etag:
                 raise ConnectionError(409, "scene_changed", "The room changed since you started this edit. It has been reloaded.")
+            # Putting a product in the room is the first step of buying it, so
+            # a variant the connected store does not sell never gets in. The
+            # browse cards carry no add control, but a hidden button is not a
+            # guard: this route takes a variant ID from anybody who posts one.
+            incoming = request.new_product or request.replacement
+            if incoming is not None:
+                await self.shopify.require_shoppable(incoming.variant_id, CONTEXT)
             config = json.loads(raw)
             size = None
             if request.op == "replace":

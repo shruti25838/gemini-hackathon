@@ -21,7 +21,7 @@ from uuid import uuid4
 
 from pydantic import Field
 
-from backend.connections import GeminiConnection, ShopifyConnection
+from backend.connections import VIEW_ONLY_REASON, GeminiConnection, ShopifyConnection
 from backend.ethyneon_client import (
     EthyneonClient,
     PurchaseServerUnavailable,
@@ -84,6 +84,19 @@ class CheckoutStudio:
             "price_changed": bool(price_now and was and price_now.get("amount") != was.get("amount")),
             "problem": None,
         }
+
+    async def _sold_here(self, variant_id: str) -> bool:
+        """Does the connected development store sell this exact variant?
+
+        Asked of the store itself, not of the line's reported merchant and
+        not of Shop MCP. A browse result naming our domain would otherwise
+        decide its own eligibility.
+        """
+        try:
+            await self.shopify.require_shoppable(variant_id, CONTEXT)
+        except ConnectionError:
+            return False
+        return True
 
     async def _audit(self, scene: dict[str, Any], lines: list[dict[str, Any]], checks: list[dict[str, Any]]) -> dict[str, Any]:
         packet = {
@@ -226,6 +239,11 @@ class CheckoutStudio:
             raise ConnectionError(422, "cart_empty", "Place at least one Shopify product in the room first.")
         lines = await asyncio.gather(*(self._verify(item) for item in products))
 
+        sold_here = await asyncio.gather(*(self._sold_here(line["variant_id"]) for line in lines))
+        for line, ours in zip(lines, sold_here):
+            line["sold_here"] = ours
+        view_only = [line["title"] for line in lines if not line["sold_here"]]
+
         problems = placement_problems(scene, [item["id"] for item in products])
         currencies = {(line["price_now"] or {}).get("currency") for line in lines if line["price_now"]}
         changed = [line["title"] for line in lines if line.get("price_changed")]
@@ -239,6 +257,9 @@ class CheckoutStudio:
              "detail": ("Price changed: " + ", ".join(changed)) if changed else "Prices match the room design."},
             {"name": "Placement guardrails", "ok": not problems, "detail": " ".join(problems) or "Every item fits with clear paths."},
             {"name": "Single currency", "ok": len(currencies) == 1, "detail": ", ".join(sorted(c for c in currencies if c)) or "No price"},
+            {"name": "Sold on the connected store", "ok": not view_only,
+             "detail": f"{VIEW_ONLY_REASON} Not sold here: {', '.join(view_only)}." if view_only
+                       else f"All {len(lines)} line(s) are variants the connected store sells."},
         ]
         audit = await self._audit(scene, lines, checks)
         code_ok = all(check["ok"] for check in checks)
@@ -257,7 +278,11 @@ class CheckoutStudio:
         # which produced real purchase links to arbitrary third-party
         # merchants. The purchase server decides now, and it only ever
         # answers for the configured development store.
-        purchase = await self._purchase(lines, status, request.confirm)
+        # A cart holding anything the store does not sell never reaches the
+        # confirm call, whatever the client asked for. The purchase server
+        # would refuse it as well; refusing here means no approval is ever
+        # recorded for a cart that could not be bought.
+        purchase = await self._purchase(lines, status, request.confirm and not view_only)
         stores = purchase["stores"]
         for line in lines:
             line["purchasable"] = line["variant_id"] in purchase["purchasable_variants"]
