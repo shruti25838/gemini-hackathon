@@ -5,9 +5,16 @@ const spin = byId("spin");
 const reset = byId("reset");
 const status = byId("status");
 const exampleButtons = [...document.querySelectorAll("[data-command]")];
+const modeInputs = [...document.querySelectorAll('input[name="mode"]')];
 let offers = [];
 let selected = null;
 let busy = false;
+let lastQuery = "";
+
+// "browse" searches every merchant on Shopify and can buy nothing. "store"
+// searches the connected development store. This only decides what is
+// searched; the server decides, per variant, what can actually be bought.
+const currentMode = () => modeInputs.find((input) => input.checked)?.value ?? "browse";
 
 const viewer = import("./viewer.js")
   .then(({ProductViewer}) => new ProductViewer(byId("viewer"), (spinning) => {
@@ -52,14 +59,35 @@ function priceLabel(price) {
 
 function controls() {
   byId("send").disabled = busy;
+  for (const input of modeInputs) input.disabled = busy;
   for (const button of exampleButtons) {
     const unavailable = button === byId("choose-example") ? offers.length < 2 : "needsProduct" in button.dataset && !selected;
     button.disabled = busy || unavailable;
   }
-  for (const card of results.children) {
+  for (const card of results.querySelectorAll("button.card")) {
     card.disabled = busy;
     card.setAttribute("aria-pressed", String(card.dataset.variant === selected?.variant_id));
   }
+}
+
+function viewOnlyNote(offer) {
+  const note = document.createElement("p");
+  note.className = "card-view-only";
+  note.append("View only, sold by ");
+  const url = https(offer.listing_url);
+  if (url) {
+    const link = document.createElement("a");
+    link.href = url.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = offer.merchant;
+    note.append(link);
+  } else {
+    const name = document.createElement("strong");
+    name.textContent = offer.merchant;
+    note.append(name);
+  }
+  return note;
 }
 
 function renderOffers() {
@@ -89,7 +117,17 @@ function renderOffers() {
     details.textContent = [priceLabel(offer.price), finish?.label].filter(Boolean).join(" · ");
     info.append(title, details);
     card.append(indexTag, img ?? fallback, info);
-    results.append(card);
+    // The card opens the product in the 3D viewer and does nothing else.
+    // A view-only card names the merchant and links to their listing
+    // beside it, and gets no add, review, checkout or cart control.
+    if (offer.shoppable === false) {
+      const slot = document.createElement("div");
+      slot.className = "card-slot";
+      slot.append(card, viewOnlyNote(offer));
+      results.append(slot);
+    } else {
+      results.append(card);
+    }
   }
   byId("catalog-empty").hidden = offers.length > 0;
   byId("result-count").hidden = !offers.length;
@@ -163,9 +201,14 @@ function showAttachment(product) {
 async function apply(result) {
   if (result.action === "show_results") {
     offers = result.results;
+    lastQuery = result.query;
     renderOffers();
     const count = offers.length;
-    notify(count ? "Found " + count + " Shopify results for “" + result.query + "”." : "Shopify returned no products for that search.");
+    const where = result.mode === "browse" ? "across Shopify" : "in our store";
+    notify(count
+      ? "Found " + count + " results " + where + " for “" + result.query + "”."
+        + (result.shoppable ? "" : " These are view only.")
+      : "No products found " + where + " for that search.");
     return;
   }
   if (result.action === "message") {
@@ -220,6 +263,7 @@ async function run(command) {
         command,
         visible: offers.map(({variant_id, title}) => ({variant_id, title})),
         selected_variant_id: selected?.variant_id ?? null,
+        mode: currentMode(),
         country: "US",
         currency: "USD",
       }),
@@ -250,6 +294,21 @@ byId("composer-form").addEventListener("submit", (event) => {
 });
 for (const button of exampleButtons) {
   button.addEventListener("click", () => run(button.dataset.command));
+}
+for (const input of modeInputs) {
+  input.addEventListener("change", () => {
+    const browsing = currentMode() === "browse";
+    byId("catalog-source").lastChild.textContent = browsing ? " Browsing all Shopify" : " Our store";
+    // The grid came from the other source, so its labels no longer
+    // answer this question. Clear it, and re-run the last search.
+    offers = [];
+    renderOffers();
+    controls();
+    if (lastQuery) run(lastQuery);
+    else notify(browsing
+      ? "Searching every merchant on Shopify. Results are view only."
+      : "Searching our connected store. These can be placed and bought.");
+  });
 }
 spin.addEventListener("click", async () => (await viewer)?.setSpin(spin.getAttribute("aria-pressed") !== "true"));
 reset.addEventListener("click", async () => {
