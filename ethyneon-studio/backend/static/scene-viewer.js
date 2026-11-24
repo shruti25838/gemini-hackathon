@@ -85,6 +85,31 @@ export function halfExtents(size, yawDeg) {
   };
 }
 
+/** An invisible solid the size of the product, purely to be grabbed.
+ *
+ * A loaded merchant model is mostly air: a chair is legs, a thin back
+ * and gaps. Raycasting against that geometry means a press lands on the
+ * product perhaps half the time, and the other half falls through to the
+ * camera and orbits, which reads as "drag is broken". A stand-in box has
+ * the opposite problem the moment its mesh is swapped for a real model,
+ * because loadProduct disposes the box.
+ *
+ * So every placed product carries this, and nothing ever disposes it. It
+ * writes no colour and no depth, so it is invisible and occludes nothing,
+ * but it is a solid Mesh and the raycaster always finds it.
+ */
+export function hitVolume(item) {
+  const {width, depth, height} = item.size;
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(width, height, depth),
+    new THREE.MeshBasicMaterial({colorWrite: false, depthWrite: false}),
+  );
+  mesh.name = "hit-volume";
+  mesh.renderOrder = -1;
+  mesh.userData.hitVolume = true;
+  return mesh;
+}
+
 function boxesOverlap(a, b) {
   return Math.abs(a.x - b.x) < a.hw + b.hw && Math.abs(a.z - b.z) < a.hd + b.hd;
 }
@@ -110,47 +135,87 @@ export class SceneViewer extends RoomViewer {
     this.products = new Map();
     this.selectedId = null;
     this.raycaster = new THREE.Raycaster();
-    const canvas = this.renderer.domElement;
+    // Listeners go on the container, in the capture phase, and not on the
+    // canvas. Three reasons, each of which was a bug found by driving the
+    // page rather than reading it:
+    //
+    //   The price pill is a CSS2D element sitting above the canvas with
+    //   pointer-events: auto. Pressing the most obvious target in the whole
+    //   view therefore never reached a canvas listener at all: no drag, and
+    //   not even an orbit. The container is an ancestor of both the canvas
+    //   and the label layer, so it sees both.
+    //
+    //   OrbitControls is attached to the canvas and was constructed first,
+    //   so it used to receive pointerdown before this code did. Disabling it
+    //   afterwards left the gesture half-started. Capturing on the ancestor
+    //   runs first, and stopPropagation means the orbit never begins.
+    //
+    //   A miss used to silently orbit the camera, which looks exactly like
+    //   "drag is broken" to anybody holding a mouse.
+    const surface = this.container;
     let down = null;
-    canvas.addEventListener("pointerdown", (event) => {
+    surface.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
       down = [event.clientX, event.clientY];
-      if (this.moveId && this.pick(event) === this.moveId) {
-        const {group} = this.products.get(this.moveId);
-        this.dragging = {id: this.moveId, start: group.position.clone()};
-        this.controls.enabled = false;
-        canvas.setPointerCapture(event.pointerId);
-      }
-    });
-    canvas.addEventListener("pointermove", (event) => {
+      const id = this.productAt(event);
+      if (!id) return;
+      const {group} = this.products.get(id);
+      this.dragging = {id, start: group.position.clone(), moved: false};
+      this.controls.enabled = false;
+      surface.setPointerCapture(event.pointerId);
+      // Before OrbitControls on the canvas below us ever sees it.
+      event.stopPropagation();
+      event.preventDefault();
+    }, true);
+    surface.addEventListener("pointermove", (event) => {
       if (!this.dragging) return;
       const point = this.floorPoint(event);
       if (!point) return;
       const {group, item} = this.products.get(this.dragging.id);
       const {x, z} = this.clampToRoom(point, item);
       group.position.set(x, this.dragging.start.y, z);
+      this.dragging.moved = group.position.distanceTo(this.dragging.start) > CLICK_THRESHOLD_M;
       this.paintDrag(this.dragging.id, this.liveConflict(this.dragging.id, {x, z}));
-    });
-    canvas.addEventListener("pointerup", (event) => {
+      event.stopPropagation();
+    }, true);
+    const release = (event) => {
       if (this.dragging) {
         const {id, start} = this.dragging;
         const {group} = this.products.get(id);
         this.dragging = null;
-        this.controls.enabled = true;
+        this.controls.enabled = !this.moveId;
         this.paintDrag(id, null);
+        if (surface.hasPointerCapture?.(event.pointerId)) {
+          surface.releasePointerCapture(event.pointerId);
+        }
         if (group.position.distanceTo(start) > CLICK_THRESHOLD_M) {
           this.onMoved?.(id, {x: group.position.x, z: group.position.z});
         } else {
-          // Below the threshold it was a click. Put it back exactly, so a
-          // shaky select never silently moves the product a centimetre.
+          // Below the threshold it was a press, not a drag. Put it back
+          // exactly, so a shaky hand never silently moves a product a
+          // centimetre, and treat it as a selection.
           group.position.copy(start);
           this.select(id);
         }
+        event.stopPropagation();
         return;
       }
       if (!down || Math.hypot(event.clientX - down[0], event.clientY - down[1]) > 5) return;
-      const id = this.pick(event);
+      const id = this.productAt(event);
       if (id) this.select(id);
-    });
+    };
+    surface.addEventListener("pointerup", release, true);
+    surface.addEventListener("pointercancel", release, true);
+  }
+
+  /** Which product is under this pointer, by pill or by raycast. */
+  productAt(event) {
+    // The pill carries its product id, so a press on it needs no raycast and
+    // cannot miss. This is the target a shopper aims at.
+    const pill = event.target?.closest?.(".price-tag");
+    const tagged = pill?.dataset?.product;
+    if (tagged && this.products.has(tagged)) return tagged;
+    return this.pick(event);
   }
 
   pointer(event) {
@@ -233,8 +298,12 @@ export class SceneViewer extends RoomViewer {
   }
 
   setMoveMode(id) {
+    // Dragging works without this. What Move adds is a pinned camera:
+    // while it is on, a press that misses the product does nothing at
+    // all instead of orbiting the view out from under the shopper.
     this.moveId = id;
-    this.renderer.domElement.style.cursor = id ? "grab" : "";
+    this.controls.enabled = !id;
+    this.container.style.cursor = id ? "grab" : "";
   }
 
   setSwapMode(id) {
@@ -257,6 +326,7 @@ export class SceneViewer extends RoomViewer {
         }
       }
       group.userData.productId = item.id;
+      group.add(hitVolume(item));
       group.add(this.priceTag(item));
       this.room.add(group);
       this.products.set(item.id, {group, item});

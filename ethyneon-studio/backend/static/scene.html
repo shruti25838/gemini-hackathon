@@ -85,7 +85,7 @@
         </p>
         <div class="viewport room-viewport" role="region" aria-label="Interactive 3D room with products">
           <div id="room-viewer"></div>
-          <p class="viewport-hint">Click a product or its price tag · Drag to orbit · Scroll to zoom</p>
+          <p class="viewport-hint">Press and drag an item to move it · Drag the background to turn the room · Scroll to zoom</p>
           <aside class="product-pop" id="product-pop" aria-labelledby="product-title" hidden>
             <div class="pop-head">
               <div>
@@ -106,6 +106,8 @@
             </div>
             <div class="edit-tools" id="edit-tools" role="group" aria-label="Edit this product" hidden>
               <button type="button" id="edit-move" aria-pressed="false">Move</button>
+              <p class="tool-note" id="move-note">You can drag any item straight away. <b>Move</b> holds the camera
+                still while you do, so a press that misses does not turn the room.</p>
               <button type="button" id="edit-left" aria-label="Rotate 15 degrees left">⟲ 15°</button>
               <button type="button" id="edit-right" aria-label="Rotate 15 degrees right">⟳ 15°</button>
               <button type="button" id="edit-swap" aria-pressed="false">Swap…</button>

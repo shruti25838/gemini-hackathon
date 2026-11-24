@@ -364,7 +364,7 @@ async function selectProduct(item) {
   byId("edit-tools").hidden = false;
   byId("use-product").hidden = true;
   if (room.moveId !== item.id) setModes();
-  editMessage("");
+  editMessage("Press and drag it on the floor to move it.");
   const cm = (m) => Math.round(m * 100);
   // Say where the number came from next to the number. A fallback size
   // printed as plainly as a measured one is the whole problem this
@@ -506,7 +506,9 @@ byId("back-to-placed").addEventListener("click", () => selected && selectProduct
 byId("edit-move").addEventListener("click", () => {
   const on = room.moveId !== selected?.id;
   setModes({move: on ? selected.id : null});
-  editMessage(on ? "Drag the product across the floor, then release." : "");
+  editMessage(on
+    ? "Camera held still. Press and drag the item across the floor."
+    : "Camera free again. You can still drag the item.");
 });
 for (const [id, delta] of [["edit-left", -15], ["edit-right", 15]]) {
   byId(id).addEventListener("click", () => selected && editScene(

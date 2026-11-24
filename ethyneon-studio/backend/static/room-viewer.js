@@ -386,6 +386,10 @@ export class RoomViewer {
       });
       normalized.add(asset);
       for (const child of preview.children.slice()) {
+        // Everything the stand-in drew is replaced by the real model,
+        // except the invisible solid that makes the product grabbable.
+        // Disposing that left a loaded model with nothing to press on.
+        if (child.userData.hitVolume) continue;
         if (child.isMesh || child.isLineSegments) dispose(child);
       }
       preview.add(normalized);

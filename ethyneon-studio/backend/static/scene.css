@@ -2,9 +2,14 @@
 .scene-main .stage { position: static; }
 .scene-main .room-viewport { height: clamp(460px, 72vh, 820px); }
 
+/* The pill is the thing a shopper aims at, so it starts the drag rather
+   than swallowing it. touch-action keeps a touch drag from scrolling the
+   page out from under the gesture. */
 .price-tag {
   pointer-events: auto;
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
   font: inherit;
   font-size: 10px;
   font-weight: 700;
@@ -220,6 +225,13 @@ span.store-checkout { background: #202622; color: #d1dad1; }
 .list-note { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
 
 /* Every box that is not a real model says it is a stand-in, on the tag. */
+.price-tag:active { cursor: grabbing; }
+/* The chips are decoration inside the pill. Letting them be the event
+   target only made the dead zone around the pill bigger. */
+.tag-note { pointer-events: none; }
+.tool-note { flex: 1 0 100%; margin: 2px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.tool-note b { color: #cfd8d0; }
+
 .tag-note {
   margin-left: 2px; padding: 1px 5px; border-radius: 999px;
   background: #2b2f2b; color: #c7d2c6; font-size: 9.5px; letter-spacing: 0.02em;

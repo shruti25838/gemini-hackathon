@@ -599,6 +599,131 @@ class DragSourceTests(unittest.TestCase):
         self.assertNotIn("showScene", paint)
 
 
+class PointerCoordinateTests(unittest.TestCase):
+    """How a mouse position becomes a point in the room.
+
+    A real browser at 125% page zoom was reported as broken. It was not this:
+    driving the page at devicePixelRatio 1.25 failed in exactly the same way
+    as at 1.0, and the conversion below is zoom-correct by construction.
+    These tests are here to keep it that way, because the two tempting wrong
+    answers both look reasonable.
+    """
+
+    def setUp(self):
+        self.viewer = (STATIC / "scene-viewer.js").read_text(encoding="utf-8")
+        self.room_viewer = (STATIC / "room-viewer.js").read_text(encoding="utf-8")
+        self.pointer = self.viewer.split("pointer(event) {")[1].split("\n  }")[0]
+
+    def test_the_conversion_measures_against_the_canvas_rect(self):
+        """clientX and getBoundingClientRect are both CSS pixels, so browser
+        zoom scales both and cancels out. Nothing else has that property."""
+        self.assertIn("getBoundingClientRect()", self.pointer)
+        self.assertIn("event.clientX", self.pointer)
+        self.assertIn("event.clientY", self.pointer)
+
+    def test_the_conversion_never_touches_devicePixelRatio(self):
+        """devicePixelRatio sizes the drawing buffer. Multiplying pointer
+        coordinates by it offsets every hit on a HiDPI screen or at any zoom
+        other than 100%."""
+        self.assertNotIn("devicePixelRatio", self.pointer)
+
+    def test_the_conversion_never_uses_window_or_page_coordinates(self):
+        """pageX and window.innerWidth ignore both the scroll position and
+        where the canvas actually sits, so the hit drifts as the page moves."""
+        for wrong in ("pageX", "pageY", "window.inner", "screenX", "offsetWidth"):
+            self.assertNotIn(wrong, self.pointer, wrong)
+
+    def test_the_drawing_buffer_is_the_only_place_the_ratio_is_used(self):
+        self.assertIn("setPixelRatio(Math.min(window.devicePixelRatio, 2))", self.room_viewer)
+
+    def test_the_rect_is_read_per_event_rather_than_cached(self):
+        """A cached rect goes stale on resize, scroll, or a zoom change."""
+        self.assertIn("const bounds = this.renderer.domElement.getBoundingClientRect();",
+                      self.pointer)
+
+
+class GrabTargetTests(unittest.TestCase):
+    """Pressing a product has to start a drag, whatever it is made of."""
+
+    def setUp(self):
+        self.viewer = (STATIC / "scene-viewer.js").read_text(encoding="utf-8")
+        self.room_viewer = (STATIC / "room-viewer.js").read_text(encoding="utf-8")
+        self.css = (STATIC / "scene.css").read_text(encoding="utf-8")
+        self.markup = (STATIC / "scene.html").read_text(encoding="utf-8")
+
+    def test_every_placed_product_gets_an_invisible_solid(self):
+        """A loaded merchant model is legs and air. Without this, a press
+        lands on the product only sometimes and otherwise orbits the camera."""
+        self.assertIn("export function hitVolume(item)", self.viewer)
+        self.assertIn("group.add(hitVolume(item));", self.viewer)
+
+    def test_the_solid_is_the_size_of_the_product(self):
+        block = self.viewer.split("export function hitVolume(item) {")[1].split("\n}")[0]
+        self.assertIn("const {width, depth, height} = item.size;", block)
+        self.assertIn("new THREE.BoxGeometry(width, height, depth)", block)
+
+    def test_the_solid_is_invisible_and_occludes_nothing(self):
+        block = self.viewer.split("export function hitVolume(item) {")[1].split("\n}")[0]
+        self.assertIn("colorWrite: false", block)
+        self.assertIn("depthWrite: false", block)
+        # visible stays true on purpose: an invisible object is skipped by
+        # some raycaster paths, and then the solid would do nothing at all.
+        self.assertNotIn("visible: false", block)
+
+    def test_the_solid_is_a_mesh_rather_than_lines(self):
+        """LineSegments need a raycaster threshold and are near impossible to
+        hit. The stand-in's own wireframe is exactly that shape."""
+        block = self.viewer.split("export function hitVolume(item) {")[1].split("\n}")[0]
+        self.assertIn("new THREE.Mesh(", block)
+        self.assertNotIn("LineSegments", block)
+
+    def test_loading_a_real_model_does_not_dispose_the_solid(self):
+        block = self.room_viewer.split("for (const child of preview.children.slice()) {")[1] \
+            .split("}")[0]
+        self.assertIn("child.userData.hitVolume", block)
+        self.assertIn("continue", block)
+
+    def test_the_price_pill_starts_the_drag_instead_of_swallowing_it(self):
+        """The pill is a CSS2D element above the canvas with pointer-events
+        auto. It used to eat the press on the most obvious target in the
+        view: no drag, and not even an orbit."""
+        self.assertIn('event.target?.closest?.(".price-tag")', self.viewer)
+        self.assertIn("pill?.dataset?.product", self.viewer)
+
+    def test_the_chips_inside_the_pill_are_not_event_targets(self):
+        self.assertIn(".tag-note { pointer-events: none; }", self.css)
+
+    def test_the_listeners_are_on_the_container_in_the_capture_phase(self):
+        """The canvas cannot see a press on the pill, and OrbitControls on
+        the canvas would otherwise get the event first."""
+        self.assertIn("const surface = this.container;", self.viewer)
+        for event in ("pointerdown", "pointermove", "pointerup"):
+            self.assertIn(f'surface.addEventListener("{event}"', self.viewer)
+        down = self.viewer.split('surface.addEventListener("pointerdown"')[1].split("}, true);")[0]
+        self.assertIn("event.stopPropagation();", down)
+
+    def test_a_drag_is_never_taken_by_the_camera(self):
+        down = self.viewer.split('surface.addEventListener("pointerdown"')[1].split("}, true);")[0]
+        self.assertIn("this.controls.enabled = false;", down)
+        self.assertIn("setPointerCapture", down)
+
+    def test_move_mode_pins_the_camera_and_says_so(self):
+        block = self.viewer.split("setMoveMode(id) {")[1].split("\n  }")[0]
+        self.assertIn("this.controls.enabled = !id;", block)
+        self.assertIn("You can drag any item straight away", self.markup)
+        self.assertIn("holds the camera", self.markup)
+
+    def test_the_hint_under_the_room_says_how_to_move_something(self):
+        self.assertIn("Press and drag an item to move it", self.markup)
+
+    def test_dragging_no_longer_depends_on_arming_move_first(self):
+        """The original rule was `if (this.moveId && pick(event) === this.moveId)`,
+        so a shopper who had not found the Move button could not move
+        anything, and nothing on screen said the button existed for that."""
+        self.assertNotIn("if (this.moveId && this.pick(event) === this.moveId)", self.viewer)
+        self.assertIn("const id = this.productAt(event);", self.viewer)
+
+
 class ServerAndClientAgreeTests(unittest.TestCase):
     """The duplicated door zone is the one place two languages hold the same
     rule, so the numbers are compared rather than trusted."""

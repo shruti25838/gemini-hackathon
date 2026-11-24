@@ -23,6 +23,7 @@ a real person, or anyone's actual room.
 | `16-scene-drop-verdict.png` | After release, the server's verdict: **Tight**, "fits, but barely. Only 0.03 m to spare", with the badge **Tentative: size read from the listing text, not measured** | Real, from the deterministic engine | **Yes.** The tentative badge is the honest part |
 | `17-scene-your-list.png` | Your list: two rows with merchant, price, fit badge, "Preview only, sold by …", and a **Buy at <merchant>** link. "Listed prices total $364.99", and the note that purchases happen on the merchant's own site | Real | **Yes.** Shows there is no cart and no checkout |
 | `18-scene-stand-in-and-unknown.png` | A second product whose listing states no size. **Unknown** with the missing datum named, a wireframe box tagged `stand-in · size guessed`, the panel reading "50 × 50 × 80 cm · not in the listing, this is a fallback" and "3D model unavailable. Gemini rejected the configured credentials" | Real, and a real failure | **Yes.** It is the honesty artifact of this branch |
+| `19-scene-drag-red-midflight.png` | A preview chair held mid-drag over the door swing in Plan view: the product glows **red**, the panel reads "That spot is blocked. Release to have the server check it anyway", the Move note explains what Move is for, and the hint under the room reads "Press and drag an item to move it" | Real, captured with real mouse events | **Yes.** It is the proof that drag works and the clearest picture of the fit rule |
 | `08-studio-browse-mode.png` | Product Studio as it opens: the mode switch with **Browse all Shopify / view only** selected, the attribution line under it, and the masthead reading "Browsing all Shopify". The grid is empty and the 3D pane is waiting | Real page, **nothing searched yet** | **Yes.** It is the clearest picture of the rule: the label is on screen before any result is |
 | `09-studio-browse-search.png` | The same page after pressing "Find gaming chairs". The status line reads "Gemini rejected the configured credentials" | Real, and a real failure | **Yes**, if you want to show the failure honestly. Not if you want a product shot |
 | `10-studio-store-mode.png` | After switching to **Our store / buyable**. The pill moves, the masthead changes to "Our store", the status line changes | Real | **Yes**, as the before-and-after of the switch |
@@ -32,6 +33,11 @@ Shots 11 to 18 were captured on the browse-first Design view, against a
 room typed into the preset form and live Shop MCP results. No Gemini key
 and no Storefront credentials were involved in any of them, which is the
 point: the flow they show does not need either.
+
+Shot 19 was captured by driving a real `page.mouse.down`, a move in steps
+and a `page.mouse.up`, not by setting state. It is the frame that proves
+the drag fix: before it, pressing the price pill did nothing at all and
+pressing near the product orbited the camera instead.
 
 ## Not captured, and why
 
