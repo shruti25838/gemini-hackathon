@@ -7,3 +7,8 @@ Geminitoken
 __pycache__/
 .pytest_cache/
 .cache/
+
+# Written by the Design view preset-room form and by whatever agent is
+# editing the room. It is session state, not source.
+geometricconfig.json
+geometricconfig.tmp
