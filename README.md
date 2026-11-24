@@ -6,8 +6,8 @@ test checkout.
 
 **Status: lane C complete, money path verified live.** State and revisions,
 the fit engine, the catalog layer, cart approval, the live cart write and the
-checkout audit are built and tested. **884 tests pass offline across the two
-suites: 774 here and 110 in the Studio**, plus 17 live checks that are
+checkout audit are built and tested. **920 tests pass offline across the two
+suites: 774 here and 146 in the Studio**, plus 17 live checks that are
 deselected unless you ask for them.
 
 The whole money path has run end to end on the development store: a real cart
@@ -145,7 +145,7 @@ The Studio has its own suite, in its own venv, run from its own folder:
 ```powershell
 cd ethyneon-studio
 .venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pytest                # 110 offline
+.venv\Scripts\python -m pytest                # 146 offline
 ```
 
 The default run is offline and deterministic. Tests marked `network` are
@@ -214,6 +214,15 @@ true` on that surface at the model level, and `CartReview` refuses to be built
 on it at all. The purchasable path is the configured development store through
 the Storefront API and its hosted test checkout.
 
+The Studio's Product Studio has a mode switch beside its command box.
+**Browse all Shopify** searches Shop MCP across every merchant, with the
+`SHOPIFY_SHOPS` filter dropped so "all" means all. Browse results come from other merchants, are for viewing only, and cannot be bought here.
+Every browse card names its merchant and links to their listing, carries
+no add, review or checkout control, and is refused by the scene and
+checkout routes on the server, which ask the development store itself
+rather than trusting the merchant a result claims. **Our store (buyable)**
+is the Storefront API path and is unchanged.
+
 The client allows exactly four read-only tools and blocks all twelve purchase
 and payment tools before a request is even built. The endpoint, transport and
 required headers are undocumented upstream, so the working recipe is written
@@ -271,7 +280,7 @@ its own `.env` and dependencies, and its own pytest suite:
 
 ```powershell
 cd ethyneon-studio
-.venv\Scripts\python -m pytest        # 110 offline
+.venv\Scripts\python -m pytest        # 146 offline
 ```
 
 Its `pytest.ini` exists because both projects ship a top-level package named

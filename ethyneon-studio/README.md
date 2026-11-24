@@ -21,6 +21,7 @@ Set the values in `.env` before starting the service. Process environment values
 | `GEMINI_API_KEY` | Sign in with the hackathon account and create an API key in its Gemini project. [Google AI Studio API keys](https://aistudio.google.com/api-keys) |
 | `AGORA_APP_ID` and `AGORA_APP_CERTIFICATE` | Values from the same certificate-enabled Agora project. Only the App ID and issued room tokens go to the browser. |
 | `SHOPIFY_SHOPS` | Optional comma-separated `myshopify.com` domains. Set it to the development-store domain to restrict discovery to that store. Public Shop catalog reads work without a shopper account. |
+| `SHOPIFY_SHOPS` (browse mode) | The Product Studio's **Browse all Shopify** mode drops this filter on purpose, so browsing reaches every merchant. Browse results come from other merchants, are for viewing only, and cannot be bought here. |
 | `SHOPIFY_STOREFRONT_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` | Development-store domain and public Storefront access token. Set both and **product search reads that store** instead of the public Shop catalog, so every result is something the purchase server can sell. Also used for native product 3D media. |
 
 Open `http://127.0.0.1:8000/docs` for typed requests and the bearer-token field. `GET /healthz` checks that the server is running. `GET /api/providers` reports configuration presence. It does not make provider calls.
