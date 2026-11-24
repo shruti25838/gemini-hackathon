@@ -23,10 +23,28 @@ hand.
 
 ## What it does
 
-Photograph the room. Get an editable 3D version of it. Search real products
-from a connected Shopify store, drop one in, and get a plain-English answer
-about whether it fits, including what it collides with and why. Approve the
-cart, and only then get a checkout link.
+Measure the room, or photograph it. Get an editable 3D version. Browse real
+products across every merchant on Shopify, drop one in as a preview, and get
+a plain-English answer about whether it fits, including what it collides
+with and why. Then buy it on the merchant's own page.
+
+### The product source changed, on purpose
+
+This started as "search one connected development store and buy there". A
+development store with four desks is not furniture shopping, so the demo
+path is now browse-first: every merchant on Shopify, view only, and the
+purchase happens on their site rather than ours.
+
+Nothing was deleted to do it. The cart, the approval record, the Decision 1
+checkout audit and the live cart write are all still in the repository and
+still tested. They are unreachable from the Design view, and a test is what
+keeps them unreachable. A preview item is refused by the checkout review
+before a cart line exists, so it can never reach an approval, the purchase
+server or a link.
+
+The practical gain is that the whole flow now runs with **no Gemini key and
+no Storefront credentials**: the room is typed in from tape measurements,
+browse search needs neither, and the fit verdict is pure geometry.
 
 ```
   photos of a room
@@ -73,8 +91,8 @@ Nothing in this table is a claim we have not run.
 
 | Suite | Environment | Result |
 | --- | --- | --- |
-| Root (`tests/`) | `.venv`, Python 3.10 | **774 pass offline** |
-| Studio (`ethyneon-studio/tests/`) | own `.venv`, Python 3.12 | **146 pass offline** |
+| Root (`tests/`) | `.venv`, Python 3.10 | **787 pass offline** |
+| Studio (`ethyneon-studio/tests/`) | own `.venv`, Python 3.12 | **206 pass offline** |
 | Live checks | needs credentials | 17, deselected by default, skip rather than fail |
 | `scripts/e2e_mock.sh` | the pull request gate | all 6 steps pass |
 

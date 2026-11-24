@@ -6,8 +6,8 @@ test checkout.
 
 **Status: lane C complete, money path verified live.** State and revisions,
 the fit engine, the catalog layer, cart approval, the live cart write and the
-checkout audit are built and tested. **920 tests pass offline across the two
-suites: 774 here and 146 in the Studio**, plus 17 live checks that are
+checkout audit are built and tested. **993 tests pass offline across the two
+suites: 787 here and 206 in the Studio**, plus 17 live checks that are
 deselected unless you ask for them.
 
 The whole money path has run end to end on the development store: a real cart
@@ -132,7 +132,7 @@ on, at <http://127.0.0.1:8000/api/health>.
 
 ```bash
 bash scripts/e2e_mock.sh                      # the gate for every pull request
-.venv/Scripts/python -m pytest -q             # 774 offline tests, no network
+.venv/Scripts/python -m pytest -q             # 787 offline tests, no network
 .venv/Scripts/python -m pytest -m network -q  # 17 live checks, needs keys
 .venv/Scripts/python scripts/secret_scan.py   # run before every commit
 .venv/Scripts/python scripts/check_access.py  # prove access, prints no secrets
@@ -145,7 +145,7 @@ The Studio has its own suite, in its own venv, run from its own folder:
 ```powershell
 cd ethyneon-studio
 .venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pytest                # 146 offline
+.venv\Scripts\python -m pytest                # 206 offline
 ```
 
 The default run is offline and deterministic. Tests marked `network` are
@@ -214,9 +214,20 @@ true` on that surface at the model level, and `CartReview` refuses to be built
 on it at all. The purchasable path is the configured development store through
 the Storefront API and its hosted test checkout.
 
-The Studio's Product Studio has a mode switch beside its command box.
+Shop MCP is now the Design view's product source, not just a discovery
+surface beside it. The demo path is: measure a room, browse every
+merchant, place a product as a **preview**, and buy it on that
+merchant's own page. Browse results come from other merchants, are for
+viewing only, and cannot be bought here.
+
+A preview item is refused by `CheckoutStudio.review` before a cart line
+exists, so it never reaches an approval, the purchase server or a
+checkout link. Lane C's cart, audit and fit engine all stay in the
+repository and are still tested; they are simply not the demo path.
+
+The Product Studio has a mode switch beside its command box.
 **Browse all Shopify** searches Shop MCP across every merchant, with the
-`SHOPIFY_SHOPS` filter dropped so "all" means all. Browse results come from other merchants, are for viewing only, and cannot be bought here.
+`SHOPIFY_SHOPS` filter dropped so "all" means all.
 Every browse card names its merchant and links to their listing, carries
 no add, review or checkout control, and is refused by the scene and
 checkout routes on the server, which ask the development store itself
@@ -280,7 +291,7 @@ its own `.env` and dependencies, and its own pytest suite:
 
 ```powershell
 cd ethyneon-studio
-.venv\Scripts\python -m pytest        # 146 offline
+.venv\Scripts\python -m pytest        # 206 offline
 ```
 
 Its `pytest.ini` exists because both projects ship a top-level package named
@@ -357,7 +368,7 @@ ENABLE_ORDER_LOOKUP=0  # payment never claimed
 Before the demo:
 
 ```bash
-.venv/Scripts/python -m pytest -q                # 774 offline, no network
+.venv/Scripts/python -m pytest -q                # 787 offline, no network
 .venv/Scripts/python scripts/check_access.py     # prints no secrets
 .venv/Scripts/python scripts/live_cart_smoke.py  # must say LIVE_CART_WRITES off
 ```
