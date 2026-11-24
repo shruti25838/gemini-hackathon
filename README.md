@@ -6,8 +6,8 @@ test checkout.
 
 **Status: lane C complete, money path verified live.** State and revisions,
 the fit engine, the catalog layer, cart approval, the live cart write and the
-checkout audit are built and tested. **1055 tests pass offline across the two
-suites: 787 here and 268 in the Studio**, plus 17 live checks that are
+checkout audit are built and tested. **1080 tests pass offline across the two
+suites: 787 here and 293 in the Studio**, plus 17 live checks that are
 deselected unless you ask for them.
 
 The whole money path has run end to end on the development store: a real cart
@@ -145,7 +145,7 @@ The Studio has its own suite, in its own venv, run from its own folder:
 ```powershell
 cd ethyneon-studio
 .venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pytest                # 268 offline
+.venv\Scripts\python -m pytest                # 293 offline
 ```
 
 The default run is offline and deterministic. Tests marked `network` are
@@ -291,7 +291,7 @@ its own `.env` and dependencies, and its own pytest suite:
 
 ```powershell
 cd ethyneon-studio
-.venv\Scripts\python -m pytest        # 268 offline
+.venv\Scripts\python -m pytest        # 293 offline
 ```
 
 Its `pytest.ini` exists because both projects ship a top-level package named

@@ -398,6 +398,31 @@ export class RoomViewer {
     }
   }
 
+  /** Recolour what is already drawn, without rebuilding the room.
+   *
+   * The wheel calls this on every pointer move so the room follows the
+   * thumb. Rebuilding from the scene data would mean a server round trip
+   * and a dropped frame per pixel, and would reset the camera on a room
+   * whose dimensions changed. The authoritative colour still arrives the
+   * normal way when the edit is saved and the scene re-renders.
+   */
+  previewRoomColor(target, hex) {
+    if (!this.room) return;
+    const paint = (node) => {
+      if (node.isMesh && node.material?.color) node.material.color.set(hex);
+    };
+    if (target === "floor") {
+      const floor = this.room.getObjectByName("floor");
+      if (floor) paint(floor);
+      return;
+    }
+    // By wall group, so the door leaf and the window glass keep their own
+    // colours instead of turning into painted wall.
+    for (const id of ["wall_n", "wall_e", "wall_s", "wall_w"]) {
+      this.room.getObjectByName(id)?.traverse(paint);
+    }
+  }
+
   setLabels(visible) {
     this.showLabels = visible;
     this.labels.domElement.hidden = !visible;

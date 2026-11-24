@@ -1,6 +1,7 @@
 import { ProductViewer } from "./viewer.js";
 import { SceneViewer, modelDot, priceLabel, setDot } from "./scene-viewer.js";
-import { FLOOR_COLORS, WALL_COLORS, parseColorCommand } from "./scene-colors.js";
+import { FLOOR_COLORS, WALL_COLORS, colorLabel, parseColorCommand } from "./scene-colors.js";
+import { ColorWheel } from "./scene-wheel.js";
 
 const byId = (id) => document.getElementById(id);
 const POLL_MS = 1500;
@@ -733,6 +734,22 @@ byId("room-form").addEventListener("submit", async (event) => {
 // anything. No model is involved at any point.
 
 let lastColorChange = null;
+let wheel = null;
+// Set while a wheel drag is in flight, so the poll that arrives mid-drag
+// cannot repaint the room back to the saved colour under the thumb.
+let wheelPreview = null;
+
+const wheelTarget = () =>
+  document.querySelector('input[name="wheel-target"]:checked')?.value ?? "walls";
+
+/** Show a colour in the chip, the hex code, the name and the hex field. */
+function showWheelColor(hex, {typing = false} = {}) {
+  byId("wheel-chip").style.backgroundColor = hex;
+  byId("wheel-hex").textContent = hex;
+  const name = colorLabel(hex);
+  byId("wheel-name").textContent = name === hex ? "" : name;
+  if (!typing) byId("hex-input").value = hex;
+}
 
 function colorMessage(text, error = false) {
   const line = byId("color-message");
@@ -743,6 +760,14 @@ function colorMessage(text, error = false) {
 function paintSwatches() {
   const walls = scene?.walls?.[0]?.color;
   const floor = scene?.floor?.color;
+  // Both directions: a swatch, a command or a reload moves the wheel too.
+  if (wheel && !wheelPreview) {
+    const current = wheelTarget() === "floor" ? floor : walls;
+    if (current) {
+      wheel.setHex(current);
+      showWheelColor(current);
+    }
+  }
   for (const button of document.querySelectorAll("#wall-swatches .swatch")) {
     button.setAttribute("aria-pressed", String(button.dataset.hex === walls));
   }
@@ -780,6 +805,7 @@ async function applyColor(target, hex, done) {
   }
   colorMessage("Applying…");
   try {
+    wheelPreview = null;
     const body = await post("/studio/scene/edit", {
       base_etag: etag, action_id: crypto.randomUUID(),
       op: "set_room_color", target, color: hex,
@@ -819,11 +845,60 @@ byId("color-command-form").addEventListener("submit", (event) => {
     return;
   }
   input.value = "";
+  // Both directions: the wheel follows the command, and the target
+  // switch follows it too, so the next drag paints the same surface.
+  const radio = document.querySelector(`input[name="wheel-target"][value="${result.target}"]`);
+  if (radio) radio.checked = true;
+  wheel?.setHex(result.hex);
+  showWheelColor(result.hex);
   applyColor(result.target, result.hex,
     `${result.target === "walls" ? "Walls" : "Floor"} set to ${result.name}.`);
 });
 
 buildSwatches("wall-swatches", WALL_COLORS, "walls");
 buildSwatches("floor-swatches", FLOOR_COLORS, "floor");
+
+// The wheel previews into the live materials while dragging and saves
+// once on release, through the same guarded route as every swatch.
+wheel = new ColorWheel(byId("color-wheel"), {
+  onPreview: (hex) => {
+    wheelPreview = {target: wheelTarget(), hex};
+    showWheelColor(hex);
+    room.previewRoomColor(wheelTarget(), hex);
+  },
+  onCommit: (hex) => {
+    const target = wheelTarget();
+    applyColor(target, hex, `${target === "walls" ? "Walls" : "Floor"} set to ${colorLabel(hex)}.`);
+  },
+});
+showWheelColor(wheel.hex());
+
+for (const input of document.querySelectorAll('input[name="wheel-target"]')) {
+  input.addEventListener("change", () => {
+    const current = wheelTarget() === "floor" ? scene?.floor?.color : scene?.walls?.[0]?.color;
+    if (current) {
+      wheel.setHex(current);
+      showWheelColor(current);
+    }
+    colorMessage(`The wheel now paints the ${wheelTarget()}.`);
+  });
+}
+
+byId("hex-input").addEventListener("input", (event) => {
+  const value = event.target.value.trim().toLowerCase();
+  if (!/^#[0-9a-f]{6}$/.test(value)) return;
+  wheel.setHex(value);
+  showWheelColor(value, {typing: true});
+});
+byId("hex-input").addEventListener("change", (event) => {
+  const value = event.target.value.trim().toLowerCase();
+  if (!/^#[0-9a-f]{6}$/.test(value)) {
+    colorMessage("A hex colour looks like #a8b89a.", true);
+    showWheelColor(wheel.hex());
+    return;
+  }
+  const target = wheelTarget();
+  applyColor(target, value, `${target === "walls" ? "Walls" : "Floor"} set to ${colorLabel(value)}.`);
+});
 
 poll();

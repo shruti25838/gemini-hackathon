@@ -273,7 +273,8 @@ class ColorCommandTests(unittest.TestCase):
         colour on a different row."""
         self.assertEqual(self.parse("floor light grey")[0]["hex"], "#c9c9c4")
         self.assertEqual(self.parse("walls warm grey")[0]["hex"], "#d6cfc4")
-        self.assertEqual(self.parse("walls grey")[0]["hex"], "#d6cfc4")
+        # Plain "grey" is its own neutral, deliberately not the warm one.
+        self.assertEqual(self.parse("walls grey")[0]["hex"], "#a6a6a3")
 
     def test_british_and_american_spellings_both_work(self):
         self.assertEqual(self.parse("floor light gray")[0]["hex"],
@@ -311,6 +312,225 @@ class ColorCommandTests(unittest.TestCase):
 # ==========================================================================
 # The panel, read off the page
 # ==========================================================================
+
+
+REQUIRED_NAMES = ['pink', 'hot pink', 'light pink', 'rose', 'red', 'maroon', 'orange', 'peach', 'yellow', 'mustard', 'lime', 'green', 'mint', 'sage', 'forest', 'olive', 'teal', 'aqua', 'sky blue', 'blue', 'navy', 'indigo', 'purple', 'lavender', 'magenta', 'beige', 'cream', 'tan', 'brown', 'black', 'white', 'grey', 'silver', 'terracotta', 'charcoal']
+
+
+class ColorNameCoverageTests(unittest.TestCase):
+    """Every name in the brief, executed through the real parser.
+
+    "pink" is why this exists: the lookup did not have it, so a shopper
+    asking for a pink wall got told the colour did not exist.
+    """
+
+    def parse(self, *commands):
+        module = (STATIC / "scene-colors.js").as_uri()
+        script = HARNESS % (module, json.dumps(list(commands)))
+        result = subprocess.run([NODE, "--input-type=module", "-e", script],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_every_required_name_is_reachable_by_typing(self):
+        replies = self.parse(*[f"walls {name}" for name in REQUIRED_NAMES])
+        missing = [name for name, reply in zip(REQUIRED_NAMES, replies) if "error" in reply]
+        self.assertEqual(missing, [], f"the parser does not know: {missing}")
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_every_required_name_also_works_on_the_floor(self):
+        replies = self.parse(*[f"floor {name}" for name in REQUIRED_NAMES])
+        for name, reply in zip(REQUIRED_NAMES, replies):
+            with self.subTest(name=name):
+                self.assertEqual(reply.get("target"), "floor", reply)
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_every_name_resolves_to_a_real_hex(self):
+        replies = self.parse(*[f"walls {name}" for name in REQUIRED_NAMES])
+        for name, reply in zip(REQUIRED_NAMES, replies):
+            with self.subTest(name=name):
+                self.assertRegex(reply.get("hex", ""), r"^#[0-9a-f]{6}$")
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_the_two_word_names_are_not_read_as_their_last_word(self):
+        """"hot pink" must not become "pink", and "sky blue" must not become
+        "blue". Longest name first is the whole reason this works."""
+        pairs = [("hot pink", "pink"), ("light pink", "pink"),
+                 ("sky blue", "blue"), ("light grey", "grey"),
+                 ("warm grey", "grey"), ("dark grey", "grey")]
+        replies = self.parse(*[f"walls {long}" for long, _ in pairs],
+                             *[f"walls {short}" for _, short in pairs])
+        half = len(pairs)
+        for index, (long, short) in enumerate(pairs):
+            with self.subTest(pair=(long, short)):
+                self.assertNotEqual(replies[index]["hex"], replies[half + index]["hex"],
+                                    f"{long} resolved the same as {short}")
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_an_unknown_name_still_gets_the_plain_reply(self):
+        """Adding names must not turn the lookup into a guesser."""
+        for reply in self.parse("walls chartreuse", "walls banana", "floor ultraviolet"):
+            self.assertEqual(reply, {"error": "I don't know that color."})
+
+    @unittest.skipIf(NODE is None, "node is not installed")
+    def test_a_swatch_name_resolves_to_that_swatch_exactly(self):
+        """Typing "olive" has to light up the olive swatch, not land a shade
+        beside it."""
+        source = (STATIC / "scene-colors.js").read_text(encoding="utf-8")
+        import re
+        block = source.split("export const COLOR_NAMES")[0]
+        swatches = dict((name.lower(), hex_value)
+                        for name, hex_value in re.findall(r'\["([A-Za-z ]+)", "(#[0-9a-f]{6})"\]', block))
+        names = sorted(swatches)
+        replies = self.parse(*[f"walls {name}" for name in names])
+        for name, reply in zip(names, replies):
+            with self.subTest(name=name):
+                self.assertEqual(reply["hex"], swatches[name])
+
+
+@unittest.skipIf(NODE is None, "node is not installed")
+class HsvRoundTripTests(unittest.TestCase):
+    """The wheel's arithmetic, executed rather than assumed."""
+
+    def evaluate(self, expression):
+        module = (STATIC / "scene-colors.js").as_uri()
+        script = (f'import * as c from "{module}";\n'
+                  f"console.log(JSON.stringify({expression}));")
+        result = subprocess.run([NODE, "--input-type=module", "-e", script],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_a_hex_survives_the_round_trip(self):
+        hexes = ["#a8b89a", "#6f7a3f", "#ffc0cb", "#ff69b4", "#2b3a55",
+                 "#ffffff", "#000000", "#c9a16b", "#1f2220"]
+        out = self.evaluate(
+            "%s.map(h => c.hsvToHex(c.hexToHsv(h)))" % json.dumps(hexes))
+        self.assertEqual(out, hexes)
+
+    def test_a_bad_hex_is_rejected_rather_than_coerced(self):
+        self.assertIsNone(self.evaluate('c.hexToHsv("red")'))
+        self.assertIsNone(self.evaluate('c.hexToHsv("#12345")'))
+        self.assertIsNone(self.evaluate('c.hexToRgb("#gggggg")'))
+
+    def test_hue_wraps_and_values_clamp(self):
+        self.assertEqual(self.evaluate("c.hsvToHex({h: 360, s: 1, v: 1})"),
+                         self.evaluate("c.hsvToHex({h: 0, s: 1, v: 1})"))
+        self.assertEqual(self.evaluate("c.hsvToHex({h: 0, s: 5, v: 5})"), "#ff0000")
+        self.assertEqual(self.evaluate("c.hsvToHex({h: 0, s: -1, v: -1})"), "#000000")
+
+    def test_pink_lands_where_a_person_would_expect(self):
+        hsv = self.evaluate('c.hexToHsv("#ffc0cb")')
+        self.assertGreater(hsv["h"], 330)
+        self.assertLess(hsv["s"], 0.3)
+        self.assertGreater(hsv["v"], 0.9)
+
+
+class ColorWheelSourceTests(unittest.TestCase):
+    """The wheel is canvas and pointer events, and saves the same way."""
+
+    def setUp(self):
+        self.wheel = (STATIC / "scene-wheel.js").read_text(encoding="utf-8")
+        self.js = (STATIC / "scene.js").read_text(encoding="utf-8")
+        self.markup = (STATIC / "scene.html").read_text(encoding="utf-8")
+        self.room_viewer = (STATIC / "room-viewer.js").read_text(encoding="utf-8")
+
+    def test_the_wheel_imports_nothing_external(self):
+        """No library, no CDN. The only import is our own colour arithmetic."""
+        import re
+        imports = re.findall(r'^import .*?from "([^"]+)";', self.wheel, re.M)
+        self.assertEqual(imports, ["./scene-colors.js"], imports)
+        self.assertNotIn("http", self.wheel)
+
+    def test_it_is_drawn_on_a_plain_canvas(self):
+        self.assertIn('<canvas id="color-wheel"', self.markup)
+        self.assertIn('getContext("2d")', self.wheel)
+        self.assertIn("ctx.arc(", self.wheel)
+        self.assertIn("createLinearGradient", self.wheel)
+
+    def test_it_has_a_hue_ring_and_a_shade_square(self):
+        self.assertIn('return "ring"', self.wheel)
+        self.assertIn('return "square"', self.wheel)
+
+    def test_pointer_coordinates_come_from_the_canvas_rect(self):
+        """The same mistake cost a working drag once already."""
+        block = self.wheel.split("const local = (event) => {")[1].split("};")[0]
+        self.assertIn("getBoundingClientRect()", block)
+        self.assertIn("event.clientX", block)
+        self.assertNotIn("devicePixelRatio", block)
+        self.assertNotIn("pageX", block)
+
+    def test_dragging_previews_and_releasing_saves(self):
+        """A write per pixel of a drag would put a revision in the scene file
+        for every pixel."""
+        down = self.wheel.split('canvas.addEventListener("pointerdown"')[1].split("});")[0]
+        self.assertIn("setPointerCapture", down)
+        move = self.wheel.split('canvas.addEventListener("pointermove"')[1].split("});")[0]
+        self.assertIn("this.apply(local(event))", move)
+        self.assertIn("this.onPreview?.(this.hex())", self.wheel)
+        release = self.wheel.split("const release = (event) => {")[1].split("};")[0]
+        self.assertIn("this.onCommit?.(this.hex())", release)
+
+    def test_the_commit_goes_through_the_guarded_edit_route(self):
+        block = self.js.split("wheel = new ColorWheel(")[1].split("});")[0]
+        self.assertIn("applyColor(target, hex", block)
+        apply_block = self.js.split("async function applyColor(target, hex, done) {")[1].split("\n}")[0]
+        self.assertIn('"/studio/scene/edit"', apply_block)
+        self.assertIn('op: "set_room_color"', apply_block)
+        self.assertIn("action_id: crypto.randomUUID()", apply_block)
+        self.assertIn("base_etag: etag", apply_block)
+
+    def test_the_live_preview_never_writes_anything(self):
+        """onPreview touches materials only. If it ever posted, a drag would
+        write a revision per frame."""
+        block = self.js.split("onPreview: (hex) => {")[1].split("},")[0]
+        self.assertIn("room.previewRoomColor", block)
+        self.assertNotIn("post(", block)
+        self.assertNotIn("fetch(", block)
+
+    def test_the_preview_recolours_in_place_without_rebuilding(self):
+        block = self.room_viewer.split("previewRoomColor(target, hex) {")[1].split("\n  }")[0]
+        self.assertIn("getObjectByName", block)
+        self.assertNotIn("this.show(", block)
+        self.assertIn('"wall_n", "wall_e", "wall_s", "wall_w"', block)
+
+    def test_the_undo_still_works_for_a_wheel_change(self):
+        """The wheel commits through applyColor, which is what records the
+        undo, so there is one undo path and not two."""
+        self.assertIn("lastColorChange = body.undo ?? null;", self.js)
+        block = self.js.split("onCommit: (hex) => {")[1].split("},")[0]
+        self.assertIn("applyColor(", block)
+
+    def test_the_current_colour_is_shown_as_a_chip_a_hex_and_a_name(self):
+        self.assertIn('id="wheel-chip"', self.markup)
+        self.assertIn('id="wheel-hex"', self.markup)
+        self.assertIn('id="wheel-name"', self.markup)
+        self.assertIn('id="hex-input"', self.markup)
+
+    def test_there_is_a_walls_floor_target_switch(self):
+        self.assertIn('name="wheel-target" value="walls" checked', self.markup)
+        self.assertIn('name="wheel-target" value="floor"', self.markup)
+
+    def test_the_old_controls_are_all_still_there(self):
+        for fragment in ('id="wall-swatches"', 'id="floor-swatches"',
+                         'type="color" id="custom-color"', 'type="color" id="custom-floor"',
+                         'id="color-command"', 'id="color-undo"'):
+            self.assertIn(fragment, self.markup, fragment)
+
+    def test_the_wheel_and_the_command_stay_in_sync_both_ways(self):
+        self.assertIn("wheel.setHex(current);", self.js)      # file or swatch -> wheel
+        self.assertIn("wheel?.setHex(result.hex);", self.js)  # typed command -> wheel
+        self.assertIn("showWheelColor(value, {typing: true});", self.js)  # hex field -> wheel
+
+    def test_a_poll_mid_drag_cannot_repaint_under_the_thumb(self):
+        self.assertIn("let wheelPreview = null;", self.js)
+        self.assertIn("if (wheel && !wheelPreview) {", self.js)
+
+    def test_a_grey_keeps_the_hue_the_shopper_chose(self):
+        """Otherwise the ring snaps to red every time somebody picks white."""
+        block = self.wheel.split("setHex(hex) {")[1].split("\n  }")[0]
+        self.assertIn("hsv.s === 0", block)
 
 
 class ColorPanelTests(unittest.TestCase):

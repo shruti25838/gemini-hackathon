@@ -131,6 +131,27 @@
             <h3 id="colors-title">Room colors</h3>
             <span class="result-count" id="color-source" hidden></span>
           </div>
+          <div class="color-wheel-row">
+            <canvas id="color-wheel" width="196" height="196"
+                    aria-label="Color wheel: hue around the ring, shade in the square"></canvas>
+            <div class="wheel-side">
+              <div class="wheel-target" role="radiogroup" aria-label="Which surface the wheel paints">
+                <label><input type="radio" name="wheel-target" value="walls" checked> Walls</label>
+                <label><input type="radio" name="wheel-target" value="floor"> Floor</label>
+              </div>
+              <p class="wheel-current">
+                <span class="wheel-chip" id="wheel-chip"></span>
+                <code id="wheel-hex">#a8b89a</code>
+                <span class="wheel-name" id="wheel-name"></span>
+              </p>
+              <label class="hex-field" for="hex-input">Hex
+                <input id="hex-input" maxlength="7" spellcheck="false" autocomplete="off"
+                       placeholder="#a8b89a" aria-label="Hex colour code">
+              </label>
+              <p class="wheel-hint">Drag the ring for hue, the square for shade. The room follows while
+                you drag and saves when you let go.</p>
+            </div>
+          </div>
           <div class="color-row">
             <span class="color-label" id="walls-label">Walls</span>
             <div class="swatches" id="wall-swatches" role="group" aria-labelledby="walls-label"></div>
