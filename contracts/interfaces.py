@@ -166,7 +166,17 @@ class ProposedPlacement(EthyneonModel):
 
     object_id: str
     pose: Pose
-    footprint: Rect2D
+    footprint: Optional[Rect2D] = Field(
+        default=None,
+        description=(
+            "Omit when no footprint is known. check_fit then takes the "
+            "dimensions from the placement's CatalogOffer, and when that offer "
+            "has no documented width and depth either, the result is unknown "
+            "and the missing datum is named in unknown_reasons. A product "
+            "found on Shop MCP often has no dimensions at all, so this is the "
+            "ordinary case and not an error."
+        ),
+    )
     height_m: Optional[Metres] = None
     offer_ref: Optional[str] = None
     replaces_object_id: Optional[str] = None
