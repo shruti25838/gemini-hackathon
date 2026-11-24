@@ -55,6 +55,15 @@ HEX_COLOR = re.compile(r"#[0-9a-fA-F]{6}")
 HEADREST = re.compile(r"\b(?:head\s*rest|neck (?:pillow|cushion|support))\b", re.I)
 HELP = "Search for a Shopify product, pick a card by position, then try a color, rotation, or headrest."
 
+# Anything that starts with one of these is asking for an edit, not for a
+# product, and the model is better at working out which edit. Everything
+# else in browse mode is a product name.
+EDIT_COMMAND = re.compile(
+    r"^(?:rotate|spin|turn|make|paint|colou?r|add|attach|mount|choose|select|pick|open"
+    r"|help|undo|remove|delete|clear|buy|cart|checkout|show me how|what can)\b",
+    re.I,
+)
+
 
 def quick_intent(command: str) -> Intent | None:
     text = " ".join(command.lower().rstrip("!?.").split())
@@ -89,6 +98,24 @@ def quick_intent(command: str) -> Intent | None:
     ):
         return Intent(action="add_headrest", value="")
     return None
+
+
+def bare_search(command: str) -> Intent | None:
+    """In browse mode, a bare product name is a search and needs no model.
+
+    Browsing is the first thing anybody does and it should not depend on a
+    model being reachable. Typing "gaming chair" into a product search box
+    has exactly one plausible meaning, and sending it to Gemini to be told
+    so costs a round trip and, when the key is rejected, the whole feature.
+
+    Ambiguous commands still go to the model: anything starting with an
+    edit verb is not caught here. Our-store mode never calls this, so that
+    path is byte for byte what it was.
+    """
+    text = " ".join(command.split())
+    if not text or EDIT_COMMAND.match(text):
+        return None
+    return Intent(action="search", value=text[:400])
 
 
 def catalog_offer(product: dict[str, Any], variant: dict[str, Any], *, shoppable: bool = True) -> dict[str, Any]:
@@ -142,6 +169,10 @@ class ProductStudio:
         direct = quick_intent(request.command.strip())
         if direct:
             return direct
+        if request.mode == "browse":
+            bare = bare_search(request.command)
+            if bare:
+                return bare
         prompt = (
             "Interpret one user command for a Shopify 3D product studio. Return action and value. "
             "search: product words to look up, with typos corrected. A bare product name is a search. "
