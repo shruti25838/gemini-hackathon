@@ -307,7 +307,7 @@ for (const input of modeInputs) {
     if (lastQuery) run(lastQuery);
     else notify(browsing
       ? "Searching every merchant on Shopify. Results are view only."
-      : "Searching our connected store. These can be placed and bought.");
+      : "Searching the connected store. Anything it does not sell is refused.");
   });
 }
 spin.addEventListener("click", async () => (await viewer)?.setSpin(spin.getAttribute("aria-pressed") !== "true"));

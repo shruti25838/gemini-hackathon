@@ -15,9 +15,28 @@ a real person, or anyone's actual room.
 | `03-studio-room-capture.png` | Room Studio step 1: the CC0 sample selector loaded with 15 sets, "Use live camera", "Play demo video", the feature checklist | Real page, **empty 3D pane** | **Yes**, if captioned as the capture step. It does not show a built room |
 | `04-studio-product.png` | Product Studio: 3D preview pane and the command box | Real page, **no product loaded** | **Yes**, if captioned as the empty state |
 | `06-lane-a-demo-room.png` | Karishma's front end: a 3.2 by 3.0 m preset room in 3D with a door and window, dimension inputs, status pills reading `AI: MOCK (saved outputs)` and `Fixture catalog · not live` | Real render, mocked AI, and it says so on screen | **Yes.** The best single image we have |
+| `08-studio-browse-mode.png` | Product Studio as it opens: the mode switch with **Browse all Shopify / view only** selected, the attribution line under it, and the masthead reading "Browsing all Shopify". The grid is empty and the 3D pane is waiting | Real page, **nothing searched yet** | **Yes.** It is the clearest picture of the rule: the label is on screen before any result is |
+| `09-studio-browse-search.png` | The same page after pressing "Find gaming chairs". The status line reads "Gemini rejected the configured credentials" | Real, and a real failure | **Yes**, if you want to show the failure honestly. Not if you want a product shot |
+| `10-studio-store-mode.png` | After switching to **Our store / buyable**. The pill moves, the masthead changes to "Our store", the status line changes | Real | **Yes**, as the before-and-after of the switch |
 | `07-lane-a-activity-panel.png` | The same demo after setting the door to hinge left, opens in. The swing renders. The activity panel shows the full trail: intake, brief, planner, door motion, then a refusal and a pause | Real | **Yes, with a caveat.** It contains a deliberate `LaneANotWired` refusal. Post it only if you want the "it refuses rather than guesses" angle, which is a good angle |
 
 ## Not captured, and why
+
+- **A populated browse result grid, and a browse product open in 3D.**
+  Both were asked for and neither is possible right now. The command
+  box routes a bare product name through the Gemini intent model
+  before any search runs, and that key still answers `401`, so the
+  grid cannot be filled from the browser in either mode. The 3D pane
+  is blocked twice over: nothing can be selected, and the mesh
+  generator needs Gemini as well. Without it the pane keeps its
+  resting state, the empty grid and "Choose a Shopify result to see
+  it in 3D", which is what `09` shows. The browse path itself was
+  checked live against Shop MCP and does work: see the report and
+  `ethyneon-studio/tests/backend/test_browse_mode.py`.
+- **Other merchants' product photography.** A filled browse grid would
+  carry it. The cards name and link to each merchant, which is the
+  attribution, but it is still their photography and this repository
+  records no licence covering it.
 
 - **Room photos to a built 3D room.** The Gemini key is invalid: the Decisions
   and Neon calls return `401 API key not valid`, so `/studio/room/scan`
