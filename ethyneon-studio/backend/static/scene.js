@@ -20,9 +20,9 @@ const modelState = new Map();  // variant_id -> cached | missing | building | fa
 // product that nobody made.
 const STATE_TEXT = {
   cached: "3D model from the listing",
-  missing: "Stand-in box at listing size",
+  missing: "Stand-in box",
   building: "Building a 3D model…",
-  failed: "Stand-in box at listing size · 3D build failed",
+  failed: "Stand-in box · 3D build failed",
 };
 const STAND_IN = new Set(["missing", "failed"]);
 const FIT_WORDS = {
@@ -211,7 +211,9 @@ function renderCart() {
     name.className = "cart-name";
     name.append(modelDot(stateOf(item)), document.createTextNode(item.label));
     const note = document.createElement("small");
-    note.textContent = STATE_TEXT[stateOf(item)];
+    note.textContent = STATE_TEXT[stateOf(item)]
+      + (STAND_IN.has(stateOf(item)) && (item.dimension_source ?? "unknown") === "unknown"
+         ? " · size guessed, none in the listing" : "");
     const price = document.createElement("b");
     price.textContent = priceLabel(item.price) || "—";
     button.append(name, note, price);
@@ -364,8 +366,16 @@ async function selectProduct(item) {
   if (room.moveId !== item.id) setModes();
   editMessage("");
   const cm = (m) => Math.round(m * 100);
+  // Say where the number came from next to the number. A fallback size
+  // printed as plainly as a measured one is the whole problem this
+  // project exists to fix.
+  const sizeNote = {
+    shopify_selected_size: " · from the listing options",
+    shopify_listing_description: " · read from the listing text",
+    catalog_fixture: "",
+  }[item.dimension_source] ?? " · not in the listing, this is a fallback";
   showFacts(item.label, item.price, [
-    ["Size", `${cm(item.size.width)} × ${cm(item.size.depth)} × ${cm(item.size.height)} cm`],
+    ["Size", `${cm(item.size.width)} × ${cm(item.size.depth)} × ${cm(item.size.height)} cm${sizeNote}`],
   ], item.listing_url, item.variant_id);
   const token = spin.token = Symbol(item.id);
   const record = item.variant_id ? buildModel(item.variant_id) : Promise.reject(new Error("No Shopify variant."));

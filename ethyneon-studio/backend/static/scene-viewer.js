@@ -18,14 +18,18 @@ const PASSAGE_CLEARANCE_M = 0.6;
 
 const DOT_TITLES = {
   cached: "3D model built from the merchant listing",
-  missing: "Stand-in box at the listing size. Not a 3D model of this product",
+  missing: "Stand-in box, not a 3D model of this product",
   building: "Building a 3D model from the merchant listing…",
-  failed: "Stand-in box at the listing size. The 3D build failed",
+  failed: "Stand-in box, not a 3D model of this product. The 3D build failed",
 };
-// Anything but a real model is a box the size the listing claims. Saying
-// so is not optional: a grey box that looks like a desk, unlabelled, is a
-// claim about the product that nobody made.
-export const STAND_IN_STATES = new Set(["missing", "failed"]);
+// Anything but a real model is a box. Whether that box is at a size the
+// listing stated or at a fallback is decided per item in priceTag, because
+// a dot knows the model state and nothing else. Saying which is not
+// optional: an unlabelled grey box is a claim nobody made.
+// "building" is in here too. While the generator is running, what is on
+// screen is still a box, and a box that is briefly unlabelled is a box that
+// got on screen without saying what it was.
+export const STAND_IN_STATES = new Set(["missing", "failed", "building"]);
 
 // Small status dot: green filled = 3D cached, red hollow = no 3D yet, amber pulsing = building.
 export function modelDot(state = "missing") {
@@ -174,8 +178,8 @@ export class SceneViewer extends RoomViewer {
 
   clampToRoom(point, item) {
     const {hw, hd} = halfExtents(item.size, item.pose.rotation.yaw);
-    const width = this.scene?.dimensions.width.value_m ?? Infinity;
-    const depth = this.scene?.dimensions.depth.value_m ?? Infinity;
+    const width = this.roomData?.dimensions.width.value_m ?? Infinity;
+    const depth = this.roomData?.dimensions.depth.value_m ?? Infinity;
     const snap = (value) => Math.round(value / SNAP_M) * SNAP_M;
     return {
       x: Math.min(Math.max(snap(point.x), hw), Math.max(hw, width - hw)),
@@ -187,7 +191,7 @@ export class SceneViewer extends RoomViewer {
   // its answer is the one that counts; this only decides a colour.
   liveConflict(id, position) {
     const entry = this.products.get(id);
-    if (!entry || !this.scene) return false;
+    if (!entry || !this.roomData) return false;
     const {hw, hd} = halfExtents(entry.item.size, entry.item.pose.rotation.yaw);
     const moving = {x: position.x, z: position.z, hw, hd};
 
@@ -198,13 +202,13 @@ export class SceneViewer extends RoomViewer {
         x: other.group.position.x, z: other.group.position.z, hw: bounds.hw, hd: bounds.hd,
       })) return true;
     }
-    for (const item of this.scene.existing_items ?? []) {
+    for (const item of this.roomData.existing_items ?? []) {
       const bounds = halfExtents(item.size, item.pose.rotation.yaw);
       if (boxesOverlap(moving, {
         x: item.pose.position.x, z: item.pose.position.z, hw: bounds.hw, hd: bounds.hd,
       })) return true;
     }
-    for (const zone of openingZones(this.scene)) {
+    for (const zone of openingZones(this.roomData)) {
       if (boxesOverlap(moving, {x: zone.x, z: zone.z, hw: zone.w / 2, hd: zone.d / 2})) return true;
     }
     return false;
@@ -240,7 +244,8 @@ export class SceneViewer extends RoomViewer {
 
   showScene(scene, resolveModel, stateOf = () => "missing") {
     this.stateOf = stateOf;
-    this.scene = scene;
+    // Not this.scene: RoomViewer already uses that for the THREE.Scene.
+    this.roomData = scene;
     this.show({...scene, placed_products: []});
     this.products.clear();
     for (const item of scene.placed_products) {
@@ -273,10 +278,17 @@ export class SceneViewer extends RoomViewer {
     tag.dataset.product = item.id;
     tag.dataset.variant = item.variant_id ?? "";
     tag.append(modelDot(state), document.createTextNode(priceLabel(item.price) || "—"));
+    // Two different things wear a box. One is a product whose listing
+    // stated a size, drawn at that size. The other is a product whose
+    // listing stated nothing, drawn at a fallback the fit engine openly
+    // refuses to trust. Calling both "stand-in at listing size" would be
+    // a measurement nobody published.
+    const sizeKnown = (item.dimension_source ?? "unknown") !== "unknown";
     if (standIn) {
       const note = document.createElement("span");
       note.className = "tag-note";
-      note.textContent = "stand-in";
+      note.textContent = state === "building" ? "stand-in · building 3D"
+        : sizeKnown ? "stand-in" : "stand-in · size guessed";
       tag.append(note);
     }
     if (item.preview) {
@@ -286,12 +298,18 @@ export class SceneViewer extends RoomViewer {
       tag.append(note);
     }
     tag.title = standIn
-      ? `${item.label} · stand-in box at the listing size, not a 3D model of this product`
+      ? `${item.label} · ${sizeKnown
+          ? "stand-in box at the size the listing states"
+          : "stand-in box at a fallback size: this listing states none"}, not a 3D model of this product`
       : item.label;
     const spoken = [
       item.label,
       priceLabel(item.price) || "price unavailable",
-      standIn ? "shown as a stand-in box at the listing size" : null,
+      standIn
+        ? (sizeKnown
+            ? "shown as a stand-in box at the size the listing states"
+            : "shown as a stand-in box at a fallback size, because the listing states none")
+        : null,
       item.preview ? `preview only, sold by ${item.merchant ?? "another merchant"}` : null,
     ].filter(Boolean).join(", ");
     tag.setAttribute("aria-label", spoken);

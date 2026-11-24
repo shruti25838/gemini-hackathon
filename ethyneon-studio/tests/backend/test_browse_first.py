@@ -585,6 +585,14 @@ class DragSourceTests(unittest.TestCase):
         self.assertIn("/studio/scene/edit", self.scene_js)
         self.assertIn("the server's guardrails", self.scene_js)
 
+    def test_the_viewer_never_overwrites_the_three_js_scene(self):
+        """RoomViewer keeps the THREE.Scene on this.scene. Storing the room
+        data there too silently replaced it, and every placement failed with
+        "this.scene.add is not a function". Found by running it, not reading
+        it, which is why this test exists."""
+        self.assertNotIn("this.scene =", self.viewer)
+        self.assertIn("this.roomData = scene;", self.viewer)
+
     def test_the_painting_does_not_rebuild_the_room(self):
         """Rebuilding drops the mesh the pointer is holding."""
         paint = self.viewer.split("paintDrag(id, blocked) {")[1].split("\n  }")[0]
@@ -658,18 +666,39 @@ class StandInLabelTests(unittest.TestCase):
         self.scene_js = (STATIC / "scene.js").read_text(encoding="utf-8")
 
     def test_a_box_is_never_called_a_3d_model_of_the_product(self):
-        self.assertIn("Stand-in box at the listing size", self.viewer)
-        self.assertIn("Stand-in box at listing size", self.scene_js)
-        self.assertIn("Not a 3D model of this product", self.viewer)
+        self.assertIn("stand-in box at the size the listing states", self.viewer)
+        self.assertIn("Stand-in box, not a 3D model of this product", self.viewer)
+        self.assertIn("Stand-in box", self.scene_js)
+        self.assertIn("not a 3D model of this product", self.viewer)
+
+    def test_a_guessed_size_is_never_called_a_listing_size(self):
+        """A box drawn at the 50 by 50 by 80 cm fallback is not a
+        measurement anybody published, and must not read like one."""
+        self.assertIn("stand-in · size guessed", self.viewer)
+        self.assertIn("stand-in box at a fallback size: this listing states none",
+                      self.viewer)
+        self.assertIn("not in the listing, this is a fallback", self.scene_js)
+        self.assertIn("size guessed, none in the listing", self.scene_js)
+
+    def test_the_size_row_says_where_the_number_came_from(self):
+        self.assertIn("read from the listing text", self.scene_js)
+        self.assertIn("from the listing options", self.scene_js)
 
     def test_the_tag_in_the_room_carries_the_word(self):
-        self.assertIn('note.textContent = "stand-in";', self.viewer)
+        self.assertIn('"stand-in" : "stand-in · size guessed"', self.viewer)
+
+    def test_a_box_being_built_is_labelled_too(self):
+        """There was a window, while the generator ran, where the box on
+        screen carried no label at all. A screenshot caught it."""
+        self.assertIn('new Set(["missing", "failed", "building"])', self.viewer)
+        self.assertIn('"stand-in · building 3D"', self.viewer)
 
     def test_a_preview_item_is_labelled_in_the_room_too(self):
         self.assertIn('note.textContent = "preview";', self.viewer)
 
     def test_a_screen_reader_is_told_the_same_thing(self):
-        self.assertIn("shown as a stand-in box at the listing size", self.viewer)
+        self.assertIn("shown as a stand-in box at the size the listing states", self.viewer)
+        self.assertIn("shown as a stand-in box at a fallback size", self.viewer)
         self.assertIn("preview only, sold by", self.viewer)
 
     def test_the_verdict_is_shown_in_words_not_only_a_colour(self):
