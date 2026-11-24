@@ -31,6 +31,11 @@ class SimilarBody(VariantBody):
     limit: int = Field(default=6, ge=1, le=12)
 
 
+class BrowseBody(RequestBody):
+    query: str = Field(min_length=1, max_length=120)
+    limit: int = Field(default=8, ge=1, le=12)
+
+
 @router.get("")
 def scene_page() -> FileResponse:
     return FileResponse(STUDIO_ASSETS / "scene.html")
@@ -70,6 +75,12 @@ def scene_model_file(name: Annotated[str, PathParam(pattern=r"^[0-9]+\.glb$")], 
     if isinstance(model, str):
         return RedirectResponse(model)
     return Response(model, media_type="model/gltf-binary", headers={"Cache-Control": "no-cache"})
+
+
+@router.post("/browse")
+async def scene_browse(body: BrowseBody, request: Request) -> dict[str, Any]:
+    """Search every merchant on Shopify. View only, and never purchasable."""
+    return await request.app.state.scenes.browse(body.query, body.limit)
 
 
 @router.post("/room")

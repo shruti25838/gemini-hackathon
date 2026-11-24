@@ -248,45 +248,50 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(len(set(ids)), 2)
 
 
-class ButtonTests(unittest.TestCase):
-    """Which button sends the approval, read off the page source.
+class NoCheckoutStepTests(unittest.TestCase):
+    """The Design view has no checkout step at all any more.
 
-    `scene.js` has two steps. "Continue to checkout" only re-renders what the
-    review already returned, so its request must stay a plain review. "Open
-    Shopify checkout" is the approval, and it is the one request that carries
-    confirm.
+    This used to pin which of two buttons carried the approval. Browse
+    first removed both: buying happens on the merchant's own page, so the
+    page has no review, no approval and no link. The route and the server
+    rules behind it stay in the repository and are still tested in this
+    file, because lane C was not deleted. They are simply unreachable from
+    this page, and these tests are what keep them unreachable.
     """
 
     def setUp(self):
         self.source = (STUDIO / "backend" / "static" / "scene.js").read_text(encoding="utf-8")
-        self.posts = [
+        self.markup = (STUDIO / "backend" / "static" / "scene.html").read_text(encoding="utf-8")
+
+    def test_the_page_never_calls_the_checkout_route(self):
+        posts = [
             text.strip() for text in self.source.splitlines()
-            if '/studio/scene/checkout' in text and "post(" in text
+            if '/studio/scene/checkout' in text
         ]
+        self.assertEqual(posts, [], posts)
 
-    def test_exactly_two_requests_go_to_the_checkout_route(self):
-        self.assertEqual(len(self.posts), 2, self.posts)
+    def test_the_page_never_sends_an_approval(self):
+        self.assertNotIn("confirm: true", self.source)
+        self.assertNotIn("confirm:true", self.source)
 
-    def test_the_first_button_sends_no_confirm(self):
-        review = [text for text in self.posts if "confirm" not in text]
-        self.assertEqual(len(review), 1, self.posts)
-        self.assertIn("base_etag: etag", review[0])
-
-    def test_the_second_button_sends_confirm_true(self):
-        approve = [text for text in self.posts if "confirm" in text]
-        self.assertEqual(len(approve), 1, self.posts)
-        self.assertIn("confirm: true", approve[0])
-
-    def test_the_confirming_request_is_inside_the_open_checkout_handler(self):
-        """If confirm moved into the first handler, the approval would be
-        recorded before the shopper ever saw the total."""
-        head, _, tail = self.source.partition('open.textContent = "Open Shopify checkout"')
-        self.assertTrue(tail, "the Open Shopify checkout button is gone")
-        self.assertNotIn("confirm: true", head)
-        self.assertIn("confirm: true", tail)
+    def test_no_checkout_or_cart_control_is_on_the_page(self):
+        for fragment in ("Review &amp; checkout", "Open Shopify checkout", 'id="checkout"', 'id="audit"'):
+            self.assertNotIn(fragment, self.markup)
 
     def test_the_page_never_builds_a_cart_url_of_its_own(self):
         self.assertNotIn("/cart/", self.source)
+
+    def test_the_list_says_where_buying_happens(self):
+        self.assertIn("Your list", self.markup)
+        self.assertIn("Purchases happen on each merchant", self.markup)
+        self.assertIn(
+            "Browse results come from other merchants, are for viewing only, "
+            "and cannot be bought here.", self.markup)
+
+    def test_every_row_can_only_lead_to_the_merchant(self):
+        """The one outbound control on a row is the merchant link."""
+        self.assertIn('buy.textContent = `Buy at ', self.source)
+        self.assertIn('buy.rel = "noopener noreferrer"', self.source)
 
 
 # ==========================================================================

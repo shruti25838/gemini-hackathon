@@ -21,9 +21,10 @@ from urllib.parse import parse_qs, urlsplit
 
 import httpx
 
-from backend.connections import SHOPIFY_VARIANT_ID, ShopifyConnection
+from backend.connections import SHOPIFY_VARIANT_ID, VIEW_ONLY_REASON, ShopifyConnection
 from backend.errors import ConnectionError
 from backend.fit_bridge import FitEngineUnavailable, check_placement
+from backend.product_dimensions import listing_dimensions
 from backend.product_models import ProductModelConnection
 from backend.scene_edit import SceneEdit, add_product, apply_edit, placement_problems, replacement_problem
 from backend.schemas import RequestBody
@@ -579,6 +580,41 @@ class SceneStudio:
             if entry["object_type"] == kind and entry["variant_id"] != variant_id
             and (not store or entry.get("merchant") == store)
         ][:limit] if kind else []
+
+    async def browse(self, query: str, limit: int = 8) -> dict[str, Any]:
+        """Search every merchant on Shopify for something to preview here.
+
+        No model call and no 3D build, so this works with no Gemini key and
+        no Storefront credentials. Each result carries the size read out of
+        its own listing and where in the listing it was read, so a
+        placement made from it reaches the fit engine with honest
+        provenance instead of a default box.
+
+        Nothing returned here is purchasable. The cards say so, and the
+        refusal is in checkout.py rather than in which buttons are drawn.
+        """
+        query = " ".join(query.split())[:120]
+        if not query:
+            raise ConnectionError(422, "browse_query_missing", "Type what you are looking for.")
+        document = await self.shopify.browse_catalog({
+            "query": query, "context": CONTEXT, "pagination": {"limit": limit},
+        })
+        results = []
+        for product in document["products"]:
+            variant = product["variants"][0]
+            offer = catalog_offer(product, variant, shoppable=False)
+            measured = listing_dimensions(
+                variant.get("options") or [],
+                ProductModelConnection._description(
+                    variant.get("description") or product.get("description")),
+            )
+            offer["size_m"] = measured.dimensions_m
+            offer["dimension_source"] = measured.source
+            results.append(offer)
+        return {
+            "query": query, "source": "shop_mcp", "shoppable": False,
+            "view_only_reason": VIEW_ONLY_REASON, "results": results[:limit],
+        }
 
     async def similar(self, variant_id: str, query: str, limit: int = 6) -> dict[str, Any]:
         query = " ".join(query.split())[:120]

@@ -14,9 +14,35 @@ let selected = null;
 let previewing = null;
 const records = new Map();
 const modelState = new Map();  // variant_id -> cached | missing | building | failed
-const STATE_TEXT = {cached: "3D cached", missing: "No 3D · click to build", building: "Building 3D…", failed: "3D failed · click to retry"};
+// A product only has a real 3D model when the generator has run. Anything
+// else on screen is a box at the size the listing claims, and every place
+// that shows one says so. An unlabelled grey box is a claim about the
+// product that nobody made.
+const STATE_TEXT = {
+  cached: "3D model from the listing",
+  missing: "Stand-in box at listing size",
+  building: "Building a 3D model…",
+  failed: "Stand-in box at listing size · 3D build failed",
+};
+const STAND_IN = new Set(["missing", "failed"]);
+const FIT_WORDS = {
+  fits: "Fits",
+  tight: "Tight",
+  does_not_fit: "Does not fit",
+  unknown: "Unknown",
+};
+// Shown in words, not as a colour. Somebody reading a screenshot of this
+// has to be able to tell that the size was never measured.
+const TENTATIVE_BADGE = "Tentative: size read from the listing text, not measured";
+let fitVerdicts = {};
 
 const room = new SceneViewer(byId("room-viewer"), (item) => selectProduct(item), {
+  onDragFeedback: (blocked) => {
+    if (blocked === null) return;
+    editMessage(blocked
+      ? "That spot is blocked. Release to have the server check it anyway."
+      : "Clear here. Release to have the server check it.", blocked);
+  },
   onMoved: (id, point) => editScene({op: "move", product_id: id, position: point}, "Moved."),
   onSwap: (from, to) => editScene({op: "swap", product_id: from, other_id: to}, "Swapped the two positions."),
 });
@@ -53,8 +79,9 @@ async function editScene(change, done) {
   try {
     const body = await post("/studio/scene/edit", {base_etag: etag, action_id: crypto.randomUUID(), ...change});
     etag = body.etag;
-    await render(body.scene, {quiet: true});
+    await render(body.scene, {quiet: true, fit: body.fit});
     editMessage(done);
+    showVerdict(change.product_id === "new" ? null : change.product_id);
     toast(`${done} · revision ${body.scene.revision}`);
   } catch (error) {
     const reason = error.message.startsWith("Not possible") ? error.message : `Not placed: ${error.message}`;
@@ -139,6 +166,26 @@ function safeUrl(value, host) {
   }
 }
 
+// The deterministic engine decides, and its sentence is what the shopper
+// reads. No badge at all is shown when no verdict came back, because an
+// absent check must not look like a passed one.
+function showVerdict(productId) {
+  const line = byId("fit-line");
+  const verdict = productId ? fitVerdicts[productId] : null;
+  if (!verdict) {
+    line.hidden = true;
+    return;
+  }
+  line.hidden = false;
+  const badge = byId("fit-badge");
+  badge.textContent = FIT_WORDS[verdict.result] ?? verdict.result;
+  badge.dataset.result = verdict.result;
+  byId("fit-cause").textContent = verdict.cause;
+  const tentative = byId("fit-tentative");
+  tentative.hidden = !verdict.tentative;
+  tentative.textContent = verdict.tentative ? TENTATIVE_BADGE : "";
+}
+
 function toast(text) {
   const element = byId("toast");
   element.textContent = text;
@@ -147,12 +194,16 @@ function toast(text) {
   toast.timer = setTimeout(() => { element.hidden = true; }, 2800);
 }
 
+// Your list. Not a cart: nothing here can be bought in this app, so every
+// row ends at the merchant's own page and there is no control that does
+// anything else with it.
 function renderCart() {
   const list = byId("cart-list");
   list.replaceChildren(...scene.placed_products.map((item) => {
     const li = document.createElement("li");
     li.dataset.cart = item.id;
     li.dataset.variant = item.variant_id ?? "";
+    if (item.preview) li.dataset.preview = "true";
     const button = document.createElement("button");
     button.type = "button";
     button.setAttribute("aria-pressed", String(item.id === selected?.id));
@@ -166,6 +217,34 @@ function renderCart() {
     button.append(name, note, price);
     button.addEventListener("click", () => room.select(item.id));
     li.append(button);
+
+    const verdict = fitVerdicts[item.id];
+    if (verdict) {
+      const fit = document.createElement("span");
+      fit.className = "row-fit";
+      fit.dataset.result = verdict.result;
+      fit.textContent = FIT_WORDS[verdict.result] ?? verdict.result;
+      if (verdict.tentative) fit.textContent += " · tentative";
+      fit.title = verdict.cause;
+      li.append(fit);
+    }
+
+    if (item.preview) {
+      const sold = document.createElement("p");
+      sold.className = "row-preview";
+      sold.textContent = `Preview only, sold by ${item.merchant ?? "another merchant"}`;
+      li.append(sold);
+    }
+    const url = safeUrl(item.listing_url);
+    if (url) {
+      const buy = document.createElement("a");
+      buy.className = "row-buy";
+      buy.href = url.href;
+      buy.target = "_blank";
+      buy.rel = "noopener noreferrer";
+      buy.textContent = `Buy at ${item.merchant ?? url.hostname} \u2197`;
+      li.append(buy);
+    }
     return li;
   }));
   const totals = {};
@@ -174,13 +253,13 @@ function renderCart() {
   }
   byId("subtotal").textContent = Object.entries(totals)
     .map(([currency, amount]) => priceLabel({currency, amount})).join(" + ") || "—";
+  byId("list-count").hidden = !scene.placed_products.length;
+  byId("list-count").textContent = `${scene.placed_products.length} item(s)`;
 }
 
-async function render(next, {quiet = false} = {}) {
-  if (scene && next.revision !== scene.revision) {
-    byId("audit").hidden = true;
-    checkoutLine(null, "");
-  }
+async function render(next, {quiet = false, fit = null} = {}) {
+  fitVerdicts = fit ?? fitVerdicts;
+  byId("room-form").hidden = true;
   await refreshStates(next.placed_products.map((item) => item.variant_id));
   const previous = scene;
   scene = next;
@@ -191,6 +270,7 @@ async function render(next, {quiet = false} = {}) {
   byId("source").lastChild.textContent = ` Live from geometricconfig.json · revision ${scene.revision}`;
   room.showScene(scene, resolveModel, stateOf);
   renderCart();
+  if (selected && !fitVerdicts[selected.id]) showVerdict(null);
   if (previous && !quiet) toast(`Room updated · revision ${scene.revision}`);
   if (selected) {
     const still = scene.placed_products.find((item) => item.id === selected.id);
@@ -211,10 +291,12 @@ async function poll() {
     if (response.status === 200) {
       const body = await response.json();
       etag = body.etag;
-      await render(body.scene);
+      await render(body.scene, {fit: body.fit ?? {}});
     } else if (response.status !== 304 && !scene) {
       const body = await response.json().catch(() => ({}));
-      byId("stage-title").textContent = body.message ?? "Waiting for geometricconfig.json";
+      byId("stage-title").textContent = "No room yet";
+      byId("stage-eyebrow").textContent = body.message ?? "Waiting for geometricconfig.json";
+      byId("room-form").hidden = false;
     }
   } catch {
     // Keep the last scene on screen; the next poll retries.
@@ -360,155 +442,6 @@ function previewSuggestion(offer, card) {
   spin(buildModel(offer.variant_id), spin.token = Symbol(offer.variant_id));
 }
 
-function checkoutLine(state, text) {
-  const line = byId("checkout-line");
-  line.hidden = !state;
-  line.dataset.state = state ?? "";
-  const parts = [];
-  if (state === "working") {
-    const spinner = document.createElement("span");
-    spinner.className = "spinner";
-    parts.push(spinner);
-  }
-  const words = document.createElement("span");
-  words.textContent = text;
-  const model = document.createElement("code");
-  model.textContent = "gemini-decision-1";
-  line.replaceChildren(...parts, words, model);
-}
-
-function listItems(target, rows) {
-  byId(target).replaceChildren(...rows.map((row) => {
-    const li = document.createElement("li");
-    if (row.ok !== undefined) li.dataset.ok = String(row.ok);
-    li.append(...row.parts.map((part) => {
-      const span = document.createElement(part.strong ? "b" : "span");
-      span.textContent = part.text;
-      return span;
-    }));
-    return li;
-  }));
-}
-
-function renderAudit(audit) {
-  byId("audit").hidden = false;
-  const status = byId("audit-status");
-  status.dataset.status = audit.status === "ready" ? "pass" : "needs_more";
-  status.textContent = audit.status === "ready" ? "Ready" : "Needs review";
-  byId("audit-message").textContent = audit.message;
-  listItems("audit-checks", audit.checks.map((check) => ({
-    ok: check.ok, parts: [{text: check.ok ? "✓" : "✗", strong: true}, {text: check.name, strong: true}, {text: check.detail}],
-  })));
-  const decision = audit.decision;
-  const pct = (value) => `${Math.round(value * 100)}%`;
-  byId("audit-decision").replaceChildren(...[
-    ["Cart matches the room", pct(decision.purchase_scope_matches)],
-    ["Requirements resolved", pct(decision.required_constraints_resolved)],
-    ["Fits the brief", pct(decision.fits_brief)],
-    ["Next action", `${decision.next_action.replaceAll("_", " ")} (${pct(decision.next_action_confidence)})`],
-  ].flatMap(([name, value]) => {
-    const dt = document.createElement("dt");
-    const dd = document.createElement("dd");
-    dt.textContent = name;
-    dd.textContent = value;
-    return [dt, dd];
-  }));
-  listItems("audit-lines", audit.lines.map((line) => ({
-    ok: line.verified && line.available,
-    parts: [
-      {text: line.title.slice(0, 70)},
-      {text: line.price_changed ? `${priceLabel(line.price_was)} → ${priceLabel(line.price_now)}` : priceLabel(line.price_now) || "—", strong: true},
-    ],
-  })));
-  // Demo checkout: show what each store's order would be, and stop before placing it.
-  const titles = new Map(audit.lines.map((line) => [line.product_id, line.title]));
-  const stores = byId("audit-stores");
-  stores.replaceChildren();
-  if (audit.status === "ready") {
-    const proceed = document.createElement("button");
-    proceed.type = "button";
-    proceed.className = "primary store-proceed";
-    proceed.textContent = "Continue to checkout";
-    proceed.addEventListener("click", () => {
-      const summary = audit.stores.map((store) => {
-        const block = document.createElement("div");
-        block.className = "store-order";
-        const head = document.createElement("p");
-        const name = document.createElement("b");
-        const amount = document.createElement("span");
-        name.textContent = store.merchant;
-        amount.textContent = priceLabel({amount: store.subtotal_minor, currency: audit.subtotal.currency});
-        head.append(name, amount);
-        const items = document.createElement("ul");
-        items.append(...store.lines.map((id) => Object.assign(document.createElement("li"), {textContent: titles.get(id)?.slice(0, 70) ?? id})));
-        block.append(head, items);
-        return block;
-      });
-      const totals = document.createElement("p");
-      totals.className = "store-total";
-      const label = document.createElement("span");
-      const total = document.createElement("b");
-      label.textContent = "Total before shipping and tax";
-      total.textContent = priceLabel(audit.subtotal);
-      totals.append(label, total);
-      // Shopify checkout cannot run in an iframe, so the cart opens in its own window.
-      // Pressing this is the approval: it is the only request that sends confirm,
-      // and the purchase server mints no link until it arrives. The review above
-      // asked for none, so audit.stores is empty until this call comes back.
-      const open = document.createElement("button");
-      open.type = "button";
-      open.className = "primary store-open";
-      open.textContent = "Open Shopify checkout";
-      open.addEventListener("click", async () => {
-        open.disabled = true;
-        try {
-          const confirmed = await post("/studio/scene/checkout", {base_etag: etag, confirm: true});
-          const store = (confirmed.stores ?? []).find((candidate) => safeUrl(candidate.cart_url));
-          if (!store) {
-            checkoutLine("blocked", confirmed.message || "No checkout link was issued.");
-            return;
-          }
-          const left = Math.max(0, window.screenX + window.outerWidth - 560);
-          const popup = window.open(store.cart_url, `shopify-${store.merchant}`, `popup,width=540,height=820,left=${left},top=${window.screenY + 40}`);
-          if (!popup) location.assign(store.cart_url);
-          checkoutLine("ok", `Shopify checkout opened for ${store.merchant} · enter card details there ·`);
-        } catch (error) {
-          checkoutLine("blocked", error.message);
-          if (error.status === 409) etag = null;
-        } finally {
-          open.disabled = false;
-        }
-      });
-      const opens = [open];
-      const note = document.createElement("p");
-      note.className = "store-note";
-      note.textContent = "Card details go into Shopify's secure checkout window, never this app. For the demo, stop before pressing Pay: no order is placed until you do.";
-      stores.replaceChildren(...summary, totals, ...opens, note);
-      checkoutLine("ok", "Checkout ready ·");
-    });
-    stores.append(proceed);
-  }
-  byId("audit-note").textContent = `${audit.order.note} Audit ${audit.audit_id.slice(0, 8)} · revision ${audit.scene_revision} · ${audit.checked_at}. Any edit needs a fresh review.`;
-}
-
-byId("checkout").addEventListener("click", async () => {
-  if (!scene || !etag) return;
-  const button = byId("checkout");
-  button.disabled = true;
-  byId("audit").hidden = true;
-  checkoutLine("working", "Re-checking Shopify prices and stock, then auditing with");
-  try {
-    const audit = await post("/studio/scene/checkout", {base_etag: etag});
-    checkoutLine(audit.status === "ready" ? "ok" : "blocked", audit.status === "ready" ? "Audit passed ·" : "Audit needs review ·");
-    renderAudit(audit);
-  } catch (error) {
-    checkoutLine("blocked", error.message);
-    if (error.status === 409) etag = null;
-  } finally {
-    button.disabled = false;
-  }
-});
-
 // Shopify link → 3D: the server converts the listing to a cached model; the result can be added to the room.
 let imported = null;
 byId("link-form").addEventListener("submit", async (event) => {
@@ -604,4 +537,175 @@ byId("toggle-labels").addEventListener("click", (event) => {
   event.currentTarget.setAttribute("aria-pressed", String(on));
   room.setLabels(on);
 });
+// ==========================================================================
+// Browse every merchant, and preview one in the room
+// ==========================================================================
+//
+// Nothing found here is purchasable. The card says so, the placed item says
+// so, Your list says so, and checkout.py refuses it. Four places agree
+// because only the last one is a guard; the other three are manners.
+
+let browsing = false;
+
+function previewCard(offer) {
+  const card = document.createElement("div");
+  card.className = "browse-card";
+
+  const open = document.createElement("button");
+  open.type = "button";
+  open.className = "browse-pick";
+  const image = photoThumb(offer.image_url, offer.title);
+  if (image) open.append(image);
+  const title = document.createElement("span");
+  title.className = "browse-title";
+  title.textContent = offer.title;
+  const meta = document.createElement("span");
+  meta.className = "browse-meta";
+  const size = offer.size_m
+    ? `${Math.round(offer.size_m.width * 100)} × ${Math.round(offer.size_m.depth * 100)} cm`
+    : "no size in the listing";
+  meta.textContent = [priceLabel(offer.price), size].filter(Boolean).join(" · ");
+  open.append(title, meta);
+  open.addEventListener("click", () => placePreview(offer, open));
+  card.append(open);
+
+  const sold = document.createElement("p");
+  sold.className = "browse-sold";
+  sold.append("View only, sold by ");
+  const url = safeUrl(offer.listing_url);
+  if (url) {
+    const link = document.createElement("a");
+    link.href = url.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = offer.merchant;
+    sold.append(link);
+  } else {
+    const name = document.createElement("strong");
+    name.textContent = offer.merchant;
+    sold.append(name);
+  }
+  card.append(sold);
+  return card;
+}
+
+// Only Shopify's own CDN, only https, and only at card size. A merchant's
+// product photography is theirs; showing it bigger than a thumbnail is not
+// ours to do.
+function photoThumb(value, alt) {
+  const url = safeUrl(value, "cdn.shopify.com");
+  if (!url) return null;
+  url.searchParams.set("width", "220");
+  const img = document.createElement("img");
+  img.src = url.href;
+  img.alt = alt ? `${alt}, merchant photo` : "";
+  img.loading = "lazy";
+  img.width = 110;
+  return img;
+}
+
+function browseMessage(text, error = false) {
+  const line = byId("browse-message");
+  line.textContent = text;
+  line.dataset.error = String(error);
+}
+
+byId("browse-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const query = byId("browse-input").value.trim();
+  if (!query || browsing) return;
+  browsing = true;
+  byId("browse-go").disabled = true;
+  browseMessage("Searching every merchant on Shopify…");
+  try {
+    const body = await post("/studio/scene/browse", {query, limit: 8});
+    byId("browse-results").replaceChildren(...body.results.map(previewCard));
+    byId("browse-count").hidden = !body.results.length;
+    byId("browse-count").textContent = `${body.results.length} found`;
+    browseMessage(body.results.length
+      ? `${body.results.length} result(s) for “${body.query}”. Pick one to preview it in the room.`
+      : `Nothing found for “${body.query}”.`);
+  } catch (error) {
+    browseMessage(error.message, true);
+  } finally {
+    browsing = false;
+    byId("browse-go").disabled = false;
+  }
+});
+
+async function placePreview(offer, button) {
+  if (!scene || !etag) {
+    browseMessage("Create the room first, then pick a product.", true);
+    return;
+  }
+  button.disabled = true;
+  try {
+    await editScene({
+      op: "add",
+      product_id: "new",
+      new_product: {
+        variant_id: offer.variant_id,
+        title: offer.title,
+        price: offer.price ?? null,
+        listing_url: offer.listing_url ?? null,
+        // The three fields that make this a preview rather than a purchase.
+        // The server does not take the client's word for any of it: it looks
+        // the variant up on Shopify before anything is written.
+        preview: true,
+        merchant: offer.merchant ?? null,
+        dimension_source: offer.dimension_source ?? "unknown",
+        size: offer.size_m
+          ? {width: offer.size_m.width, depth: offer.size_m.depth, height: offer.size_m.height}
+          : null,
+      },
+    }, `Previewing ${offer.title.slice(0, 48)} in the room.`);
+    const placed = scene.placed_products.find((item) => item.variant_id === offer.variant_id);
+    if (placed) {
+      room.select(placed.id);
+      showVerdict(placed.id);
+    }
+  } finally {
+    button.disabled = false;
+  }
+}
+
+// ==========================================================================
+// A room measured with a tape, for when no model is answering
+// ==========================================================================
+
+byId("room-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const message = byId("room-message");
+  const number = (id) => Number(byId(id).value);
+  byId("room-go").disabled = true;
+  message.dataset.error = "false";
+  message.textContent = "Writing the room…";
+  try {
+    const body = await post("/studio/scene/room", {
+      width_m: number("room-width"),
+      depth_m: number("room-depth"),
+      height_m: number("room-height"),
+      door_wall: byId("door-wall").value,
+      door_offset_m: number("door-offset"),
+      door_width_m: number("door-width"),
+      door_hinge: byId("door-hinge").value,
+      door_swing: byId("door-swing").value,
+      replace: byId("room-form").dataset.replace === "true",
+    });
+    etag = body.etag;
+    await render(body.scene, {quiet: true, fit: body.fit ?? {}});
+    message.textContent = "";
+    toast("Room created. Now find a product.");
+  } catch (error) {
+    message.dataset.error = "true";
+    message.textContent = error.message;
+    if (error.status === 409) {
+      byId("room-form").dataset.replace = "true";
+      byId("room-go").textContent = "Replace the room anyway";
+    }
+  } finally {
+    byId("room-go").disabled = false;
+  }
+});
+
 poll();
