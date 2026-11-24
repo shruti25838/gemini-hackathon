@@ -15,6 +15,9 @@ const CLICK_THRESHOLD_M = 0.03;
 const SNAP_M = 0.05;
 // Mirrors PASSAGE_CLEARANCE_M in backend/scene_edit.py.
 const PASSAGE_CLEARANCE_M = 0.6;
+// The layer the invisible grab volumes live on: rendered by nothing,
+// tested by the raycaster.
+const HIT_LAYER = 1;
 
 const DOT_TITLES = {
   cached: "3D model built from the merchant listing",
@@ -105,8 +108,11 @@ export function hitVolume(item) {
     new THREE.MeshBasicMaterial({colorWrite: false, depthWrite: false}),
   );
   mesh.name = "hit-volume";
-  mesh.renderOrder = -1;
   mesh.userData.hitVolume = true;
+  // The camera renders layer 0 and the raycaster is told to test layer 1 as
+  // well, so this is never drawn while still being found by a press. That is
+  // belt and braces over colorWrite: false, which should already be enough.
+  mesh.layers.set(HIT_LAYER);
   return mesh;
 }
 
@@ -135,6 +141,7 @@ export class SceneViewer extends RoomViewer {
     this.products = new Map();
     this.selectedId = null;
     this.raycaster = new THREE.Raycaster();
+    this.raycaster.layers.enable(HIT_LAYER);
     // Listeners go on the container, in the capture phase, and not on the
     // canvas. Three reasons, each of which was a bug found by driving the
     // page rather than reading it:

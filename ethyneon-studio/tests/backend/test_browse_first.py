@@ -669,6 +669,12 @@ class GrabTargetTests(unittest.TestCase):
         # visible stays true on purpose: an invisible object is skipped by
         # some raycaster paths, and then the solid would do nothing at all.
         self.assertNotIn("visible: false", block)
+        # Belt and braces: as well as writing no colour, the volume lives on
+        # a layer the camera does not render, so it cannot appear in a shot
+        # whatever a future renderer does with colorWrite.
+        self.assertIn("mesh.layers.set(HIT_LAYER)", block)
+        self.assertIn("const HIT_LAYER = 1;", self.viewer)
+        self.assertIn("this.raycaster.layers.enable(HIT_LAYER);", self.viewer)
 
     def test_the_solid_is_a_mesh_rather_than_lines(self):
         """LineSegments need a raycaster threshold and are near impossible to

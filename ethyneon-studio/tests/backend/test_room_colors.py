@@ -244,6 +244,62 @@ console.log(JSON.stringify(cases.map((text) => parseColorCommand(text))));
 """
 
 
+class SceneFileEncodingTests(unittest.TestCase):
+    """A product title with a character cp1252 cannot hold.
+
+    Found by building the hero room: a side table called
+    "Solid Walnut Side Table for Living Room - 24 x 12" with an en dash in
+    it was written through write_text with no encoding, so on Windows it
+    went out as mojibake and the next read died with a UnicodeDecodeError
+    that surfaced as "geometricconfig.json is not a valid room". Every
+    write of the scene file now names its encoding.
+    """
+
+    EN_DASH_TITLE = "Solid Walnut Side Table \u2013 24 x 12"
+
+    def scenes(self):
+        folder = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        scenes = SceneStudio(None, None, path=folder / "geometricconfig.json",
+                             cache_dir=folder / "cache")
+        scenes.write_preset_room(PresetRoom(width_m=4.0, depth_m=3.2))
+        config = json.loads(scenes.path.read_text(encoding="utf-8"))
+        config["placed_products"] = [{
+            "id": "p1", "label": self.EN_DASH_TITLE,
+            "variant_id": "gid://shopify/ProductVariant/1",
+            "size": {"width": 0.6, "depth": 0.3, "height": 0.65},
+            "pose": {"position": {"x": 1.2, "y": 0, "z": 1.0}},
+        }]
+        scenes.path.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
+        scenes._last_good = None
+        return scenes
+
+    def test_a_commit_keeps_a_non_ascii_title_readable(self):
+        scenes = self.scenes()
+        body = run(scenes.edit(SceneEdit(
+            base_etag=scenes.read()[0], action_id=action("e"),
+            op="rotate", product_id="p1", yaw=15.0)))
+        self.assertEqual(body["scene"]["placed_products"][0]["label"], self.EN_DASH_TITLE)
+        again = json.loads(scenes.path.read_text(encoding="utf-8"))
+        self.assertEqual(again["placed_products"][0]["label"], self.EN_DASH_TITLE)
+
+    def test_a_colour_edit_does_not_corrupt_a_non_ascii_room(self):
+        scenes = self.scenes()
+        run(scenes.edit(SceneEdit(
+            base_etag=scenes.read()[0], action_id=action("f"),
+            op="set_room_color", target="walls", color="#a8b89a")))
+        scenes._last_good = None
+        self.assertEqual(scenes.read()[1]["scene"]["placed_products"][0]["label"],
+                         self.EN_DASH_TITLE)
+
+    def test_every_scene_write_names_its_encoding(self):
+        """read_bytes plus ensure_ascii=False only round-trips if it does."""
+        source = (STUDIO_ROOT / "backend" / "scene.py").read_text(encoding="utf-8")
+        for block in source.split("write_text(")[1:]:
+            head = block[:200]
+            if "json.dumps(config" in head:
+                self.assertIn('encoding="utf-8"', head, head[:120])
+
+
 @unittest.skipIf(NODE is None, "node is not installed; the parser cannot be executed")
 class ColorCommandTests(unittest.TestCase):
     """scene-colors.js imports nothing and touches no DOM, so node can run it."""

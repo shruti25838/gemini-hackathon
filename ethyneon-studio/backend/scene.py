@@ -438,7 +438,14 @@ class SceneStudio:
         config["revision"] = int(config.get("revision") or 0) + 1
         config["last_edit"] = {**last_edit, "source": "design_view"}
         temporary = self.path.with_suffix(".tmp")
-        temporary.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n")
+        # encoding, explicitly. ensure_ascii=False means a product title with an
+        # en dash goes out as real UTF-8, and the Windows default is cp1252,
+        # which cannot hold it: the file was written as mojibake and the next
+        # read died with a UnicodeDecodeError that looked like a corrupt room.
+        temporary.write_text(
+            json.dumps(config, indent=2, ensure_ascii=False) + chr(10),
+            encoding="utf-8",
+        )
         temporary.replace(self.path)
         self._last_good = None
         return self.read()[1]
