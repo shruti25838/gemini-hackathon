@@ -27,11 +27,24 @@ class Point(RequestBody):
     z: float = Field(ge=-100, le=100, allow_inf_nan=False)
 
 
+# What a size written on the item came from. Both Shopify values map to the
+# contract's listing_text_inferred, which caps any fit result at tentative.
+DimensionSource = Literal[
+    "shopify_selected_size", "shopify_listing_description", "catalog_fixture", "unknown",
+]
+
+
 class Replacement(RequestBody):
     variant_id: str = Field(pattern=SHOPIFY_VARIANT_ID)
     title: str = Field(min_length=1, max_length=300)
     price: dict[str, Any] | None = None
     listing_url: str | None = Field(default=None, max_length=2000)
+    # A preview item is somebody else's product, in the room to be looked
+    # at. It can never reach a cart, an approval or a checkout link, and
+    # the refusal is in checkout.py, not in whether the button is drawn.
+    preview: bool = False
+    merchant: str | None = Field(default=None, max_length=255)
+    dimension_source: DimensionSource | None = None
 
 
 class NewProduct(Replacement):
@@ -147,6 +160,8 @@ def add_product(config: dict[str, Any], edit: SceneEdit, size: dict[str, float],
     new = edit.new_product
     item = {"id": edit.product_id if edit.product_id != "new" else f"product_{uuid4().hex[:12]}",
             "label": new.title[:120], "variant_id": new.variant_id, "price": new.price, "listing_url": new.listing_url,
+            "preview": bool(new.preview), "merchant": new.merchant,
+            "dimension_source": new.dimension_source or "unknown",
             "size": size, "pose": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"yaw": 0, "pitch": 0, "roll": 0}}}
     config.setdefault("placed_products", []).append(item)
     scene = scene_of(config)
@@ -193,7 +208,9 @@ def apply_edit(config: dict[str, Any], edit: SceneEdit, replacement_size: dict[s
     if edit.op == "replace":
         new = edit.replacement
         item.update({"variant_id": new.variant_id, "label": new.title[:120], "price": new.price,
-                     "listing_url": new.listing_url})
+                     "listing_url": new.listing_url, "preview": bool(new.preview),
+                     "merchant": new.merchant,
+                     "dimension_source": new.dimension_source or "unknown"})
         item.pop("model", None)
         if replacement_size:
             item["size"] = replacement_size

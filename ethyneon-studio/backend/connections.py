@@ -28,8 +28,14 @@ VIEW_ONLY_REASON = (
     "and cannot be bought here."
 )
 NO_SHOPPABLE_STORE_REASON = (
-    "No development store is connected, so nothing can be placed in a room "
-    "or bought here."
+    "No development store is connected, so nothing can be bought here."
+)
+NOT_ON_SHOPIFY_REASON = (
+    "That product could not be found on Shopify, so it cannot be placed."
+)
+PREVIEW_NOT_PURCHASABLE_REASON = (
+    "Preview items are sold by other merchants. Buy them on the merchant's "
+    "own page. They cannot enter a cart or a checkout here."
 )
 
 
@@ -176,6 +182,27 @@ class ShopifyConnection:
         variant or a refusal, never a silent pass.
         """
         raise ConnectionError(409, "no_shoppable_store", NO_SHOPPABLE_STORE_REASON)
+
+    async def require_placeable(
+        self, variant_id: str, context: dict[str, str], *, preview: bool = False,
+    ) -> dict[str, Any]:
+        """Can this variant go into the room, and on what terms?
+
+        A preview item is going in to be looked at, not bought, so the only
+        question is whether it is a real Shopify variant. A buyable item
+        has to clear the full shoppable check. Two different questions, one
+        door, so no caller can place something by asking the easier one
+        without saying preview out loud.
+        """
+        if not preview:
+            return await self.require_shoppable(variant_id, context)
+        try:
+            return await self.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            if error.status == 404:
+                raise ConnectionError(
+                    422, "variant_not_found", NOT_ON_SHOPIFY_REASON) from error
+            raise
 
     async def _call(self, name: ShopTool, catalog: dict[str, Any]) -> dict[str, Any]:
         if self.shops:

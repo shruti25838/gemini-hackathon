@@ -28,6 +28,7 @@ from typing import Any
 import httpx
 
 from backend.connections import (
+    NOT_ON_SHOPIFY_REASON,
     NO_SHOPPABLE_STORE_REASON,
     VIEW_ONLY_REASON,
     ShopifyConnection,
@@ -374,6 +375,26 @@ class CatalogConnection:
         except ConnectionError as error:
             if error.status == 404:
                 raise ConnectionError(422, "variant_view_only", VIEW_ONLY_REASON) from error
+            raise
+
+    async def require_placeable(
+        self, variant_id: str, context: dict[str, str], *, preview: bool = False,
+    ) -> dict[str, Any]:
+        """Preview needs a real Shopify variant. Buyable needs our store.
+
+        This is what lets the whole browse flow run with no Storefront
+        credentials at all: a preview placement asks Shop MCP, which needs
+        none. Asking for a buyable placement without a store still fails,
+        and fails loudly.
+        """
+        if not preview:
+            return await self.require_shoppable(variant_id, context)
+        try:
+            return await self.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            if error.status == 404:
+                raise ConnectionError(
+                    422, "variant_not_found", NOT_ON_SHOPIFY_REASON) from error
             raise
 
     async def get_product(self, catalog: dict[str, Any]) -> dict[str, Any]:

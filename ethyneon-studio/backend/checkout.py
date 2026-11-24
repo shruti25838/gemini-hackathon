@@ -21,7 +21,12 @@ from uuid import uuid4
 
 from pydantic import Field
 
-from backend.connections import VIEW_ONLY_REASON, GeminiConnection, ShopifyConnection
+from backend.connections import (
+    PREVIEW_NOT_PURCHASABLE_REASON,
+    VIEW_ONLY_REASON,
+    GeminiConnection,
+    ShopifyConnection,
+)
 from backend.ethyneon_client import (
     EthyneonClient,
     PurchaseServerUnavailable,
@@ -237,6 +242,19 @@ class CheckoutStudio:
                     if item.get("variant_id") and (request.product_ids is None or item["id"] in request.product_ids)]
         if not products:
             raise ConnectionError(422, "cart_empty", "Place at least one Shopify product in the room first.")
+
+        # Refused before a single line is built, so no preview item is ever
+        # priced, approved, sent to the purchase server, or counted towards
+        # a checkout link. The names are given so the shopper knows which
+        # ones to remove.
+        previews = [item["label"] for item in products if item.get("preview")]
+        if previews:
+            raise ConnectionError(
+                422, "preview_not_purchasable",
+                f"{PREVIEW_NOT_PURCHASABLE_REASON} Preview items in this room: "
+                f"{', '.join(previews)}.",
+                details={"preview_items": previews},
+            )
         lines = await asyncio.gather(*(self._verify(item) for item in products))
 
         sold_here = await asyncio.gather(*(self._sold_here(line["variant_id"]) for line in lines))

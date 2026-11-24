@@ -150,6 +150,11 @@ def scene_room(config: dict[str, Any]) -> dict[str, Any]:
             "variant_id": variant if isinstance(variant, str) and re.fullmatch(SHOPIFY_VARIANT_ID, variant) else None,
             "price": item.get("price") if isinstance(item.get("price"), dict) else None,
             "listing_url": item.get("listing_url"),
+            # Carried so the viewer can label the item and Your list can
+            # link to whoever actually sells it.
+            "preview": bool(item.get("preview")),
+            "merchant": item.get("merchant"),
+            "dimension_source": item.get("dimension_source") or "unknown",
             "size": _size(item.get("size"), "other", height),
             "pose": _pose(item.get("pose")),
             "model": item.get("model") if isinstance(item.get("model"), dict) else None,
@@ -280,13 +285,15 @@ class SceneStudio:
             raw = self.path.read_bytes()
             if hashlib.sha1(raw).hexdigest()[:16] != request.base_etag:
                 raise ConnectionError(409, "scene_changed", "The room changed since you started this edit. It has been reloaded.")
-            # Putting a product in the room is the first step of buying it, so
-            # a variant the connected store does not sell never gets in. The
-            # browse cards carry no add control, but a hidden button is not a
-            # guard: this route takes a variant ID from anybody who posts one.
+            # Anything entering the room is checked against Shopify first.
+            # A preview item needs only to be a real variant; a buyable one
+            # has to be on the connected store. This route takes a variant ID
+            # from anybody who posts one, so the question is asked here and
+            # not left to whether the UI drew a button.
             incoming = request.new_product or request.replacement
             if incoming is not None:
-                await self.shopify.require_shoppable(incoming.variant_id, CONTEXT)
+                await self.shopify.require_placeable(
+                    incoming.variant_id, CONTEXT, preview=incoming.preview)
             config = json.loads(raw)
             size = None
             if request.op == "replace":
