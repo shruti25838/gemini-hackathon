@@ -15,10 +15,23 @@ a real person, or anyone's actual room.
 | `03-studio-room-capture.png` | Room Studio step 1: the CC0 sample selector loaded with 15 sets, "Use live camera", "Play demo video", the feature checklist | Real page, **empty 3D pane** | **Yes**, if captioned as the capture step. It does not show a built room |
 | `04-studio-product.png` | Product Studio: 3D preview pane and the command box | Real page, **no product loaded** | **Yes**, if captioned as the empty state |
 | `06-lane-a-demo-room.png` | Karishma's front end: a 3.2 by 3.0 m preset room in 3D with a door and window, dimension inputs, status pills reading `AI: MOCK (saved outputs)` and `Fixture catalog · not live` | Real render, mocked AI, and it says so on screen | **Yes.** The best single image we have |
+| `11-scene-room-form.png` | The Design view with no room yet: the measure-your-room form, and the note that a photo-built room needs the Gemini key while these numbers need nothing | Real page, empty room | **Yes.** It is the clearest single picture of what changed |
+| `12-scene-browse-grid.png` | Eight real products from six merchants for "gaming chair", each card captioned **View only, sold by <merchant>** with a link to that merchant, under the attribution line | Real, live Shop MCP | **Yes, with one caveat.** The cards carry other merchants' product photography at card size. The cards name and link to each merchant, which is the attribution, but it is still their work |
+| `13-scene-preview-placed.png` | A browse product placed in the room as a preview, tagged `$279.00 preview` | Real | **Yes** |
+| `14-scene-drag-blocked.png` | The same chair dragged into the door swing: the product glows **red**, and the panel reads "That spot is blocked. Release to have the server check it anyway" | Real | **Yes.** The best picture of the fit idea |
+| `15-scene-drag-clear.png` | Dragged back into open floor: **green**, "Clear here. Release to have the server check it" | Real | **Yes**, as the pair to 14 |
+| `16-scene-drop-verdict.png` | After release, the server's verdict: **Tight**, "fits, but barely. Only 0.03 m to spare", with the badge **Tentative: size read from the listing text, not measured** | Real, from the deterministic engine | **Yes.** The tentative badge is the honest part |
+| `17-scene-your-list.png` | Your list: two rows with merchant, price, fit badge, "Preview only, sold by …", and a **Buy at <merchant>** link. "Listed prices total $364.99", and the note that purchases happen on the merchant's own site | Real | **Yes.** Shows there is no cart and no checkout |
+| `18-scene-stand-in-and-unknown.png` | A second product whose listing states no size. **Unknown** with the missing datum named, a wireframe box tagged `stand-in · size guessed`, the panel reading "50 × 50 × 80 cm · not in the listing, this is a fallback" and "3D model unavailable. Gemini rejected the configured credentials" | Real, and a real failure | **Yes.** It is the honesty artifact of this branch |
 | `08-studio-browse-mode.png` | Product Studio as it opens: the mode switch with **Browse all Shopify / view only** selected, the attribution line under it, and the masthead reading "Browsing all Shopify". The grid is empty and the 3D pane is waiting | Real page, **nothing searched yet** | **Yes.** It is the clearest picture of the rule: the label is on screen before any result is |
 | `09-studio-browse-search.png` | The same page after pressing "Find gaming chairs". The status line reads "Gemini rejected the configured credentials" | Real, and a real failure | **Yes**, if you want to show the failure honestly. Not if you want a product shot |
 | `10-studio-store-mode.png` | After switching to **Our store / buyable**. The pill moves, the masthead changes to "Our store", the status line changes | Real | **Yes**, as the before-and-after of the switch |
 | `07-lane-a-activity-panel.png` | The same demo after setting the door to hinge left, opens in. The swing renders. The activity panel shows the full trail: intake, brief, planner, door motion, then a refusal and a pause | Real | **Yes, with a caveat.** It contains a deliberate `LaneANotWired` refusal. Post it only if you want the "it refuses rather than guesses" angle, which is a good angle |
+
+Shots 11 to 18 were captured on the browse-first Design view, against a
+room typed into the preset form and live Shop MCP results. No Gemini key
+and no Storefront credentials were involved in any of them, which is the
+point: the flow they show does not need either.
 
 ## Not captured, and why
 
@@ -33,10 +46,14 @@ a real person, or anyone's actual room.
   it in 3D", which is what `09` shows. The browse path itself was
   checked live against Shop MCP and does work: see the report and
   `ethyneon-studio/tests/backend/test_browse_mode.py`.
-- **Other merchants' product photography.** A filled browse grid would
-  carry it. The cards name and link to each merchant, which is the
-  attribution, but it is still their photography and this repository
-  records no licence covering it.
+- **Any merchant photo larger than a card thumbnail.** The browse cards
+  cap images at 110 px and request them from Shopify's CDN at 220 px
+  wide. Nothing here enlarges one, and no screenshot shows one bigger.
+  The cards name and link to each merchant, which is the attribution,
+  but the photography is still theirs and this repository records no
+  licence covering it.
+- **A photo-built room.** Still blocked by the same invalid Gemini key.
+  The preset form is the way round it and is what shots 11 to 18 use.
 
 - **Room photos to a built 3D room.** The Gemini key is invalid: the Decisions
   and Neon calls return `401 API key not valid`, so `/studio/room/scan`
