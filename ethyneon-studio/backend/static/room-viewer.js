@@ -51,9 +51,47 @@ const CEILING_COLOR = 0xf2efe7;
 const SKY_SET_BACK_M = 0.02;
 const SKY_MARGIN_M = 0.25;
 const SKY_HEADROOM_M = 0.18;
-// The patch of light on the floor inside a window, and how warm it is.
-const SUN_PATCH_DEPTH_M = 1.35;
-const SUN_PATCH_SPREAD_M = 0.5;
+// Heights of the flat things that lie on the floor. Each needs its own or
+// they fight for the same pixels. Grid and outline were already here.
+const Y_GRID = 0.002;
+const Y_OUTLINE = 0.004;
+const Y_CONTACT = 0.013;
+
+// Joinery: a baseboard along the walls, a sill under each window and an
+// architrave around it. Real geometry a few centimetres proud of the wall,
+// because a flat wall meeting a flat floor at a hard line is the single
+// strongest reason a render reads as a drawing rather than a room.
+const JOINERY_COLOR = 0xf6f3ec;
+const BASEBOARD_HEIGHT_M = 0.095;
+const BASEBOARD_PROUD_M = 0.018;
+const SILL_DEPTH_M = 0.055;
+const SILL_THICKNESS_M = 0.032;
+const ARCHITRAVE_WIDTH_M = 0.055;
+const ARCHITRAVE_PROUD_M = 0.028;
+
+// Fake ambient occlusion: soft dark gradients hugging the corners and the
+// wall-to-ceiling junction, and a blob under every item.
+//
+// Not a post-process. three.js ships an SSAO pass and it would have been
+// the fashionable answer, but it puts a second render path under every
+// view including the two people measure in, and it halos. These are flat
+// quads with an alpha ramp: deterministic, cheap, and if one looks wrong it
+// looks wrong in exactly one place.
+const SHADE_COLOR = 0x23261f;
+const SHADE_CEILING_BAND_M = 0.55;
+const SHADE_CORNER_M = 0.42;
+const SHADE_JUNCTION_ALPHA = 0.24;
+const SHADE_CORNER_ALPHA = 0.16;
+const CONTACT_SHADOW_SPREAD = 1.4;
+const CONTACT_SHADOW_ALPHA = 0.42;
+
+// How much of a product's own grain is kept. The meshes are generated
+// proxies and their procedural pattern is drawn at full strength, which on
+// a near-white material reads as a painted-on ripple rather than as wood.
+// The texture on disk is never touched: samples/ is read only, and this is
+// a softened copy made in the browser.
+const TEXTURE_CONTRAST = 0.62;
+const TEXTURE_SATURATION = 0.9;
 
 // Eye-level vantages. x and z are fractions of the room's width and depth
 // so a vantage travels to a room of another size; y is a real height in
@@ -76,6 +114,21 @@ const EYE_VIEWS = [
   {fov: 68, eye: [0.8625, 1.55, 0.7188], look: [0.4375, 0.95, 0.1563]},
   // 2 - further back and narrower, more floor and more ceiling.
   {fov: 62, eye: [0.9125, 1.65, 0.8438], look: [0.4750, 1.05, 0.1875]},
+];
+// Three-quarter vantages: outside the room and above it, looking down in
+// over the cut-away walls. Same shape of entry as EYE_VIEWS, x and z as
+// fractions and the look height in metres, except that the camera's own
+// height is not given. It is worked out from `pitch`, the angle below
+// horizontal, so the vantage is that angle in any room rather than a
+// height that happens to be that angle in this one.
+const QUARTER_VIEWS = [
+  // 0 - over the north-east corner, the one opposite the door on wall_s.
+  {fov: 48, pitch: 40, eye: [1.34, -0.34], look: [0.50, 0.90, 0.50]},
+  // 1 - over the south-east corner instead, which keeps the north window
+  //     and the sofa wall both in shot at the cost of a busier foreground.
+  {fov: 50, pitch: 38, eye: [1.30, 1.30], look: [0.46, 0.85, 0.46]},
+  // 2 - north-east again, shallower and wider: more floor, more far wall.
+  {fov: 54, pitch: 35, eye: [1.26, -0.26], look: [0.50, 0.80, 0.50]},
 ];
 // Plan and Overview keep the lens they have always had. Widening the lens
 // for the hero must not quietly re-frame the two views people work in.
@@ -148,6 +201,113 @@ function skyTexture() {
   return texture;
 }
 
+/** A quad from four world-space points, with the UVs stated outright.
+ *
+ * Every soft gradient below needs its dark edge in a known place, and
+ * working that out from a PlaneGeometry plus a lookAt is how orientation
+ * bugs get written. Giving the corners and their UVs together means there
+ * is nothing left to infer.
+ */
+function quad(points, uvs) {
+  const order = [0, 1, 2, 0, 2, 3];
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(
+    order.flatMap((index) => [points[index].x, points[index].y, points[index].z]), 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(
+    order.flatMap((index) => uvs[index]), 2));
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+/** A ramp from dark at u = 0 to nothing at u = 1. */
+function shadeTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 64;
+  canvas.height = 4;
+  const ctx = canvas.getContext("2d");
+  const gradient = ctx.createLinearGradient(0, 0, 64, 0);
+  gradient.addColorStop(0.0, "rgba(255,255,255,1)");
+  gradient.addColorStop(0.3, "rgba(255,255,255,0.42)");
+  gradient.addColorStop(0.65, "rgba(255,255,255,0.12)");
+  gradient.addColorStop(1.0, "rgba(255,255,255,0)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 64, 4);
+  return new THREE.CanvasTexture(canvas);
+}
+
+/** A box in a wall's own frame: along the wall, up it, and out through it.
+ *
+ * u runs along the wall from its start, v up from the floor, o outward
+ * through the wall, so a negative o is inside the room. buildWall measures
+ * its own boxes the same way.
+ */
+function slab(frame, u0, u1, v0, v1, o0, o1, material) {
+  const [du, dv, depth] = [u1 - u0, v1 - v0, o1 - o0];
+  if (du <= 0.001 || dv <= 0.001 || depth <= 0.001) return null;
+  const mesh = new THREE.Mesh(
+    frame.dir.x ? new THREE.BoxGeometry(du, dv, depth) : new THREE.BoxGeometry(depth, dv, du),
+    material,
+  );
+  mesh.position.copy(frame.start)
+    .addScaledVector(frame.dir, (u0 + u1) / 2)
+    .addScaledVector(UP, (v0 + v1) / 2)
+    .addScaledVector(frame.out, (o0 + o1) / 2);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+/** A softened copy of a product's own texture.
+ *
+ * The file under samples/ is never touched. This draws it through a canvas
+ * filter and hands back a new texture, so the mesh on disk is exactly the
+ * mesh the merchant listing produced and only the drawing of it is calmer.
+ * If the browser has no canvas filter, the original comes back unchanged.
+ */
+function softened(texture, cache) {
+  const image = texture?.image;
+  if (!image?.width || !image?.height) return texture;
+  if (cache.has(texture)) return cache.get(texture);
+  let soft = texture;
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const ctx = canvas.getContext("2d");
+    // Pulling contrast in pulls the average in with it, toward mid grey.
+    // On the near-white bookcase that turned a white shelf into a grey one,
+    // which is not softening a pattern, it is repainting the product. So
+    // measure the average first and hand it back with brightness: the grain
+    // calms down and the colour of the thing stays where the listing put it.
+    ctx.drawImage(image, 0, 0);
+    const {data} = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let total = 0;
+    for (let index = 0; index < data.length; index += 4) {
+      total += (data[index] + data[index + 1] + data[index + 2]) / 3;
+    }
+    const mean = total / (data.length / 4) / 255;
+    const pulled = (mean - 0.5) * TEXTURE_CONTRAST + 0.5;
+    const brightness = pulled > 0.02 ? Math.min(2.5, mean / pulled) : 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.filter = `contrast(${TEXTURE_CONTRAST * 100}%)`
+      + ` saturate(${TEXTURE_SATURATION * 100}%) brightness(${brightness})`;
+    ctx.drawImage(image, 0, 0);
+    soft = new THREE.CanvasTexture(canvas);
+    soft.colorSpace = texture.colorSpace;
+    soft.wrapS = texture.wrapS;
+    soft.wrapT = texture.wrapT;
+    soft.flipY = texture.flipY;
+    soft.repeat.copy(texture.repeat);
+    soft.offset.copy(texture.offset);
+    soft.anisotropy = texture.anisotropy;
+    soft.needsUpdate = true;
+  } catch {
+    soft = texture;
+  }
+  cache.set(texture, soft);
+  return soft;
+}
+
 /** A soft round falloff, used as the shape of the light on the floor. */
 function glowTexture() {
   const size = 128;
@@ -161,6 +321,35 @@ function glowTexture() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, size, size);
   return new THREE.CanvasTexture(canvas);
+}
+
+/** A soft blob of shade on the floor under one item.
+ *
+ * The shadow map gives a long cast shadow from the window, which is the
+ * drama. This is the other half: the dark that gathers right where a leg
+ * meets the floor, which no shadow map at any resolution resolves. Without
+ * it furniture floats, and floating furniture is most of why the last hero
+ * read as flat.
+ *
+ * It is a child of the item, so it follows a drag, and it is drawn and
+ * never picked: a press a hand's width from a chair must not become a
+ * press on the chair just because its shadow is wider than it is.
+ */
+function contactShadow(item) {
+  const {width, depth, height} = item.size;
+  const blob = new THREE.Mesh(
+    new THREE.PlaneGeometry(width * CONTACT_SHADOW_SPREAD, depth * CONTACT_SHADOW_SPREAD),
+    new THREE.MeshBasicMaterial({
+      map: glowTexture(), color: SHADE_COLOR, transparent: true,
+      opacity: CONTACT_SHADOW_ALPHA, depthWrite: false, toneMapped: false,
+    }),
+  );
+  blob.name = "contact-shadow";
+  blob.userData.decor = true;
+  blob.rotation.x = -Math.PI / 2;
+  blob.position.y = -height / 2 + Y_CONTACT;
+  blob.raycast = () => {};
+  return blob;
 }
 
 function label(text, className) {
@@ -193,7 +382,13 @@ export class RoomViewer {
     this.camera = new THREE.PerspectiveCamera(50, 1, 0.05, 200);
     this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Stated rather than left to the default, because the whole look
+    // depends on both: filmic roll-off so a sunlit floor keeps its detail
+    // instead of clipping to white, and sRGB out so the wall colour the
+    // shopper picked is the wall colour on screen.
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.12;
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.append(this.renderer.domElement);
@@ -204,24 +399,38 @@ export class RoomViewer {
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     const environment = new RoomEnvironment();
     this.scene.environment = pmrem.fromScene(environment, 0.04).texture;
-    // Three lights, and the balance between them is the whole point. The
-    // room used to be lit almost entirely by the environment and a strong
-    // hemisphere, which lights every face of every object about equally:
-    // correct exposure, no shading, and furniture that reads as cut paper.
-    // Now the warm key off the window side does most of the work, a cool
-    // sky fill keeps the shadow sides from going black, and the environment
-    // is pulled back so the key is what shapes the surfaces.
-    this.scene.environmentIntensity = 0.30;
+    // Three lights, and the balance between them is the whole point.
+    //
+    // The room was first lit almost entirely by the environment and a 1.4
+    // hemisphere. Light arriving equally from everywhere cannot shape
+    // anything: correct exposure, no shading, furniture like cut paper.
+    // Pulling the ambient back once was not enough either, because the key
+    // was not casting shadows, so there was nothing for the contrast to be
+    // between. With shadows on it has to come back far enough that the
+    // sunlit floor is plainly brighter than the rest of the floor.
+    //
+    // A hemisphere light falls off with a surface's own upward tilt, so
+    // taking it down darkens the floor's ambient hard and the walls' only a
+    // little. That is the right way round here: it is the floor the sun
+    // lands on, and a wall that goes black is just a hole.
+    this.scene.environmentIntensity = 0.20;
     environment.dispose();
     pmrem.dispose();
-    this.scene.add(new THREE.HemisphereLight(0xdcebff, 0x6b6a5e, 0.72));
+    this.scene.add(new THREE.HemisphereLight(0xdcebff, 0x6b6a5e, 0.45));
     this.sun = new THREE.DirectionalLight(0xffe6bd, 2.1);
     this.sun.castShadow = true;
-    this.sun.shadow.mapSize.set(2048, 2048);
-    this.sun.shadow.normalBias = 0.02;
+    // 4096 over a room a few metres across is a couple of millimetres per
+    // texel, which is what a chair leg needs before its shadow stops
+    // looking like a staircase. normalBias lifts the sample off the
+    // surface so a wall does not shade itself; the small negative bias
+    // pulls the rest back off the floor without detaching the contact.
+    this.sun.shadow.mapSize.set(4096, 4096);
+    this.sun.shadow.normalBias = 0.022;
+    this.sun.shadow.bias = -0.0004;
+    this.sun.shadow.radius = 2.5;
     // Cool bounce from the far side, aimed at the same point as the key and
     // casting nothing, so it fills without inventing a second set of shadows.
-    this.fill = new THREE.DirectionalLight(0xc9dcf2, 0.42);
+    this.fill = new THREE.DirectionalLight(0xc9dcf2, 0.45);
     this.fill.target = this.sun.target;
     this.scene.add(this.sun, this.sun.target, this.fill);
 
@@ -270,6 +479,18 @@ export class RoomViewer {
     group.name = "room";
     this.room = group;
     this.scene.add(group);
+
+    // One room's worth of shared materials. They are made here and not in
+    // the constructor because dispose() takes the old room's materials with
+    // it, and a material made once at start-up would be destroyed the first
+    // time the room changed.
+    this.joinery = new THREE.MeshStandardMaterial({color: JOINERY_COLOR, roughness: 0.55});
+    const shade = (opacity) => new THREE.MeshBasicMaterial({
+      map: shadeTexture(), color: SHADE_COLOR, transparent: true, opacity,
+      depthWrite: false, side: THREE.DoubleSide, toneMapped: false,
+    });
+    this.junctionShade = shade(SHADE_JUNCTION_ALPHA);
+    this.cornerShade = shade(SHADE_CORNER_ALPHA);
 
     // Floor with a procedural finish repeated every metre.
     const texture = floorTexture(room.floor.material, "#ffffff");
@@ -333,7 +554,13 @@ export class RoomViewer {
       if (openings.some((opening) => opening.type === "window")) {
         group.add(this.daylight(wall, frame, openings, height));
       }
-      for (const opening of openings) group.add(this.buildOpening(opening, frame, height));
+      // Into the wall's own culled group, not the room. An opening left in
+      // the room group outlived the wall it was cut in: with the wall taken
+      // away for the camera, Overview showed two window frames hanging in
+      // mid air and a pane of glass floating in front of the sofa, dimming
+      // it. A hole in a wall that is not being drawn is not a hole.
+      const culled = this.walls.at(-1).group;
+      for (const opening of openings) culled.add(this.buildOpening(opening, frame, height));
     }
 
     this.itemGroup = new THREE.Group();
@@ -361,8 +588,12 @@ export class RoomViewer {
       // distance, and a raking direction is what gives the floor and the
       // seat fronts a long readable shadow.
       const {x, y, z} = window.center;
-      this.sun.position.set(x, y + 1.15, z).addScaledVector(frames[window.wall].out, 2.6);
-      this.sun.intensity = Math.min(2.6, 0.5 + 11 * room.lighting.window_area_m2 / (width * depth));
+      // Raised from the first attempt's 32 degrees to about 50. At 32 the
+      // light raked beautifully and threw the window's patch of sun clean
+      // out of the room through the opposite wall; at 50 the patch lands on
+      // the floor where it belongs and the shadows are still long.
+      this.sun.position.set(x, y + 2.6, z).addScaledVector(frames[window.wall].out, 1.8);
+      this.sun.intensity = Math.min(3.1, 0.6 + 13 * room.lighting.window_area_m2 / (width * depth));
     } else {
       this.sun.position.set(width * 0.2, height * 3, depth * 1.4);
       this.sun.intensity = 0.4;
@@ -375,6 +606,15 @@ export class RoomViewer {
     Object.assign(this.sun.shadow.camera,
       {left: -span * 1.2, right: span * 1.2, top: span * 1.2, bottom: -span * 1.2, near: 0.1, far: span * 8});
     this.sun.shadow.camera.updateProjectionMatrix();
+
+    // There is no painted patch of light on the floor any more, and that is
+    // the fix and not an omission. The brief allowed either a pool shaped to
+    // the window or none at all. Once the key casts shadows the shadow map
+    // draws the real thing: the opening's own outline, leaning the way the
+    // light leans, with the legs of whatever stands in it cut out of it. A
+    // painted glow over that is a second sun nobody asked for, and the first
+    // attempt at one landed about a metre from where the light actually
+    // falls. Deleting it is the honest version.
     this.setLabels(this.showLabels);
     if (resetCamera) this.view(this.lastView ?? "overview");
   }
@@ -410,6 +650,63 @@ export class RoomViewer {
       cursor = end;
     }
     addBox(cursor, frame.length + extend, 0, height);
+
+    // Everything below goes in this same group, which frame() hides when
+    // the wall stands between the camera and the room. A baseboard or an
+    // architrave left behind by its own cut-away wall would float in
+    // Overview, the way the door leaf already does.
+
+    // Baseboard. It stops either side of a door and runs straight past a
+    // window, whose sill is well above it.
+    let skirting = -extend;
+    for (const opening of openings) {
+      if (opening.sill_m >= BASEBOARD_HEIGHT_M) continue;
+      group.add(...[slab(frame, skirting, opening.offset_m, 0, BASEBOARD_HEIGHT_M,
+                         -BASEBOARD_PROUD_M, 0, this.joinery)].filter(Boolean));
+      skirting = opening.offset_m + opening.width_m;
+    }
+    group.add(...[slab(frame, skirting, frame.length + extend, 0, BASEBOARD_HEIGHT_M,
+                       -BASEBOARD_PROUD_M, 0, this.joinery)].filter(Boolean));
+
+    // A sill under each window and an architrave round it. The opening was
+    // a hole cut in a flat sheet; this gives its edge a thickness you can
+    // see, which is most of what makes a window look like a window.
+    for (const opening of openings) {
+      if (opening.type !== "window") continue;
+      const head = opening.sill_m + opening.height_m;
+      const left = opening.offset_m;
+      const right = opening.offset_m + opening.width_m;
+      group.add(...[
+        slab(frame, left - 0.045, right + 0.045, opening.sill_m - SILL_THICKNESS_M,
+             opening.sill_m, -SILL_DEPTH_M, WALL_THICKNESS, this.joinery),
+        slab(frame, left - ARCHITRAVE_WIDTH_M, right + ARCHITRAVE_WIDTH_M, head,
+             head + ARCHITRAVE_WIDTH_M, -ARCHITRAVE_PROUD_M, 0, this.joinery),
+        slab(frame, left - ARCHITRAVE_WIDTH_M, left, opening.sill_m,
+             head + ARCHITRAVE_WIDTH_M, -ARCHITRAVE_PROUD_M, 0, this.joinery),
+        slab(frame, right, right + ARCHITRAVE_WIDTH_M, opening.sill_m,
+             head + ARCHITRAVE_WIDTH_M, -ARCHITRAVE_PROUD_M, 0, this.joinery),
+      ].filter(Boolean));
+    }
+
+    // Fake ambient occlusion: a band of shade where the wall meets the
+    // ceiling, and one down each end where it meets the next wall. Flat
+    // quads a few millimetres proud of the plaster, dark on the edge that
+    // touches the join and gone a third of a metre away.
+    const face = (u, v) => frame.start.clone()
+      .addScaledVector(frame.dir, u).addScaledVector(UP, v)
+      .addScaledVector(frame.out, -0.006);
+    const DARK_THEN_CLEAR = [[0, 0], [0, 1], [1, 1], [1, 0]];
+    const ends = [-extend, frame.length + extend];
+    group.add(new THREE.Mesh(quad([
+      face(ends[0], height), face(ends[1], height),
+      face(ends[1], height - SHADE_CEILING_BAND_M), face(ends[0], height - SHADE_CEILING_BAND_M),
+    ], DARK_THEN_CLEAR), this.junctionShade));
+    for (const [edge, inward] of [[ends[0], SHADE_CORNER_M], [ends[1], -SHADE_CORNER_M]]) {
+      group.add(new THREE.Mesh(quad([
+        face(edge, 0), face(edge, height),
+        face(edge + inward, height), face(edge + inward, 0),
+      ], DARK_THEN_CLEAR), this.cornerShade));
+    }
 
     const tag = label(
       `${wall.id.replace("wall_", "Wall ").toUpperCase()} · ${fmt(wall.length_m)}`,
@@ -519,7 +816,6 @@ export class RoomViewer {
   daylight(wall, frame, openings, height) {
     const group = new THREE.Group();
     group.name = "daylight_" + wall.id;
-    const alongX = Math.abs(frame.dir.x) > 0.5;
     const windows = openings.filter((opening) => opening.type === "window");
     const extend = frame.dir.x ? WALL_THICKNESS : 0;
 
@@ -543,23 +839,6 @@ export class RoomViewer {
     sky.lookAt(sky.position.clone().addScaledVector(frame.out, -1));
     group.add(sky);
 
-    for (const opening of windows) {
-      const across = opening.width_m + SUN_PATCH_SPREAD_M;
-      const patch = new THREE.Mesh(
-        new THREE.PlaneGeometry(alongX ? across : SUN_PATCH_DEPTH_M, alongX ? SUN_PATCH_DEPTH_M : across),
-        new THREE.MeshBasicMaterial({
-          map: glowTexture(), color: 0xffeccd, transparent: true, opacity: 0.55,
-          blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
-        }),
-      );
-      patch.name = opening.id + "-daylight";
-      patch.rotation.x = -Math.PI / 2;
-      patch.position.copy(frame.start)
-        .addScaledVector(frame.dir, opening.offset_m + opening.width_m / 2)
-        .addScaledVector(frame.out, -SUN_PATCH_DEPTH_M / 2);
-      patch.position.y = 0.008;
-      group.add(patch);
-    }
     return group;
   }
 
@@ -579,6 +858,7 @@ export class RoomViewer {
     const tag = label(item.label, "item-label");
     tag.position.set(0, height / 2 + 0.1, 0);
     group.add(tag);
+    group.add(contactShadow(item));
     return group;
   }
 
@@ -600,10 +880,16 @@ export class RoomViewer {
       const normalized = new THREE.Group();
       normalized.scale.copy(scale);
       asset.position.sub(center);
+      // Shadows on, and the product's own grain pulled back. The file
+      // under samples/ is untouched: softened() copies the texture through
+      // a canvas and the mesh on disk stays exactly as the listing made it.
+      const softeners = new Map();
       asset.traverse((node) => {
-        if (node.isMesh) {
-          node.castShadow = true;
-          node.receiveShadow = true;
+        if (!node.isMesh) return;
+        node.castShadow = true;
+        node.receiveShadow = true;
+        for (const material of [node.material ?? []].flat()) {
+          if (material.map) material.map = softened(material.map, softeners);
         }
       });
       normalized.add(asset);
@@ -611,7 +897,7 @@ export class RoomViewer {
         // Everything the stand-in drew is replaced by the real model,
         // except the invisible solid that makes the product grabbable.
         // Disposing that left a loaded model with nothing to press on.
-        if (child.userData.hitVolume) continue;
+        if (child.userData.hitVolume || child.userData.decor) continue;
         if (child.isMesh || child.isLineSegments) dispose(child);
       }
       preview.add(normalized);
@@ -682,6 +968,13 @@ export class RoomViewer {
       const eyeHeight = Math.min(chosen.eye[1], height - 0.25);
       target.set(chosen.look[0] * width, Math.min(chosen.look[1], height - 0.4), chosen.look[2] * depth);
       this.camera.position.set(chosen.eye[0] * width, eyeHeight, chosen.eye[2] * depth);
+    } else if (name === "quarter") {
+      const chosen = QUARTER_VIEWS[candidate] ?? QUARTER_VIEWS[0];
+      fov = chosen.fov;
+      target.set(chosen.look[0] * width, Math.min(chosen.look[1], height - 0.4), chosen.look[2] * depth);
+      const [eyeX, eyeZ] = [chosen.eye[0] * width, chosen.eye[1] * depth];
+      const reach = Math.hypot(eyeX - target.x, eyeZ - target.z);
+      this.camera.position.set(eyeX, target.y + reach * Math.tan(chosen.pitch * DEG), eyeZ);
     } else {
       this.camera.position.set(width * 1.25, height + span * 0.95, depth + span * 0.95);
     }
