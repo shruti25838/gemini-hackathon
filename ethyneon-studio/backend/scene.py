@@ -23,9 +23,14 @@ import httpx
 
 from backend.connections import SHOPIFY_VARIANT_ID, ShopifyConnection
 from backend.errors import ConnectionError
+from backend.fit_bridge import FitEngineUnavailable, check_placement
 from backend.product_models import ProductModelConnection
 from backend.scene_edit import SceneEdit, add_product, apply_edit, placement_problems, replacement_problem
+from backend.schemas import RequestBody
 from backend.studio import catalog_offer
+
+from pydantic import Field
+from typing import Literal
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,6 +79,53 @@ def _size(value: Any, kind: str, room_height: float) -> dict[str, float]:
         "depth": max(_number(value.get("depth"), depth), 0.02),
         "height": max(_number(value.get("height"), height if height is not None else room_height), 0.02),
     }
+
+
+def fit_verdicts(scene: dict[str, Any]) -> dict[str, Any]:
+    """One deterministic verdict per Shopify product in the room.
+
+    Computed once per file version, because read() caches on the etag.
+    A verdict is never guessed: if the engine cannot be reached the key
+    is simply absent and the front end shows no badge, rather than
+    showing a reassuring one it did not earn.
+    """
+    verdicts: dict[str, Any] = {}
+    for item in scene["placed_products"]:
+        if not item.get("variant_id"):
+            continue
+        try:
+            verdicts[item["id"]] = check_placement(scene, item["id"])
+        except (FitEngineUnavailable, ValueError, KeyError, TypeError):
+            continue
+    return verdicts
+
+
+DEFAULT_ROOM_CATEGORY = "other"
+WALL_IDS = Literal["wall_n", "wall_e", "wall_s", "wall_w"]
+
+
+class PresetRoom(RequestBody):
+    """A room typed in by hand, for when no model is available.
+
+    The photo path needs Gemini to read walls and openings out of a
+    panorama. This is the same room, measured with a tape and typed in,
+    which is both the honest fallback and the thing the product is
+    actually about. Every bound here matches contracts/room_spec.py so a
+    room written through this route is one the fit engine accepts.
+    """
+
+    width_m: float = Field(ge=1.0, le=20.0)
+    depth_m: float = Field(ge=1.0, le=20.0)
+    height_m: float = Field(default=2.5, ge=1.8, le=6.0)
+    category: str = Field(default=DEFAULT_ROOM_CATEGORY, max_length=40)
+    door_wall: WALL_IDS = "wall_s"
+    door_offset_m: float = Field(default=0.2, ge=0.0, le=20.0)
+    door_width_m: float = Field(default=0.9, ge=0.3, le=3.0)
+    door_hinge: Literal["left", "right", "none"] = "left"
+    door_swing: Literal["inward", "outward", "sliding", "none"] = "inward"
+    # Writing a room throws away whatever was in the old one, so saying
+    # so has to be deliberate rather than a default.
+    replace: bool = False
 
 
 def scene_room(config: dict[str, Any]) -> dict[str, Any]:
@@ -202,7 +254,10 @@ class SceneStudio:
             if self._last_good:
                 return self._last_good
             raise ConnectionError(422, "scene_config_invalid", f"{self.path.name} is not a valid room: {exc}.", retryable=True) from exc
-        self._last_good = (etag, {"scene": scene, "etag": etag, "source": self.path.name})
+        self._last_good = (
+            etag,
+            {"scene": scene, "etag": etag, "source": self.path.name, "fit": fit_verdicts(scene)},
+        )
         return self._last_good
 
     @staticmethod
@@ -335,6 +390,52 @@ class SceneStudio:
             etag, body = self.read()
             self._edits[request.action_id] = body
             return body
+
+    def write_preset_room(self, request: "PresetRoom") -> dict[str, Any]:
+        """Create or replace geometricconfig.json from typed measurements."""
+        if self.path.exists() and not request.replace:
+            try:
+                existing = json.loads(self.path.read_bytes())
+            except (ValueError, OSError):
+                existing = {}
+            if existing.get("placed_products"):
+                raise ConnectionError(
+                    409, "room_already_has_products",
+                    f"This room already holds {len(existing['placed_products'])} product(s). "
+                    "Replacing it removes them.",
+                )
+        wall_length = request.width_m if request.door_wall in {"wall_n", "wall_s"} else request.depth_m
+        if request.door_offset_m + request.door_width_m > wall_length:
+            raise ConnectionError(
+                422, "door_off_the_wall",
+                f"A {request.door_width_m:.2f} m door at {request.door_offset_m:.2f} m does not fit "
+                f"on a {wall_length:.2f} m wall.",
+            )
+        config = {
+            "revision": 1,
+            "category": request.category,
+            "dimensions": {
+                "width": {"value_m": request.width_m, "status": "confirmed"},
+                "depth": {"value_m": request.depth_m, "status": "confirmed"},
+                "height": {"value_m": request.height_m, "status": "confirmed"},
+            },
+            "openings": [{
+                "id": "door_main", "type": "door", "wall": request.door_wall,
+                "offset_m": request.door_offset_m, "width_m": request.door_width_m,
+                "height_m": min(2.03, request.height_m - 0.1),
+                "hinge": request.door_hinge, "swing": request.door_swing,
+            }],
+            "existing_items": [],
+            "placed_products": [],
+            "last_edit": {"op": "preset_room", "product_id": "", "source": "design_view"},
+        }
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.path.with_suffix(".tmp")
+        temporary.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        temporary.replace(self.path)
+        self._last_good = None
+        self._edits.clear()
+        return self.read()[1]
 
     def _cache_file(self, variant_id: str) -> Path:
         key = hashlib.sha1(f"{MODEL_CACHE_VERSION}:{variant_id}".encode()).hexdigest()

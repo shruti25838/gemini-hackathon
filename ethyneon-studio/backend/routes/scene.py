@@ -8,6 +8,7 @@ from pydantic import Field
 
 from backend.connections import SHOPIFY_VARIANT_ID
 from backend.errors import ConnectionError
+from backend.scene import PresetRoom
 from backend.scene_edit import SceneEdit
 from backend.checkout import CheckoutRequest
 from backend.routes.studio import STUDIO_ASSETS, require_local_studio
@@ -69,6 +70,12 @@ def scene_model_file(name: Annotated[str, PathParam(pattern=r"^[0-9]+\.glb$")], 
     if isinstance(model, str):
         return RedirectResponse(model)
     return Response(model, media_type="model/gltf-binary", headers={"Cache-Control": "no-cache"})
+
+
+@router.post("/room")
+async def scene_preset_room(body: PresetRoom, request: Request) -> dict[str, Any]:
+    """Write a room from typed measurements. No model, no network."""
+    return request.app.state.scenes.write_preset_room(body)
 
 
 @router.post("/edit")
