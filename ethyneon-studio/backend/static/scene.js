@@ -546,10 +546,11 @@ byId("close-product").addEventListener("click", clearSelection);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !byId("product-pop").hidden) clearSelection();
 });
-// ?eye=0|1|2 picks between the three eye-level vantages in room-viewer.js.
+// ?eye=0|1|2 picks which of a view's candidate vantages to use: the three
+// in EYE_VIEWS for Eye level, the three in QUARTER_VIEWS for Three-quarter.
 // It is read once, it reaches nothing but the camera, and it is how the
-// three candidate framings were compared for the posted screenshot. Out of
-// range or absent, the Eye level button gives vantage 0.
+// candidate framings were compared for the posted screenshots. Out of
+// range or absent, every button gives vantage 0.
 const EYE_CANDIDATE = Number(new URLSearchParams(location.search).get("eye")) || 0;
 for (const button of document.querySelectorAll("[data-view]")) {
   button.addEventListener("click", () => room.view(button.dataset.view, EYE_CANDIDATE));
