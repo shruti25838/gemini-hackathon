@@ -112,6 +112,24 @@ DEFAULT_ROOM_CATEGORY = "other"
 WALL_IDS = Literal["wall_n", "wall_e", "wall_s", "wall_w"]
 
 
+MAX_WINDOWS = 4
+
+
+class PresetWindow(RequestBody):
+    """One window, measured with the same tape as the room.
+
+    scene_room() and room-viewer.js have always handled an opening of
+    type "window": the wall is cut above and below the sill and a glass
+    pane is drawn. The only thing missing was a way to type one in.
+    """
+
+    wall: WALL_IDS
+    offset_m: float = Field(ge=0.0, le=20.0)
+    width_m: float = Field(ge=0.3, le=5.0)
+    height_m: float = Field(default=1.2, ge=0.2, le=4.0)
+    sill_m: float = Field(default=0.9, ge=0.0, le=5.0)
+
+
 class PresetRoom(RequestBody):
     """A room typed in by hand, for when no model is available.
 
@@ -131,6 +149,9 @@ class PresetRoom(RequestBody):
     door_width_m: float = Field(default=0.9, ge=0.3, le=3.0)
     door_hinge: Literal["left", "right", "none"] = "left"
     door_swing: Literal["inward", "outward", "sliding", "none"] = "inward"
+    # Up to four, which is one per wall. A fifth is refused by the model
+    # rather than silently dropped.
+    windows: list[PresetWindow] = Field(default_factory=list, max_length=MAX_WINDOWS)
     # Writing a room throws away whatever was in the old one, so saying
     # so has to be deliberate rather than a default.
     replace: bool = False
@@ -435,13 +456,53 @@ class SceneStudio:
                     f"This room already holds {len(existing['placed_products'])} product(s). "
                     "Replacing it removes them.",
                 )
-        wall_length = request.width_m if request.door_wall in {"wall_n", "wall_s"} else request.depth_m
+        def wall_length_of(wall_id: str) -> float:
+            return request.width_m if wall_id in {"wall_n", "wall_s"} else request.depth_m
+
+        wall_length = wall_length_of(request.door_wall)
         if request.door_offset_m + request.door_width_m > wall_length:
             raise ConnectionError(
                 422, "door_off_the_wall",
                 f"A {request.door_width_m:.2f} m door at {request.door_offset_m:.2f} m does not fit "
                 f"on a {wall_length:.2f} m wall.",
             )
+
+        # Every window gets the same three questions the door got: does it
+        # fit along its wall, does it fit under the ceiling, and is it
+        # standing where something else already is.
+        taken: dict[str, list[tuple[float, float, str]]] = {
+            request.door_wall: [(request.door_offset_m,
+                                 request.door_offset_m + request.door_width_m, "the door")],
+        }
+        windows = []
+        for index, window in enumerate(request.windows, 1):
+            name = f"window_{index}"
+            length = wall_length_of(window.wall)
+            if window.offset_m + window.width_m > length:
+                raise ConnectionError(
+                    422, "window_off_the_wall",
+                    f"A {window.width_m:.2f} m window at {window.offset_m:.2f} m does not fit "
+                    f"on the {window.wall.replace('_', ' ')}, which is {length:.2f} m long.",
+                )
+            if window.sill_m + window.height_m > request.height_m:
+                raise ConnectionError(
+                    422, "window_above_the_ceiling",
+                    f"A {window.height_m:.2f} m window with its sill at {window.sill_m:.2f} m "
+                    f"reaches past a {request.height_m:.2f} m ceiling.",
+                )
+            start, end = window.offset_m, window.offset_m + window.width_m
+            for other_start, other_end, what in taken.get(window.wall, []):
+                if start < other_end and end > other_start:
+                    raise ConnectionError(
+                        422, "window_overlaps_an_opening",
+                        f"That window overlaps {what} on the {window.wall.replace('_', ' ')}.",
+                    )
+            taken.setdefault(window.wall, []).append((start, end, name))
+            windows.append({
+                "id": name, "type": "window", "wall": window.wall,
+                "offset_m": window.offset_m, "width_m": window.width_m,
+                "height_m": window.height_m, "sill_m": window.sill_m,
+            })
         config = {
             "revision": 1,
             "category": request.category,
@@ -455,7 +516,7 @@ class SceneStudio:
                 "offset_m": request.door_offset_m, "width_m": request.door_width_m,
                 "height_m": min(2.03, request.height_m - 0.1),
                 "hinge": request.door_hinge, "swing": request.door_swing,
-            }],
+            }, *windows],
             "existing_items": [],
             "placed_products": [],
             "last_edit": {"op": "preset_room", "product_id": "", "source": "design_view"},

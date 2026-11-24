@@ -688,6 +688,40 @@ async function placePreview(offer, button) {
 // A room measured with a tape, for when no model is answering
 // ==========================================================================
 
+// Up to four windows, matching MAX_WINDOWS in backend/scene.py. The server
+// checks every one of them again; this only stops the button adding a
+// fifth row that could never be saved.
+const MAX_WINDOWS = 4;
+
+byId("add-window").addEventListener("click", () => {
+  const rows = byId("window-rows");
+  if (rows.children.length >= MAX_WINDOWS) {
+    byId("room-message").dataset.error = "true";
+    byId("room-message").textContent = `Four windows is the most this form takes.`;
+    return;
+  }
+  const row = byId("window-row-template").content.firstElementChild.cloneNode(true);
+  // Second window defaults to a different wall, so two clicks give two
+  // windows that can both be saved rather than an overlap.
+  const walls = ["wall_n", "wall_e", "wall_w", "wall_s"];
+  row.querySelector('[data-window="wall"]').value = walls[rows.children.length % walls.length];
+  row.querySelector('[data-window="remove"]').addEventListener("click", () => row.remove());
+  rows.append(row);
+});
+
+function collectWindows() {
+  return [...byId("window-rows").children].map((row) => {
+    const field = (name) => row.querySelector(`[data-window="${name}"]`).value;
+    return {
+      wall: field("wall"),
+      offset_m: Number(field("offset_m")),
+      width_m: Number(field("width_m")),
+      height_m: Number(field("height_m")),
+      sill_m: Number(field("sill_m")),
+    };
+  });
+}
+
 byId("room-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const message = byId("room-message");
@@ -705,6 +739,7 @@ byId("room-form").addEventListener("submit", async (event) => {
       door_width_m: number("door-width"),
       door_hinge: byId("door-hinge").value,
       door_swing: byId("door-swing").value,
+      windows: collectWindows(),
       replace: byId("room-form").dataset.replace === "true",
     });
     etag = body.etag;

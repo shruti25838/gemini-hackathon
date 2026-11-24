@@ -161,6 +161,10 @@ span.store-checkout { background: #202622; color: #d1dad1; }
   border-radius: 8px; background: #111512; color: #f2f4f1; font-size: 13px;
 }
 .room-form .primary { justify-self: start; padding: 10px 18px; }
+.window-block { display: grid; gap: 8px; }
+.window-block .section-head { margin: 0; }
+.window-row { align-items: end; padding: 8px; border: 1px dashed var(--border); border-radius: 10px; }
+#window-rows:empty { display: none; }
 
 .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
 .section-head h3 { margin: 0; font-size: 15px; }
