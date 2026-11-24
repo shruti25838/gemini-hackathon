@@ -1,5 +1,6 @@
 import { ProductViewer } from "./viewer.js";
 import { SceneViewer, modelDot, priceLabel, setDot } from "./scene-viewer.js";
+import { FLOOR_COLORS, WALL_COLORS, parseColorCommand } from "./scene-colors.js";
 
 const byId = (id) => document.getElementById(id);
 const POLL_MS = 1500;
@@ -272,6 +273,7 @@ async function render(next, {quiet = false, fit = null} = {}) {
   byId("source").lastChild.textContent = ` Live from geometricconfig.json · revision ${scene.revision}`;
   room.showScene(scene, resolveModel, stateOf);
   renderCart();
+  paintSwatches();
   if (selected && !fitVerdicts[selected.id]) showVerdict(null);
   if (previous && !quiet) toast(`Room updated · revision ${scene.revision}`);
   if (selected) {
@@ -719,5 +721,109 @@ byId("room-form").addEventListener("submit", async (event) => {
     byId("room-go").disabled = false;
   }
 });
+
+// ==========================================================================
+// Room colors
+// ==========================================================================
+//
+// A swatch writes through the same guarded edit route as every other change,
+// so the colour lands in geometricconfig.json and survives a reload. The
+// saved source is "chosen by user": the photo pipeline has its own
+// sampled_from_photo value and this is not that, because nobody measured
+// anything. No model is involved at any point.
+
+let lastColorChange = null;
+
+function colorMessage(text, error = false) {
+  const line = byId("color-message");
+  line.textContent = text;
+  line.dataset.error = String(error);
+}
+
+function paintSwatches() {
+  const walls = scene?.walls?.[0]?.color;
+  const floor = scene?.floor?.color;
+  for (const button of document.querySelectorAll("#wall-swatches .swatch")) {
+    button.setAttribute("aria-pressed", String(button.dataset.hex === walls));
+  }
+  for (const button of document.querySelectorAll("#floor-swatches .swatch")) {
+    button.setAttribute("aria-pressed", String(button.dataset.hex === floor));
+  }
+  const source = byId("color-source");
+  const chosen = [
+    scene?.walls?.[0]?.color_source === "chosen_by_user" ? "walls" : null,
+    scene?.floor?.color_source === "chosen_by_user" ? "floor" : null,
+  ].filter(Boolean);
+  source.hidden = !chosen.length;
+  source.textContent = chosen.join(" and ") + " chosen by you";
+}
+
+function buildSwatches(id, palette, target) {
+  byId(id).replaceChildren(...palette.map(([name, hex]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "swatch";
+    button.dataset.hex = hex;
+    button.style.backgroundColor = hex;
+    button.title = `${name} ${hex}`;
+    button.setAttribute("aria-label", `${target === "walls" ? "Walls" : "Floor"}: ${name}`);
+    button.setAttribute("aria-pressed", "false");
+    button.addEventListener("click", () => applyColor(target, hex, `${target === "walls" ? "Walls" : "Floor"} set to ${name.toLowerCase()}.`));
+    return button;
+  }));
+}
+
+async function applyColor(target, hex, done) {
+  if (!scene || !etag) {
+    colorMessage("Create the room first.", true);
+    return;
+  }
+  colorMessage("Applying…");
+  try {
+    const body = await post("/studio/scene/edit", {
+      base_etag: etag, action_id: crypto.randomUUID(),
+      op: "set_room_color", target, color: hex,
+    });
+    etag = body.etag;
+    // The server hands back the colour that was on screen, so the undo
+    // restores exactly that and not a guess at the default.
+    lastColorChange = body.undo ?? null;
+    byId("color-undo").hidden = !lastColorChange;
+    await render(body.scene, {quiet: true, fit: body.fit});
+    colorMessage(done);
+  } catch (error) {
+    colorMessage(error.message, true);
+    if (error.status === 409) etag = null;
+  }
+}
+
+byId("color-undo").addEventListener("click", () => {
+  if (!lastColorChange) return;
+  const {target, color} = lastColorChange;
+  lastColorChange = null;
+  byId("color-undo").hidden = true;
+  applyColor(target, color, `Put the ${target} back to ${color}.`);
+});
+
+byId("custom-color").addEventListener("change", (event) =>
+  applyColor("walls", event.target.value.toLowerCase(), "Walls set to your color."));
+byId("custom-floor").addEventListener("change", (event) =>
+  applyColor("floor", event.target.value.toLowerCase(), "Floor set to your color."));
+
+byId("color-command-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = byId("color-command");
+  const result = parseColorCommand(input.value);
+  if (result.error) {
+    colorMessage(result.error, true);
+    return;
+  }
+  input.value = "";
+  applyColor(result.target, result.hex,
+    `${result.target === "walls" ? "Walls" : "Floor"} set to ${result.name}.`);
+});
+
+buildSwatches("wall-swatches", WALL_COLORS, "walls");
+buildSwatches("floor-swatches", FLOOR_COLORS, "floor");
 
 poll();

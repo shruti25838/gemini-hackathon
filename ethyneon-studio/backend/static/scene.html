@@ -126,6 +126,38 @@
             </div>
           </aside>
         </div>
+        <section class="room-colors" aria-labelledby="colors-title">
+          <div class="section-head">
+            <h3 id="colors-title">Room colors</h3>
+            <span class="result-count" id="color-source" hidden></span>
+          </div>
+          <div class="color-row">
+            <span class="color-label" id="walls-label">Walls</span>
+            <div class="swatches" id="wall-swatches" role="group" aria-labelledby="walls-label"></div>
+          </div>
+          <div class="color-row">
+            <span class="color-label" id="floor-label">Floor</span>
+            <div class="swatches" id="floor-swatches" role="group" aria-labelledby="floor-label"></div>
+          </div>
+          <div class="color-row">
+            <span class="color-label">Any color</span>
+            <label class="custom-color" for="custom-color">
+              <input type="color" id="custom-color" value="#6f7a3f">
+              <span>Walls</span>
+            </label>
+            <label class="custom-color" for="custom-floor">
+              <input type="color" id="custom-floor" value="#6b4a2f">
+              <span>Floor</span>
+            </label>
+            <button type="button" class="ghost-button" id="color-undo" hidden>Undo</button>
+          </div>
+          <form id="color-command-form">
+            <label for="color-command" class="sr-only">Type a color command</label>
+            <input id="color-command" maxlength="80" placeholder="Or type: make the walls olive" autocomplete="off">
+            <button type="submit" class="ghost-button" id="color-command-go">Apply</button>
+          </form>
+          <p class="edit-message" id="color-message" role="status" aria-live="polite"></p>
+        </section>
         <section class="browse" aria-labelledby="browse-title">
           <div class="section-head">
             <h3 id="browse-title">Find products on Shopify</h3>

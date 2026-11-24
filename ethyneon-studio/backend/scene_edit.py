@@ -15,6 +15,15 @@ from backend.schemas import RequestBody
 
 
 TOLERANCE_M = 0.01
+# The four walls, in the order scene_room() emits them. Defined here rather
+# than imported from backend.scene, which imports this module.
+WALL_IDS = ("wall_n", "wall_e", "wall_s", "wall_w")
+# A colour the shopper picked. Deliberately not one of the EvidenceStatus
+# values the photo pipeline uses: "sampled_from_photo" would claim the
+# colour was measured off their room, and "confirmed" would imply somebody
+# checked it against the real wall. Neither is true of a swatch click.
+USER_CHOSEN_COLOR = "chosen_by_user"
+HEX_COLOR = r"^#[0-9a-fA-F]{6}$"
 PASSAGE_CLEARANCE_M = 0.6
 # A replacement must fit the space the current product occupies: up to 10% or 5 cm larger on each side.
 REPLACE_GROWTH = 1.10
@@ -54,13 +63,19 @@ class NewProduct(Replacement):
 class SceneEdit(RequestBody):
     base_etag: str = Field(pattern=r"^[0-9a-f]{16}$")
     action_id: str = Field(pattern=r"^[0-9a-fA-F-]{8,64}$")
-    op: Literal["move", "rotate", "swap", "replace", "remove", "add"]
-    product_id: str = Field(min_length=1, max_length=120)
+    op: Literal["move", "rotate", "swap", "replace", "remove", "add", "set_room_color"]
+    # Defaults to the room itself, because a colour edit is not about a
+    # product. needs_inputs refuses that default for every edit that is.
+    product_id: str = Field(default="room", min_length=1, max_length=120)
     other_id: str | None = Field(default=None, max_length=120)
     position: Point | None = None
     yaw: float | None = Field(default=None, ge=-720, le=720, allow_inf_nan=False)
     replacement: Replacement | None = None
     new_product: NewProduct | None = None
+    # set_room_color only. "walls" means all four; this build has no
+    # per-wall control, so it does not pretend to have one.
+    target: Literal["walls", "floor"] | None = None
+    color: str | None = Field(default=None, pattern=HEX_COLOR)
 
     @model_validator(mode="after")
     def needs_inputs(self) -> "SceneEdit":
@@ -68,6 +83,14 @@ class SceneEdit(RequestBody):
                   "add": self.new_product}
         if self.op in needed and needed[self.op] is None:
             raise ValueError(f"The {self.op} edit is missing its input.")
+        if self.op == "set_room_color":
+            if self.target is None or self.color is None:
+                raise ValueError("A colour edit needs a target and a colour.")
+        elif self.product_id == "room":
+            # The default exists for colour edits. An edit that moves or
+            # replaces a product must name one, or it would quietly act on
+            # nothing at all.
+            raise ValueError(f"The {self.op} edit must name a product_id.")
         return self
 
 
@@ -177,6 +200,28 @@ def add_product(config: dict[str, Any], edit: SceneEdit, size: dict[str, float],
                 return [item["id"]]
     config["placed_products"].remove(item)
     raise ValueError(f"There is no free floor space that fits {new.title[:60]}.")
+
+
+def apply_room_color(config: dict[str, Any], edit: SceneEdit) -> None:
+    """Write a colour the shopper picked, and record that as its source.
+
+    The caller works out what to offer as an undo, because the colour on
+    screen before this ran may have been a default that the file never
+    stored, and an undo has to restore what the shopper was looking at.
+    """
+    color = edit.color.lower()
+    if edit.target == "floor":
+        floor = config.setdefault("floor", {})
+        floor["color"] = color
+        floor["color_source"] = USER_CHOSEN_COLOR
+        return
+
+    existing = {wall.get("id"): wall for wall in config.get("walls") or [] if isinstance(wall, dict)}
+    config["walls"] = [
+        {**(existing.get(wall_id) or {}), "id": wall_id,
+         "color": color, "color_source": USER_CHOSEN_COLOR}
+        for wall_id in WALL_IDS
+    ]
 
 
 def apply_edit(config: dict[str, Any], edit: SceneEdit, replacement_size: dict[str, float] | None) -> list[str]:

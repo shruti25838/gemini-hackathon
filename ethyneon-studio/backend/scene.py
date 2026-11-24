@@ -26,7 +26,14 @@ from backend.errors import ConnectionError
 from backend.fit_bridge import FitEngineUnavailable, check_placement
 from backend.product_dimensions import listing_dimensions
 from backend.product_models import ProductModelConnection
-from backend.scene_edit import SceneEdit, add_product, apply_edit, placement_problems, replacement_problem
+from backend.scene_edit import (
+    SceneEdit,
+    add_product,
+    apply_edit,
+    apply_room_color,
+    placement_problems,
+    replacement_problem,
+)
 from backend.schemas import RequestBody
 from backend.studio import catalog_offer
 
@@ -351,6 +358,23 @@ class SceneStudio:
                 await self.shopify.require_placeable(
                     incoming.variant_id, CONTEXT, preview=incoming.preview)
             config = json.loads(raw)
+
+            # A colour touches no geometry, so it skips the placement
+            # guardrails entirely rather than running them against an
+            # unchanged room and pretending that meant something.
+            if request.op == "set_room_color":
+                # Read the colour the viewer is showing, which may be a default
+                # the file never stored, so undo restores what was on screen.
+                showing = scene_room(config)
+                previous = (showing["floor"]["color"] if request.target == "floor"
+                            else showing["walls"][0]["color"])
+                apply_room_color(config, request)
+                body = self._commit(config, request, {"op": "set_room_color",
+                                                      "target": request.target})
+                body = {**body, "undo": {"target": request.target, "color": previous}}
+                self._edits[request.action_id] = body
+                return body
+
             size = None
             if request.op == "replace":
                 size = self._catalog_size(request.replacement.variant_id)
@@ -382,15 +406,21 @@ class SceneStudio:
             problems = problems or placement_problems(scene_room(config), changed)
             if problems:
                 raise ConnectionError(422, "placement_blocked", " ".join(problems), details={"problems": problems})
-            config["revision"] = int(config.get("revision") or 0) + 1
-            config["last_edit"] = {"op": request.op, "product_id": request.product_id, "source": "design_view"}
-            temporary = self.path.with_suffix(".tmp")
-            temporary.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n")
-            temporary.replace(self.path)
-            self._last_good = None
-            etag, body = self.read()
+            body = self._commit(config, request,
+                                {"op": request.op, "product_id": request.product_id})
             self._edits[request.action_id] = body
             return body
+
+    def _commit(self, config: dict[str, Any], request: SceneEdit,
+                last_edit: dict[str, Any]) -> dict[str, Any]:
+        """Bump the revision and write the file, atomically."""
+        config["revision"] = int(config.get("revision") or 0) + 1
+        config["last_edit"] = {**last_edit, "source": "design_view"}
+        temporary = self.path.with_suffix(".tmp")
+        temporary.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n")
+        temporary.replace(self.path)
+        self._last_good = None
+        return self.read()[1]
 
     def write_preset_room(self, request: "PresetRoom") -> dict[str, Any]:
         """Create or replace geometricconfig.json from typed measurements."""
