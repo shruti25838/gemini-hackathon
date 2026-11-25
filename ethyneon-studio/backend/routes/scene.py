@@ -8,6 +8,7 @@ from pydantic import Field
 
 from backend.connections import SHOPIFY_VARIANT_ID
 from backend.errors import ConnectionError
+from backend.scene import PresetRoom
 from backend.scene_edit import SceneEdit
 from backend.checkout import CheckoutRequest
 from backend.routes.studio import STUDIO_ASSETS, require_local_studio
@@ -28,6 +29,11 @@ class StatusBody(RequestBody):
 class SimilarBody(VariantBody):
     query: str = Field(min_length=1, max_length=200)
     limit: int = Field(default=6, ge=1, le=12)
+
+
+class BrowseBody(RequestBody):
+    query: str = Field(min_length=1, max_length=120)
+    limit: int = Field(default=8, ge=1, le=12)
 
 
 @router.get("")
@@ -69,6 +75,18 @@ def scene_model_file(name: Annotated[str, PathParam(pattern=r"^[0-9]+\.glb$")], 
     if isinstance(model, str):
         return RedirectResponse(model)
     return Response(model, media_type="model/gltf-binary", headers={"Cache-Control": "no-cache"})
+
+
+@router.post("/browse")
+async def scene_browse(body: BrowseBody, request: Request) -> dict[str, Any]:
+    """Search every merchant on Shopify. View only, and never purchasable."""
+    return await request.app.state.scenes.browse(body.query, body.limit)
+
+
+@router.post("/room")
+async def scene_preset_room(body: PresetRoom, request: Request) -> dict[str, Any]:
+    """Write a room from typed measurements. No model, no network."""
+    return request.app.state.scenes.write_preset_room(body)
 
 
 @router.post("/edit")

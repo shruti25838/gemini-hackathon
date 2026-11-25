@@ -6,8 +6,9 @@ test checkout.
 
 **Status: lane C complete, money path verified live.** State and revisions,
 the fit engine, the catalog layer, cart approval, the live cart write and the
-checkout audit are built and tested. 461 tests pass: 444 offline and 17
-against live services.
+checkout audit are built and tested. **1111 tests pass offline across the two
+suites: 787 here and 324 in the Studio**, plus 17 live checks that are
+deselected unless you ask for them.
 
 The whole money path has run end to end on the development store: a real cart
 created from an approved review, reconciled line by line, passed by the
@@ -64,17 +65,40 @@ Cart writes stay disabled regardless, so no live cart is created.
 bash scripts/e2e_mock.sh
 ```
 
-When a teammate's lane A lands, swapping it in is one call at startup:
+Lane A has landed, and startup now decides for itself. With `MOCK_AI=0` and
+`GOOGLE_API_KEY` or `GEMINI_API_KEY` set, Karishma's adapter is installed;
+anything less keeps the labelled stub, because a provider that cannot reach
+its model is worse than a stub that admits what it is. The boot line says
+which is on, and names no credential:
+
+```
+  lane A: karishma+ours, 1 of 7 functions real
+  lane A: stub (MOCK_AI is on)
+```
+
+`/api/health` then reports each of the seven functions separately, so a
+delegated call can never be demoed as an agent:
+
+| function | with the real adapter installed |
+| --- | --- |
+| `analyze_room` | `real: karishma` |
+| `validate_room_spec` | `delegated: ours (backend.validation)` |
+| `run_checkout_gates` | `delegated: ours (backend.decisions)` |
+| the other four | `delegated: stub (out of scope this phase)` |
+
+To install a provider by hand, for example a different one:
 
 ```python
 from backend.lane_a import set_lane_a
-from ai.agents import RealLaneA
+from ai.karishma_adapter.provider import RealLaneA
 
 set_lane_a(RealLaneA())     # raises if any of the seven functions is missing
 ```
 
 See [docs/LANE_C_HANDOFF.md](docs/LANE_C_HANDOFF.md) for every route, every
-function, and how to swap each stub individually.
+function, and how to swap each stub individually, and
+[docs/LANE_A_ADAPTER.md](docs/LANE_A_ADAPTER.md) for what the adapter
+translates.
 
 ## Setup
 
@@ -108,16 +132,43 @@ on, at <http://127.0.0.1:8000/api/health>.
 
 ```bash
 bash scripts/e2e_mock.sh                      # the gate for every pull request
-.venv/Scripts/python -m pytest tests -q       # 366 offline tests, no network
-.venv/Scripts/python -m pytest tests -m network -q   # 17 live checks, needs keys
+.venv/Scripts/python -m pytest -q             # 787 offline tests, no network
+.venv/Scripts/python -m pytest -m network -q  # 17 live checks, needs keys
+.venv/Scripts/python scripts/secret_scan.py   # run before every commit
 .venv/Scripts/python scripts/check_access.py  # prove access, prints no secrets
 .venv/Scripts/python scripts/gen_schemas.py --check
 cd web && npm run build                       # type-checks the generated types
 ```
 
+The Studio has its own suite, in its own venv, run from its own folder:
+
+```powershell
+cd ethyneon-studio
+.venv\Scripts\python -m pip install -r requirements-dev.txt
+.venv\Scripts\python -m pytest                # 324 offline
+```
+
 The default run is offline and deterministic. Tests marked `network` are
 deselected unless you ask for them, and they skip rather than fail when a
 credential is missing.
+
+`scripts/secret_scan.py` reads every tracked file and fails on anything
+shaped like a credential, or on a tracked `.env`, database, cache, room
+photograph or key file. It prints the file and the rule, never the matched
+value. Run it before every commit.
+
+The evaluation harness scores the room-photo-to-fit-verdict pipeline against
+rooms somebody measured with a tape. It runs offline against the stub model
+with no key:
+
+```bash
+.venv/Scripts/python -m eval.run_eval --offline
+```
+
+**It ships zero cases**, and prints a report of zeroes saying so. Writing
+cases is the work; inventing them would make the numbers meaningless.
+[eval/CASES.md](eval/CASES.md) says how to contribute one, and why every case
+records its author and whether it came from inside or outside the team.
 
 After changing any contract model, regenerate or the checks fail:
 
@@ -163,6 +214,26 @@ true` on that surface at the model level, and `CartReview` refuses to be built
 on it at all. The purchasable path is the configured development store through
 the Storefront API and its hosted test checkout.
 
+Shop MCP is now the Design view's product source, not just a discovery
+surface beside it. The demo path is: measure a room, browse every
+merchant, place a product as a **preview**, and buy it on that
+merchant's own page. Browse results come from other merchants, are for
+viewing only, and cannot be bought here.
+
+A preview item is refused by `CheckoutStudio.review` before a cart line
+exists, so it never reaches an approval, the purchase server or a
+checkout link. Lane C's cart, audit and fit engine all stay in the
+repository and are still tested; they are simply not the demo path.
+
+The Product Studio has a mode switch beside its command box.
+**Browse all Shopify** searches Shop MCP across every merchant, with the
+`SHOPIFY_SHOPS` filter dropped so "all" means all.
+Every browse card names its merchant and links to their listing, carries
+no add, review or checkout control, and is refused by the scene and
+checkout routes on the server, which ask the development store itself
+rather than trusting the merchant a result claims. **Our store (buyable)**
+is the Storefront API path and is unchanged.
+
 The client allows exactly four read-only tools and blocks all twelve purchase
 and payment tools before a request is even built. The endpoint, transport and
 required headers are undocumented upstream, so the working recipe is written
@@ -174,24 +245,62 @@ down in [docs/SHOP_MCP_NOTES.md](docs/SHOP_MCP_NOTES.md).
 contracts/      twelve shared Pydantic models, one file each
   interfaces.py Protocol stubs for every call between lanes
   schemas/      JSON Schema, generated, never hand-edited
-fixtures/       one sample per contract, plus failures/
+fixtures/       one sample per contract, plus failures/ and fit_cases/
   failures/     deliberately bad data, each saying where it must be caught
-ai/             lane A: agents, gates, planner, live guide
-web/            lane B: React, TypeScript, Three.js
-  src/types/    TypeScript contract types, generated
+  fit_cases/    15 golden fit cases, one per outcome the contract names
+ai/             lane A: the adapter, and Karishma's modules vendored
+  karishma/     her code, unchanged, with her contracts under _vendor/
+  karishma_adapter/  translates between her dialect and our contracts
+web/            lane B: React and TypeScript shell. Health and contract types
+                only; the 3D room and review card are not built here
 backend/        lane C: FastAPI app, routes, Shopify, Shop MCP
 fit/            lane C: pure geometry, no web, database or network imports
+eval/           the room-photo-to-fit-verdict harness. No cases ship
 tests/          contracts, ai, web, backend, fit
-scripts/        dev, gen_schemas, make_fixtures, check_shop_mcp, e2e_mock
+scripts/        dev, gen_schemas, make_fixtures, check_shop_mcp, e2e_mock,
+                secret_scan
 docs/           PRD v3.0, team integration contract, Shop MCP notes
+demos/          runnable work that is not the product
+  karishma-lane-a/  her front end on her backend, mocked, its own port
 ethyneon-studio/  lane B: Mitran's Studio, its own venv (3.12) and suite
 ```
 
-`ethyneon-studio/` is a separate service with its own `.env`, dependencies and
-`python -m unittest` suite. It renders rooms and products but decides nothing
-about money: every purchase question goes to this server over
-`ETHYNEON_API_BASE`, and with that unset Studio has no purchase path at all.
-Its README has the two-port setup.
+### How the pieces connect
+
+```
+  room photos ──► STUDIO :8001 ──► its own room, scene and voice pages
+  (CC0 samples)        │
+                       │  storefront.py searches the connected dev store
+                       │  ethyneon_client.py asks this server about money
+                       ▼
+                 BACKEND :8000
+                   contracts/   the shapes everything agrees on
+                   fit/         the only thing that decides a fit
+                   catalog.py   only a dev-store offer is shoppable
+                   shop_mcp.py  discovery, allowlisted, never a cart
+                   cart_write   two gates, off by default
+                   checkout.py  link released only after the audit
+                   revisions.py commit_revision, the only writer
+                   ai/karishma_adapter  lane A, when a key is configured
+```
+
+The Studio renders rooms and products and decides nothing about money. Every
+purchase question goes to this server over `ETHYNEON_API_BASE`, and with that
+unset the Studio has no purchase path at all. It is a separate service with
+its own `.env` and dependencies, and its own pytest suite:
+
+```powershell
+cd ethyneon-studio
+.venv\Scripts\python -m pytest        # 324 offline
+```
+
+Its `pytest.ini` exists because both projects ship a top-level package named
+`backend`; without it the suite imports the wrong one. Its README has the
+two-port setup.
+
+`demos/karishma-lane-a/` is not part of the product and is wired to nothing.
+It runs Karishma's front end against her own backend in mock mode so her work
+is runnable rather than only credited. Its README says what works.
 
 `fit/` sits outside `backend/` on purpose: the same code runs on the server
 and inside the Argon and Carbon sandboxes, so it may not import anything that
@@ -259,7 +368,7 @@ ENABLE_ORDER_LOOKUP=0  # payment never claimed
 Before the demo:
 
 ```bash
-.venv/Scripts/python -m pytest tests -q          # 444 offline, no network
+.venv/Scripts/python -m pytest -q                # 787 offline, no network
 .venv/Scripts/python scripts/check_access.py     # prints no secrets
 .venv/Scripts/python scripts/live_cart_smoke.py  # must say LIVE_CART_WRITES off
 ```
@@ -316,9 +425,19 @@ version.
 
 Written during the Gemini 4 NYC Hackathon, November 2026.
 
+### License
+
+**The team has not chosen a license yet, so this code is not licensed for
+reuse.** Default copyright applies: it is public to read, and nobody has
+permission to copy, modify or redistribute it until we pick one and say so.
+There is deliberately no `LICENSE` file rather than a placeholder that would
+imply otherwise.
+
+Third-party dependencies keep their own licenses, listed below.
+
 | Component | License | Note |
 | --- | --- | --- |
-| All first-party code in this repo | to be chosen | Written at the event |
+| All first-party code in this repo | **none chosen yet, see above** | Written at the event |
 | FastAPI, Starlette, Uvicorn | MIT / BSD-3 | |
 | Pydantic, pydantic-settings | MIT | |
 | httpx, websockets, aiosqlite, python-dotenv | BSD-3 / MIT | |
@@ -329,22 +448,33 @@ Written during the Gemini 4 NYC Hackathon, November 2026.
 | TypeScript | Apache-2.0 | |
 | three, @react-three/fiber, @react-three/drei | MIT | |
 | Product data from Shop MCP | merchant-owned | Displayed as labelled discovery, never copied into the dev store |
-| 3D product assets | to be recorded in Phase 3 | Stand-in geometry, labelled representative on screen |
-| Room photos | supplied at the event | Consent shown before analysis; EXIF and GPS stripped in the browser |
+| Room photo sets in `ethyneon-studio/samples/rooms/` | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | Cut from [Poly Haven](https://polyhaven.com/hdris) interior panoramas. Per-set source recorded in `manifest.json` |
+
+No room photograph of anyone's actual home is committed. The sample sets
+above are the only room imagery in the repository, and they are empty rooms
+derived from CC0 panoramas. A photo a shopper uploads at runtime has its EXIF
+and GPS stripped in the browser and is never written to this repository.
+`fixtures/photos/README.md` explains why the two named fixture photos are
+still absent.
 
 ### Third-party assets and licenses, lane B (`ethyneon-studio/`)
 
-Nothing below is vendored: the browser libraries load from a CDN at a pinned version, and the sample
-photos and generated meshes live in `ethyneon-studio/samples/` and `.cache/`, which git ignores.
+No browser library is vendored: each loads from a CDN at a pinned version. A
+test reads every file in `backend/static/` and fails if any absolute URL
+points somewhere not listed here.
 
 | Asset | License | Note |
 | --- | --- | --- |
 | three.js 0.180.0, from jsDelivr | MIT | `three.module.js` and `examples/jsm` loaders |
 | Agora RTC SDK NG 4.23.4, from jsDelivr | Agora SDK license, free tier | Voice only |
-| Poly Haven interior HDRIs, source for the 28 sample room sets | CC0 | Cut into camera views by `scripts/make_room_samples.py` |
-| `samples/shopify-walnut-side-table.glb` | not stated, confirm with Mitran | Generated from a public Shopify listing's photos; treat as merchant-owned until confirmed |
+| `samples/rooms/`, 28 photo sets of 7 empty rooms | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | Cut from [Poly Haven](https://polyhaven.com/hdris) interior panoramas by `scripts/make_room_samples.py`. `manifest.json` records each set's source URL, headings and licence. **Committed.** |
 | Shopify product data, photos and copy | merchant-owned | Labelled discovery only. Never mirrored into the development store, never purchasable. |
-| Generated 3D models for merchant products | derived from merchant-owned photos | Approximate stand-in geometry, labelled on screen |
 | Inter, Helvetica Neue, SF Mono, Menlo | system fonts | Named in CSS stacks, not bundled |
 
-To be completed as lane A lands.
+**Generated 3D product models are deliberately not committed.** The 608
+meshes and the alternatives catalogues that exist on `feature/mitran` are
+built from other merchants' product photography and listing data, and this
+repository records no licence covering them. `.gitignore` excludes
+`samples/models/` and `samples/catalog/`, and a test asks git that nothing
+outside `samples/rooms/` is tracked. Whoever generated them keeps them
+locally; the Studio's model endpoint rebuilds them on demand.

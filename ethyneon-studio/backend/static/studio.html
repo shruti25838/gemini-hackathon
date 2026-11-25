@@ -22,7 +22,7 @@
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
         <div><h1>Ethyneon</h1><span>Product Studio</span></div>
       </div>
-      <span class="catalog-source"><i aria-hidden="true"></i> Shopify catalog</span>
+      <span class="catalog-source" id="catalog-source"><i aria-hidden="true"></i> Browsing all Shopify</span>
     </header>
 
     <main>
@@ -71,6 +71,12 @@
         </aside>
       </div>
       <section class="composer panel" aria-label="Text commands">
+        <fieldset class="modes" id="modes">
+          <legend class="sr-only">Where to search</legend>
+          <label><input type="radio" name="mode" value="browse" checked> Browse all Shopify <span class="mode-tag">view only</span></label>
+          <label><input type="radio" name="mode" value="store"> Our store <span class="mode-tag">buyable</span></label>
+        </fieldset>
+        <p class="attribution">Browse results come from other merchants, are for viewing only, and cannot be bought here.</p>
         <p class="status" id="status" role="status" aria-live="polite">Enter a product or a design command.</p>
         <form id="composer-form">
           <label for="command" class="sr-only">Product or design command</label>

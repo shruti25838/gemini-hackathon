@@ -1,0 +1,10 @@
+# Test dependencies for the Studio. The runtime dependencies live in
+# requirements.txt; this file adds only what the suite needs.
+#
+#   uv venv --python 3.12 .venv
+#   uv pip install --python .venv/bin/python -r requirements-dev.txt
+#
+# The suite is plain unittest.TestCase driven by pytest, so no asyncio
+# plugin is required.
+-r requirements.txt
+pytest>=8,<10

@@ -18,6 +18,26 @@ SHOPIFY_VARIANT_ID = r"^gid://shopify/(v|ProductVariant)/[A-Za-z0-9_-]+$"
 INTERACTION_ID = r"^[A-Za-z0-9_-]+$"
 ShopTool = Literal["search_catalog", "get_product", "lookup_catalog"]
 
+# Shop MCP searches the public Shop catalog, which spans every merchant. A
+# result from it is something to look at, not something this app can sell.
+# The UI and the server say that in the same words on purpose: a shopper who
+# reads the label and a developer who reads the refusal should not have to
+# work out that they are the same rule.
+VIEW_ONLY_REASON = (
+    "Browse results come from other merchants, are for viewing only, "
+    "and cannot be bought here."
+)
+NO_SHOPPABLE_STORE_REASON = (
+    "No development store is connected, so nothing can be bought here."
+)
+NOT_ON_SHOPIFY_REASON = (
+    "That product could not be found on Shopify, so it cannot be placed."
+)
+PREVIEW_NOT_PURCHASABLE_REASON = (
+    "Preview items are sold by other merchants. Buy them on the merchant's "
+    "own page. They cannot enter a cart or a checkout here."
+)
+
 
 def invalid_response(provider: str) -> ConnectionError:
     return ConnectionError(
@@ -139,6 +159,50 @@ class GeminiConnection:
 class ShopifyConnection:
     http: httpx.AsyncClient
     shops: tuple[str, ...] = ()
+
+    @property
+    def source(self) -> str:
+        return "shop_mcp"
+
+    async def browse_catalog(self, catalog: dict[str, Any]) -> dict[str, Any]:
+        """Shop MCP is already the cross-merchant surface, so this is a search
+        that labels what it returns. `CatalogConnection` overrides it to drop
+        the shop filter first."""
+        document = await self.search_catalog(catalog)
+        return {**document, "source": "shop_mcp", "shoppable": False,
+                "view_only_reason": VIEW_ONLY_REASON}
+
+    async def require_shoppable(self, variant_id: str, context: dict[str, str]) -> dict[str, Any]:
+        """Refuse. Shop MCP sells nothing here, so every variant it knows is view only.
+
+        `CatalogConnection` overrides this with the real check against the
+        development store. It lives here as well so that a caller never has
+        to ask which connection it was handed: anything that places a product
+        in a room or spends money calls this and gets either a verified
+        variant or a refusal, never a silent pass.
+        """
+        raise ConnectionError(409, "no_shoppable_store", NO_SHOPPABLE_STORE_REASON)
+
+    async def require_placeable(
+        self, variant_id: str, context: dict[str, str], *, preview: bool = False,
+    ) -> dict[str, Any]:
+        """Can this variant go into the room, and on what terms?
+
+        A preview item is going in to be looked at, not bought, so the only
+        question is whether it is a real Shopify variant. A buyable item
+        has to clear the full shoppable check. Two different questions, one
+        door, so no caller can place something by asking the easier one
+        without saying preview out loud.
+        """
+        if not preview:
+            return await self.require_shoppable(variant_id, context)
+        try:
+            return await self.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            if error.status == 404:
+                raise ConnectionError(
+                    422, "variant_not_found", NOT_ON_SHOPIFY_REASON) from error
+            raise
 
     async def _call(self, name: ShopTool, catalog: dict[str, Any]) -> dict[str, Any]:
         if self.shops:

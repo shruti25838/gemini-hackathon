@@ -20,14 +20,21 @@ fallback when no Storefront store is configured, so an unconfigured Studio
 behaves exactly as it did before.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from html import unescape
 import re
 from typing import Any
 
 import httpx
 
-from backend.connections import ShopifyConnection, invalid_response, request_object
+from backend.connections import (
+    NOT_ON_SHOPIFY_REASON,
+    NO_SHOPPABLE_STORE_REASON,
+    VIEW_ONLY_REASON,
+    ShopifyConnection,
+    invalid_response,
+    request_object,
+)
 from backend.errors import ConnectionError
 
 
@@ -325,10 +332,70 @@ class CatalogConnection:
     def source(self) -> str:
         return "storefront_api" if self.storefront.configured else "shop_mcp"
 
+    @property
+    def browse(self) -> ShopifyConnection:
+        """Shop MCP with the shop filter lifted, for Browse all Shopify.
+
+        `discovery` carries SHOPIFY_SHOPS, so once the development store is
+        listed there a discovery search answers with that one store and
+        "browse all" would quietly mean "browse ours". This is the same
+        client, the same transport and the same read-only tool allowlist,
+        with only the shop filter dropped. Nothing it returns is shoppable:
+        `require_shoppable` still has to agree before a product can be
+        placed in a room or sent to the purchase server.
+        """
+        return self.discovery if not self.discovery.shops else replace(self.discovery, shops=())
+
     async def search_catalog(self, catalog: dict[str, Any]) -> dict[str, Any]:
         if self.storefront.configured:
             return await self.storefront.search_catalog(catalog)
-        return await self.discovery.search_catalog(catalog)
+        return {"source": "shop_mcp", **await self.discovery.search_catalog(catalog)}
+
+    async def browse_catalog(self, catalog: dict[str, Any]) -> dict[str, Any]:
+        """Search every merchant on Shop, whether or not a store is configured."""
+        document = await self.browse.search_catalog(catalog)
+        return {**document, "source": "shop_mcp", "shoppable": False,
+                "view_only_reason": VIEW_ONLY_REASON}
+
+    async def require_shoppable(self, variant_id: str, context: dict[str, str]) -> dict[str, Any]:
+        """Return the variant only if the connected development store sells it.
+
+        This is the server-side half of the view-only rule. The browse cards
+        carry no add, review or checkout control, but a hidden button is not
+        a guard: anybody can post a variant ID at these routes. The store's
+        own Storefront API is the only authority on what the store sells, so
+        the answer comes from there and from nowhere else. Shop MCP is not
+        consulted, because a product existing somewhere on Shop is exactly
+        the thing being refused.
+        """
+        if not self.storefront.configured:
+            raise ConnectionError(409, "no_shoppable_store", NO_SHOPPABLE_STORE_REASON)
+        try:
+            return await self.storefront.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            if error.status == 404:
+                raise ConnectionError(422, "variant_view_only", VIEW_ONLY_REASON) from error
+            raise
+
+    async def require_placeable(
+        self, variant_id: str, context: dict[str, str], *, preview: bool = False,
+    ) -> dict[str, Any]:
+        """Preview needs a real Shopify variant. Buyable needs our store.
+
+        This is what lets the whole browse flow run with no Storefront
+        credentials at all: a preview placement asks Shop MCP, which needs
+        none. Asking for a buyable placement without a store still fails,
+        and fails loudly.
+        """
+        if not preview:
+            return await self.require_shoppable(variant_id, context)
+        try:
+            return await self.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            if error.status == 404:
+                raise ConnectionError(
+                    422, "variant_not_found", NOT_ON_SHOPIFY_REASON) from error
+            raise
 
     async def get_product(self, catalog: dict[str, Any]) -> dict[str, Any]:
         if self.storefront.configured:
@@ -350,4 +417,13 @@ class CatalogConnection:
             except ConnectionError as error:
                 if error.status != 404:
                     raise
-        return await self.discovery.lookup_variant(variant_id, context)
+        try:
+            return await self.discovery.lookup_variant(variant_id, context)
+        except ConnectionError as error:
+            # A browse result opened in the 3D viewer is from another
+            # merchant, so a filtered discovery call cannot see it either.
+            # Reading it is allowed; buying it is not, and that is decided
+            # by require_shoppable, never here.
+            if error.status != 404 or self.browse is self.discovery:
+                raise
+        return await self.browse.lookup_variant(variant_id, context)

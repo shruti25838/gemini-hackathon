@@ -156,7 +156,21 @@ main { max-width: 1480px; padding: 24px clamp(18px, 4vw, 64px) 30px; margin: 0 a
 }
 .card-meta { font-size: 11px; color: #a4b3a7; }
 
+/* A browse card belongs to another merchant. It carries their name, a
+   link to their listing, and no control that could add it to a room,
+   a review or a cart. */
+.card-slot { display: flex; flex-direction: column; min-width: 0; gap: 6px; }
+.card-slot .card { flex: 1 1 auto; }
+.card-view-only { margin: 0 2px; font-size: 11px; line-height: 1.4; color: var(--muted); }
+.card-view-only a { text-decoration: underline; overflow-wrap: anywhere; }
+
 .composer { margin-top: 16px; padding: 12px 16px; }
+.modes { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; padding: 0; border: 0; }
+.modes label { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px; background: #141814; color: #cfd8d0; font-size: 13px; }
+.modes label:has(input:checked) { border-color: var(--accent); background: #22301f; color: #eaf5e4; }
+.modes input { margin: 0; accent-color: var(--accent); }
+.mode-tag { color: var(--muted); font-size: 11px; }
+.attribution { margin: 0 0 9px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .status { margin: 0 0 9px; color: #b8c4b9; font-size: 13px; min-height: 1.2em; }
 .status[data-error="true"] { color: #ffb6a7; }
 #composer-form { display: flex; gap: 8px; }

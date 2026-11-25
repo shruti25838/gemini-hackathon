@@ -71,7 +71,10 @@ class StudioTests(unittest.TestCase):
                 self.assertEqual(reply.status_code, 200, reply.text)
                 return reply.json()
 
-            cards = send("gaing chair")["results"]
+            # Our-store mode still goes through the intent model, which is
+            # what corrects the typo. Browse mode deliberately does not:
+            # see test_browse_mode.BareSearchTests.
+            cards = send("gaing chair", mode="store")["results"]
             self.assertEqual(cards[1]["variant_id"], CHAIR)
             visible = [{"title": card["title"], "variant_id": card["variant_id"]} for card in cards]
             selection = send("Choose the top right", visible=visible)

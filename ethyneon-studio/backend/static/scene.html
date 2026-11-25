@@ -28,6 +28,71 @@
     </header>
 
     <main class="scene-main">
+      <form class="panel room-form" id="room-form" aria-labelledby="room-form-title" hidden>
+        <h2 id="room-form-title">Measure your room</h2>
+        <p class="room-form-note">There is no room yet. Type what you measured with a tape. A photo-built
+          room needs the Gemini key, which is not answering; these numbers need nothing.</p>
+        <div class="room-fields">
+          <label>Width <small>m</small><input id="room-width" type="number" step="0.01" min="1" max="20" value="3.20" required></label>
+          <label>Depth <small>m</small><input id="room-depth" type="number" step="0.01" min="1" max="20" value="3.00" required></label>
+          <label>Height <small>m</small><input id="room-height" type="number" step="0.01" min="1.8" max="6" value="2.50" required></label>
+        </div>
+        <div class="room-fields">
+          <label>Door wall
+            <select id="door-wall">
+              <option value="wall_s" selected>South</option>
+              <option value="wall_n">North</option>
+              <option value="wall_e">East</option>
+              <option value="wall_w">West</option>
+            </select></label>
+          <label>From the corner <small>m</small><input id="door-offset" type="number" step="0.01" min="0" max="20" value="0.20" required></label>
+          <label>Door width <small>m</small><input id="door-width" type="number" step="0.01" min="0.3" max="3" value="0.90" required></label>
+        </div>
+        <div class="room-fields">
+          <label>Hinge
+            <select id="door-hinge">
+              <option value="left" selected>Left</option>
+              <option value="right">Right</option>
+              <option value="none">Not recorded</option>
+            </select></label>
+          <label>Opens
+            <select id="door-swing">
+              <option value="inward" selected>Inward</option>
+              <option value="outward">Outward</option>
+              <option value="sliding">Sliding</option>
+              <option value="none">Not recorded</option>
+            </select></label>
+        </div>
+        <p class="room-form-note">A hinge or swing you leave unrecorded is not guessed. The fit check will
+          answer unknown and say which one it wanted.</p>
+        <div class="window-block">
+          <div class="section-head">
+            <h3>Windows</h3>
+            <button type="button" class="ghost-button" id="add-window">Add a window</button>
+          </div>
+          <div id="window-rows"></div>
+          <p class="room-form-note">Up to four. A window is never an obstacle: the fit check only looks at
+            doors, so nothing is blocked by one whatever its sill height.</p>
+        </div>
+        <template id="window-row-template">
+          <div class="room-fields window-row">
+            <label>Wall
+              <select data-window="wall">
+                <option value="wall_n">North</option>
+                <option value="wall_e">East</option>
+                <option value="wall_s">South</option>
+                <option value="wall_w">West</option>
+              </select></label>
+            <label>From the corner <small>m</small><input data-window="offset_m" type="number" step="0.01" min="0" max="20" value="0.80"></label>
+            <label>Width <small>m</small><input data-window="width_m" type="number" step="0.01" min="0.3" max="5" value="1.40"></label>
+            <label>Height <small>m</small><input data-window="height_m" type="number" step="0.01" min="0.2" max="4" value="1.30"></label>
+            <label>Sill <small>m</small><input data-window="sill_m" type="number" step="0.01" min="0" max="5" value="0.90"></label>
+            <button type="button" class="ghost-button" data-window="remove" aria-label="Remove this window">Remove</button>
+          </div>
+        </template>
+        <button type="submit" class="primary" id="room-go">Create the room</button>
+        <p class="edit-message" id="room-message" role="status" aria-live="polite"></p>
+      </form>
       <section class="panel stage" aria-labelledby="stage-title">
         <div class="panel-header">
           <div><p class="eyebrow" id="stage-eyebrow">Room · metres</p><h2 id="stage-title">Loading the room…</h2></div>
@@ -35,12 +100,18 @@
             <button type="button" data-view="overview">Overview</button>
             <button type="button" data-view="plan">Plan</button>
             <button type="button" data-view="eye">Eye level</button>
+            <button type="button" data-view="quarter">Three-quarter</button>
             <button type="button" id="toggle-labels" aria-pressed="true">Labels</button>
           </div>
         </div>
+        <p class="fit-line" id="fit-line" role="status" aria-live="polite" hidden>
+          <span class="fit-badge" id="fit-badge"></span>
+          <span id="fit-cause"></span>
+          <span class="fit-tentative" id="fit-tentative" hidden></span>
+        </p>
         <div class="viewport room-viewport" role="region" aria-label="Interactive 3D room with products">
           <div id="room-viewer"></div>
-          <p class="viewport-hint">Click a product or its price tag · Drag to orbit · Scroll to zoom</p>
+          <p class="viewport-hint">Press and drag an item to move it · Drag the background to turn the room · Scroll to zoom</p>
           <aside class="product-pop" id="product-pop" aria-labelledby="product-title" hidden>
             <div class="pop-head">
               <div>
@@ -61,6 +132,8 @@
             </div>
             <div class="edit-tools" id="edit-tools" role="group" aria-label="Edit this product" hidden>
               <button type="button" id="edit-move" aria-pressed="false">Move</button>
+              <p class="tool-note" id="move-note">You can drag any item straight away. <b>Move</b> holds the camera
+                still while you do, so a press that misses does not turn the room.</p>
               <button type="button" id="edit-left" aria-label="Rotate 15 degrees left">⟲ 15°</button>
               <button type="button" id="edit-right" aria-label="Rotate 15 degrees right">⟳ 15°</button>
               <button type="button" id="edit-swap" aria-pressed="false">Swap…</button>
@@ -79,30 +152,93 @@
             </div>
           </aside>
         </div>
-        <form class="link-import" id="link-form">
-          <label for="link-input">Paste a Shopify product link</label>
-          <div><input id="link-input" type="url" required placeholder="https://store.com/products/…" autocomplete="off">
-          <button type="submit" class="primary" id="link-go">Make 3D</button></div>
-          <p class="edit-message" id="link-message" role="status"></p>
-        </form>
-        <div class="cart">
-          <ul class="cart-list" id="cart-list" aria-label="Products in the room"></ul>
-          <p class="cart-total"><span>Subtotal</span><b id="subtotal">—</b></p>
-          <button type="button" class="primary checkout-button" id="checkout">Review &amp; checkout</button>
-          <p class="model-line" id="checkout-line" role="status" hidden></p>
-          <section class="audit" id="audit" aria-labelledby="audit-title" hidden>
-            <div class="audit-head">
-              <h3 id="audit-title">Checkout review</h3>
-              <span class="pill" id="audit-status"></span>
+        <section class="room-colors" aria-labelledby="colors-title">
+          <div class="section-head">
+            <h3 id="colors-title">Room colors</h3>
+            <span class="result-count" id="color-source" hidden></span>
+          </div>
+          <div class="color-wheel-row">
+            <canvas id="color-wheel" width="196" height="196"
+                    aria-label="Color wheel: hue around the ring, shade in the square"></canvas>
+            <div class="wheel-side">
+              <div class="wheel-target" role="radiogroup" aria-label="Which surface the wheel paints">
+                <label><input type="radio" name="wheel-target" value="walls" checked> Walls</label>
+                <label><input type="radio" name="wheel-target" value="floor"> Floor</label>
+              </div>
+              <p class="wheel-current">
+                <span class="wheel-chip" id="wheel-chip"></span>
+                <code id="wheel-hex">#a8b89a</code>
+                <span class="wheel-name" id="wheel-name"></span>
+              </p>
+              <label class="hex-field" for="hex-input">Hex
+                <input id="hex-input" maxlength="7" spellcheck="false" autocomplete="off"
+                       placeholder="#a8b89a" aria-label="Hex colour code">
+              </label>
+              <p class="wheel-hint">Drag the ring for hue, the square for shade. The room follows while
+                you drag and saves when you let go.</p>
             </div>
-            <p class="audit-message" id="audit-message"></p>
-            <ul class="audit-checks" id="audit-checks"></ul>
-            <dl class="audit-decision" id="audit-decision"></dl>
-            <ul class="audit-lines" id="audit-lines"></ul>
-            <div class="audit-stores" id="audit-stores"></div>
-            <p class="audit-note" id="audit-note"></p>
-          </section>
-        </div>
+          </div>
+          <div class="color-row">
+            <span class="color-label" id="walls-label">Walls</span>
+            <div class="swatches" id="wall-swatches" role="group" aria-labelledby="walls-label"></div>
+          </div>
+          <div class="color-row">
+            <span class="color-label" id="floor-label">Floor</span>
+            <div class="swatches" id="floor-swatches" role="group" aria-labelledby="floor-label"></div>
+          </div>
+          <div class="color-row">
+            <span class="color-label">Any color</span>
+            <label class="custom-color" for="custom-color">
+              <input type="color" id="custom-color" value="#6f7a3f">
+              <span>Walls</span>
+            </label>
+            <label class="custom-color" for="custom-floor">
+              <input type="color" id="custom-floor" value="#6b4a2f">
+              <span>Floor</span>
+            </label>
+            <button type="button" class="ghost-button" id="color-undo" hidden>Undo</button>
+          </div>
+          <form id="color-command-form">
+            <label for="color-command" class="sr-only">Type a color command</label>
+            <input id="color-command" maxlength="80" placeholder="Or type: make the walls olive" autocomplete="off">
+            <button type="submit" class="ghost-button" id="color-command-go">Apply</button>
+          </form>
+          <p class="edit-message" id="color-message" role="status" aria-live="polite"></p>
+        </section>
+        <section class="browse" aria-labelledby="browse-title">
+          <div class="section-head">
+            <h3 id="browse-title">Find products on Shopify</h3>
+            <span class="result-count" id="browse-count" hidden></span>
+          </div>
+          <form id="browse-form">
+            <label for="browse-input" class="sr-only">Search every merchant on Shopify</label>
+            <input id="browse-input" required maxlength="120" placeholder="Search every merchant, such as gaming chair" autocomplete="off">
+            <button type="submit" class="primary" id="browse-go">Search</button>
+          </form>
+          <p class="attribution">Browse results come from other merchants, are for viewing only, and cannot be bought here.</p>
+          <p class="edit-message" id="browse-message" role="status" aria-live="polite"></p>
+          <div class="browse-results" id="browse-results"></div>
+          <details class="link-import-wrap">
+            <summary>Or paste a product link</summary>
+            <form class="link-import" id="link-form">
+              <label for="link-input">Paste a Shopify product link</label>
+              <div><input id="link-input" type="url" required placeholder="https://store.com/products/…" autocomplete="off">
+              <button type="submit" class="primary" id="link-go">Make 3D</button></div>
+              <p class="edit-message" id="link-message" role="status"></p>
+            </form>
+          </details>
+        </section>
+        <section class="cart your-list" aria-labelledby="your-list-title">
+          <div class="section-head">
+            <h3 id="your-list-title">Your list</h3>
+            <span class="result-count" id="list-count" hidden></span>
+          </div>
+          <ul class="cart-list" id="cart-list" aria-label="Products in the room"></ul>
+          <p class="cart-total"><span>Listed prices total</span><b id="subtotal">—</b></p>
+          <p class="list-note">Browse results come from other merchants, are for viewing only, and cannot be bought here.</p>
+          <p class="list-note">Purchases happen on each merchant's own site. Nothing is bought in this app,
+            and this list is not a cart.</p>
+        </section>
       </section>
     </main>
     <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>

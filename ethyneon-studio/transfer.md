@@ -1,6 +1,6 @@
 # Ethyneon handoff
 
-Use this handoff for the current implementation. The [Ethyneon PRD](Ethyneon_PRD_v3.0.md) has the longer product rationale, evidence rules, and recovery design. The [team integration contract](Ethyneon_Team_Split_and_Integration_Contract.pdf) has the ownership and interface details. Carry forward the owner's **no new test cases** requirement for this phase.
+Use this handoff for the current implementation. The [Ethyneon PRD](../docs/Ethyneon_PRD_v3.0.pdf) has the longer product rationale, evidence rules, and recovery design. The [team integration contract](../docs/Ethyneon_Team_Split_and_Integration_Contract.pdf) has the ownership and interface details. Carry forward the owner's **no new test cases** requirement for this phase.
 
 ## Product direction
 
@@ -117,7 +117,7 @@ For recovery, preserve the last accepted state and retry or replan the affected 
 | **Design Studio** | Gemini roles, ADK 2 workflow and resumable runs, Decisions API, and Argon and Carbon sandboxes. | Typed room, brief, placement and review artifacts, and stage updates. |
 | **Shopify Checkout and Fit** | Backend state, sample and development-store discovery, verified offers, model assets and cache, deterministic fit, cart reconciliation, and order status. | Exact Shopify variants, product dimensions and assets, fit verdict, audited review, and Shopify-confirmed transaction outcome. |
 
-Agree on shared objects and wire shapes before splitting code into separate projects. Keep the backend as the writer of accepted state. Pass validated revisions and action IDs so reconnecting clients and late agent replies can converge on the current room. For Agora, begin with one phone capture and a desktop or headset viewer. Pair to the same room, then publish the committed revision over Signaling. [Team integration contract](Ethyneon_Team_Split_and_Integration_Contract.pdf) · [Agora SDK token reference](https://docs.agora.io/en/api-reference/api-ref/server-sdk/platform/python)
+Agree on shared objects and wire shapes before splitting code into separate projects. Keep the backend as the writer of accepted state. Pass validated revisions and action IDs so reconnecting clients and late agent replies can converge on the current room. For Agora, begin with one phone capture and a desktop or headset viewer. Pair to the same room, then publish the committed revision over Signaling. [Team integration contract](../docs/Ethyneon_Team_Split_and_Integration_Contract.pdf) · [Agora SDK token reference](https://docs.agora.io/en/api-reference/api-ref/server-sdk/platform/python)
 
 ## First implementation slice
 
